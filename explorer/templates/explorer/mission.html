@@ -1,0 +1,20 @@
+{% extends "explorer/base.html" %}
+
+{% block main-content %}
+<div class="container">
+  <!-- Example row of columns -->
+  <div class="row  mission-header">
+    <div class="col-12-lg">
+      <h1 class="display-3">Mission {{object.number}}</h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12-lg mission-{{object.number}}-header">
+      <h2>{{object.name|safe}}</h2>
+
+
+    <p><a class="btn btn-outline-info btn-lg" href="{% url 'challenge' 1 %}" role="button">Start the mission &raquo;</a></p>
+  </div>
+  </div>
+</div>
+{% endblock %}

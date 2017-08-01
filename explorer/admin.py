@@ -1,3 +1,7 @@
 from django.contrib import admin
 
-# Register your models here.
+from explorer.models import *
+
+admin.site.register(Mission)
+admin.site.register(Challenge)
+admin.site.register(Target)

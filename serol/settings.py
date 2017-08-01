@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+# Django settings for SEROL project.
+
 import os, sys
 from django.utils.crypto import get_random_string
 
@@ -9,13 +12,15 @@ PRODUCTION = True if CURRENT_PATH.startswith('/var/www') else False
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEBUG=False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 ADMIN_TITLE = 'SEROL admin'
 
 # Application definition
 
 INSTALLED_APPS = [
+    'explorer.apps.ExplorerConfig',
+    'status.apps.StatusConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -97,7 +102,7 @@ DATABASES = {
     "default": {
         # Live DB
         "ENGINE": "django.db.backends.mysql",
-        "NAME": os.environ.get('SEROL_DB_NAME', 'neoexchange'),
+        "NAME": os.environ.get('SEROL_DB_NAME', 'seroldb'),
         "USER": os.environ.get('SEROL_DB_USER',''),
         "PASSWORD": os.environ.get('SEROL_DB_PASSWD',''),
         "HOST": os.environ.get('SEROL_DB_HOST',''),
@@ -122,7 +127,7 @@ PORTAL_TOKEN = os.environ.get('VALHALLA_TOKEN','')
 # defined per machine.
 if not CURRENT_PATH.startswith('/var/www'):
     try:
-        from local_settings import *
+        from .local_settings import *
     except ImportError as e:
         if "local_settings" not in str(e):
             raise e
