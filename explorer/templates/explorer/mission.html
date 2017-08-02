@@ -1,20 +1,15 @@
 {% extends "explorer/base.html" %}
 
 {% block main-content %}
-<div class="container">
-  <!-- Example row of columns -->
-  <div class="row  mission-header">
-    <div class="col-12-lg">
-      <h1 class="display-3">Mission {{object.number}}</h1>
+  <div class="container">
+  <div class="row mission-{{object.number}}-header">
+    <div class="col-2">
+      <h1 class="side-writing">Mission {{object.number}}</h1>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-12-lg mission-{{object.number}}-header">
-      <h2>{{object.name|safe}}</h2>
-
-
-    <p><a class="btn btn-outline-info btn-lg" href="{% url 'challenge' 1 %}" role="button">Start the mission &raquo;</a></p>
-  </div>
+    <div class="col-10  mission-content">
+      <h1 class="mission-name">{{object.name|safe}}</h1>
+      <p><a class="btn btn-info btn-lg" href="{% url 'challenge' 1 %}" role="button">Start the mission &raquo;</a></p>
+    </div>
   </div>
 </div>
 {% endblock %}

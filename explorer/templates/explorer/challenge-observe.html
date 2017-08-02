@@ -1,5 +1,44 @@
 {% extends 'explorer/base.html' %}
 
+{% block script-content %}
+<script>
+var targets;
+function add_targets(i, data){
+  var item = "#target-img-"+i;
+  $(item+" .target-name").html(data);
+}
+
+function startEnd(date) {
+  var end = new Date(date);
+  end.setDate(end.getDate() + 1);
+  return end.toISOString();
+}
+
+$(document).ready(function(){
+  var whatsupurl = "https://lco.global/whatsup/search/v2/?aperture=0m4&format=jsonp";
+  var start = new Date();
+  var end;
+  end = startEnd(start);
+  whatsupurl += "&category={{object.category}}";
+  whatsupurl += "&end="+end.substr(0,19);
+  whatsupurl += "&start="+start.toISOString().substr(0,19);
+  $.ajax( {url : whatsupurl,
+    jsonp: "callback",
+    dataType: "jsonp",
+    success: function( data ) {
+      targets = data.targets;
+      var target;
+      for (i=0;i<4;i++){
+        target = data.targets[i];
+        var item = "#target-img-"+i;
+        $(item+" .target-name").html(target.name);
+      }
+    }
+  });
+});
+</script>
+{% endblock%}
+
 {% block main-content %}
 <div class="container">
   <!-- Example row of columns -->
@@ -9,23 +48,27 @@
         <p>Choose a galaxy for Serol to take a picture of!</p>
     </div>
     <div class="col-lg-6 pb-5">
-        <a href="#">
+        <a href="#" id="target-img-0">
             <img class="img-fluid" src="http://placehold.it/400x300" alt="">
+            <div class="target-name"></div>
         </a>
     </div>
     <div class="col-lg-6 pb-5">
-        <a href="#">
+        <a href="#" id="target-img-1">
             <img class="img-fluid" src="http://placehold.it/400x300" alt="">
+            <div class="target-name"></div>
         </a>
     </div>
     <div class="col-lg-6 pb-5">
-        <a href="#">
+        <a href="#" id="target-img-2">
             <img class="img-fluid" src="http://placehold.it/400x300" alt="">
+            <div class="target-name"></div>
         </a>
     </div>
     <div class="col-lg-6 pb-5">
-        <a href="#">
+        <a href="#" id="target-img-3">
             <img class="img-fluid" src="http://placehold.it/400x300" alt="">
+            <div class="target-name"></div>
         </a>
     </div>
   </div>

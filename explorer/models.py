@@ -12,6 +12,7 @@ class Challenge(models.Model):
     mission = models.ForeignKey(Mission)
     description = models.TextField()
     action = models.TextField()
+    category = models.TextField(blank=True,null=True)
 
 class Target(models.Model):
     objectid = models.CharField(max_length=50)

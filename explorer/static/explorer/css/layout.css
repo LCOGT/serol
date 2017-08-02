@@ -40,6 +40,20 @@ h1, h2, h3, h4, h5, h6 {
     color: #fff;
 }
 
+h1.side-writing {
+  -webkit-transform: rotate(180deg);
+  -moz-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
+  transform: rotate(180deg);
+
+  writing-mode: vertical-lr;
+  text-orientation: sidways-right;
+  font-size:10rem;
+  text-shadow: 0 .5rem .5rem rgba(0,0,0,.5);
+}
+
+
 
 /* Extra markup and styles for table-esque vertical and horizontal centering */
 .site-wrapper {
@@ -47,8 +61,6 @@ h1, h2, h3, h4, h5, h6 {
   width: 100%;
   height: 100%; /* For at least Firefox */
   min-height: 100%;
-  -webkit-box-shadow: inset 0 0 5rem rgba(0,0,0,.5);
-          box-shadow: inset 0 0 5rem rgba(0,0,0,.5);
 }
 .site-wrapper-inner {
   display: table-cell;
@@ -69,29 +81,8 @@ h1, h2, h3, h4, h5, h6 {
  * Header
  */
 
-.masthead {
-  margin-bottom: 2rem;
-}
-
-.masthead-brand {
-  margin-bottom: 0;
-}
-
-.nav-masthead .nav-link {
-  padding: .25rem 0;
-  font-weight: bold;
-  background-color: transparent;
-  border-bottom: .25rem solid transparent;
-}
-
-
-.nav-masthead .nav-link + .nav-link {
-  margin-left: 1rem;
-}
-
-.nav-masthead .active {
-  color: #fff;
-  border-bottom-color: #fff;
+.nav-head {
+  border-bottom: 1px solid #555;
 }
 
 /*
@@ -137,21 +128,36 @@ h1, h2, h3, h4, h5, h6 {
    border-bottom:1px solid #fff;
  }
 
- .mission-header h2{
-   position: relative;
-   bottom:0;
- }
 
  .mission-1-header {
-   background: url('../images/M2WebGraphics.jpg') no-repeat center;
-   height:600px;
-   width:1000px;
+   background: url('../images/m1-heading.jpg') no-repeat center bottom;
+   height:100%;
+   min-height:500px;
+   vertical-align: top;
+ }
+
+.mission-content h1,
+.mission-content p {
+  margin-right: auto;
+  margin-left: auto;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+ .mission-name {
+   vertical-align: middle;
+   font-size:4rem;
+   width:15rem;
  }
 
  .footer {
-   border-top:1px #fff solid;
+   background: #555;
  }
 
+.target-name{
+  vertical-align: middle;
+}
 
 
 @media (max-width: 42rem) {
