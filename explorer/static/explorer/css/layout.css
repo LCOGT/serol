@@ -145,6 +145,11 @@ h1.side-writing {
   transform: translateY(-50%);
 }
 
+.mission-title,
+.mission-content h1 {
+  background: rgba(0,0,0,0.5);
+}
+
  .mission-name {
    vertical-align: middle;
    font-size:4rem;
@@ -157,6 +162,10 @@ h1.side-writing {
 
 .target-name{
   vertical-align: middle;
+  position:absolute;
+  top:40%;
+  left:38%;
+  font-size:5rem;
 }
 
 

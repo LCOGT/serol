@@ -1,8 +1,15 @@
 {% extends 'explorer/base.html' %}
+{% load static %}
 
 {% block script-content %}
+<script src="{% static 'explorer/js/utils.js' %}" ></script>
 <script>
 var targets;
+var start = new Date();
+var end = startEnd(start);
+var image_files = {'5.1.1' : "{% static 'explorer/images/5.1.1-spiral_galaxy.png' %}"};
+
+
 function add_targets(i, data){
   var item = "#target-img-"+i;
   $(item+" .target-name").html(data);
@@ -10,30 +17,45 @@ function add_targets(i, data){
 
 function startEnd(date) {
   var end = new Date(date);
-  end.setDate(end.getDate() + 1);
+  end.setDate(end.getDate() + 7);
   return end.toISOString();
 }
 
 $(document).ready(function(){
   var whatsupurl = "https://lco.global/whatsup/search/v2/?aperture=0m4&format=jsonp";
-  var start = new Date();
-  var end;
-  end = startEnd(start);
-  whatsupurl += "&category={{object.category}}";
+  var category = "{{object.category}}";
+  var image_file = image_files[category];
+
+  whatsupurl += "&category="+category;
   whatsupurl += "&end="+end.substr(0,19);
   whatsupurl += "&start="+start.toISOString().substr(0,19);
+
   $.ajax( {url : whatsupurl,
     jsonp: "callback",
     dataType: "jsonp",
     success: function( data ) {
       targets = data.targets;
       var target;
-      for (i=0;i<4;i++){
+      var max_length = targets.length > 6 ? 6 : targets.length;
+      // Hide all the image placeholders
+      $(".target-holder").hide();
+
+      for (i=0;i<max_length;i++){
         target = data.targets[i];
         var item = "#target-img-"+i;
         $(item+" .target-name").html(target.name);
+        $(item+" img").attr('src',image_file);
+        $(item).data('tid',i);
+        // Show parent target holder
+        $(item).parent().show();
       }
     }
+  });
+
+  $(".target-holder a").on("click", function(){
+    var tid = $(this).data('tid');
+    $(".modal-title").html(targets[tid].name);
+    $(".modal-body").html(targets[tid].desc);
   });
 });
 </script>
@@ -45,32 +67,63 @@ $(document).ready(function(){
   <div class="row">
     <div class="col-lg-12">
         <h1 class="page-header">Challenge {{object.number }}!</h1>
-        <p>Choose a galaxy for Serol to take a picture of!</p>
+        <p>{{object.action}}</p>
     </div>
-    <div class="col-lg-6 pb-5">
-        <a href="#" id="target-img-0">
+    <div class="col-lg-4 pb-5 target-holder">
+        <a href="#" id="target-img-0" data-toggle="modal" data-target="#targetModal" data-tid="">
             <img class="img-fluid" src="http://placehold.it/400x300" alt="">
             <div class="target-name"></div>
         </a>
     </div>
-    <div class="col-lg-6 pb-5">
-        <a href="#" id="target-img-1">
+    <div class="col-lg-4 pb-5 target-holder">
+        <a href="#" id="target-img-1" data-toggle="modal" data-target="#targetModal" data-tid="">
             <img class="img-fluid" src="http://placehold.it/400x300" alt="">
             <div class="target-name"></div>
         </a>
     </div>
-    <div class="col-lg-6 pb-5">
-        <a href="#" id="target-img-2">
+    <div class="col-lg-4 pb-5 target-holder">
+        <a href="#" id="target-img-2" data-toggle="modal" data-target="#targetModal" data-tid="">
             <img class="img-fluid" src="http://placehold.it/400x300" alt="">
             <div class="target-name"></div>
         </a>
     </div>
-    <div class="col-lg-6 pb-5">
-        <a href="#" id="target-img-3">
+    <div class="col-lg-4 pb-5 target-holder">
+        <a href="#" id="target-img-3" data-toggle="modal" data-target="#targetModal" data-tid="">
+            <img class="img-fluid" src="http://placehold.it/400x300" alt="">
+            <div class="target-name"></div>
+        </a>
+    </div>
+    <div class="col-lg-4 pb-5 target-holder">
+        <a href="#" id="target-img-4" data-toggle="modal" data-target="#targetModal" data-tid="">
+            <img class="img-fluid" src="http://placehold.it/400x300" alt="">
+            <div class="target-name"></div>
+        </a>
+    </div>
+    <div class="col-lg-4 pb-5 target-holder">
+        <a href="#" id="target-img-5" data-toggle="modal" data-target="#targetModal" data-tid="">
             <img class="img-fluid" src="http://placehold.it/400x300" alt="">
             <div class="target-name"></div>
         </a>
     </div>
   </div>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="targetModal" tabindex="-1" role="dialog" aria-labelledby="targetModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p></p>
+      </div>
+      <div class="modal-footer">
+        <a href="" class="btn btn-secondary" >Take a picture! ></a>
+      </div>
+    </div>
+  </div>
 {% endblock %}

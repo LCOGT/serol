@@ -118,6 +118,11 @@ PORTAL_REQUEST_URL = 'https://observe.lco.global/userrequests/'
 PORTAL_TOKEN_URL = PORTAL_API_URL + 'api-token-auth/'
 PORTAL_TOKEN = os.environ.get('VALHALLA_TOKEN','')
 
+DEFAULT_CAMERAS = { '1m0' : '1M0-SCICAM-SBIG',
+                    '2m0' : '2M0-SCICAM-SPECTRAL',
+                    '0m4' : '0M4-SCICAM-SBIG'
+                    }
+
 ##################
 # LOCAL SETTINGS #
 ##################
