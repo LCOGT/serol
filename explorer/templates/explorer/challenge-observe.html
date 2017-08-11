@@ -5,9 +5,22 @@
 <script src="{% static 'explorer/js/utils.js' %}" ></script>
 <script>
 var targets;
+var tmp;
 var start = new Date();
 var end = startEnd(start);
-var image_files = {'5.1.1' : "{% static 'explorer/images/5.1.1-spiral_galaxy.png' %}"};
+var csrftoken = '{{ csrf_token }}';
+var category = '{{object.category}}';
+var challenge_id = '{{object.id}}' 
+var redirect_url = "{% url 'challenge' object.id %}";
+var image_files = {
+    '5.1.1' : "{% static 'explorer/images/5.1.1-spiral_galaxy.png' %}",
+    '5.1.4' : "{% static 'explorer/images/5.1.4-elliptical_galaxy.png' %}",
+    '5.1.6' : "{% static 'explorer/images/5.1.6-interacting_galaxy.png' %}",
+    '4.1.4' : "{% static 'explorer/images/4.1.4-supernova_remnant.png' %}",
+    '3.6.4.1' : "{% static 'explorer/images/3.6.4.1-open_cluster.png' %}",
+    '3.6.4.2' : "{% static 'explorer/images/3.6.4.1-globuler_cluster.png' %}",
+    '2.3' : "{% static 'explorer/images/2.3-asteroid.png' %}"
+                  };
 
 
 function add_targets(i, data){
@@ -22,8 +35,7 @@ function startEnd(date) {
 }
 
 $(document).ready(function(){
-  var whatsupurl = "https://lco.global/whatsup/search/v2/?aperture=0m4&format=jsonp";
-  var category = "{{object.category}}";
+  var whatsupurl = "https://lco.global/whatsup/range/?aperture=0m4&format=jsonp";
   var image_file = image_files[category];
 
   whatsupurl += "&category="+category;
@@ -56,57 +68,42 @@ $(document).ready(function(){
     var tid = $(this).data('tid');
     $(".modal-title").html(targets[tid].name);
     $(".modal-body").html(targets[tid].desc);
+    $("#submit_button").data('tid',tid);
+  });
+
+  $("#submit_button").on("click", function(){
+    var tid = $(this).data('tid')
+    submit_to_serol(targets[tid], localStorage.getItem('token'));
   });
 });
 </script>
 {% endblock%}
+{% block wrapper-class%}mission-{{object.mission.number}}-sidebar{%endblock%}
 
 {% block main-content %}
-<div class="container">
+<div class="container-fluid">
   <!-- Example row of columns -->
-  <div class="row">
+  <div class="row page-header">
     <div class="col-lg-12">
-        <h1 class="page-header">Challenge {{object.number }}!</h1>
+        <h1>Challenge {{object.number }}!</h1>
         <p>{{object.action}}</p>
-    </div>
-    <div class="col-lg-4 pb-5 target-holder">
-        <a href="#" id="target-img-0" data-toggle="modal" data-target="#targetModal" data-tid="">
-            <img class="img-fluid" src="http://placehold.it/400x300" alt="">
-            <div class="target-name"></div>
-        </a>
-    </div>
-    <div class="col-lg-4 pb-5 target-holder">
-        <a href="#" id="target-img-1" data-toggle="modal" data-target="#targetModal" data-tid="">
-            <img class="img-fluid" src="http://placehold.it/400x300" alt="">
-            <div class="target-name"></div>
-        </a>
-    </div>
-    <div class="col-lg-4 pb-5 target-holder">
-        <a href="#" id="target-img-2" data-toggle="modal" data-target="#targetModal" data-tid="">
-            <img class="img-fluid" src="http://placehold.it/400x300" alt="">
-            <div class="target-name"></div>
-        </a>
-    </div>
-    <div class="col-lg-4 pb-5 target-holder">
-        <a href="#" id="target-img-3" data-toggle="modal" data-target="#targetModal" data-tid="">
-            <img class="img-fluid" src="http://placehold.it/400x300" alt="">
-            <div class="target-name"></div>
-        </a>
-    </div>
-    <div class="col-lg-4 pb-5 target-holder">
-        <a href="#" id="target-img-4" data-toggle="modal" data-target="#targetModal" data-tid="">
-            <img class="img-fluid" src="http://placehold.it/400x300" alt="">
-            <div class="target-name"></div>
-        </a>
-    </div>
-    <div class="col-lg-4 pb-5 target-holder">
-        <a href="#" id="target-img-5" data-toggle="modal" data-target="#targetModal" data-tid="">
-            <img class="img-fluid" src="http://placehold.it/400x300" alt="">
-            <div class="target-name"></div>
-        </a>
     </div>
   </div>
 </div>
+<div class="container">
+  <div class="row">
+    {% for i in "012345" %}
+    <div class="col-lg-4  col-sm-6 pb-5 target-holder">
+        <a href="#" id="target-img-{{i}}" data-toggle="modal" data-target="#targetModal" data-tid="">
+            <img class="img-fluid" src="http://placehold.it/400x300" alt="">
+            <div class="target-name-holder">
+              <span class="target-name"></span>
+            </div>
+        </a>
+    </div>
+    {% endfor %}
+  </div>
+  </div>
 
 <!-- Modal -->
 <div class="modal fade" id="targetModal" tabindex="-1" role="dialog" aria-labelledby="targetModalLabel" aria-hidden="true">
@@ -122,7 +119,7 @@ $(document).ready(function(){
         <p></p>
       </div>
       <div class="modal-footer">
-        <a href="" class="btn btn-secondary" >Take a picture! ></a>
+        <a href="#" class="btn btn-secondary" id="submit_button" data-tid="">Take a picture! ></a>
       </div>
     </div>
   </div>

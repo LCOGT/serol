@@ -26,18 +26,31 @@ body {
   height: 100%;
 }
 
+#wrapper {
+  min-height: 100%;
+}
+
+#wrapper-inner {
+  overflow:auto;
+  padding-bottom:200px;
+}
+
+
 body {
   text-align: center;
   font-family: 'Roboto', sans-serif;
-  text-shadow: 0 .05rem .1rem rgba(0,0,0,.5);
-  background: url('../images/serol_bg_sm.jpg') repeat #2b3e50;
+  background: url('../images/serol_bg_sm.jpg') repeat fixed #2b3e50;
   color: #fff;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1, h2, h3, h4, h5, h6, .target-name {
     font-family: 'Oswald', sans-serif;
     font-weight: 300;
     color: #fff;
+}
+
+h1 {
+  font-size:4.5rem;
 }
 
 h1.side-writing {
@@ -66,14 +79,18 @@ h1.side-writing {
   display: table-cell;
   vertical-align: top;
 }
-.cover-container {
-  margin-right: auto;
-  margin-left: auto;
+.center-box-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  resize: both;
+  overflow: auto;
+
 }
 
-/* Padding for spacing */
-.inner {
-  padding: 2rem;
+.center-box {
+  resize: both;
+  overflow: auto;
 }
 
 
@@ -88,37 +105,16 @@ h1.side-writing {
 /*
  * Modals
  */
- .modal-content {
-   background-color: #aaa;
- }
 
- .modal-header {
+ .modal-content,
+ .modal-content h4 {
    color: #2b3e50;
  }
 
- .modal-dialog {
-  min-height: -webkit-calc(100vh - 60px);
-  min-height: -moz-calc(100vh - 60px);
-  min-height: calc(100vh - 60px);
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
-     -moz-box-orient: vertical;
-     -moz-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-     -moz-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  overflow: auto;
+h5.modal-title{
+  color: #2b3e50;
 }
+
 
 /*
  * Colour and Art
@@ -130,10 +126,14 @@ h1.side-writing {
 
 
  .mission-1-header {
-   background: url('../images/m1-heading.jpg') no-repeat center bottom;
+   background: url('../images/m1-heading.jpg') no-repeat center top;
    height:100%;
    min-height:500px;
    vertical-align: top;
+ }
+
+ .mission-1-sidebar {
+   background: url('../images/m1-SidePanel.jpg') no-repeat fixed left bottom;
  }
 
 .mission-content h1,
@@ -145,8 +145,7 @@ h1.side-writing {
   transform: translateY(-50%);
 }
 
-.mission-title,
-.mission-content h1 {
+.mission-title{
   background: rgba(0,0,0,0.5);
 }
 
@@ -154,20 +153,49 @@ h1.side-writing {
    vertical-align: middle;
    font-size:4rem;
    width:15rem;
+   text-shadow: 0 .5rem .5rem rgba(128,128,255,0.7);
  }
 
- .footer {
-   background: #555;
+ .page-header {
+   background-color:rgb(128,0,0);
  }
 
-.target-name{
+ .title-left{
+   background: url('../images/TitlePage-LEFT.jpg') no-repeat center top;
+   height:450px;
+ }
+ .title-right{
+   background: url('../images/TitlePage-RIGHT.jpg') no-repeat center top;
+   height:450px;
+ }
+
+.target-name-holder {
   vertical-align: middle;
   position:absolute;
   top:40%;
   left:38%;
-  font-size:5rem;
+  border-radius: 20px;
+  border:5px solid #fff;
+  background-color: rgba(255,0,0,0.5);
 }
 
+.target-name-holder:hover{
+  background-color: rgba(0,128,0,1.0);
+}
+
+.target-name{
+  font-size:3rem;
+  z-index:2;
+  padding: 5px;
+}
+
+.target-holder img {
+  width:50%;
+}
+
+footer {
+  background-color:#000;
+}
 
 @media (max-width: 42rem) {
   .modal-dialog {
@@ -197,15 +225,6 @@ h1.side-writing {
 .cover .btn-lg {
   padding: .75rem 1.25rem;
   font-weight: bold;
-}
-
-
-/*
- * Footer
- */
-
-.mastfoot {
-  color: rgba(255,255,255,.5);
 }
 
 

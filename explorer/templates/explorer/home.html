@@ -1,26 +1,29 @@
 {% extends "explorer/base.html" %}
+{% load static %}
+
+{% block wrapper-class%}site-wrapper{%endblock%}
 
 {% block main-content %}
-<div class="site-wrapper">
 
-      <div class="site-wrapper-inner">
-
-        <div class="cover-container">
-
-
-          <div class="inner cover ">
-            <h1 class="cover-heading">SEROL</h1>
-            <p class="lead">and the Cosmic Explorers</p>
-            <p class="lead">
-              <a href="#" class="btn btn-lg btn-outline-secondary" data-toggle="modal" data-target="#exampleModal">Start the adventure!</a>
-
-            </p>
-          </div>
-        </div>
-      </div>
+<div class="container flex-grow">
+  <div class="row">
+    <div class="col-4 title-left">
+    </div>
+    <div class="col-4 ">
+      <img src="{% static 'explorer/images/serol_head_logo.png' %}" alt="serol logo" class="img-fluid" />
+      <h1 class="title-main">SEROL</h1>
+      <p class="lead">Cosmic Explorer</p>
+      <p class="lead">
+        <a href="#" class="btn btn-lg btn-outline-secondary animated tada" data-toggle="modal" data-target="#exampleModal">Start the adventure!</a>
+      </p>
+    </div>
+    <div class="col-4 title-right">
     </div>
   </div>
-          <!-- Button trigger modal -->
+  <div class="row">
+
+  </div>
+</div>
 
 
 <!-- Modal -->

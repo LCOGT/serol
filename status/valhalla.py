@@ -25,7 +25,7 @@ def process_observation_request(params, token):
 
     if r.status_code in [200,201]:
         logger.debug('Submitted request')
-        return True, False
+        return True, r.json()['id']
     else:
         logger.error("Could not send request: {}".format(r.content))
         return False, r.content
@@ -34,6 +34,7 @@ def request_format(object_name, object_ra, object_dec, start,end, obs_filter, pr
     '''
     Format a simple request using the schema the Scheduler understands
     '''
+
     default_camera = settings.DEFAULT_CAMERAS[aperture]
 
 # this selects any telescope on the 1 meter network
@@ -42,8 +43,8 @@ def request_format(object_name, object_ra, object_dec, start,end, obs_filter, pr
         }
     molecules = []
 
-    f_str = json.loads(obs_filter)
-    for f in f_str:
+    # f_str = json.loads(obs_filter)
+    for f in obs_filter:
         molecule = {
             # Required fields
             'exposure_time'   : f['exposure'],   # Exposure time, in secs
@@ -74,10 +75,10 @@ def request_format(object_name, object_ra, object_dec, start,end, obs_filter, pr
         }
 
     request = {
-        "constraints" : {'max_airmass' : 1.6},
+        "constraints" : {'max_airmass' : 1.6, "min_lunar_distance": 30.0,},
         "location" : location,
         "molecules" : molecules,
-        "observation_note" : "Messier Bingo Request",
+        "observation_note" : "Serol Request",
         "target" : target,
         "type" : "request",
         "windows" : [window],
@@ -88,10 +89,9 @@ def request_format(object_name, object_ra, object_dec, start,end, obs_filter, pr
         "requests" : [request],
         "type" : "compound_request",
         "ipp_value" : 1.0,
-        "group_id": "mb_{}_{}".format(object_name, datetime.utcnow().strftime("%Y%m%d")),
+        "group_id": "sxe_{}_{}".format(object_name, datetime.utcnow().strftime("%Y%m%d")),
         "observation_type": "NORMAL",
-        "proposal": proposal
+        "proposal": settings.PROPOSAL_CODE
         }
 
-    #final_request = json.dumps(user_request)
     return user_request

@@ -1,6 +1,21 @@
-function submit_to_serol(target, token){
 
-		var url = '/schedule/';
+function status_check(requestid, token) {
+  $.getJSON('https://observe.lco.global/api/userrequests/'+requestid+'/',
+    {headers: {'Authorization': 'Token '+token},
+    dataType: 'json',
+    contentType: 'application/json'})
+    .done(function(resp){
+      tmp = resp
+      console.log("DONE"+resp);
+    })
+    .fail(function(resp){
+      console.log("FAIL "+resp);
+    });
+}
+
+function submit_to_serol(target, token, redirect_url){
+
+		var url = '/api/schedule/';
 		var data = {start:start.toISOString().substr(0,19),
 					end:end.substr(0,19),
 					aperture:'0m4', //obs_vals[0]['aperture'],
@@ -9,6 +24,8 @@ function submit_to_serol(target, token){
 					object_dec:target.dec,
 					filters:JSON.stringify(target.filters),
 					token: token,
+          csrfmiddlewaretoken: csrftoken,
+          challenge:challenge_id
 				};
 		$.ajax({
 			url: url,
@@ -17,16 +34,14 @@ function submit_to_serol(target, token){
 			data: data,
 			error: function(e){
 				console.log('Error: '+e);
-				var content = "<h3>Error!</h3><p>Sorry, there was a problem submitting your request. Please try later.</p>"
-				$('#message-content').html(content);
+				$('.modal-title').html("Error!");
+				$('.modal-body').html("<p>Sorry, there was a problem submitting your request. Please try later.</p>");
 				closePopup(delay='2000');
 			},
 			success: function(data){
-				var content = "<h3>Success!</h3><p>Your image will be ready in the next week.</p><img src='http://lcogt.net/files/edu/serol/serol_sm.png'>"
-				$('#message-content').html(content);
-				closePopup(delay='2000');
-				// Stop them from accidentally submitting a second time
-				$('#observe_button').hide();
+				$('.modal-title').html("Success!");
+				$('.modal-body').html("<p>Your image will be ready in the next week.</p><img src='https://lco.global/files/edu/serol/serol_holding_cosmic_objects_sm.png'>");
+        window.location.replace(redirect_url);
 
 			}
 		});
@@ -59,7 +74,7 @@ function submit_to_serol(target, token){
       }
     var request = {
       "location":{"telescope_class":"0m4"},
-      "constraints":{"max_airmass":1.6},
+      "constraints":{"max_airmass":2.0},
       "target": target,
       "molecules": molecules,
       "windows": [timewindow],
@@ -74,15 +89,17 @@ function submit_to_serol(target, token){
         "observation_type": "NORMAL",
         "requests": [request],
     }
-    console.log(data)
     $.ajax({
       url: 'https://observe.lco.global/api/userrequests/',
       type: 'post',
-      data: data,
+      data: JSON.stringify(data),
       headers: {'Authorization': 'Token '+token},
       dataType: 'json',
-      success: function(data){
-        console.log(data);
-      }
-  });
+      contentType: 'application/json'})
+      .done(function(resp){
+        console.log("DONE"+resp);
+      })
+      .fail(function(resp){
+        console.log("FAIL "+resp);
+      });
   }
