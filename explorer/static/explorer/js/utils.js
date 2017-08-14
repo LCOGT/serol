@@ -1,20 +1,45 @@
 
-function status_check(requestid, token) {
+function status_request(requestid, token) {
+  var resp;
   $.getJSON('https://observe.lco.global/api/userrequests/'+requestid+'/',
     {headers: {'Authorization': 'Token '+token},
     dataType: 'json',
     contentType: 'application/json'})
     .done(function(resp){
-      tmp = resp
+      resp = resp
       console.log("DONE"+resp);
     })
     .fail(function(resp){
       console.log("FAIL "+resp);
     });
+    return resp;
 }
 
-function submit_to_serol(target, token, redirect_url){
+function status_userrequest(userrequestid, token) {
+  var data;
+  $.getJSON('https://observe.lco.global/api/requests/'+userrequestid+'/blocks/?canceled=false',
+    {headers: {'Authorization': 'Token '+token},
+    dataType: 'json',
+    contentType: 'application/json'})
+    .done(function(rdata){
+      data = rdata
+      console.log("DONE"+rdata);
+    })
+    .fail(function(rdata){
+      console.log("FAIL "+rdata);
+    });
+    return data;
+}
 
+function startEnd(date) {
+  var end = new Date(date);
+  end.setDate(end.getDate() + 7);
+  return end.toISOString();
+}
+
+function submit_to_serol(target, token, challenge_id, redirect_url, csrftoken){
+    var start = new Date();
+    var end = startEnd(start);
 		var url = '/api/schedule/';
 		var data = {start:start.toISOString().substr(0,19),
 					end:end.substr(0,19),
@@ -36,7 +61,6 @@ function submit_to_serol(target, token, redirect_url){
 				console.log('Error: '+e);
 				$('.modal-title').html("Error!");
 				$('.modal-body').html("<p>Sorry, there was a problem submitting your request. Please try later.</p>");
-				closePopup(delay='2000');
 			},
 			success: function(data){
 				$('.modal-title').html("Success!");

@@ -1,0 +1,45 @@
+{% extends 'explorer/base.html' %}
+{% load static i18n %}
+
+{% block wrapper-class%}mission-{{object.mission.number}}-sidebar{%endblock%}
+
+{% block main-content %}
+<div class="container-fluid">
+  <!-- Example row of columns -->
+  <div class="row page-header">
+    <div class="col-lg-12">
+        <h1 class="display-1">{% trans "Challenge" %} {{object.number }}!</h1>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-lg-12">
+    {% if progress.status == "Start"%}
+    <p class="lead">{{object.description|safe}}</p>
+    <p>{{progress.status}}</p>
+    <a href="{% url 'observe' object.pk %}" class="tn btn-info btn-lg  animated tada">Start the challenge ></a>
+    {% elif progress.status == "Submitted" %}
+    <h2 class="display-2">{% trans "Come back later" %}</h2>
+    <p>{% trans "Serol has asked a telescope friend to take your requested picture for you." %}</p>
+    <p id="message">{% trans "Serol is hoping this will be observed on" %} <span id="request-site"></span> {% trans "at" %} <span id="request-time"></span>.</p>
+    {% elif progress.status == "Completed" %}
+    {% elif progress.status == "Failed" %}
+    {% endif %}
+  </div>
+  </div>
+  </div>
+{% endblock %}
+
+{% if progress.status == "Submitted" %}
+{% block script-content %}
+<script src="{% static "explorer/js/utils.js" %}"  type="text/javascript" ></script>
+<script>
+var requestid = "{{progress.requestids}}";
+var resp;
+$(document).ready(function(){
+  resp = status_request(requestid, localStorage.getItem('token'));
+});
+</script>
+{% endblock%}
+{% endif %}

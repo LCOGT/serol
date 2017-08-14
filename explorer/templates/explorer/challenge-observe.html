@@ -6,12 +6,7 @@
 <script>
 var targets;
 var tmp;
-var start = new Date();
-var end = startEnd(start);
-var csrftoken = '{{ csrf_token }}';
 var category = '{{object.category}}';
-var challenge_id = '{{object.id}}' 
-var redirect_url = "{% url 'challenge' object.id %}";
 var image_files = {
     '5.1.1' : "{% static 'explorer/images/5.1.1-spiral_galaxy.png' %}",
     '5.1.4' : "{% static 'explorer/images/5.1.4-elliptical_galaxy.png' %}",
@@ -28,13 +23,10 @@ function add_targets(i, data){
   $(item+" .target-name").html(data);
 }
 
-function startEnd(date) {
-  var end = new Date(date);
-  end.setDate(end.getDate() + 7);
-  return end.toISOString();
-}
-
 $(document).ready(function(){
+  var csrftoken = '{{ csrf_token }}';
+  var challenge_id = '{{object.id}}'
+  var redirect_url = "{% url 'challenge' object.id %}";
   var whatsupurl = "https://lco.global/whatsup/range/?aperture=0m4&format=jsonp";
   var image_file = image_files[category];
 
@@ -73,7 +65,7 @@ $(document).ready(function(){
 
   $("#submit_button").on("click", function(){
     var tid = $(this).data('tid')
-    submit_to_serol(targets[tid], localStorage.getItem('token'));
+    submit_to_serol(targets[tid], localStorage.getItem('token'), challenge_id, redirect_url, csrftoken);
   });
 });
 </script>

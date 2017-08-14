@@ -11,11 +11,12 @@ from explorer.views import MissionView, ChallengeRedirectView, ChallengeView
 
 urlpatterns = [
     url(r'^mission/(?P<pk>[0-9]+)/$', MissionView.as_view(), name="mission"),
-    url(r'^challenge/(?P<pk>[0-9]+)/start/$', ChallengeView.as_view(), {'mode':'start'}, name="challenge-start"),
-    url(r'^challenge/(?P<pk>[0-9]+)/observe/$', ChallengeView.as_view(), {'mode':'observe'}, name="challenge-observe"),
-    url(r'^challenge/(?P<pk>[0-9]+)/identify/$', ChallengeView.as_view(), {'mode':'identify'}, name="challenge-identify"),
-    url(r'^challenge/(?P<pk>[0-9]+)/analyse/$', ChallengeView.as_view(), {'mode':'analyse'}, name="challenge-analyse"),
-    url(r'^challenge/(?P<pk>[0-9]+)/investigate/$', ChallengeView.as_view(), {'mode':'investigate'}, name="challenge-investigate"),
+    url(r'^challenge/(?P<pk>[0-9]+)/start/$', ChallengeView.as_view(), {'mode':'start'}, name="start"),
+    url(r'^challenge/(?P<pk>[0-9]+)/observe/$', ChallengeView.as_view(), {'mode':'observe'}, name="observe"),
+    url(r'^challenge/(?P<pk>[0-9]+)/identify/$', ChallengeView.as_view(), {'mode':'identify'}, name="identify"),
+    url(r'^challenge/(?P<pk>[0-9]+)/analyse/$', ChallengeView.as_view(), {'mode':'analyse'}, name="analyse"),
+    url(r'^challenge/(?P<pk>[0-9]+)/investigate/$', ChallengeView.as_view(), {'mode':'investigate'}, name="investigate"),
+    url(r'^challenge/(?P<pk>[0-9]+)/submitted/$', ChallengeView.as_view(), {'mode':'submitted'}, name="submitted"),
     url(r'^challenge/(?P<pk>[0-9]+)/$', ChallengeRedirectView.as_view(), name="challenge"),
     url(r'^status/(?P<pk>[0-9]+)/$', StatusView.as_view(), name="status"),
     url(r'^api/schedule/$', ScheduleView.as_view(), name='schedule'),

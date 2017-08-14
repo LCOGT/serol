@@ -1,4 +1,4 @@
-{% load static %}
+{% load static i18n %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -28,10 +28,21 @@
 
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item" id="login"><a class="nav-link" href="#" data-toggle="modal" data-target="#login-overlay">Login</a></li>
           <li class="nav-item"><a class="nav-link" href="#">Become a Cosmic Explorer</a></li>
           <li class="nav-item"><a class="nav-link" href="#">About Serol</a></li>
-          <li class="nav-item" id="logout" style="display:none;"><a class="nav-link" href="#">Logout</a></li>
+          {% if request.user.is_authenticated %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              {{ request.user}}
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <a class="dropdown-item" href="#">Your Profile</a>
+              <a class="dropdown-item" href="#" id="logout">Logout</a>
+            </div>
+          </li>
+          {% else %}
+          <li class="nav-item" id="login"><a class="nav-link" href="#" data-toggle="modal" data-target="#login-overlay">Login</a></li>
+          {% endif %}
         </ul>
       </div>
     </nav>

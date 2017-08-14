@@ -1,20 +1,20 @@
 {% extends "explorer/base.html" %}
-{% load static %}
+{% load static i18n %}
 
 {% block wrapper-class%}site-wrapper{%endblock%}
 
 {% block main-content %}
 
-<div class="container flex-grow">
+<div class="container">
   <div class="row">
     <div class="col-4 title-left">
     </div>
     <div class="col-4 ">
       <img src="{% static 'explorer/images/serol_head_logo.png' %}" alt="serol logo" class="img-fluid" />
-      <h1 class="title-main">SEROL</h1>
-      <p class="lead">Cosmic Explorer</p>
+      <h1 class="title-main">{% trans "Mission Serol" %}</h1>
+      <p class="lead">{% trans "The Adventures of Serol, Cosmic Explorer" %}</p>
       <p class="lead">
-        <a href="#" class="btn btn-lg btn-outline-secondary animated tada" data-toggle="modal" data-target="#exampleModal">Start the adventure!</a>
+        <a href="#" class="btn btn-lg btn-outline-secondary animated tada" data-toggle="modal" data-target="#exampleModal">{% trans "Start the adventure!" %}</a>
       </p>
     </div>
     <div class="col-4 title-right">
