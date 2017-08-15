@@ -60,6 +60,7 @@ var DateDiff = {
 
 function status_request(requestid, token) {
   var data;
+  console.log(token)
   $.getJSON('https://observe.lco.global/api/userrequests/'+requestid+'/',
     {headers: {'Authorization': 'Token '+token},
     dataType: 'json',
@@ -72,7 +73,7 @@ function status_request(requestid, token) {
       console.log("DONE"+data);
     })
     .fail(function(rdata){
-      console.log("FAIL "+rdata);
+      console.log("FAIL "+rdata['detail']);
     });
     return data;
 }
@@ -94,14 +95,38 @@ function status_userrequest(userrequestid, token) {
       data = rdata
     })
     .fail(function(rdata){
-      console.log("FAIL "+rdata);
+      console.log("FAIL "+rdata['detail']);
+    });
+    return data;
+}
+
+function fetch_image(userrequestid, archivetoken){
+  var data = {};
+  $.getJSON('https://archive-api.lco.global/frames/?limit=1&offset=1&ordering=-id&REQNUM='+userrequestid,
+    {headers: {'Authorization': 'Token '+token},
+    dataType: 'json',
+    contentType: 'application/json'})
+    .done(function(rdata){
+      if (rdata['results'].length > 0){
+        data['frame'] = rdata['results'][0]['id'];
+        data['url'] = rdata['results'][0]['url'];
+      }
+      console.log("Number of Images ="+rdata['results'].length);
+    })
+    .fail(function(rdata){
+      console.log("FAIL "+rdata['detail']);
     });
     return data;
 }
 
 function update_date(days, hours, minutes){
-  $('#request-days').html(days+" days");
-  $('#request-time').html(hours+":"+minutes);
+  if  (days >0){
+    $('#request-time').html(days+" days");
+  }else if (hours >1){
+    $('#request-time').html(hours+" hours");
+  }else{
+    $('#request-time').html(minutes+" mins");
+  }
 }
 
 function update_site(site){

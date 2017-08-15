@@ -31,7 +31,7 @@ function login(username, password, callback){
     dataType: 'json',
     success: function(data){
       localStorage.setItem('token', data.token);
-      console.log("stored token"+data.token);
+      console.log("stored token "+data.token);
       //getProposals();
       callback(true);
     },

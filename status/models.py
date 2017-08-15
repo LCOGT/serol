@@ -3,6 +3,7 @@ from datetime import datetime
 from django.db import models
 from django.contrib.auth.models import User
 from django_fsm import FSMField, transition
+from django.utils.translation import ugettext as _
 
 from explorer.models import Challenge, Mission
 
@@ -15,9 +16,10 @@ STATUS = (
 class Progress(models.Model):
     user = models.ForeignKey(User)
     challenge = models.ForeignKey(Challenge)
-    requestids = models.TextField()
+    requestids = models.CharField(max_length=20)
     status = FSMField(default='New', choices=STATUS)
     last_update = models.DateTimeField(default=datetime.utcnow)
+    target = models.CharField(max_length=100)
 
     def __str__(self):
         return "{} is {} in {}".format(self.user.username, self.challenge, self.status)
@@ -38,7 +40,7 @@ class Progress(models.Model):
         pass
 
     @transition(field=status, source=['Observed'], target='Identify')
-    def indentify(self):
+    def identify(self):
         pass
 
     @transition(field=status, source=['Identify'], target='Analyse')

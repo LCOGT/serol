@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.translation import ugettext as _
 
 class Mission(models.Model):
     number = models.IntegerField()
@@ -10,9 +11,11 @@ class Challenge(models.Model):
     name = models.CharField(max_length=200)
     badge = models.ImageField(upload_to='badges')
     mission = models.ForeignKey(Mission)
-    description = models.TextField()
+    description = models.TextField(help_text=_("Research page info"))
     action = models.TextField()
-    category = models.TextField(blank=True,null=True)
+    category = models.TextField(help_text=_("Astronomical object type"), blank=True, null=True)
+    avm_code = models.CharField(max_length=50, blank=True, null=True)
+    active = models.BooleanField(default=True)
 
-class Target(models.Model):
-    objectid = models.CharField(max_length=50)
+    def __str__(self):
+        return "Challenge {} from Mission {}".format(self.number, self.mission.number)

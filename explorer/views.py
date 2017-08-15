@@ -37,10 +37,13 @@ class ChallengeRedirectView(RedirectView):
 
         try:
             progress = Progress.objects.get(challenge=challenge, user=self.request.user)
+            if progress.status == 'Observed':
+                # Skip from observed to identify. This is manual in case user is resting on Submitted page
+                progress.identify()
+                progress.save()
             urlpath = progress.status.lower()
         except Exception as e:
             urlpath = 'start'
-            print(e)
         try:
             url = reverse(urlpath, args=args, kwargs=kwargs)
             self.url = url
