@@ -75,7 +75,7 @@ def request_format(object_name, object_ra, object_dec, start,end, obs_filter, pr
         }
 
     request = {
-        "constraints" : {'max_airmass' : 1.6, "min_lunar_distance": 30.0,},
+        "constraints" : {'max_airmass' : 2.0, "min_lunar_distance": 30.0,},
         "location" : location,
         "molecules" : molecules,
         "observation_note" : "Serol Request",

@@ -70,6 +70,19 @@ p {
   font-size:2rem;
 }
 
+#request-message {
+  color: rgba(255, 255, 255, 0.25);
+}
+
+h2.request-status-info {
+  display: inline-block;
+  font-size: 8rem;
+}
+#request-days,
+#request-time {
+  font-family: "Aldrich";
+  display:block;
+}
 
 
 /* Extra markup and styles for table-esque vertical and horizontal centering */

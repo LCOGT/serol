@@ -1,18 +1,80 @@
+var site_codes = {
+  'coj' : 'Siding Spring, Australia',
+  'ogg' : 'Haleakala, Hawaii',
+  'tfn' : 'Tenerife, Canary Islands',
+  'cpt' : 'Sutherland, South Africa',
+  'lsc' : 'Cerro Tololo, Chile',
+  'elp' : 'McDonald, Texas'
+}
+
+var DateDiff = {
+
+    inDays: function(d1, d2) {
+        var t2 = d2.getTime();
+        var t1 = d1.getTime();
+
+        return parseInt((t2-t1)/(24*3600*1000));
+    },
+
+    inWeeks: function(d1, d2) {
+        var t2 = d2.getTime();
+        var t1 = d1.getTime();
+
+        return parseInt((t2-t1)/(24*3600*1000*7));
+    },
+
+    inHours: function(d1, d2) {
+        var t2 = d2.getTime();
+        var t1 = d1.getTime();
+
+        return parseInt((t2-t1)/(3600*1000));
+    },
+
+    inMinutes: function(d1, d2) {
+        var t2 = d2.getTime();
+        var t1 = d1.getTime();
+        var dt = (t2-t1)/(3600*1000);
+        var hours = parseInt(dt);
+        var imins = parseInt((dt - hours)*60);
+
+        if (String(imins).length == 1){
+          return "0"+String(imins);
+        } else {
+          return imins ;
+        }
+    },
+
+    inMonths: function(d1, d2) {
+        var d1Y = d1.getFullYear();
+        var d2Y = d2.getFullYear();
+        var d1M = d1.getMonth();
+        var d2M = d2.getMonth();
+
+        return (d2M+12*d2Y)-(d1M+12*d1Y);
+    },
+
+    inYears: function(d1, d2) {
+        return d2.getFullYear()-d1.getFullYear();
+    }
+}
 
 function status_request(requestid, token) {
-  var resp;
+  var data;
   $.getJSON('https://observe.lco.global/api/userrequests/'+requestid+'/',
     {headers: {'Authorization': 'Token '+token},
     dataType: 'json',
     contentType: 'application/json'})
-    .done(function(resp){
-      resp = resp
-      console.log("DONE"+resp);
+    .done(function(rdata){
+      data = rdata
+      if (rdata['state'] == 'PENDING' && rdata['requests'].length > 0){
+        status_userrequest(rdata['requests'][0]['id'], token)
+      }
+      console.log("DONE"+data);
     })
-    .fail(function(resp){
-      console.log("FAIL "+resp);
+    .fail(function(rdata){
+      console.log("FAIL "+rdata);
     });
-    return resp;
+    return data;
 }
 
 function status_userrequest(userrequestid, token) {
@@ -22,13 +84,29 @@ function status_userrequest(userrequestid, token) {
     dataType: 'json',
     contentType: 'application/json'})
     .done(function(rdata){
+      if (rdata.length > 0){
+        var d2 = new Date(rdata[0]['start']);
+        var d1 = new Date();
+        update_date(DateDiff.inDays(d1,d2), DateDiff.inHours(d1,d2), DateDiff.inMinutes(d1,d2));
+        update_site(rdata[0]['site']);
+      }
+      console.log("SCHEDULED"+rdata);
       data = rdata
-      console.log("DONE"+rdata);
     })
     .fail(function(rdata){
       console.log("FAIL "+rdata);
     });
     return data;
+}
+
+function update_date(days, hours, minutes){
+  $('#request-days').html(days+" days");
+  $('#request-time').html(hours+":"+minutes);
+}
+
+function update_site(site){
+  var name = site_codes[site];
+  $('#request-site').html(name)
 }
 
 function startEnd(date) {

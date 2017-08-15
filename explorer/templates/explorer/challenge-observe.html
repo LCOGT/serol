@@ -5,7 +5,6 @@
 <script src="{% static 'explorer/js/utils.js' %}" ></script>
 <script>
 var targets;
-var tmp;
 var category = '{{object.category}}';
 var image_files = {
     '5.1.1' : "{% static 'explorer/images/5.1.1-spiral_galaxy.png' %}",
@@ -77,7 +76,7 @@ $(document).ready(function(){
   <!-- Example row of columns -->
   <div class="row page-header">
     <div class="col-lg-12">
-        <h1>Challenge {{object.number }}!</h1>
+        <h1>Challenge {{object.number }}</h1>
         <p>{{object.action}}</p>
     </div>
   </div>

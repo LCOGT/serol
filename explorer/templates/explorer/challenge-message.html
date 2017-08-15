@@ -8,21 +8,39 @@
   <!-- Example row of columns -->
   <div class="row page-header">
     <div class="col-lg-12">
-        <h1 class="display-1">{% trans "Challenge" %} {{object.number }}!</h1>
+        <h1 class="display-1">{% trans "Challenge" %} {{object.number }}</h1>
     </div>
   </div>
 </div>
 <div class="container">
   <div class="row">
-    <div class="col-lg-12">
+    <div class="col-md-10 offset-md-2">
     {% if progress.status == "Start"%}
     <p class="lead">{{object.description|safe}}</p>
     <p>{{progress.status}}</p>
     <a href="{% url 'observe' object.pk %}" class="tn btn-info btn-lg  animated tada">Start the challenge ></a>
     {% elif progress.status == "Submitted" %}
-    <h2 class="display-2">{% trans "Come back later" %}</h2>
-    <p>{% trans "Serol has asked a telescope friend to take your requested picture for you." %}</p>
-    <p id="message">{% trans "Serol is hoping this will be observed on" %} <span id="request-site"></span> {% trans "at" %} <span id="request-time"></span>.</p>
+    <p>{% trans "Serol has asked Las Cumbres Observatory to take your picture in" %}</p>
+    <div id="request-message">
+      <div class="row">
+        <div class="col-md-2 offset-md-2">
+          <i class="fas fa-alarm-clock fa-10x"></i>
+        </div>
+        <div class="col-md-8">
+        <h2 class="request-status-info"><span id="request-days"></span><span id="request-time"><i class="fa fa-cog fa-spin fa-fw"></i></span></h2>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-2  offset-md-2">
+          <i class="fas fa-compass fa-10x"></i>
+        </div>
+        <div class="col-md-8">
+          <h2 class="request-status-info" id="request-site">
+            <i class="fa fa-cog fa-spin fa-fw"></i>
+          </h2>
+        </div>
+      </div>
+    </div>
     {% elif progress.status == "Completed" %}
     {% elif progress.status == "Failed" %}
     {% endif %}
