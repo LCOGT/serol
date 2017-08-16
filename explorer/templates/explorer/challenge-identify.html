@@ -6,6 +6,27 @@
 {% block script-content %}
 <script src="{% static 'explorer/js/utils.js' %}" ></script>
 <script>
+var images = Array();
+images.push({'mine':true, 'url':"https://s3-us-west-2.amazonaws.com/thumbnails.lcogt.net/6794624.-7029006549152786650.jpg?AWSAccessKeyId=AKIAIIXJI2IT23CSF2RA&Signature=3RZsKNimPTFZiV%2BTbiiXW5sLSTs%3D&Expires=1502923587"});
+images.push({'mine':false, 'url':"http://lcogt.net/files/rtisba/faulkes-rti/imagearchive/2013/08/07/process-1835-2.jpg"});
+images.push({'mine':false, 'url':"http://lcogt.net/files/rtisba/faulkes-rti/imagearchive/2013/04/26/process-2408-1.jpg"});
+images.push({'mine':false, 'url':"http://lcogt.net/files/rtisba/faulkes-rti/imagearchive/2013/04/04/process-753-2.jpg"});
+
+images = shuffle(images);
+
+$(document).ready(function(){
+  for (i=0;i<4;i++){
+    $("#img-"+i).attr('src',images[i]['url']);
+    $("#img-text-"+i).data('mine',images[i]['mine']);
+  }
+  $(".identify-text").on('click', function(d){
+    if ($(this).data('mine') == true){
+      console.log('YES')
+    } else {
+      console.log($(this));
+    }
+  });
+});
 </script>
 {% endblock %}
 
@@ -24,9 +45,11 @@
       <div class="row">
         {% for i in "0123" %}
         <div class="col-sm-6 pb-5 identify-container">
-          <img src="http://placehold.it/400x300" alt="Avatar" class="identify-image img-fluid" id="img-{{i}}">
+          <img src="http://placehold.it/300x300" alt="Avatar" class="identify-image img-fluid rounded" id="img-{{i}}">
           <div class="identify-middle">
-            <div class="identify-text" id="img-text-{{i}}"></div>
+            <div class="identify-text" id="img-text-{{i}}" data-mine="">
+              <i class="fa fa-question fa-4x"></i>
+            </div>
           </div>
         </div>
         {% endfor %}

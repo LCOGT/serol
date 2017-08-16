@@ -64,6 +64,7 @@ h1.side-writing {
   text-orientation: sidways-right;
   font-size:10rem;
   text-shadow: 0 .5rem .5rem rgba(0,0,0,.5);
+  padding:20px 0;
 }
 
 p {
@@ -235,8 +236,7 @@ h5.modal-title{
 */
 
 .identify-container {
-    position: relative;
-    width: 50%;
+  background-color: rgba(0,0,0, 0.2);
 }
 
 .identify-image {
