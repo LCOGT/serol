@@ -2,26 +2,6 @@
 {% load static %}
 
 {% block script-content %}
-<script src="{% static "explorer/js/auth.js" %}"  type="text/javascript" ></script>
-<script>
-$(document).ready(function(){
-	$('#login-btn').on('click',function(){
-	  login($('#email').val(), $('#password').val(), function(result){
-	    if(result){
-	      $('#login-form').hide();
-	      $('#alert-error').hide();
-	      $('#logout').show();
-	    }else{
-	      $('#alert-error').show().find('strong').text('Login Failed');
-	    }
-	  });
-	});
-
-  $('#logout-btn').click(function(){
-    logout();
-  });
-});
-</script>
 {% endblock %}
 
 {% block main-content %}
@@ -40,6 +20,7 @@ $(document).ready(function(){
 					<h1>Serol</h1>
 					<h3>Log into your On Sky account</h3>
 					<form action="" method="post"  id="loginForm" >
+            {% csrf_token %}
 						<div class="row">
 							<label for="username">Email Address:</label>
 							<input type="text" name="username" value="" id="username">

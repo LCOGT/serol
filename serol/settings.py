@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'social_django',
     'rest_framework'
 ]
 
@@ -39,6 +40,11 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+AUTHENTICATION_BACKENDS = (
+    'serol.auth_backend.ValhallaBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
 
 ROOT_URLCONF = 'serol.urls'
 
@@ -96,6 +102,8 @@ USE_TZ = False
 
 STATIC_URL = '/static/'
 
+STATIC_ROOT = '/var/www/html/'
+
 chars = 'abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)'
 SECRET_KEY = get_random_string(50, chars)
 
@@ -111,6 +119,7 @@ DATABASES = {
 
     }
 }
+
 
 LOGGING = {
     'version': 1,
