@@ -102,13 +102,12 @@ SECRET_KEY = get_random_string(50, chars)
 DATABASES = {
     "default": {
         # Live DB
-        "ENGINE": "django.db.backends.mysql",
-        "NAME": os.environ.get('SEROL_DB_NAME', 'seroldb'),
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.environ.get('SEROL_DB_NAME', ''),
         "USER": os.environ.get('SEROL_DB_USER',''),
         "PASSWORD": os.environ.get('SEROL_DB_PASSWD',''),
         "HOST": os.environ.get('SEROL_DB_HOST',''),
-        "CONN_MAX_AGE" : 1800,
-        "OPTIONS"   : {'init_command': 'SET storage_engine=INNODB'},
+        "PORT"   : '5432',
 
     }
 }

@@ -1,0 +1,11 @@
+Django>=1.11,<1.12
+django-fsm
+django-rest-framework
+djangorestframework
+djangorestframework-jsonp
+django-pagedown
+django-markdown-deux
+psycopg2
+Pillow
+requests
+six

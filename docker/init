@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Perform migrations and pull in fixtures
+python /var/www/serol/manage.py migrate --noinput
+#python /var/www/serol/manage.py loaddata full_catalogue.json
+
+# Django static files
+python /var/www/serol/manage.py collectstatic --noinput
+
+# Run under supervisord
+exec /usr/bin/supervisord -n -c /etc/supervisord.conf
