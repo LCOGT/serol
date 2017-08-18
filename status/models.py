@@ -1,9 +1,9 @@
 from datetime import datetime
 
 from django.db import models
-from django.contrib.auth.models import User
 from django_fsm import FSMField, transition
 from django.utils.translation import ugettext as _
+from django.contrib.auth.models import AbstractUser
 
 from explorer.models import Challenge, Mission
 
@@ -12,6 +12,9 @@ STATUS = (
 ('Identify','Identify'), ('Analyse','Analyse'), ('Identify','Identify'), ('Investigate','Investigate')
 )
 
+class User(AbstractUser):
+    token = models.CharField(help_text=_('Authentication for Valhalla'), max_length=50, blank=True, null=True)
+    archive_token = models.CharField(help_text=_('Authentication for LCO archive'), max_length=50, blank=True, null=True)
 
 class Progress(models.Model):
     user = models.ForeignKey(User)

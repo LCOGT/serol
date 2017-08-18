@@ -26,15 +26,6 @@ body {
   height: 100%;
 }
 
-#wrapper {
-  min-height: 100%;
-}
-
-#wrapper-inner {
-  overflow:auto;
-  padding-bottom:200px;
-}
-
 
 body {
   text-align: center;
@@ -93,8 +84,8 @@ h2.request-status-info {
   height: 100%; /* For at least Firefox */
   min-height: 100%;
 }
-.site-wrapper-inner {
-  display: table-cell;
+.masthead, .mastfoot, .content {
+  display: table-row;
   vertical-align: top;
 }
 .center-box-wrapper {
@@ -273,47 +264,25 @@ h5.modal-title{
   padding: 16px 32px;
 }
 
-/* Footer
+/* Wrapper layouts
 */
 
-footer {
-  background-color:#000;
+.site-wrapper {
+  display: table;
+  width: 100%;
+  height: 100%; /* For at least Firefox */
+  min-height: 100%;
+  -webkit-box-shadow: inset 0 0 5rem rgba(0,0,0,.5);
+          box-shadow: inset 0 0 5rem rgba(0,0,0,.5);
 }
-
-@media (max-width: 42rem) {
-  .modal-dialog {
-    min-height: -webkit-calc(100vh - 20px);
-    min-height: -moz-calc(100vh - 20px);
-    min-height: calc(100vh - 20px);
-  }
+.site-wrapper-inner {
+  display: table-cell;
+  vertical-align: top;
 }
-
-@media (min-width: 48em) {
-  .masthead-brand {
-    float: left;
-  }
-  .nav-masthead {
-    float: right;
-  }
+.cover-container {
+  margin-right: auto;
+  margin-left: auto;
 }
-
-
-/*
- * Cover
- */
-
-.cover {
-  padding: 0 1.5rem;
-}
-.cover .btn-lg {
-  padding: .75rem 1.25rem;
-  font-weight: bold;
-}
-
-
-/*
- * Affix and center
- */
 
 @media (min-width: 40em) {
   /* Pull out the header and footer */
@@ -337,10 +306,11 @@ footer {
   }
 }
 
-@media (min-width: 62em) {
-  .masthead,
-  .mastfoot,
-  .cover-container {
-    width: 60rem;
+
+@media (max-width: 42rem) {
+  .modal-dialog {
+    min-height: -webkit-calc(100vh - 20px);
+    min-height: -moz-calc(100vh - 20px);
+    min-height: calc(100vh - 20px);
   }
 }

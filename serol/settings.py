@@ -27,7 +27,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'social_django',
     'rest_framework'
 ]
 
@@ -45,6 +44,8 @@ AUTHENTICATION_BACKENDS = (
     'serol.auth_backend.ValhallaBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
+
+AUTH_USER_MODEL = 'status.User'
 
 ROOT_URLCONF = 'serol.urls'
 
@@ -169,6 +170,7 @@ PORTAL_API_URL = 'https://observe.lco.global/api/'
 PORTAL_REQUEST_API = PORTAL_API_URL + 'userrequests/'
 PORTAL_REQUEST_URL = 'https://observe.lco.global/userrequests/'
 PORTAL_TOKEN_URL = PORTAL_API_URL + 'api-token-auth/'
+PORTAL_PROFILE_URL = PORTAL_API_URL + 'profile/'
 PORTAL_TOKEN = os.environ.get('VALHALLA_TOKEN','')
 
 DEFAULT_CAMERAS = { '1m0' : '1M0-SCICAM-SBIG',

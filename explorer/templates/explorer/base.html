@@ -22,83 +22,48 @@
 
   <body>
 
-    <div id="wrapper">
-    <nav class="navbar navbar-toggleable-md navbar-inverse nav-head">
-      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <a class="navbar-brand" href="/"><img src="{% static 'explorer/images/serol_logo_sm.png'%}" /></a>
+    <div class="site-wrapper">
+        <nav class="navbar navbar-toggleable-md navbar-inverse nav-head">
+          <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <a class="navbar-brand" href="/"><img src="{% static 'explorer/images/serol_logo_sm.png'%}" /></a>
 
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item"><a class="nav-link" href="#">Become a Cosmic Explorer</a></li>
-          <li class="nav-item"><a class="nav-link" href="#">About Serol</a></li>
-          {% if request.user.is_authenticated %}
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              {{ request.user}}
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <a class="dropdown-item" href="#">Your Profile</a>
-              <a class="dropdown-item" href="#" id="logout">Logout</a>
-            </div>
-          </li>
-          {% else %}
-          <li class="nav-item" id="login"><a class="nav-link" href="#" data-toggle="modal" data-target="#login-overlay">Login</a></li>
-          {% endif %}
-        </ul>
-      </div>
-    </nav>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item"><a class="nav-link" href="#">Become a Cosmic Explorer</a></li>
+              <li class="nav-item"><a class="nav-link" href="#">About Serol</a></li>
+              {% if request.user.is_authenticated %}
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  {{ request.user}}
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                  <a class="dropdown-item" href="#">Your Profile</a>
+                  <a class="dropdown-item" href="{% url 'auth_logout' %}" id="logout">Logout</a>
+                </div>
+              </li>
+              {% else %}
+              <li class="nav-item" id="login"><a class="nav-link" href="{% url 'auth_login' %}">Login</a></li>
+              {% endif %}
+            </ul>
+          </div>
+        </nav>
 
-<div class="{% block wrapper-class%}{%endblock%}" id="wrapper-inner">
+<div class="{% block wrapper-class%}{%endblock%}">
 {% block main-content %}
 {% endblock %}
 </div>
 
-
-    <div id="login-overlay" class="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-      <div class="modal-content">
-          <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
-              <h4 class="modal-title" id="myModalLabel">Login</h4>
-          </div>
-          <div class="modal-body">
-              <div class="row">
-                          <form id="loginForm" method="POST" action="" novalidate="novalidate">
-                            {% csrf_token %}
-                              <div class="form-group">
-                                  <label for="username" class="control-label">Username</label>
-                                  <input type="text" class="form-control" id="username" name="username" value="" required="" title="Please enter you username" placeholder="example@gmail.com">
-                                  <span class="help-block"></span>
-                              </div>
-                              <div class="form-group">
-                                  <label for="password" class="control-label">Password</label>
-                                  <input type="password" class="form-control" id="password" name="password" value="" required="" title="Please enter your password">
-                                  <span class="help-block"></span>
-                              </div>
-                              <div id="alert-error" class="alert alert-error hide">Wrong username or password</div>
-                              <button class="btn btn-success btn-block" id="login-btn">Login</button>
-                              <p><a href="/forgot/" class="btn btn-default btn-block">Help to login</a></p>
-                              <p><a href="#" class="btn btn-info btn-block">Register now!</a></p>
-                          </form>
-              </div>
-          </div>
+<div class="mastfoot">
+  <div class="container-fluid">
+      <div class="footer-content">
+        &copy; {% now "Y" %} <a href="https://lco.global">Las Cumbres Observatory</a>
       </div>
-    </div>
   </div>
 </div>
+</div>
 
-
-  <footer class="navbar-fixed-bottom">
-      <div class="container-fluid py-3">
-          <div class="row">
-          <div class="footer-content">
-          &copy; {% now "Y" %} <a href="https://lco.global">Las Cumbres Observatory</a>
-          </div>
-        </div>
-      </div>
-  </footer>
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
