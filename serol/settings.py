@@ -14,7 +14,7 @@ DEBUG=False
 
 ALLOWED_HOSTS = ['*']
 
-ADMIN_TITLE = 'SEROL admin'
+ADMIN_SITE_HEADER = 'SEROL admin'
 
 # Application definition
 
@@ -179,6 +179,9 @@ DEFAULT_CAMERAS = { '1m0' : '1M0-SCICAM-SBIG',
                     }
 
 PROPOSAL_CODE = 'LCOEPO2014B-010'
+
+LOGIN_URL = "/login/"
+LOGIN_REDIRECT_URL = "/"
 
 ##################
 # LOCAL SETTINGS #

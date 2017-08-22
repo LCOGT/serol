@@ -26,6 +26,9 @@ class ValhallaBackend(object):
             user.token = token
             user.archive_token = profile[1]
             user.save()
+            # Finally add these tokens as session variables
+            request.session['token'] = token
+            request.session['archive_token'] = profile
             return user
         return None
 

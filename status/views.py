@@ -31,12 +31,13 @@ class RequestSerializer(serializers.Serializer):
         params = self.data
         obs_params = request_format(params['object_name'], params['object_ra'], params['object_dec'], params['start'], params['end'], params['filters'], params['aperture'])
         resp_status, resp_msg = process_observation_request(params=obs_params, token=params['token'])
+        if not resp_status:
+            return Response(resp_msg, status=status.HTTP_400_BAD_REQUEST)
         resp_prog = save_progress(challenge=params['challenge'], user=kwargs['user'], request_id=resp_msg)
-        print(resp_status, resp_prog)
         if resp_status and resp_prog:
             return Response("Success", status=status.HTTP_201_CREATED)
         else:
-            return Response(resp_msg, status=status.HTTP_400_BAD_REQUEST)
+            return Response("Manipulating status", status=status.HTTP_400_BAD_REQUEST)
 
 class ScheduleView(APIView):
     """

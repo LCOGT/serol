@@ -22,7 +22,7 @@
 
   <body>
 
-    <div class="site-wrapper">
+    <div class="site-wrapper {% block wrapper-class%}{%endblock%}">
         <nav class="navbar navbar-toggleable-md navbar-inverse nav-head">
           <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -50,10 +50,8 @@
           </div>
         </nav>
 
-<div class="{% block wrapper-class%}{%endblock%}">
 {% block main-content %}
 {% endblock %}
-</div>
 
 <div class="mastfoot">
   <div class="container-fluid">

@@ -3,6 +3,21 @@
 
 {% block wrapper-class%}site-wrapper{%endblock%}
 
+{% block script-content %}
+{% if request.user.is_authenticated %}
+<script>
+$(document).ready(function(){
+  if (localStorage.getItem('token') == null){
+    localStorage.setItem('token','{{request.user.token}}');
+  }
+  if (localStorage.getItem('archive_token') == null){
+    localStorage.setItem('archive_token','{{request.user.archive_token}}');
+  }
+});
+</script>
+{% endif %}
+{% endblock %}
+
 {% block main-content %}
 
 <div class="container">

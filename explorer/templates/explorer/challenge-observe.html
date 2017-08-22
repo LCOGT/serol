@@ -1,5 +1,5 @@
 {% extends 'explorer/base.html' %}
-{% load static %}
+{% load static i18n %}
 
 {% block script-content %}
 <script src="{% static 'explorer/js/utils.js' %}" ></script>
@@ -23,6 +23,8 @@ function add_targets(i, data){
 }
 
 $(document).ready(function(){
+  var start = new Date();
+  var end = startEnd(start);
   var csrftoken = '{{ csrf_token }}';
   var challenge_id = '{{object.id}}'
   var redirect_url = "{% url 'challenge' object.id %}";
@@ -102,7 +104,7 @@ $(document).ready(function(){
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title"></h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="close_button">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>

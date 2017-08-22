@@ -143,6 +143,10 @@ h5.modal-title{
 
 .mission-1-sidebar {
    background: url('../images/m1-SidePanel.jpg') no-repeat fixed left bottom;
+   height:100%;
+   min-height:500px;
+   position: absolute;
+   bottom: 0;
  }
 
 .mission-content h1,

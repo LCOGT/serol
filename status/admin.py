@@ -17,3 +17,5 @@ class CustomUserAdmin(UserAdmin):
     )
 
 admin.site.register(User, CustomUserAdmin)
+
+admin.site.site_header = 'SEROL admin'

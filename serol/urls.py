@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from django.contrib import admin
 from django.contrib.staticfiles import views
-from django.contrib.auth.views import login, logout
+from django.contrib.auth.views import LoginView, LogoutView
 from django.conf import settings
 from django.views.generic import TemplateView
 
@@ -21,8 +21,8 @@ urlpatterns = [
     url(r'^status/(?P<pk>[0-9]+)/$', StatusView.as_view(), name="status"),
     url(r'^api/schedule/$', ScheduleView.as_view(), name='schedule'),
     url(r'^admin/', admin.site.urls),
-    url(r'^login/$', login, {'template_name': 'explorer/login.html'}, name='auth_login'),
-    url(r'^logout/$', logout, {'template_name': 'explorer/logout.html'}, name='auth_logout'),
+    url(r'^login/$', LoginView.as_view(template_name='explorer/login.html'), name='auth_login'),
+    url(r'^logout/$', LogoutView.as_view(next_page= '/', template_name= 'explorer/logout.html'), name='auth_logout'),
     url(r'^$', TemplateView.as_view(template_name="explorer/home.html"), name='home'),
 
 ]

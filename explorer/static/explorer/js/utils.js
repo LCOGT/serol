@@ -81,7 +81,6 @@ function shuffle(array) {
 
 function status_request(requestid, token) {
   var data;
-  console.log(token)
   $.getJSON('https://observe.lco.global/api/userrequests/'+requestid+'/',
     {headers: {'Authorization': 'Token '+token},
     dataType: 'json',
@@ -94,7 +93,7 @@ function status_request(requestid, token) {
       console.log("DONE"+data);
     })
     .fail(function(rdata){
-      console.log("FAIL "+rdata['detail']);
+      console.log("FAIL "+rdata);
     });
     return data;
 }
@@ -189,7 +188,12 @@ function submit_to_serol(target, token, challenge_id, redirect_url, csrftoken){
 			success: function(data){
 				$('.modal-title').html("Success!");
 				$('.modal-body').html("<p>Your image will be ready in the next week.</p><img src='https://lco.global/files/edu/serol/serol_holding_cosmic_objects_sm.png'>");
-        window.location.replace(redirect_url);
+        $('#submit_button').html("Next >");
+        $('#submit_button').attr('href',redirect_url);
+        $('#close_button').prop("disabled", true);
+        window.setTimeout(function(){
+          window.location.replace(redirect_url);
+        },5000);
 
 			}
 		});
