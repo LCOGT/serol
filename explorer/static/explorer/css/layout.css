@@ -133,20 +133,38 @@ h5.modal-title{
    border-bottom:1px solid #fff;
  }
 
+.challenge {
+  height:100%;
+  min-height:500px;
+  position: absolute;
+}
+
+.challenge-header {
+  height:100%;
+  min-height:500px;
+  vertical-align: top;
+}
 
  .mission-1-header {
    background: url('../images/m1-heading.jpg') no-repeat center top;
-   height:100%;
-   min-height:500px;
-   vertical-align: top;
+ }
+
+.mission-3-sidebar {
+   background: url('../images/SidePanel-LifeandDeathofStars.jpg') no-repeat fixed left bottom;
+ }
+ .mission-2-header {
+   background: url('../images/M2WebGraphic.jpg') no-repeat center top;
+ }
+
+.mission-2-sidebar {
+   background: url('../images/SidePanel-UniverseAtLarge.jpg') no-repeat fixed left bottom;
+ }
+ .mission-3-header {
+   background: url('../images/M3WebGraphic.jpg') no-repeat center top;
  }
 
 .mission-1-sidebar {
    background: url('../images/m1-SidePanel.jpg') no-repeat fixed left bottom;
-   height:100%;
-   min-height:500px;
-   position: absolute;
-   bottom: 0;
  }
 
 .mission-content h1,
