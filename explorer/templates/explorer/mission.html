@@ -3,15 +3,18 @@
 
 
 {% block main-content %}
-  <div class="container challenge-header mission-{{object.number}}-header">
+
+<div class="content-wrapper">
+  <div class="container content-wrapper-inner challenge-header mission-{{object.number}}-header">
   <div class="row">
-    <div class="col-2 mission-title">
-      <h1 class="side-writing">{% trans "Mission" %} {{object.number}}</h1>
-    </div>
-    <div class="col-10  mission-content">
+    <div class="col-12  mission-content">
       <h1 class="mission-name">{{object.name|safe}}</h1>
       <p><a class="btn btn-info btn-lg animated tada" href="{% url 'challenge' 1 %}" role="button">{% trans "Start the mission" %} &raquo;</a></p>
     </div>
   </div>
 </div>
+</div>
+
+<div class="corner-ribbon top-right sticky shadow mission-{{object.number}}-colour"><h1>{% trans "Mission" %} {{object.number}}</h1></div>
+
 {% endblock %}

@@ -44,18 +44,9 @@ h1 {
   font-size:4.5rem;
 }
 
-h1.side-writing {
-  -webkit-transform: rotate(180deg);
-  -moz-transform: rotate(180deg);
-  -ms-transform: rotate(180deg);
-  -o-transform: rotate(180deg);
-  transform: rotate(180deg);
-
-  writing-mode: vertical-lr;
-  text-orientation: sidways-right;
-  font-size:10rem;
-  text-shadow: 0 .5rem .5rem rgba(0,0,0,.5);
-  padding:20px 0;
+/* mininless css that used just for this demo */
+.mission-title-container {
+  float: left;
 }
 
 p {
@@ -171,9 +162,6 @@ h5.modal-title{
 .mission-content p {
   margin-right: auto;
   margin-left: auto;
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
 }
 
 .mission-title{
@@ -187,15 +175,18 @@ h5.modal-title{
    text-shadow: 0 .5rem .5rem rgba(128,128,255,0.7);
  }
 
+.mission-1-colour,
 .mission-1-sidebar .page-header {
    background-color:rgba(29, 220, 93, 0.7);
  }
 
- .mission-2-sidebar .page-header {
+.mission-2-colour,
+.mission-2-sidebar .page-header {
     background-color:rgba(237, 80, 48, 0.7);
   }
 
-  .mission-3-sidebar .page-header {
+.mission-3-colour,
+.mission-3-sidebar .page-header {
      background-color:rgba(36, 209, 255, 0.7);
    }
 
@@ -289,7 +280,7 @@ h5.modal-title{
 /* Wrapper layouts
 */
 
-.site-wrapper {
+.content-wrapper {
   display: table;
   width: 100%;
   height: 100%; /* For at least Firefox */
@@ -297,13 +288,45 @@ h5.modal-title{
   -webkit-box-shadow: inset 0 0 5rem rgba(0,0,0,.5);
           box-shadow: inset 0 0 5rem rgba(0,0,0,.5);
 }
-.site-wrapper-inner {
+.content-wrapper-inner {
   display: table-cell;
-  vertical-align: top;
+  vertical-align: middle;
 }
 .cover-container {
   margin-right: auto;
   margin-left: auto;
+}
+
+/* Ribbon styles */
+
+.corner-ribbon{
+  width: 500px;
+  position: absolute;
+  top: 50px;
+  left: -50px;
+  text-align: center;
+  line-height: 50px;
+  letter-spacing: 1px;
+  color: #f0f0f0;
+  transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+  z-index: 0;
+}
+
+.corner-ribbon.sticky{
+  position: fixed;
+}
+
+.corner-ribbon.shadow{
+  box-shadow: 0 0 3px rgba(0,0,0,.7);
+}
+
+.corner-ribbon.top-right{
+  top: 100px;
+  right: -110px;
+  left: auto;
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
 }
 
 @media (min-width: 40em) {
@@ -316,10 +339,7 @@ h5.modal-title{
     position: fixed;
     bottom: 0;
   }
-  /* Start the vertical centering */
-  .site-wrapper-inner {
-    vertical-align: middle;
-  }
+
   /* Handle the widths */
   .masthead,
   .mastfoot,

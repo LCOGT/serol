@@ -1,8 +1,6 @@
 {% extends "explorer/base.html" %}
 {% load static i18n %}
 
-{% block wrapper-class%}site-wrapper{%endblock%}
-
 {% block script-content %}
 {% if request.user.is_authenticated %}
 <script>
@@ -20,6 +18,8 @@ $(document).ready(function(){
 
 {% block main-content %}
 
+<div class="content-wrapper">
+<div class="content-wrapper-inner">
 <div class="container">
   <div class="row">
     <div class="col-4 title-left">
@@ -38,6 +38,8 @@ $(document).ready(function(){
   <div class="row">
 
   </div>
+</div>
+</div>
 </div>
 
 
