@@ -44,11 +44,6 @@ h1 {
   font-size:4.5rem;
 }
 
-/* mininless css that used just for this demo */
-.mission-title-container {
-  float: left;
-}
-
 p {
   font-size:2rem;
 }
@@ -79,20 +74,6 @@ h2.request-status-info {
   display: table-row;
   vertical-align: top;
 }
-.center-box-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  resize: both;
-  overflow: auto;
-
-}
-
-.center-box {
-  resize: both;
-  overflow: auto;
-}
-
 
 /*
  * Header
@@ -158,17 +139,18 @@ h5.modal-title{
    background: url('../images/m1-SidePanel.jpg') no-repeat fixed left bottom;
  }
 
+.mission-1 {
+    background: url('../images/M1UPPER.jpg') top center no-repeat,
+                url('../images/M1LOWER.jpg') bottom center no-repeat;
+}
+
 .mission-content h1,
 .mission-content p {
   margin-right: auto;
   margin-left: auto;
 }
 
-.mission-title{
-  background: rgba(0,0,0,0.5);
-}
-
- .mission-name {
+.mission-name {
    vertical-align: middle;
    font-size:4rem;
    width:15rem;
@@ -300,33 +282,22 @@ h5.modal-title{
 /* Ribbon styles */
 
 .corner-ribbon{
-  width: 500px;
-  position: absolute;
-  top: 50px;
-  left: -50px;
   text-align: center;
-  line-height: 50px;
-  letter-spacing: 1px;
   color: #f0f0f0;
-  transform: rotate(-45deg);
-  -webkit-transform: rotate(-45deg);
   z-index: 0;
-}
-
-.corner-ribbon.sticky{
+  left: auto;
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
   position: fixed;
-}
-
-.corner-ribbon.shadow{
   box-shadow: 0 0 3px rgba(0,0,0,.7);
 }
 
 .corner-ribbon.top-right{
+  width: 500px;
   top: 100px;
   right: -110px;
-  left: auto;
-  transform: rotate(45deg);
-  -webkit-transform: rotate(45deg);
+  line-height: 50px;
+  letter-spacing: 1px;
 }
 
 @media (min-width: 40em) {
@@ -347,6 +318,25 @@ h5.modal-title{
     width: 100%; /* Must be percentage or pixels for horizontal alignment */
   }
 }
+
+@media (max-width: 576px) {
+  .mission-1 {
+      background: url('../images/M1LOWER_sm.jpg') bottom center no-repeat;
+  }
+
+  .corner-ribbon.top-right{
+    width: 250px;
+    top: 50px;
+    right: -60px;
+    line-height: 50px;
+    letter-spacing: 1px;
+  }
+  .corner-ribbon h1{
+    font-size: 2em;
+  }
+}
+
+
 
 
 @media (max-width: 42rem) {

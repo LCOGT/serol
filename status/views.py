@@ -11,7 +11,7 @@ from rest_framework import status, serializers
 
 from status.models import Progress
 
-from status.valhalla import process_observation_request, request_format
+from status.valhalla import process_observation_request, request_format, get_observation_status
 
 class RequestSerializer(serializers.Serializer):
     """
@@ -26,6 +26,18 @@ class RequestSerializer(serializers.Serializer):
     filters = serializers.JSONField()
     token = serializers.CharField()
     challenge = serializers.IntegerField()
+    user = serializers.CharField()
+
+    def validate(self, data):
+        super(RequestSerializer, self).validate(data)
+        try:
+            progress = Progress.object.get(user=user, challenge=data['challenge'])
+            if progress.status != 'New':
+                # User has already submitted a request for this challenge
+                raise serializers.ValidationError(status.HTTP_409_CONFLICT)
+        except:
+            raise serializers.ValidationError(status.HTTP_404_NOT_FOUND)
+        return data
 
     def save(self, *args, **kwargs):
         params = self.data
@@ -33,7 +45,7 @@ class RequestSerializer(serializers.Serializer):
         resp_status, resp_msg = process_observation_request(params=obs_params, token=params['token'])
         if not resp_status:
             return Response(resp_msg, status=status.HTTP_400_BAD_REQUEST)
-        resp_prog = save_progress(challenge=params['challenge'], user=kwargs['user'], request_id=resp_msg)
+        resp_prog = save_progress(challenge=params['challenge'], user=kwargs['user'], request_id=resp_msg, target=params['object_name'])
         if resp_status and resp_prog:
             return Response("Success", status=status.HTTP_201_CREATED)
         else:
@@ -46,6 +58,7 @@ class ScheduleView(APIView):
     renderer_classes = (JSONRenderer, BrowsableAPIRenderer)
 
     def post(self, request, format=None):
+        request.data['user'] = request.user.username
         ser = RequestSerializer(data=request.data)
         if not ser.is_valid(raise_exception=True):
             logger.error('Request was not valid')
@@ -60,13 +73,24 @@ class ScheduleView(APIView):
 class StatusView(APIView):
     renderer_classes = (JSONRenderer, BrowsableAPIRenderer)
 
-    def get(self, request, format=None):
-        token = request.data.get('token', False)
-        if not token:
-            return Response("Not authenticated.", status=status.HTTP_401_UNAUTHORIZED)
-        return resp
+    def get(self, request, requestid, format=None):
+        conn, state = get_observation_status(requestid, request.user.token)
+        if state == 'PENDING':
+            return Response("No observed yet", status=status.HTTP_403_FORBIDDEN)
+        else:
+            try:
+                progress = Progress.objects.get(requestids=requestid,user=request.user)
+            except:
+                return Response("Progress object not found", status=status.HTTP_404_NOT_FOUND)
+            if state == 'COMPLETED':
+                progress.observed()
+            elif state == 'FAILED':
+                progress.failed()
+            progress.save()
+            return Response("Status updated", status=status.HTTP_200_OK)
 
-def save_progress(challenge, user, request_id):
+
+def save_progress(challenge, user, request_id, target):
     '''
     Save Progress model
     '''
@@ -75,6 +99,7 @@ def save_progress(challenge, user, request_id):
     except ObjectNotFound:
         return False
     progress.requestids = request_id
+    progress.target = target
     progress.submit()
     progress.save()
     return True

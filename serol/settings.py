@@ -168,10 +168,9 @@ REST_FRAMEWORK = {
 
 PORTAL_API_URL = 'https://observe.lco.global/api/'
 PORTAL_REQUEST_API = PORTAL_API_URL + 'userrequests/'
-PORTAL_REQUEST_URL = 'https://observe.lco.global/userrequests/'
 PORTAL_TOKEN_URL = PORTAL_API_URL + 'api-token-auth/'
 PORTAL_PROFILE_URL = PORTAL_API_URL + 'profile/'
-PORTAL_TOKEN = os.environ.get('VALHALLA_TOKEN','')
+ARCHIVE_TOKEN_URL = 'https://archive-api.lco.global/api-token-auth/'
 
 DEFAULT_CAMERAS = { '1m0' : '1M0-SCICAM-SBIG',
                     '2m0' : '2M0-SCICAM-SPECTRAL',

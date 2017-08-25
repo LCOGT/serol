@@ -54,6 +54,7 @@
 <script>
 var requestid = "{{progress.requestids}}";
 var resp;
+var redirect_url = "{% url 'challenge' object.id %}";
 $(document).ready(function(){
   resp = status_request(requestid, localStorage.getItem('token'));
 });

@@ -13,9 +13,10 @@ class ValhallaBackend(object):
     """
 
     def authenticate(self, request, username=None, password=None):
-        token = valhalla_auth(username, password)
+        token = api_auth(settings.PORTAL_TOKEN_URL, username, password)
         profile = get_profile(token)
-        if token and profile:
+        archivetoken = api_auth(settings.ARCHIVE_TOKEN_URL, username, password)
+        if token and profile and archivetoken:
             username = profile[0]
             try:
                 user = User.objects.get(username=username)
@@ -24,11 +25,11 @@ class ValhallaBackend(object):
                 # because Valhalla auth will always be used.
                 user = User(username=username)
             user.token = token
-            user.archive_token = profile[1]
+            user.archive_token = archivetoken
             user.save()
             # Finally add these tokens as session variables
             request.session['token'] = token
-            request.session['archive_token'] = profile
+            request.session['archive_token'] = archivetoken
             return user
         return None
 
@@ -38,11 +39,11 @@ class ValhallaBackend(object):
         except User.DoesNotExist:
             return None
 
-def valhalla_auth(username, password):
+
+def api_auth(url, username, password):
     '''
     Request authentication cookie from the Scheduler API
     '''
-    url = settings.PORTAL_TOKEN_URL
     try:
         r= requests.post(url,data = {
             'username': username,

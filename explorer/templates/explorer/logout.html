@@ -1,0 +1,24 @@
+{% extends 'explorer/base.html' %}
+{% load static %}
+
+{% block script-content %}
+<script>
+$(document).ready(function(){
+    localStorage.removeItem('token');
+    localStorage.removeItem('archive_token');
+});
+</script>
+{% endblock %}
+
+{%block wrapper-class %}{% endblock %}
+
+{% block main-content %}
+
+<div class="container">
+			<h1>Serol</h1>
+			<h3>Logged out</h3>
+    <div class="row text-center">
+      <a href="{% url 'auth_login' %}">Log in?</a>
+    </div>
+  </div>
+{% endblock %}

@@ -79,6 +79,18 @@ function shuffle(array) {
   return array;
 }
 
+function update_status(requestid, token) {
+  $.getJSON('/status/'+requestid+'/')
+    .done(function(data){
+      window.location.replace(redirect_url);
+      console.log("DONE"+data);
+    })
+    .fail(function(data){
+      console.log("FAIL "+data);
+    });
+    return;
+}
+
 function status_request(requestid, token) {
   var data;
   $.getJSON('https://observe.lco.global/api/userrequests/'+requestid+'/',
@@ -88,7 +100,11 @@ function status_request(requestid, token) {
     .done(function(rdata){
       data = rdata
       if (rdata['state'] == 'PENDING' && rdata['requests'].length > 0){
-        status_userrequest(rdata['requests'][0]['id'], token)
+        status_userrequest(rdata['requests'][0]['id'], token);
+      } else if (rdata['state'] == 'COMPLETED'){
+        update_status(requestid, token);
+      }else if (rdata['state'] == 'FAILED' && rdata['requests'].length > 0){
+
       }
       console.log("DONE"+data);
     })
@@ -122,8 +138,8 @@ function status_userrequest(userrequestid, token) {
 
 function fetch_image(userrequestid, archivetoken){
   var data = {};
-  $.getJSON('https://archive-api.lco.global/frames/?limit=1&offset=1&ordering=-id&REQNUM='+userrequestid,
-    {headers: {'Authorization': 'Token '+token},
+  $.getJSON({url: 'https://archive-api.lco.global/frames/?limit=1&offset=1&ordering=-id&REQNUM='+userrequestid,
+    headers: {'Authorization': 'Token '+archivetoken},
     dataType: 'json',
     contentType: 'application/json'})
     .done(function(rdata){

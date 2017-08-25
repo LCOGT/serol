@@ -9,6 +9,29 @@ import json
 
 logger = logging.getLogger(__name__)
 
+def get_observation_status(requestid, token):
+    '''
+    Get status of RequestID from the Valhalla API
+    '''
+    headers = {'Authorization': 'Token {}'.format(token)}
+    url = settings.PORTAL_REQUEST_API + requestid
+    try:
+        r = requests.get(url, headers=headers, timeout=20.0)
+    except requests.exceptions.Timeout:
+        msg = "Observing portal API timed out"
+        logger.error(msg)
+        params['error_msg'] = msg
+        return False, msg
+
+    if r.status_code in [200,201]:
+        logger.debug('Submitted request')
+        print(r.content)
+        return True, r.json()['state']
+    else:
+        logger.error("Could not send request: {}".format(r.content))
+        return False, r.content
+
+
 def process_observation_request(params, token):
     '''
     Send the observation parameters and the authentication cookie to the Scheduler API

@@ -18,11 +18,11 @@ urlpatterns = [
     url(r'^challenge/(?P<pk>[0-9]+)/investigate/$', ChallengeView.as_view(), {'mode':'investigate'}, name="investigate"),
     url(r'^challenge/(?P<pk>[0-9]+)/submitted/$', ChallengeView.as_view(), {'mode':'submitted'}, name="submitted"),
     url(r'^challenge/(?P<pk>[0-9]+)/$', ChallengeRedirectView.as_view(), name="challenge"),
-    url(r'^status/(?P<pk>[0-9]+)/$', StatusView.as_view(), name="status"),
+    url(r'^status/(?P<requestid>[0-9]+)/$', StatusView.as_view(), name="status"),
     url(r'^api/schedule/$', ScheduleView.as_view(), name='schedule'),
     url(r'^admin/', admin.site.urls),
     url(r'^login/$', LoginView.as_view(template_name='explorer/login.html'), name='auth_login'),
-    url(r'^logout/$', LogoutView.as_view(next_page= '/', template_name= 'explorer/logout.html'), name='auth_logout'),
+    url(r'^logout/$', LogoutView.as_view(template_name= 'explorer/logout.html'), name='auth_logout'),
     url(r'^$', TemplateView.as_view(template_name="explorer/home.html"), name='home'),
 
 ]
