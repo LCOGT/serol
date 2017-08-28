@@ -136,24 +136,24 @@ function status_userrequest(userrequestid, token) {
     return data;
 }
 
-function fetch_image(userrequestid, archivetoken){
-  var data = {};
-  $.getJSON({url: 'https://archive-api.lco.global/frames/?limit=1&offset=1&ordering=-id&REQNUM='+userrequestid,
-    headers: {'Authorization': 'Token '+archivetoken},
-    dataType: 'json',
-    contentType: 'application/json'})
-    .done(function(rdata){
-      if (rdata['results'].length > 0){
-        data['frame'] = rdata['results'][0]['id'];
-        data['url'] = rdata['results'][0]['url'];
+function arrange_images(resp){
+    images.push({'mine':true, 'url':resp['url']});
+    console.log(resp)
+    tmp = resp;
+    images = shuffle(images);
+    for (i=0;i<4;i++){
+      console.log(images[i]['url']);
+      $("#img-"+i).attr('src',images[i]['url']);
+      $("#img-text-"+i).data('mine',images[i]['mine']);
+    }
+    $(".identify-text").on('click', function(d){
+      if ($(this).data('mine') == true){
+        console.log('YES')
+      } else {
+        console.log('NO');
       }
-      console.log("Number of Images ="+rdata['results'].length);
-    })
-    .fail(function(rdata){
-      console.log("FAIL "+rdata['detail']);
     });
-    return data;
-}
+  }
 
 function update_date(days, hours, minutes){
   if  (days >0){
