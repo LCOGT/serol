@@ -26,18 +26,17 @@ class RequestSerializer(serializers.Serializer):
     filters = serializers.JSONField()
     token = serializers.CharField()
     challenge = serializers.IntegerField()
-    user = serializers.CharField()
 
-    def validate(self, data):
-        super(RequestSerializer, self).validate(data)
-        try:
-            progress = Progress.object.get(user=user, challenge=data['challenge'])
-            if progress.status != 'New':
-                # User has already submitted a request for this challenge
-                raise serializers.ValidationError(status.HTTP_409_CONFLICT)
-        except:
-            raise serializers.ValidationError(status.HTTP_404_NOT_FOUND)
-        return data
+    # def validate(self, data):
+    #     super(RequestSerializer, self).validate(data)
+    #     try:
+    #         progress = Progress.object.get(user=user, challenge=data['challenge'])
+    #         if progress.status != 'New':
+    #             # User has already submitted a request for this challenge
+    #             raise serializers.ValidationError(status.HTTP_409_CONFLICT)
+    #     except:
+    #         raise serializers.ValidationError(status.HTTP_404_NOT_FOUND)
+    #     return data
 
     def save(self, *args, **kwargs):
         params = self.data
@@ -58,7 +57,6 @@ class ScheduleView(APIView):
     renderer_classes = (JSONRenderer, BrowsableAPIRenderer)
 
     def post(self, request, format=None):
-        request.data['user'] = request.user.username
         ser = RequestSerializer(data=request.data)
         if not ser.is_valid(raise_exception=True):
             logger.error('Request was not valid')
