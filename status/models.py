@@ -19,6 +19,7 @@ class User(AbstractUser):
 class Progress(models.Model):
     user = models.ForeignKey(User)
     challenge = models.ForeignKey(Challenge)
+    userrequestid = models.CharField(max_length=20)
     requestids = models.CharField(max_length=20)
     status = FSMField(default='New', choices=STATUS)
     last_update = models.DateTimeField(default=datetime.utcnow)

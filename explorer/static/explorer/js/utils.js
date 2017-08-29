@@ -136,10 +136,25 @@ function status_userrequest(userrequestid, token) {
     return data;
 }
 
-function arrange_images(resp){
-    images.push({'mine':true, 'url':resp['url']});
-    console.log(resp)
-    tmp = resp;
+function get_colour_image(token, frameid){
+  $.get({url:'https://thumbnails.lco.global/'+frameid+'/?color=true&width=400&height=400',
+        headers: {'Authorization': 'Token '+token},
+        dataType: 'json',
+        contentType: 'application/json'}
+      )
+    .done(function(data){
+      img_url = data.url;
+      console.log(data)
+      arrange_images(img_url);
+    })
+    .fail(function(rdata){
+      console.log("FAILED to get thumbnail");
+    });
+}
+
+function arrange_images(url){
+    images.push({'mine':true, 'url':url});
+    console.log(url)
     images = shuffle(images);
     for (i=0;i<4;i++){
       console.log(images[i]['url']);

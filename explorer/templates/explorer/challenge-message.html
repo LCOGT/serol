@@ -52,7 +52,7 @@
 {% if progress.status == "Submitted" %}
 <script src="{% static "explorer/js/utils.js" %}"  type="text/javascript" ></script>
 <script>
-var requestid = "{{progress.requestids}}";
+var requestid = "{{progress.userrequestid}}";
 var resp;
 var redirect_url = "{% url 'challenge' object.id %}";
 $(document).ready(function(){

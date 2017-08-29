@@ -19,13 +19,13 @@ $(document).ready(function(){
       dataType: 'json',
       contentType: 'application/json'}))
     .done(function(rdata){
-        var data = {};
+        var frameid;
         if (rdata['results'].length > 0){
-          data['frame'] = rdata['results'][0]['id'];
-          data['url'] = rdata['results'][0]['url'];
+          console.log(rdata);
+          frameid = rdata['results'][0]['id'];
+          get_colour_image(localStorage.getItem('archive_token'), frameid)
         }
         console.log("Number of Images ="+rdata['results'].length);
-        arrange_images(data);
     });
 
 });

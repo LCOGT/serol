@@ -73,15 +73,17 @@ class ScheduleView(APIView):
 class StatusView(APIView):
     renderer_classes = (JSONRenderer, BrowsableAPIRenderer)
 
-    def get(self, request, requestid, format=None):
-        conn, state = get_observation_status(requestid, request.user.token)
+    def get(self, request, userrequestid, format=None):
+        requestid, state = get_observation_status(userrequestid, request.user.token)
+        print(requestid, state)
         if state == 'PENDING':
             return Response("No observed yet", status=status.HTTP_403_FORBIDDEN)
         else:
             try:
-                progress = Progress.objects.get(requestids=requestid,user=request.user)
+                progress = Progress.objects.get(userrequestid=userrequestid,user=request.user)
             except:
                 return Response("Progress object not found", status=status.HTTP_404_NOT_FOUND)
+            progress.requestids = requestid
             if state == 'COMPLETED':
                 progress.observed()
             elif state == 'FAILED':
@@ -98,7 +100,7 @@ def save_progress(challenge, user, request_id, target):
         progress = Progress.objects.get(challenge=challenge, user=user)
     except ObjectNotFound:
         return False
-    progress.requestids = request_id
+    progress.userrequestid = request_id
     progress.target = target
     progress.submit()
     progress.save()
