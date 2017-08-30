@@ -21,10 +21,7 @@ RUN pip install --upgrade pip \
         && rm -rf /root/.cache /root/.pip
 
 # install configuration
-COPY docker/processes.ini /etc/supervisord.d/
-COPY docker/nginx/* /etc/nginx/
-COPY docker/uwsgi.ini /etc/
-COPY docker/init /init
+COPY docker/ /
 
 # install webapp
 COPY . /var/www/serol
