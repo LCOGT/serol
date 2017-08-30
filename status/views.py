@@ -73,7 +73,6 @@ class StatusView(APIView):
 
     def get(self, request, userrequestid, format=None):
         requestid, state = get_observation_status(userrequestid, request.user.token)
-        print(requestid, state)
         if state == 'PENDING':
             return Response("No observed yet", status=status.HTTP_403_FORBIDDEN)
         else:

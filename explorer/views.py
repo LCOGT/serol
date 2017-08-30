@@ -46,6 +46,10 @@ class ChallengeRedirectView(LoginRequiredMixin, RedirectView):
                 # Skip from observed to identify. This is manual in case user is resting on Submitted page
                 progress.identify()
                 progress.save()
+            elif progress.status == 'Identify' and self.request.META.get('QUERY_STRING', '') == 'next':
+                print("Changed to Analyse")
+                progress.analyse()
+                progress.save()
             if progress.status == 'New':
                 urlpath = 'start'
             else:
@@ -53,6 +57,7 @@ class ChallengeRedirectView(LoginRequiredMixin, RedirectView):
         except Exception as e:
             urlpath = 'start'
             logger.exception(e)
+
         try:
             url = reverse(urlpath, args=args, kwargs=kwargs)
             self.url = url

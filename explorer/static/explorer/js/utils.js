@@ -154,7 +154,6 @@ function get_colour_image(token, frameid){
 
 function arrange_images(url){
     images.push({'mine':true, 'url':url});
-    console.log(url)
     images = shuffle(images);
     for (i=0;i<4;i++){
       console.log(images[i]['url']);
@@ -163,12 +162,25 @@ function arrange_images(url){
     }
     $(".identify-text").on('click', function(d){
       if ($(this).data('mine') == true){
+        show_identify_answer('.identify-yes');
         console.log('YES')
       } else {
+        show_identify_answer('.identify-no');
         console.log('NO');
       }
     });
   }
+
+function show_identify_answer(class_id){
+  $(class_id).show();
+  $(class_id).addClass('grow');
+  $(".grow").on('transitionend webkitTransitionEnd oTransitionEnd otransitionend MSTransitionEnd',
+    function() {
+         $(class_id).removeClass('grow');
+         $(class_id).hide();
+         if (class_id == ".identify-yes") { window.location.replace(redirect_url);}
+    });
+}
 
 function update_date(days, hours, minutes){
   if  (days >0){

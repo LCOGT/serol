@@ -7,14 +7,14 @@
 <script src="{% static 'explorer/js/utils.js' %}" ></script>
 <script>
 var images = Array();
+var redirect_url = "{% url 'start' object.id %}?next"
 var requestid = {{ progress.requestids}};
 images.push({'mine':false, 'url':"https://lco.global/files/rtisba/faulkes-rti/imagearchive/2013/08/07/process-1835-2.jpg"});
 images.push({'mine':false, 'url':"https://lco.global/files/rtisba/faulkes-rti/imagearchive/2013/04/26/process-2408-1.jpg"});
 images.push({'mine':false, 'url':"https://lco.global/files/rtisba/faulkes-rti/imagearchive/2013/04/04/process-753-2.jpg"});
-var tmp;
 $(document).ready(function(){
   $.when(
-    $.getJSON({url: 'https://archive-api.lco.global/frames/?limit=1&offset=1&ordering=-id&REQNUM='+requestid,
+    $.get({url: 'https://archive-api.lco.global/frames/?limit=1&offset=1&ordering=-id&REQNUM='+requestid,
       headers: {'Authorization': 'Token '+localStorage.getItem('archive_token')},
       dataType: 'json',
       contentType: 'application/json'}))
@@ -26,7 +26,11 @@ $(document).ready(function(){
           get_colour_image(localStorage.getItem('archive_token'), frameid)
         }
         console.log("Number of Images ="+rdata['results'].length);
+    })
+    .fail(function(d){
+
     });
+
 
 });
 </script>
@@ -35,9 +39,9 @@ $(document).ready(function(){
 {% block main-content %}
 <div class="container">
   <!-- Example row of columns -->
-  <div class="row page-header">
+  <div class="row">
     <div class="col-lg-12">
-        <h1 class="display-1">{% trans "Challenge" %} {{object.number }}</h1>
+      <h1>{% trans "Click on your picture!" %}</h1>
     </div>
   </div>
 </div>
@@ -59,7 +63,6 @@ $(document).ready(function(){
     </div>
     <div class="col-md-2">
       <div class=" side-panel">
-      <h2>{% trans "Which is your picture?" %}</h2>
       <p>{% trans "You asked for" %} <strong>{{progress.target}}</strong>.
           {% trans "That's a" %} {{object.category}}.</p>
       <p>{% trans "Which picture is it?" %}</p>
@@ -67,4 +70,9 @@ $(document).ready(function(){
     </div>
   </div>
 </div>
+<div class="corner-ribbon top-right sticky shadow mission-{{object.number}}-colour"><h2>{% trans "Mission" %} {{object.number}}</h2></div>
+<div class="identify-answer identify-yes" style="display:none;">{% trans "Correct!" %}</div>
+<div class="identify-answer identify-no" style="display:none;">{% trans "Try Again!" %}</div>
+
+
 {% endblock %}

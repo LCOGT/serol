@@ -154,7 +154,7 @@ h5.modal-title{
    vertical-align: middle;
    font-size:4rem;
    width:15rem;
-   text-shadow: 0 .5rem .5rem rgba(128,128,255,0.7);
+   text-shadow: 0 2px 0 #d84f4f, 0 4px 0 #d54646, 0 6px 0 #ce3333, 0 8px 0 #b92e2e, 0 10px 0 #912525, 0 12px 0 #721e1e, 0px 12px 10px rgba(0,0,0,0.5);
  }
 
 .mission-1-colour,
@@ -209,6 +209,14 @@ h5.modal-title{
   width:50%;
 }
 
+img.identify-image {
+  object-fit: none; /* Do not scale the image */
+  object-position: center; /* Center the image within the element */
+  max-width: 300px;
+  height: 100%;
+  margin-bottom: 1rem;
+}
+
 .side-panel {
   background-color: rgba(0,0,0, 0.2);
   border: 3px solid #fff;
@@ -258,6 +266,25 @@ h5.modal-title{
   font-size: 16px;
   padding: 16px 32px;
 }
+
+.identify-answer {
+  position:absolute;
+  top:200px;
+  font-size:5rem;
+  width:100%;
+  text-align:auto;
+}
+.identify-yes {
+  text-shadow: 0 2px 0 #14bfda, 0 4px 0 #1465da, 0 6px 0  #03be2b , 0 8px 0  #DAF7A6 , 0 10px 0 #FFC300, 0 12px 0 #b92e2e, 0px 12px 10px rgba(0,0,0,0.5);
+  /*text-shadow: 0 2px 0 #22da49, 0 4px 0 #21be42, 0 6px 0 #20cc45, 0 8px 0 #1cb73d, 0 10px 0 #17a034, 0 12px 0 #148e2e, 0px 12px 10px rgba(0,0,0,0.5);*/
+}
+
+.identify-no {
+  text-shadow: 0 2px 0 #d84f4f, 0 4px 0 #d54646, 0 6px 0 #ce3333, 0 8px 0 #b92e2e, 0 10px 0 #912525, 0 12px 0 #721e1e, 0px 12px 10px rgba(0,0,0,0.5);
+}
+
+.grow { transition: all 1.5s ease-in-out;
+        transform: scale(2);}
 
 /* Wrapper layouts
 */
