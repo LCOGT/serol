@@ -1,4 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import Http404
 from django.shortcuts import render, get_object_or_404, Http404
 from django.views.generic import DetailView
 from django.views.generic.base import RedirectView
@@ -6,7 +8,7 @@ from django.urls import reverse, NoReverseMatch
 import logging
 
 from explorer.models import Mission, Challenge
-from status.models import Progress
+from status.models import Progress, Answer, Question
 
 logger = logging.getLogger(__name__)
 
@@ -18,7 +20,7 @@ class ChallengeView(LoginRequiredMixin, DetailView):
     model = Challenge
 
     def get(self, request, *args, **kwargs):
-        if kwargs.get('mode',None) in ['observe','analyse','identify','investigate']:
+        if kwargs.get('mode',None) in ['observe','identify','investigate']:
             self.template_name = "explorer/challenge-{}.html".format(kwargs['mode'])
         elif kwargs.get('mode',None) in ['failed', 'submitted', 'completed', 'start']:
             self.template_name = "explorer/challenge-message.html"
@@ -29,6 +31,20 @@ class ChallengeView(LoginRequiredMixin, DetailView):
         if kwargs.get('mode',None) != 'start':
             obj,created = Progress.objects.get_or_create(challenge=self.get_object(), user=self.request.user)
             context['progress'] = obj
+        return context
+
+class AnalyseView(LoginRequiredMixin, DetailView):
+    model = Challenge
+    template_name = "explorer/challenge-analyser.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(AnalyseView, self).get_context_data(**kwargs)
+        try:
+            context['question'] = Question.objects.get(challenge=self.get_object())
+            context['progress'] = Progress.objects.get(challenge=self.get_object(), user=self.request.user)
+            context['answers'] = Answer.objects.filter(question=context['question'])
+        except ObjectDoesNotExist:
+            raise Http404
         return context
 
 

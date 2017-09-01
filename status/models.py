@@ -58,3 +58,21 @@ class Progress(models.Model):
     @transition(field=status, source=['Investigate'], target='Completed')
     def completed(self):
         pass
+
+    class Meta:
+        verbose_name_plural = 'User Progress'
+
+class Question(models.Model):
+    text = models.TextField()
+    challenge = models.ForeignKey(Challenge)
+
+    class Meta:
+        verbose_name_plural = 'questions'
+
+class Answer(models.Model):
+    text = models.TextField()
+    question = models.ForeignKey(Question)
+
+class UserAnswer(models.Model):
+    answer = models.ForeignKey(Answer)
+    user = models.ForeignKey(User)

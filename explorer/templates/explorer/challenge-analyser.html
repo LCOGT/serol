@@ -1,0 +1,72 @@
+{% extends 'explorer/base.html' %}
+{% load static i18n %}
+
+{% block wrapper-class%}challenge mission-{{object.mission.number}}-sidebar{%endblock%}
+
+{% block script-content %}
+<script src="{% static 'explorer/js/utils.js' %}" ></script>
+<script>
+var images = Array();
+var redirect_url = "{% url 'start' object.id %}?next"
+var requestid = {{ progress.requestids}};
+images.push({'mine':false, 'url':"https://lco.global/files/rtisba/faulkes-rti/imagearchive/2013/08/07/process-1835-2.jpg"});
+images.push({'mine':false, 'url':"https://lco.global/files/rtisba/faulkes-rti/imagearchive/2013/04/26/process-2408-1.jpg"});
+images.push({'mine':false, 'url':"https://lco.global/files/rtisba/faulkes-rti/imagearchive/2013/04/04/process-753-2.jpg"});
+$(document).ready(function(){
+  $.when(
+    $.get({url: 'https://archive-api.lco.global/frames/?limit=1&offset=1&ordering=-id&REQNUM='+requestid,
+      headers: {'Authorization': 'Token '+localStorage.getItem('archive_token')},
+      dataType: 'json',
+      contentType: 'application/json'}))
+    .done(function(rdata){
+        var frameid;
+        if (rdata['results'].length > 0){
+          console.log(rdata);
+          frameid = rdata['results'][0]['id'];
+          get_colour_image(localStorage.getItem('archive_token'), frameid)
+        }
+        console.log("Number of Images ="+rdata['results'].length);
+    })
+    .fail(function(d){
+
+    });
+
+
+});
+</script>
+{% endblock %}
+
+{% block main-content %}
+<div class="container">
+  <!-- Example row of columns -->
+  <div class="row">
+    <div class="col-lg-12">
+      <h1>{% trans "Analyse your image!" %}</h1>
+    </div>
+  </div>
+</div>
+<div class="container pt-2">
+  <div class="row">
+    <div class="col-md-6 offset-md-2">
+      <img src="http://placehold.it/300x300" alt="Avatar" class="identify-image img-fluid rounded" id="img-{{i}}">
+    </div>
+    <div class="col-md-4">
+      <div class=" side-panel">
+      <h3>{{question.text}}</strong></h3>
+
+      <p>
+        {% for answer in answers %}
+        <div class="btn-group btn-group-vertical" data-toggle="buttons">
+         <label class="btn active">
+           <input type="radio" name='answer-{{answer.pk}}' checked><i class="fa fa-circle-o fa-2x"></i><i class="fa fa-dot-circle-o fa-2x"></i> <span>  {{answer.text}}</span>
+         </label>
+       </div>
+       {% endfor %}
+      </p>
+    </div>
+    </div>
+  </div>
+</div>
+<div class="corner-ribbon top-right sticky shadow mission-{{object.number}}-colour"><h2>{% trans "Mission" %} {{object.number}}</h2></div>
+
+{% endblock %}

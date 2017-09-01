@@ -6,7 +6,7 @@ from django.conf import settings
 from django.views.generic import TemplateView
 
 from status.views import ScheduleView, StatusView
-from explorer.views import MissionView, ChallengeRedirectView, ChallengeView
+from explorer.views import MissionView, ChallengeRedirectView, ChallengeView, AnalyseView
 
 
 urlpatterns = [
@@ -14,7 +14,7 @@ urlpatterns = [
     url(r'^challenge/(?P<pk>[0-9]+)/start/$', ChallengeView.as_view(), {'mode':'start'}, name="start"),
     url(r'^challenge/(?P<pk>[0-9]+)/observe/$', ChallengeView.as_view(), {'mode':'observe'}, name="observe"),
     url(r'^challenge/(?P<pk>[0-9]+)/identify/$', ChallengeView.as_view(), {'mode':'identify'}, name="identify"),
-    url(r'^challenge/(?P<pk>[0-9]+)/analyse/$', ChallengeView.as_view(), {'mode':'analyse'}, name="analyse"),
+    url(r'^challenge/(?P<pk>[0-9]+)/analyse/$', AnalyseView.as_view(), name="analyse"),
     url(r'^challenge/(?P<pk>[0-9]+)/investigate/$', ChallengeView.as_view(), {'mode':'investigate'}, name="investigate"),
     url(r'^challenge/(?P<pk>[0-9]+)/submitted/$', ChallengeView.as_view(), {'mode':'submitted'}, name="submitted"),
     url(r'^challenge/(?P<pk>[0-9]+)/$', ChallengeRedirectView.as_view(), name="challenge"),

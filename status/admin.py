@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.utils.translation import ugettext as _
 from django.contrib.auth.admin import UserAdmin
 
-from status.models import User
+from status.models import User, Progress, Answer, Question, UserAnswer
 
 class CustomUserAdmin(UserAdmin):
 
@@ -16,6 +16,16 @@ class CustomUserAdmin(UserAdmin):
         (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
     )
 
+
+class AnswerInline(admin.TabularInline):
+    model = Answer
+
+class QuestionAdmin(admin.ModelAdmin):
+    list_display = ('challenge', 'text')
+    inlines = [AnswerInline,]
+
+
 admin.site.register(User, CustomUserAdmin)
+admin.site.register(Question, QuestionAdmin)
 
 admin.site.site_header = 'SEROL admin'

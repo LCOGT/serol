@@ -6,6 +6,9 @@ class Mission(models.Model):
     name = models.CharField(max_length=200)
     patch = models.ImageField(upload_to='patches')
 
+    def __str__(self):
+        return "{}".format(self.name)
+
 class Challenge(models.Model):
     number = models.IntegerField()
     name = models.CharField(max_length=200)
