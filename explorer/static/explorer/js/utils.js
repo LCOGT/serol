@@ -79,6 +79,11 @@ function shuffle(array) {
   return array;
 }
 
+function get_qs(n) {
+    var half = location.search.split(n + '=')[1];
+    return half !== undefined ? decodeURIComponent(half.split('&')[0]) : null;
+}
+
 function update_status(requestid, token) {
   $.getJSON('/status/'+requestid+'/')
     .done(function(data){
@@ -93,8 +98,11 @@ function update_status(requestid, token) {
 
 function status_request(requestid, token) {
   var data;
-  $.getJSON('https://observe.lco.global/api/userrequests/'+requestid+'/',
-    {headers: {'Authorization': 'Token '+token},
+  $.ajax(
+    {
+    url:'https://observe.lco.global/api/userrequests/'+requestid+'/',
+    type: "GET",
+    headers: {"Authorization": "Token "+token},
     dataType: 'json',
     contentType: 'application/json'})
     .done(function(rdata){
@@ -109,6 +117,7 @@ function status_request(requestid, token) {
       console.log("DONE"+data);
     })
     .fail(function(rdata){
+      resp_tmp=rdata;
       console.log("FAIL "+rdata);
     });
     return data;
@@ -136,16 +145,19 @@ function status_userrequest(userrequestid, token) {
     return data;
 }
 
-function get_colour_image(token, frameid){
-  $.get({url:'https://thumbnails.lco.global/'+frameid+'/?color=true&width=400&height=400',
+function get_colour_image(token, frameid, mode){
+  $.get({url:'https://thumbnails.lco.global/'+frameid+'/?color=true&width=600&height=600',
         headers: {'Authorization': 'Token '+token},
         dataType: 'json',
         contentType: 'application/json'}
       )
     .done(function(data){
       img_url = data.url;
-      console.log(data)
-      arrange_images(img_url);
+      if (mode == 'analyser'){
+          $("#img-analyser").attr('src',img_url);
+      } else {
+        arrange_images(img_url);
+      }
     })
     .fail(function(rdata){
       console.log("FAILED to get thumbnail");

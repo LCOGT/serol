@@ -21,6 +21,7 @@ ADMIN_SITE_HEADER = 'SEROL admin'
 INSTALLED_APPS = [
     'explorer.apps.ExplorerConfig',
     'status.apps.StatusConfig',
+    'stickers.apps.StickersConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -105,6 +106,10 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = '/var/www/html/'
 
+MEDIA_URL = '/media/'
+
+MEDIA_ROOT = '/var/www/html/media/'
+
 chars = 'abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)'
 SECRET_KEY = get_random_string(50, chars)
 
@@ -148,7 +153,7 @@ LOGGING = {
         'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
-            'formatter': 'verbose',
+            'formatter': 'simple',
         }
     },
     'loggers': {
@@ -181,6 +186,19 @@ PROPOSAL_CODE = 'LCOEPO2014B-010'
 
 LOGIN_URL = "/login/"
 LOGIN_REDIRECT_URL = "/"
+
+PROGRESS_OPTIONS =  (
+                ('New','New'),
+                ('Submitted', 'Submitted'),
+                ('Observed','Observed'),
+                ('Failed','Failed'),
+                ('Retry','Retry'),
+                ('Completed','Completed'),
+                ('Identify','Identify'),
+                ('Analyse','Analyse'),
+                ('Identify','Identify'),
+                ('Investigate','Investigate')
+                )
 
 ##################
 # LOCAL SETTINGS #

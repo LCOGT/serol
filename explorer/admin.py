@@ -2,6 +2,7 @@ from django.contrib import admin
 
 from explorer.models import *
 from status.models import *
+from stickers.models import *
 
 
 class MissionAdmin(admin.ModelAdmin):
@@ -13,3 +14,5 @@ class ChallengeAdmin(admin.ModelAdmin):
 admin.site.register(Mission, MissionAdmin)
 admin.site.register(Challenge, ChallengeAdmin)
 admin.site.register(Progress)
+admin.site.register(Sticker)
+admin.site.register(PersonSticker)

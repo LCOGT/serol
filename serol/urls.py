@@ -3,10 +3,12 @@ from django.contrib import admin
 from django.contrib.staticfiles import views
 from django.contrib.auth.views import LoginView, LogoutView
 from django.conf import settings
+from django.conf.urls.static import static
 from django.views.generic import TemplateView
 
 from status.views import ScheduleView, StatusView
 from explorer.views import MissionView, ChallengeRedirectView, ChallengeView, AnalyseView
+from stickers.views import StickerView
 
 
 urlpatterns = [
@@ -20,6 +22,7 @@ urlpatterns = [
     url(r'^challenge/(?P<pk>[0-9]+)/$', ChallengeRedirectView.as_view(), name="challenge"),
     url(r'^status/(?P<userrequestid>[0-9]+)/$', StatusView.as_view(), name="status"),
     url(r'^api/schedule/$', ScheduleView.as_view(), name='schedule'),
+    url(r'^stickers/$', StickerView.as_view(), name='stickers'),
     url(r'^admin/', admin.site.urls),
     url(r'^login/$', LoginView.as_view(template_name='explorer/login.html'), name='auth_login'),
     url(r'^logout/$', LogoutView.as_view(template_name= 'explorer/logout.html'), name='auth_logout'),
@@ -30,4 +33,4 @@ urlpatterns = [
 if settings.DEBUG:
     urlpatterns += [
         url(r'^static/(?P<path>.*)$', views.serve),
-    ]
+    ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

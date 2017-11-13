@@ -8,44 +8,11 @@ var apiRoot = 'https://observe.lco.global/api/';
 
 // rivets.bind($('#profile'), profile);
 
-$.ajaxPrefilter(function(options, originalOptions, jqXHR){
-  if(options.url.indexOf('lco.global/') >= 0 && localStorage.getItem('token')){
-    jqXHR.setRequestHeader('Authorization', 'Token ' + localStorage.getItem('token'));
-  }
-});
-
-function getProposals(){
-  $.getJSON(apiRoot + 'profile/', function(data){
-    profile.username = data.username || '';
-  });
-}
-
-function login(username, password, callback){
-  $.ajax({
-    url: apiRoot + 'api-token-auth/',
-    type: 'post',
-    data:     {
-          'username': username,
-          'password': password
-        },
-    dataType: 'json',
-    success: function(data){
-      localStorage.setItem('token', data.token);
-      console.log("stored token "+data.token);
-      //getProposals();
-      callback(true);
-    },
-    fail: function(){
-      callback(false);
-    }
-  });
-}
-
-function logout(){
-  localStorage.removeItem('token');
-  profile.username = '';
-}
-
+// $.ajaxPrefilter(function(options, originalOptions, jqXHR){
+//   if(options.url.indexOf('lco.global/') >= 0 && localStorage.getItem('token')){
+//     jqXHR.setRequestHeader('Authorization', 'Token ' + localStorage.getItem('token'));
+//   }
+// });
 
 // Make sure ajax POSTs get CSRF protection
 function getCookie(name) {

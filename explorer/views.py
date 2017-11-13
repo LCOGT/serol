@@ -38,11 +38,16 @@ class AnalyseView(LoginRequiredMixin, DetailView):
     template_name = "explorer/challenge-analyser.html"
 
     def get_context_data(self, **kwargs):
+        frameid = self.request.GET.get('frameid', None)
         context = super(AnalyseView, self).get_context_data(**kwargs)
         try:
-            context['question'] = Question.objects.get(challenge=self.get_object())
-            context['progress'] = Progress.objects.get(challenge=self.get_object(), user=self.request.user)
-            context['answers'] = Answer.objects.filter(question=context['question'])
+            context['questions'] = Question.objects.filter(challenge=self.get_object())
+            progress = Progress.objects.get(challenge=self.get_object(), user=self.request.user)
+            if frameid:
+                progress.analyse()
+                progress.frameids = frameid
+                progress.save()
+            context['progress'] = progress
         except ObjectDoesNotExist:
             raise Http404
         return context
@@ -63,7 +68,7 @@ class ChallengeRedirectView(LoginRequiredMixin, RedirectView):
                 progress.identify()
                 progress.save()
             elif progress.status == 'Identify' and self.request.META.get('QUERY_STRING', '') == 'next':
-                print("Changed to Analyse")
+                logger.debug("Changed to Analyse")
                 progress.analyse()
                 progress.save()
             if progress.status == 'New':

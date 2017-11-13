@@ -1,0 +1,33 @@
+{% extends 'explorer/base.html' %}
+
+{% load i18n %}
+
+{% block title %}{% trans "Your Stickers" %}{% endblock %}
+
+{% block main-content %}
+<div class="container">
+  <div class="row">
+  <h1>{% trans "Stickers you've unlocked" %}</h1>
+</div>
+<div class="row">
+  {% for sticker in stickers %}
+  {% ifchanged sticker.challenge.mission %}
+    <h2>Mission {{sticker.challenge.mission.number}}: {{sticker.challenge.mission.name}}</h2>
+  </div>
+  <div class="row">
+  {% endifchanged %}
+  {% if sticker in object_list %}
+    <div class="col-2">
+      <img src="/media/{{sticker.filename}}" alt="{{sticker.challenge.name}}" class="img-fluid rounded" />
+    </div>
+  {% else %}
+  <div class="col-2">
+    <div class="blank-sticker"></div>
+  </div>
+  {% endif %}
+  {% empty%}
+  <p>No stickers defined?</p>
+  {% endfor %}
+  </div>
+</div>
+{% endblock %}

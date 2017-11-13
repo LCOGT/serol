@@ -7,7 +7,7 @@
 <script src="{% static 'explorer/js/utils.js' %}" ></script>
 <script>
 var images = Array();
-var redirect_url = "{% url 'start' object.id %}?next"
+var redirect_url = "{% url 'analyse' object.id %}?frameid="
 var requestid = {{ progress.requestids}};
 images.push({'mine':false, 'url':"https://lco.global/files/rtisba/faulkes-rti/imagearchive/2013/08/07/process-1835-2.jpg"});
 images.push({'mine':false, 'url':"https://lco.global/files/rtisba/faulkes-rti/imagearchive/2013/04/26/process-2408-1.jpg"});
@@ -23,12 +23,13 @@ $(document).ready(function(){
         if (rdata['results'].length > 0){
           console.log(rdata);
           frameid = rdata['results'][0]['id'];
-          get_colour_image(localStorage.getItem('archive_token'), frameid)
+          redirect_url+=frameid
+          get_colour_image(localStorage.getItem('archive_token'), frameid, mode='identify')
         }
         console.log("Number of Images ="+rdata['results'].length);
     })
     .fail(function(d){
-
+      console.log('Error' + d)
     });
 
 
@@ -54,7 +55,7 @@ $(document).ready(function(){
           <img src="http://placehold.it/300x300" alt="Avatar" class="identify-image img-fluid rounded" id="img-{{i}}">
           <div class="identify-middle">
             <div class="identify-text" id="img-text-{{i}}" data-mine="">
-              <i class="fa fa-question fa-4x"></i>
+              <i class="far fa-question fa-4x"></i>
             </div>
           </div>
         </div>

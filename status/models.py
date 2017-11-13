@@ -1,16 +1,12 @@
 from datetime import datetime
 
 from django.db import models
+from django.conf import settings
 from django_fsm import FSMField, transition
 from django.utils.translation import ugettext as _
 from django.contrib.auth.models import AbstractUser
 
 from explorer.models import Challenge, Mission
-
-STATUS = (
-('New','New'),('Submitted', 'Submitted'),('Observed','Observed'),('Failed','Failed'),('Retry','Retry'),('Completed','Completed'),
-('Identify','Identify'), ('Analyse','Analyse'), ('Identify','Identify'), ('Investigate','Investigate')
-)
 
 class User(AbstractUser):
     token = models.CharField(help_text=_('Authentication for Valhalla'), max_length=50, blank=True, null=True)
@@ -19,9 +15,10 @@ class User(AbstractUser):
 class Progress(models.Model):
     user = models.ForeignKey(User)
     challenge = models.ForeignKey(Challenge)
-    userrequestid = models.CharField(max_length=20)
-    requestids = models.CharField(max_length=20)
-    status = FSMField(default='New', choices=STATUS)
+    userrequestid = models.CharField(max_length=20, null=True, blank=True)
+    requestids = models.CharField(max_length=20, null=True, blank=True)
+    frameids = models.CharField(max_length=20, null=True, blank=True)
+    status = FSMField(default='New', choices=settings.PROGRESS_OPTIONS)
     last_update = models.DateTimeField(default=datetime.utcnow)
     target = models.CharField(max_length=100)
 
