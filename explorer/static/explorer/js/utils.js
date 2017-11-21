@@ -154,7 +154,7 @@ function get_colour_image(token, frameid, mode){
     .done(function(data){
       img_url = data.url;
       if (mode == 'analyser'){
-          $("#img-analyser").attr('src',img_url);
+          $("#img-holder").attr('src',img_url);
       } else {
         arrange_images(img_url);
       }

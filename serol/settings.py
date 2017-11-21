@@ -191,13 +191,12 @@ PROGRESS_OPTIONS =  (
                 ('New','New'),
                 ('Submitted', 'Submitted'),
                 ('Observed','Observed'),
-                ('Failed','Failed'),
-                ('Retry','Retry'),
-                ('Completed','Completed'),
                 ('Identify','Identify'),
                 ('Analyse','Analyse'),
-                ('Identify','Identify'),
-                ('Investigate','Investigate')
+                ('Investigate','Investigate'),
+                ('Summary','Summary'),
+                ('Failed','Failed'),
+                ('Retry','Retry')
                 )
 
 ##################

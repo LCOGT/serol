@@ -52,7 +52,7 @@ class Progress(models.Model):
     def investigate(self):
         pass
 
-    @transition(field=status, source=['Investigate'], target='Completed')
+    @transition(field=status, source=['Analyse','Investigate'], target='Summary')
     def completed(self):
         pass
 

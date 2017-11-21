@@ -3,63 +3,41 @@
 
 {% block wrapper-class%}challenge mission-{{object.mission.number}}-sidebar{%endblock%}
 
-{% block main-content %}
-<div class="container-fluid">
-  <!-- Example row of columns -->
-  <div class="row page-header">
-    <div class="col-lg-12">
-        <h1 class="display-1">{% trans "Challenge" %} {{object.number }}</h1>
-    </div>
+{% block challengename %}{{object.challenge.name}}{% endblock %}
+
+{% block main-body %}
+<div class="centre-container">
+<h1>{% trans "Challenge Completed!" %}</h1>
+  <div class="row">
+        <div class="col-lg-4">
+          {% for sticker in stickers %}
+          <img src="/media/{{MEDIA_URL}}{{sticker.sticker.filename}}" alt="{{sticker.sticker.desc}}"  class="img-fluid rounded" />
+          {% endfor %}
+        </div>
+        <div class="col-lg-8">
+          <img src="http://placehold.it/300x300" alt="{{object.name}}" class="img-fluid rounded" id="img-holder">
+          <p>Your picture of {{progress.target}}</p>
+
+          <p>
+          {% trans "From looking at your picture, you said:"%}
+          <ul>
+            {% for answer in answers %}
+            <li>{{answer.answer.text}}</li>
+            {% endfor %}
+          </ul>
+        </p>
+        </div>
   </div>
 </div>
-<div class="container">
-  <div class="row">
-    <div class="col-md-10 offset-md-2">
-    {% if progress.status == "New"%}
-    <p class="lead">{{object.description|safe}}</p>
-    <a href="{% url 'observe' object.pk %}" class="tn btn-info btn-lg  animated tada">Start the challenge ></a>
-    {% elif progress.status == "Submitted" %}
-    <p>{% trans "Serol has asked Las Cumbres Observatory to take your picture in" %}</p>
-    <div id="request-message">
-      <div class="row">
-        <div class="col-md-2 offset-md-2">
-          <i class="fas fa-alarm-clock fa-10x"></i>
-        </div>
-        <div class="col-md-8">
-        <h2 class="request-status-info"><span id="request-time"><i class="fas fa-cog fa-spin fa-fw"></i></span></h2>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-2  offset-md-2">
-          <i class="fas fa-compass fa-10x"></i>
-        </div>
-        <div class="col-md-8">
-          <h2 class="request-status-info" id="request-site">
-            <i class="fa fa-cog fa-spin fa-fw"></i>
-          </h2>
-        </div>
-      </div>
-    </div>
-    {% elif progress.status == "Completed" %}
-    {% elif progress.status == "Failed" %}
-    {% endif %}
-  </div>
-  </div>
-  </div>
-  <div class="corner-ribbon top-right sticky shadow mission-{{object.number}}-colour"><h1>{% trans "Mission" %} {{object.number}}</h1></div>
-
 {% endblock %}
 
 {% block script-content %}
-{% if progress.status == "Submitted" %}
-<script src="{% static "explorer/js/utils.js" %}"  type="text/javascript" ></script>
+<script src="{% static 'explorer/js/utils.js' %}" ></script>
 <script>
-var requestid = "{{progress.userrequestid}}";
-var resp;
-var redirect_url = "{% url 'challenge' object.id %}";
+var frameid = {{ progress.frameids}};
+
 $(document).ready(function(){
-  resp = status_request(requestid, localStorage.getItem('token'));
+  get_colour_image(localStorage.getItem('archive_token'), frameid, mode='analyser');
 });
 </script>
-{% endif %}
-{% endblock%}
+{% endblock %}

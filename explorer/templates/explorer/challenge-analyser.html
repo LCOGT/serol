@@ -6,9 +6,20 @@
 {% block script-content %}
 <script src="{% static 'explorer/js/utils.js' %}" ></script>
 <script>
+var answers = Array();
 var requestid = {{ progress.requestids}};
 var frameid;
+var current_question=0;
+var question_total={{questions|length}};
 $(document).ready(function(){
+  $('#question-0').show();
+
+  $("input:radio[name='answer']").on('change', function (){
+      var aid = $(this).attr('id');
+      answers.push(aid);
+      show_next_question();
+  });
+
   frameid = get_qs('frameid');
   if (frameid == undefined){
     $.when(
@@ -33,45 +44,66 @@ $(document).ready(function(){
     }
 
 });
+
+function show_next_question() {
+  $('#question-'+current_question).hide();
+  current_question += 1;
+  if (current_question < question_total){
+    $('#question-'+current_question).show();
+  } else{
+    add_answers_to_form();
+    $('.speech-bubble').hide();
+    $('#submit-answers').show();
+  }
+}
+
+function add_answers_to_form() {
+  var answers_text = JSON.stringify(answers);
+  $("#form-answers").val(answers_text);
+  }
 </script>
 {% endblock %}
 
-{% block main-content %}
-<div class="container">
-  <!-- Example row of columns -->
+{% block challengename %}{{object.challenge.name}}{% endblock %}
+
+{% block main-body %}
+<div class="centre-container">
+  <h1>{% trans "Analyse your image!" %}</h1>
   <div class="row">
-    <div class="col-lg-12">
-      <h1>{% trans "Analyse your image!" %}</h1>
+    <div class="col-lg-8">
+      <img src="http://placehold.it/300x300" alt="{{object.name}}" class="img-fluid rounded" id="img-holder">
     </div>
-  </div>
-</div>
-<div class="container pt-2">
-  <div class="row">
-    <div class="col-md-6 offset-md-2">
-      <img src="http://placehold.it/300x300" alt="{{object.name}}" class="img-fluid rounded" id="img-analyser">
-    </div>
-    <div class="col-md-4">
-      <div class=" side-panel">
+    <div class="col-lg-4">
+      <div class="speech-bubble">
+        <div class="arrow bottom right"></div>
       {% for question in questions %}
+      <div class="question-wrapper" id="question-{{ forloop.counter0 }}" style="display:none;">
       <h3>{{question.text}}</strong></h3>
 
         <div class="question-container">
-        <ul>
-        {% for answer in question.answer_set.all %}
-        <li>
-           <input type="radio" name='answer' id="answer-{{answer.pk}}">
-           <label for="answer-{{answer.pk}}">{{answer.text}}</label>
-           <div class="check"></div>
-       </li>
-       {% endfor %}
-     </ul>
-   </div>
+            <ul>
+            {% for answer in question.answer_set.all %}
+            <li>
+               <input type="radio" name='answer' id="answer-{{answer.pk}}">
+               <label for="answer-{{answer.pk}}">{{answer.text}}</label>
+               <div class="check"></div>
+           </li>
+           {% endfor %}
+           </ul>
+       </div>
+     </div>
    {% endfor %}
+    </div>
+    <div id="submit-answers"  style="display:none;">
+      <form action="" method="post">
+        {% csrf_token %}
+        <input id="form-answers" name="answers" type="hidden" value="" />
+        <input type="submit" class="btn btn-4 btn-4a animated tada" value='{% trans "Send Serol your answers!" %}' />
+      </form>
     </div>
     </div>
   </div>
 
 </div>
-<div class="corner-ribbon top-right sticky shadow mission-{{object.number}}-colour"><h2>{% trans "Mission" %} {{object.number}}</h2></div>
 
 {% endblock %}

@@ -7,7 +7,7 @@ from django.conf.urls.static import static
 from django.views.generic import TemplateView
 
 from status.views import ScheduleView, StatusView
-from explorer.views import MissionView, ChallengeRedirectView, ChallengeView, AnalyseView
+from explorer.views import MissionView, ChallengeRedirectView, ChallengeView, AnalyseView, ChallengeSummary
 from stickers.views import StickerView
 
 
@@ -19,6 +19,7 @@ urlpatterns = [
     url(r'^challenge/(?P<pk>[0-9]+)/analyse/$', AnalyseView.as_view(), name="analyse"),
     url(r'^challenge/(?P<pk>[0-9]+)/investigate/$', ChallengeView.as_view(), {'mode':'investigate'}, name="investigate"),
     url(r'^challenge/(?P<pk>[0-9]+)/submitted/$', ChallengeView.as_view(), {'mode':'submitted'}, name="submitted"),
+    url(r'^challenge/(?P<pk>[0-9]+)/summary/$', ChallengeSummary.as_view(), {'mode':'summary'}, name="summary"),
     url(r'^challenge/(?P<pk>[0-9]+)/$', ChallengeRedirectView.as_view(), name="challenge"),
     url(r'^status/(?P<userrequestid>[0-9]+)/$', StatusView.as_view(), name="status"),
     url(r'^api/schedule/$', ScheduleView.as_view(), name='schedule'),

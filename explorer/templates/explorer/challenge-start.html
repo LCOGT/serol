@@ -1,0 +1,18 @@
+{% extends 'explorer/base.html' %}
+{% load static i18n %}
+
+{% block wrapper-class%}challenge mission-{{object.mission.number}}-sidebar{%endblock%}
+
+{% block main-body %}
+<div class="centre-container">
+  <h1>{% trans "Welcome to a new challenge!" %}</h1>
+  <div class="row">
+    <p class="lead">{{object.description|safe}}</p>
+    <a href="{% url 'observe' object.pk %}" class="btn btn-info btn-lg  animated tada">Start the challenge ></a>
+  </div>
+  </div>
+
+{% endblock %}
+
+{% block script-content %}
+{% endblock%}

@@ -1,6 +1,8 @@
 {% extends "explorer/base.html" %}
 {% load static i18n %}
 
+{% block ribbon %}{% endblock %}
+
 {% block script-content %}
 {% if request.user.is_authenticated %}
 <script>
@@ -15,6 +17,35 @@ $(document).ready(function(){
 </script>
 {% endif %}
 {% endblock %}
+
+{% block menubar %}
+  <nav class="navbar navbar-toggleable-md navbar-inverse nav-head">
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand" href="/"><img src="{% static 'explorer/images/serol_logo_sm.png'%}" /></a>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item"><a class="nav-link" href="#">{% trans "Become a Cosmic Explorer" %}</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">{% trans "About Serol" %}</a></li>
+        {% if request.user.is_authenticated %}
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {{ request.user}}
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="{% url 'stickers' %}">{% trans "Your Stickers" %}</a>
+            <a class="dropdown-item" href="{% url 'auth_logout' %}" id="logout">{% trans "Logout" %}</a>
+          </div>
+        </li>
+        {% else %}
+        <li class="nav-item" id="login"><a class="nav-link" href="{% url 'auth_login' %}">{% trans "Login" %}</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </nav>
+  {% endblock%}
 
 {% block main-content %}
 
