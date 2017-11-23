@@ -4,7 +4,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, Http404
 from django.views import View
-from django.views.generic import DetailView
+from django.views.generic import DetailView, ListView
 from django.views.generic.base import RedirectView
 from django.urls import reverse, NoReverseMatch
 import logging
@@ -20,9 +20,13 @@ logger = logging.getLogger(__name__)
 class AnalyseForm(forms.Form):
     answers = forms.CharField(label='Your Answers', max_length=100)
 
-class MissionView(DetailView):
+class MissionView(LoginRequiredMixin, DetailView):
     model = Mission
     template_name = "explorer/mission.html"
+
+class MissionListView(LoginRequiredMixin, ListView):
+    model = Mission
+    template_name = "explorer/missionlist.html"
 
 class ChallengeView(LoginRequiredMixin, DetailView):
     model = Challenge

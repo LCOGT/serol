@@ -1,5 +1,5 @@
 {% extends "explorer/base.html" %}
-{% load static i18n %}
+{% load static i18n  explorer_utils %}
 
 {% block ribbon %}{% endblock %}
 
@@ -60,7 +60,11 @@ $(document).ready(function(){
       <h1 class="title-main">{% trans "SEROL" %}</h1>
       <p class="lead">{% trans "Join Serol and become a Cosmic Explorer" %}</p>
       <p class="lead">
-        <a href="#" class="btn btn-lg btn-outline-secondary animated tada" data-toggle="modal" data-target="#exampleModal">{% trans "Start the adventure!" %}</a>
+        {% if request.user.is_authenticated %}
+        <a href="{% progress_url request.user %}" class="btn btn-lg btn-4 btn-4a animated tada" >{% trans "Continue your adventure!" %}</a>
+        {% else %}
+        <a href="#" class="btn btn-lg btn-4 btn-4a animated tada" data-toggle="modal" data-target="#exampleModal">{% trans "Start your adventure!" %}</a>
+        {% endif %}
       </p>
     </div>
     <div class="col-4 title-right">

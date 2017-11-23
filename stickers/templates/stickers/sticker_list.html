@@ -1,32 +1,37 @@
 {% extends 'explorer/base.html' %}
 
-{% load i18n %}
+{% load i18n staticfiles %}
 
 {% block title %}{% trans "Your Stickers" %}{% endblock %}
+{% block ribbon %}{% endblock %}
 
 {% block main-content %}
+
 <div class="container">
-  <div class="row">
+  <a href="{% url 'home' %}"><img src="{% static 'explorer/images/serol_logo_sm.png'%}" /></a>
   <h1>{% trans "Stickers you've unlocked" %}</h1>
-</div>
-<div class="row">
-  {% for sticker in stickers %}
-  {% ifchanged sticker.challenge.mission %}
-    <h2>Mission {{sticker.challenge.mission.number}}: {{sticker.challenge.mission.name}}</h2>
-  </div>
+  <p>{% trans "Below are the challenge stickers you have unlocked. Click each of them to see your pictures."%}</p>
   <div class="row">
-  {% endifchanged %}
-  {% if sticker in object_list %}
-    <div class="col-2">
-      <img src="/media/{{sticker.filename}}" alt="{{sticker.challenge.name}}" class="img-fluid rounded" />
-    </div>
-  {% else %}
+  {% for mission in missions %}
   <div class="col-2">
-    <div class="blank-sticker"></div>
+    <h2>Mission {{mission.number}}: {{mission.name}}</h2>
+    <img src="/media/{{mission.filename}}" alt="Mission {{mission.number}} patch" class="img-fluid rounded" />
   </div>
-  {% endif %}
+  {% for challenge in mission.challenge_set.all %}
+  {% for  sticker in challenge.sticker_set.all %}
+    {% if sticker in object_list %}
+      <div class="col-2">
+        <img src="/media/{{sticker.filename}}" alt="{{sticker.challenge.name}}" class="img-fluid rounded" />
+      </div>
+    {% else %}
+    <div class="col-2">
+      <div class="blank-sticker"></div>
+    </div>
+    {% endif %}
+    {% endfor %}
   {% empty%}
   <p>No stickers defined?</p>
+  {% endfor %}
   {% endfor %}
   </div>
 </div>

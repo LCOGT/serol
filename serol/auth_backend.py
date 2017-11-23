@@ -53,6 +53,10 @@ def api_auth(url, username, password):
         msg = "Observing portal API timed out"
         logger.error(msg)
         return False
+    except requests.exceptions.ConnectionError:
+        msg = "Trouble with internet"
+        logger.error(msg)
+        return False
 
     if r.status_code in [200,201]:
         logger.debug('Login successful for {}'.format(username))

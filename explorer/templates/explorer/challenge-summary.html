@@ -1,5 +1,5 @@
-{% extends 'explorer/base.html' %}
-{% load static i18n %}
+{% extends 'explorer/challenge-base.html' %}
+{% load static i18n  explorer_utils %}
 
 {% block wrapper-class%}challenge mission-{{object.mission.number}}-sidebar{%endblock%}
 
@@ -13,6 +13,7 @@
           {% for sticker in stickers %}
           <img src="/media/{{MEDIA_URL}}{{sticker.sticker.filename}}" alt="{{sticker.sticker.desc}}"  class="img-fluid rounded" />
           {% endfor %}
+          <a href="{% progress_url request.user %}" class="btn btn-4 btn-4a animated tada">{% trans "start a new challenge?" %}</a>
         </div>
         <div class="col-lg-8">
           <img src="http://placehold.it/300x300" alt="{{object.name}}" class="img-fluid rounded" id="img-holder">

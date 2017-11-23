@@ -6,12 +6,16 @@
 
 {%block wrapper-class %}{% endblock %}
 
-{% block main-content %}
+{% block ribbon %}{% endblock %}
 
-<div class="container">
+{% block main-header %}
+<a href="{% url 'home' %}"><img src="{% static 'explorer/images/serol_logo_sm.png'%}" /></a>
+{% endblock %}
+
+{% block main-body %}
+
 			<h1>Serol</h1>
 			<h3>Log into your On Sky account</h3>
-    <div class="row text-center">
       <form action="" method="post"  id="loginForm" >
         {% csrf_token %}
         <div class="row">
@@ -38,14 +42,12 @@
 								{% endfor %}
 				{% endif %}
           <input type="hidden" name="next" value="{{ next }}">
-      		<button id="login-btn" class="btn btn-primary-lg">Log me in</button>
-          <p class="small">By logging in, you agree to <a href="http://lco.global/observatory/termsofuse" target="_blank">the Las Cumbres Observatory terms of use</a>.</p>
+      		<button id="login-btn" class="btn btn-lg btn-4 btn-4a">Log me in</button>
+        <p class="small">By logging in, you agree to <a href="http://lco.global/observatory/termsofuse" target="_blank">the Las Cumbres Observatory terms of use</a>.</p>
       	<p class="small">
       		<a href="https://observe.lco.global/accounts/register/">Need an account?</a>
       		&nbsp;
       		<a href="https://observe.lco.global/accounts/password/reset/">Forgot your password?</a>
       	</p>
       </form>
-    </div>
-  </div>
 {% endblock %}

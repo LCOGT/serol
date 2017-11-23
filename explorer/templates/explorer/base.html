@@ -1,4 +1,5 @@
 {% load static i18n %}
+{% get_media_prefix as MEDIA_PREFIX %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -20,7 +21,7 @@
     <link rel="stylesheet" href="{% static 'explorer/css/font-awesome-core.css' %}">
   </head>
 
-  <body>
+  <body data-media-url="{{MEDIA_PREFIX}}">
 
     <div class="site-wrapper {% block wrapper-class%}{%endblock%}">
       {% block menubar %}
@@ -29,7 +30,6 @@
 {% block main-content %}
 <div class="container">
 {% block main-header %}
-<h3><a href="{% url 'home' %}"><img src="{% static 'explorer/images/serol_logo_sm.png'%}" /></a> Challenge {{object.number}} : {{object.name}}</h3>
 {% endblock %}
 
 {% block main-body %}
@@ -37,9 +37,7 @@
 </div>
 {% endblock %}
 
-{% block ribbon %}
-<div class="corner-ribbon sticky shadow mission-{{object.number}}-colour"><h2>{% trans "Mission" %} {{object.number}}</h2></div>
-{% endblock %}
+{% block ribbon %}{% endblock %}
 
 <div class="mastfoot">
   <div class="container-fluid">

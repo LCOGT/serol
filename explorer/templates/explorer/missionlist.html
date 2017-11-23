@@ -1,0 +1,22 @@
+{% extends "explorer/base.html" %}
+{% load i18n staticfiles %}
+
+{% block main-content %}
+
+<div class="container">
+  <h1><a href="{% url 'home' %}" ><img src="{% static 'explorer/images/serol_logo_sm.png'%}" /></a> Missions</h1>
+  <div class="row">
+  {% for mission in object_list %}
+    <div class="col-4">
+      <img src="{{MEDIA_PREFIX}}{{mission.patch}}" class="img-fluid"/>
+      <h2>{% trans "Mission" %} {{mission.number}}</h1>
+      <h3 class="mission-name">{{mission.name|safe}}</h1>
+      <p><a class="btn btn-info btn-lg" href="{% url 'mission' mission.pk %}" role="button">{% trans "Start the mission" %} &raquo;</a></p>
+    </div>
+  {% endfor %}
+  </div>
+</div>
+
+{% endblock %}
+
+{% block ribbon %}{% endblock %}

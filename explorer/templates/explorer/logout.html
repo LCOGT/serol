@@ -11,14 +11,16 @@ $(document).ready(function(){
 {% endblock %}
 
 {%block wrapper-class %}{% endblock %}
+{% block ribbon%}{% endblock %}
+
+
+{% block main-header %}
+<a href="{% url 'home' %}"><img src="{% static 'explorer/images/serol_logo_sm.png'%}" /></a>
+{% endblock %}
 
 {% block main-body %}
 
-<div class="container">
 			<h1>Serol</h1>
 			<h3>Logged out</h3>
-    <div class="row text-center">
-      <a href="{% url 'auth_login' %}">Log in?</a>
-    </div>
-  </div>
+      <p><a href="{% url 'auth_login' %}">Log in?</a></p>
 {% endblock %}

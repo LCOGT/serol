@@ -7,12 +7,14 @@ from django.conf.urls.static import static
 from django.views.generic import TemplateView
 
 from status.views import ScheduleView, StatusView
-from explorer.views import MissionView, ChallengeRedirectView, ChallengeView, AnalyseView, ChallengeSummary
+from explorer.views import MissionView, MissionListView, ChallengeRedirectView, \
+    ChallengeView, AnalyseView, ChallengeSummary
 from stickers.views import StickerView
 
 
 urlpatterns = [
     url(r'^mission/(?P<pk>[0-9]+)/$', MissionView.as_view(), name="mission"),
+    url(r'missions/$', MissionListView.as_view(), name="missions"),
     url(r'^challenge/(?P<pk>[0-9]+)/start/$', ChallengeView.as_view(), {'mode':'start'}, name="start"),
     url(r'^challenge/(?P<pk>[0-9]+)/observe/$', ChallengeView.as_view(), {'mode':'observe'}, name="observe"),
     url(r'^challenge/(?P<pk>[0-9]+)/identify/$', ChallengeView.as_view(), {'mode':'identify'}, name="identify"),

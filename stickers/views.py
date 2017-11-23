@@ -4,6 +4,7 @@ from django.views.generic.list import ListView
 
 
 from stickers.models import PersonSticker, Sticker
+from explorer.models import Mission
 
 class StickerView(LoginRequiredMixin, ListView):
 
@@ -11,7 +12,7 @@ class StickerView(LoginRequiredMixin, ListView):
 
     def get_context_data(self):
         context = super(StickerView, self).get_context_data()
-        context['stickers'] = Sticker.objects.filter(active=True).order_by('challenge__mission','challenge__number')
+        context['missions'] = Mission.objects.all()#.order_by('challenge__mission','challenge__number')
         return context
 
     def get_queryset(self):

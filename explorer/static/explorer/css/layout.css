@@ -293,10 +293,13 @@ h5.modal-title{
 
 .mission-name {
    vertical-align: middle;
-   font-size:4rem;
-   width:15rem;
    text-shadow: 0 2px 0 #d84f4f, 0 4px 0 #d54646, 0 6px 0 #ce3333, 0 8px 0 #b92e2e, 0 10px 0 #912525, 0 12px 0 #721e1e, 0px 12px 10px rgba(0,0,0,0.5);
  }
+
+h1.mission-name {
+  font-size:4rem;
+  width:15rem;
+}
 
 .mission-1-colour,
 .mission-1-sidebar .page-header {

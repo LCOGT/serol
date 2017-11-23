@@ -1,4 +1,4 @@
-{% extends 'explorer/base.html' %}
+{% extends 'explorer/challenge-base.html' %}
 {% load static i18n %}
 
 {% block wrapper-class%}challenge mission-{{object.mission.number}}-sidebar{%endblock%}
@@ -14,7 +14,6 @@
     {% if progress.status == "New"%}
     <p class="lead">{{object.description|safe}}</p>
     <a href="{% url 'observe' object.pk %}" class="tn btn-info btn-lg  animated tada">Start the challenge ></a>
-    {% elif progress.status == "Completed" %}
     {% elif progress.status == "Failed" %}
     {% endif %}
   </div>

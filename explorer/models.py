@@ -20,6 +20,7 @@ class Challenge(models.Model):
     avm_code = models.CharField(max_length=50, blank=True, null=True)
     active = models.BooleanField(default=True)
     sticker_total = models.IntegerField(default=0)
+    is_last = models.BooleanField(default=False)
 
     def __str__(self):
         return "Challenge {} from Mission {}".format(self.number, self.mission.number)
