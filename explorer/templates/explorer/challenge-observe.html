@@ -12,8 +12,10 @@ var image_files = {
     '5.1.6' : "{% static 'explorer/images/5.1.6-interacting_galaxy.png' %}",
     '4.1.4' : "{% static 'explorer/images/4.1.4-supernova_remnant.png' %}",
     '3.6.4.1' : "{% static 'explorer/images/3.6.4.1-open_cluster.png' %}",
-    '3.6.4.2' : "{% static 'explorer/images/3.6.4.1-globuler_cluster.png' %}",
-    '2.3' : "{% static 'explorer/images/2.3-asteroid.png' %}"
+    '3.6.4.2' : "{% static 'explorer/images/3.6.4.2-globular_cluster.png' %}",
+    '2.3' : "{% static 'explorer/images/2.3-asteroid.png' %}",
+    '2.2' : "{% static 'explorer/images/2.3-comet.png' %}",
+    '1.1' : "{% static 'explorer/images/1.1.2-saturn.png' %}"
                   };
 
 
@@ -28,34 +30,40 @@ $(document).ready(function(){
   var csrftoken = '{{ csrf_token }}';
   var challenge_id = '{{object.id}}'
   var redirect_url = "{% url 'challenge' object.id %}";
-  var whatsupurl = "https://lco.global/whatsup/range/?aperture=0m4&format=jsonp";
   var image_file = image_files[category];
+  var whatsupurl = "https://lco.global/whatsup/range/?aperture=0m4&format=jsonp";
+  var target_type;
 
-  whatsupurl += "&category="+category;
-  whatsupurl += "&end="+end.substr(0,19);
-  whatsupurl += "&start="+start.toISOString().substr(0,19);
+  if (category == '2.3' or category == '2.2' or category == '1.1'){
+    target_type = 'moving';
+  } else {
+    target_type = 'siderial';
+    whatsupurl += "&category="+category;
+    whatsupurl += "&end="+end.substr(0,19);
+    whatsupurl += "&start="+start.toISOString().substr(0,19);
 
-  $.ajax( {url : whatsupurl,
-    jsonp: "callback",
-    dataType: "jsonp",
-    success: function( data ) {
-      targets = data.targets;
-      var target;
-      var max_length = targets.length > 6 ? 6 : targets.length;
-      // Hide all the image placeholders
-      $(".target-holder").hide();
+    $.ajax( {url : whatsupurl,
+      jsonp: "callback",
+      dataType: "jsonp",
+      success: function( data ) {
+        targets = data.targets;
+        var target;
+        var max_length = targets.length > 6 ? 6 : targets.length;
+        // Hide all the image placeholders
+        $(".target-holder").hide();
 
-      for (i=0;i<max_length;i++){
-        target = data.targets[i];
-        var item = "#target-img-"+i;
-        $(item+" .target-name").html(target.name);
-        $(item+" img").attr('src',image_file);
-        $(item).data('tid',i);
-        // Show parent target holder
-        $(item).parent().show();
+        for (i=0;i<max_length;i++){
+          target = data.targets[i];
+          var item = "#target-img-"+i;
+          $(item+" .target-name").html(target.name);
+          $(item+" img").attr('src',image_file);
+          $(item).data('tid',i);
+          // Show parent target holder
+          $(item).parent().show();
+        }
       }
-    }
-  });
+    });
+  }
 
   $(".target-holder a").on("click", function(){
     var tid = $(this).data('tid');

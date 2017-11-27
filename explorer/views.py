@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
@@ -42,6 +44,9 @@ class ChallengeView(LoginRequiredMixin, DetailView):
         context = super(ChallengeView, self).get_context_data(**kwargs)
         if kwargs.get('mode',None) != 'start':
             obj,created = Progress.objects.get_or_create(challenge=self.get_object(), user=self.request.user)
+            if created:
+                obj.last_update = datetime.utcnow()
+                obj.save()
             context['progress'] = obj
         return context
 

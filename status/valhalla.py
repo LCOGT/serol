@@ -54,7 +54,7 @@ def process_observation_request(params, token):
         logger.error("Could not send request: {}".format(r.content))
         return False, r.content
 
-def request_format(object_name, object_ra, object_dec, start,end, obs_filter, proposal, aperture='0m4'):
+def request_format(target, start,end, obs_filter, proposal, aperture='0m4'):
     '''
     Format a simple request using the schema the Scheduler understands
     '''
@@ -83,15 +83,6 @@ def request_format(object_name, object_ra, object_dec, start,end, obs_filter, pr
             }
         molecules.append(molecule)
 
-    # define the target
-    target = {
-           'name'              : object_name,
-           'ra'                : object_ra, # RA (degrees)
-           'dec'               : object_dec, # Dec (Degrees)
-           'epoch'             : 2000,
-           'type'              : 'SIDEREAL'
-        }
-
     # Do the observation between these dates
     window = {
         'start' : start, # str(datetime)
@@ -113,9 +104,48 @@ def request_format(object_name, object_ra, object_dec, start,end, obs_filter, pr
         "requests" : [request],
         "type" : "compound_request",
         "ipp_value" : 1.0,
-        "group_id": "sxe_{}_{}".format(object_name, datetime.utcnow().strftime("%Y%m%d")),
+        "group_id": "serol_{}_{}".format(object_name, datetime.utcnow().strftime("%Y%m%d")),
         "observation_type": "NORMAL",
         "proposal": settings.PROPOSAL_CODE
         }
 
     return user_request
+
+def format_sidereal_object(object_name, object_ra, object_dec):
+    '''
+    Format target for non-moving objects
+    '''
+    target = {
+           'name'              : object_name,
+           'ra'                : object_ra, # RA (degrees)
+           'dec'               : object_dec, # Dec (Degrees)
+           'epoch'             : 2000,
+           'type'              : 'SIDEREAL'
+        }
+    return target
+
+def format_moving_object(body_id):
+    '''
+    Format target for non-sidereal objects
+    '''
+    body = Body.objects.get(id=body_id)
+    target = {
+        "name": body.name,
+        "type": "NON_SIDEREAL",
+        "epochofel": body.epochofel,
+        "scheme": body.get_schema_display(),
+        "orbinc": body.orbinc,
+        "longascnode": body.longascnode,
+        "argofperih": body.argofperih,
+        "eccentricity": body.eccentricity
+    }
+    if body.schema in [0,2]:
+        target["meandist"] = body.meandist
+        target["meananom"] = body.meananom
+        if body.schema == 2:
+            target["dailymotion"] = body.dailymotion
+    elif body.schema == 1:
+        target["perihdist"] = body.perihdist
+        target["epochofperih"] = body.epochofperih
+
+    return target

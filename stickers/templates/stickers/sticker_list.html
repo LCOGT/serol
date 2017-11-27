@@ -11,17 +11,22 @@
   <a href="{% url 'home' %}"><img src="{% static 'explorer/images/serol_logo_sm.png'%}" /></a>
   <h1>{% trans "Stickers you've unlocked" %}</h1>
   <p>{% trans "Below are the challenge stickers you have unlocked. Click each of them to see your pictures."%}</p>
-  <div class="row">
   {% for mission in missions %}
-  <div class="col-2">
-    <h2>Mission {{mission.number}}: {{mission.name}}</h2>
-    <img src="/media/{{mission.filename}}" alt="Mission {{mission.number}} patch" class="img-fluid rounded" />
+  <div class="row">
+    <div class="col-2">
+      <img src="{{MEDIA_PREFIX}}{{mission.patch}}" alt="Mission {{mission.number}} patch" class="img-fluid rounded" />
+    </div>
+    <div class="col-10">
+      <h2>Mission {{mission.number}}: {{mission.name}}</h2>
+    </div>
+    <h3>Challenge Stickers</h3>
   </div>
+  <div class="row">
   {% for challenge in mission.challenge_set.all %}
   {% for  sticker in challenge.sticker_set.all %}
     {% if sticker in object_list %}
       <div class="col-2">
-        <img src="/media/{{sticker.filename}}" alt="{{sticker.challenge.name}}" class="img-fluid rounded" />
+        <a href="{% url 'summary' sticker.challenge.pk %}"><img src="{{MEDIA_PREFIX}}{{sticker.filename}}" alt="{{sticker.challenge.name}}" class="img-fluid rounded" /></a>
       </div>
     {% else %}
     <div class="col-2">
@@ -32,6 +37,7 @@
   {% empty%}
   <p>No stickers defined?</p>
   {% endfor %}
+</div>
   {% endfor %}
   </div>
 </div>

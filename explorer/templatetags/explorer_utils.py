@@ -9,7 +9,6 @@ register = template.Library()
 
 @register.simple_tag
 def progress_url(user):
-    print(user)
     try:
         latest = Progress.objects.filter(user=user).latest('last_update')
     except ObjectDoesNotExist:
@@ -25,5 +24,5 @@ def progress_url(user):
             url = reverse('missions')
     else:
         # We haven't completed this challenge so just take us to it
-        url = reverse('challenge',kwargs={'pk':latest.pk})
+        url = reverse('challenge',kwargs={'pk':latest.challenge.pk})
     return url

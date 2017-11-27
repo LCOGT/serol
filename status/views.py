@@ -11,7 +11,8 @@ from rest_framework import status, serializers
 
 from status.models import Progress
 
-from status.valhalla import process_observation_request, request_format, get_observation_status
+from status.valhalla import process_observation_request, request_format, get_observation_status, \
+    format_sidereal_object, format_moving_object
 
 class RequestSerializer(serializers.Serializer):
     """
@@ -20,6 +21,7 @@ class RequestSerializer(serializers.Serializer):
     start = serializers.DateTimeField()
     end = serializers.DateTimeField()
     aperture = serializers.CharField()
+    target_type = serializers.CharField()
     object_name = serializers.CharField()
     object_ra = serializers.FloatField()
     object_dec = serializers.FloatField()
@@ -40,7 +42,11 @@ class RequestSerializer(serializers.Serializer):
 
     def save(self, *args, **kwargs):
         params = self.data
-        obs_params = request_format(params['object_name'], params['object_ra'], params['object_dec'], params['start'], params['end'], params['filters'], params['aperture'])
+        if params['target_type'] == 'moving':
+            target = format_moving_object(object_id)
+        else:
+            target = format_sidereal_object(params['object_name'], params['object_ra'], params['object_dec'])
+        obs_params = request_format(target, params['start'], params['end'], params['filters'], params['aperture'])
         resp_status, resp_msg = process_observation_request(params=obs_params, token=params['token'])
         if not resp_status:
             return Response(resp_msg, status=status.HTTP_400_BAD_REQUEST)

@@ -104,7 +104,7 @@ USE_TZ = False
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = '/var/www/html/'
+STATIC_ROOT = '/var/www/html/static/'
 
 MEDIA_URL = '/media/'
 
