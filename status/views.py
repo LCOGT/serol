@@ -25,7 +25,7 @@ class RequestSerializer(serializers.Serializer):
     object_name = serializers.CharField()
     object_ra = serializers.FloatField(required=False)
     object_dec = serializers.FloatField(required=False)
-    filters = serializers.JSONField()
+    filters = serializers.JSONField(required=False)
     token = serializers.CharField()
     challenge = serializers.IntegerField()
 

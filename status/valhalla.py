@@ -56,7 +56,7 @@ def submit_observation_request(params, token):
 
 def process_observation_request():
     if params['target_type'] == 'moving':
-        target = format_moving_object(object_id)
+        target, params = format_moving_object(object_id)
     else:
         target = format_sidereal_object(params['object_name'], params['object_ra'], params['object_dec'])
     obs_params = request_format(target, params['start'], params['end'], params['filters'], params['aperture'])

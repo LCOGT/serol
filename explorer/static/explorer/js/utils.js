@@ -215,21 +215,8 @@ function startEnd(date) {
   return end.toISOString();
 }
 
-function submit_to_serol(target, token, challenge_id, redirect_url, csrftoken){
-    var start = new Date();
-    var end = startEnd(start);
-		var url = '/api/schedule/';
-		var data = {start:start.toISOString().substr(0,19),
-					end:end.substr(0,19),
-					aperture:'0m4', //obs_vals[0]['aperture'],
-					object_name:target.name,
-					object_ra:target.ra,
-					object_dec:target.dec,
-					filters:JSON.stringify(target.filters),
-					token: token,
-          csrfmiddlewaretoken: csrftoken,
-          challenge:challenge_id
-				};
+function submit_to_serol(data, redirect_url){
+    var url = '/api/schedule/';
 		$.ajax({
 			url: url,
 			method: 'POST',
