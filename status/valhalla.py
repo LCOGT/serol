@@ -33,7 +33,7 @@ def get_observation_status(requestid, token):
         return False, r.content
 
 
-def process_observation_request(params, token):
+def submit_observation_request(params, token):
     '''
     Send the observation parameters and the authentication cookie to the Scheduler API
     '''
@@ -53,6 +53,15 @@ def process_observation_request(params, token):
     else:
         logger.error("Could not send request: {}".format(r.content))
         return False, r.content
+
+def process_observation_request():
+    if params['target_type'] == 'moving':
+        target = format_moving_object(object_id)
+    else:
+        target = format_sidereal_object(params['object_name'], params['object_ra'], params['object_dec'])
+    obs_params = request_format(target, params['start'], params['end'], params['filters'], params['aperture'])
+    resp_status, resp_msg = submit_observation_request(params=obs_params, token=params['token'])
+    return resp_status, resp_msg
 
 def request_format(target, start,end, obs_filter, proposal, aperture='0m4'):
     '''

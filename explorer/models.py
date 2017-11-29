@@ -4,6 +4,15 @@ from django.utils.translation import ugettext as _
 from datetime import datetime
 
 BODY_TYPES = ((0,'MPC_MINOR_PLANET'), (1,'MPC_COMET'), (2, 'JPL_MAJOR_PLANET'))
+ICONS = (
+        ('1.1.1-mars.png','Mars'),
+        ('1.1.2-jupiter.png','Jupiter'),
+        ('1.1.2-neptune.png','Neptune'),
+        ('1.1.2-saturn.png','Saturn'),
+        ('1.1.2-uranus.png','Uranus'),
+        ('2.2-comet.png','Comet'),
+        ('2.3-asteroid.png','Asteroid')
+)
 
 class Mission(models.Model):
     number = models.IntegerField()
@@ -21,7 +30,7 @@ class Challenge(models.Model):
     description = models.TextField(help_text=_("Research page info"))
     action = models.TextField(help_text=_("What the user should look for on investigate?"))
     category = models.TextField(help_text=_("What type of object is this?"), blank=True, null=True)
-    avm_code = models.CharField(max_length=50, blank=True, null=True)
+    avm_code = models.CharField(max_length=10, blank=True, null=True)
     active = models.BooleanField(default=True)
     sticker_total = models.IntegerField(default=0)
     is_last = models.BooleanField(default=False)
@@ -40,10 +49,12 @@ class Body(models.Model):
     dailymotion = models.FloatField(help_text='n', blank=True, null=True)
     meananom = models.FloatField(help_text='MA', blank=True, null=True)
     meandist = models.FloatField(help_text='A',blank=True, null=True)
-    perihdist = models.FloatField(help_text='',blank=True, null=True)
-    epochofperih = models.FloatField(help_text='',blank=True, null=True)
+    perihdist = models.FloatField(help_text='Used for comets',blank=True, null=True)
+    epochofperih = models.FloatField(help_text='Used for comets',blank=True, null=True)
     filter_list = models.CharField(max_length=20, help_text=_('JSON blob of filters'))
     exposuretime = models.FloatField()
+    avm_code = models.CharField(max_length=10)
+    icon = models.CharField(max_length=20, choices=ICONS)
     active = models.BooleanField(default=True)
     last_update = models.DateTimeField(default=datetime.utcnow)
 

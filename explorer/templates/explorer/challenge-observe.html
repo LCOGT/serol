@@ -34,10 +34,10 @@ $(document).ready(function(){
   var whatsupurl = "https://lco.global/whatsup/range/?aperture=0m4&format=jsonp";
   var target_type;
 
-  if (category == '2.3' or category == '2.2' or category == '1.1'){
+  if (category == '2.3' || category == '2.2' || category == '1.1'){
     target_type = 'moving';
   } else {
-    target_type = 'siderial';
+    target_type = 'sidereal';
     whatsupurl += "&category="+category;
     whatsupurl += "&end="+end.substr(0,19);
     whatsupurl += "&start="+start.toISOString().substr(0,19);
@@ -74,7 +74,11 @@ $(document).ready(function(){
 
   $("#submit_button").on("click", function(){
     var tid = $(this).data('tid')
-    submit_to_serol(targets[tid], localStorage.getItem('token'), challenge_id, redirect_url, csrftoken);
+    if (target_type == 'moving'){
+      submit_to_serol(tid, localStorage.getItem('token'), challenge_id, redirect_url, csrftoken);
+    } else {
+      submit_to_serol(targets[tid], localStorage.getItem('token'), challenge_id, redirect_url, csrftoken);
+    }
   });
 });
 </script>
@@ -85,6 +89,19 @@ $(document).ready(function(){
 <div class="centre-container">
   <h1>{{object.action}}</h1>
   <div class="row">
+    {% if targets %}
+    {% for target in targets %}
+    <div class="col-lg-4  col-sm-6 pb-5 target-holder">
+        <a href="#" id="target-img-{{target}}" data-toggle="modal" data-target="#targetModal" data-tid="{{target.id}}">
+            {% with "explorer/images/"|add:target.icon as icon_url %}<img class="img-fluid" src="{% static icon_url %}" alt="">
+            <div class="target-name-holder">
+              <span class="target-name">{{target.name}}</span>
+            </div>
+        </a>
+    </div>
+    {% endwith %}
+    {% endfor %}
+    {% else %}
     {% for i in "012345" %}
     <div class="col-lg-4  col-sm-6 pb-5 target-holder">
         <a href="#" id="target-img-{{i}}" data-toggle="modal" data-target="#targetModal" data-tid="">
@@ -95,6 +112,7 @@ $(document).ready(function(){
         </a>
     </div>
     {% endfor %}
+    {% endif %}
   </div>
   </div>
 

@@ -12,7 +12,7 @@ from django.urls import reverse, NoReverseMatch
 import logging
 import json
 
-from explorer.models import Mission, Challenge
+from explorer.models import Mission, Challenge, Body
 from status.models import Progress, Answer, Question, UserAnswer
 from stickers.models import PersonSticker
 from stickers.views import add_sticker
@@ -34,21 +34,26 @@ class ChallengeView(LoginRequiredMixin, DetailView):
     model = Challenge
 
     def get(self, request, *args, **kwargs):
+
         if kwargs.get('mode',None) == 'failed':
             self.template_name = "explorer/challenge-message.html"
         else:
             self.template_name = "explorer/challenge-{}.html".format(kwargs['mode'])
-        return super(ChallengeView, self).get(request, *args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        context = super(ChallengeView, self).get_context_data(**kwargs)
-        if kwargs.get('mode',None) != 'start':
+        self.object = self.get_object()
+        context = self.get_context_data(object=self.object)
+        mode = kwargs.get('mode',None)
+        if mode != 'start':
             obj,created = Progress.objects.get_or_create(challenge=self.get_object(), user=self.request.user)
             if created:
                 obj.last_update = datetime.utcnow()
                 obj.save()
-            context['progress'] = obj
-        return context
+                context['progress'] = obj
+            if mode == 'observe':
+                targets = Body.objects.filter(avm_code__startswith=obj.challenge.avm_code)
+                context['targets'] = targets
+        print(mode)
+        return self.render_to_response(context)
+
 
 class ChallengeSummary(LoginRequiredMixin, DetailView):
     model = Challenge

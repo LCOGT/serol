@@ -11,8 +11,8 @@ from rest_framework import status, serializers
 
 from status.models import Progress
 
-from status.valhalla import process_observation_request, request_format, get_observation_status, \
-    format_sidereal_object, format_moving_object
+from status.valhalla import process_observation_request, get_observation_status
+
 
 class RequestSerializer(serializers.Serializer):
     """
@@ -21,33 +21,17 @@ class RequestSerializer(serializers.Serializer):
     start = serializers.DateTimeField()
     end = serializers.DateTimeField()
     aperture = serializers.CharField()
-    target_type = serializers.CharField()
+    target_type = serializers.ChoiceField(choices=(('moving', 'moving'),('sidereal', 'sidereal')))
     object_name = serializers.CharField()
-    object_ra = serializers.FloatField()
-    object_dec = serializers.FloatField()
+    object_ra = serializers.FloatField(required=False)
+    object_dec = serializers.FloatField(required=False)
     filters = serializers.JSONField()
     token = serializers.CharField()
     challenge = serializers.IntegerField()
 
-    # def validate(self, data):
-    #     super(RequestSerializer, self).validate(data)
-    #     try:
-    #         progress = Progress.object.get(user=user, challenge=data['challenge'])
-    #         if progress.status != 'New':
-    #             # User has already submitted a request for this challenge
-    #             raise serializers.ValidationError(status.HTTP_409_CONFLICT)
-    #     except:
-    #         raise serializers.ValidationError(status.HTTP_404_NOT_FOUND)
-    #     return data
-
     def save(self, *args, **kwargs):
         params = self.data
-        if params['target_type'] == 'moving':
-            target = format_moving_object(object_id)
-        else:
-            target = format_sidereal_object(params['object_name'], params['object_ra'], params['object_dec'])
-        obs_params = request_format(target, params['start'], params['end'], params['filters'], params['aperture'])
-        resp_status, resp_msg = process_observation_request(params=obs_params, token=params['token'])
+        resp_status, resp_msg = process_observation_request(params)
         if not resp_status:
             return Response(resp_msg, status=status.HTTP_400_BAD_REQUEST)
         resp_prog = save_progress(challenge=params['challenge'], user=kwargs['user'], request_id=resp_msg, target=params['object_name'])
@@ -55,6 +39,7 @@ class RequestSerializer(serializers.Serializer):
             return Response("Success", status=status.HTTP_201_CREATED)
         else:
             return Response("Manipulating status", status=status.HTTP_400_BAD_REQUEST)
+
 
 class ScheduleView(APIView):
     """
@@ -93,7 +78,6 @@ class StatusView(APIView):
                 progress.failed()
             progress.save()
             return Response("Status updated", status=status.HTTP_200_OK)
-
 
 def save_progress(challenge, user, request_id, target):
     '''
