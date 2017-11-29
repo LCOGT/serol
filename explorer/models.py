@@ -54,6 +54,7 @@ class Body(models.Model):
     filter_list = models.CharField(max_length=20, help_text=_('JSON blob of filters'))
     exposuretime = models.FloatField()
     avm_code = models.CharField(max_length=10)
+    description = models.TextField()
     icon = models.CharField(max_length=20, choices=ICONS)
     active = models.BooleanField(default=True)
     last_update = models.DateTimeField(default=datetime.utcnow)

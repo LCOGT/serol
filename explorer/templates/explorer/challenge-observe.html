@@ -5,6 +5,7 @@
 <script src="{% static 'explorer/js/utils.js' %}" ></script>
 <script>
 var targets;
+var tmp;
 var category = '{{object.avm_code}}';
 var image_files = {
     '5.1.1' : "{% static 'explorer/images/5.1.1-spiral_galaxy.png' %}",
@@ -67,12 +68,20 @@ $(document).ready(function(){
 
   $(".target-holder a").on("click", function(){
     var tid = $(this).data('tid');
-    $(".modal-title").html(targets[tid].name);
-    $(".modal-body").html(targets[tid].desc);
+    if (target_type=='moving'){
+      var title = $(this).find(".target-name").html();
+      var desc = $(this).find(".target-desc").html();
+      $(".modal-title").html(title);
+      $(".modal-body").html(desc);
+    } else {
+      $(".modal-title").html(targets[tid].name);
+      $(".modal-body").html(targets[tid].desc);
+    }
     $("#submit_button").data('tid',tid);
   });
 
   $("#submit_button").on("click", function(){
+    console.log(target_type)
     var tid = $(this).data('tid')
     if (target_type == 'moving'){
       submit_to_serol(tid, localStorage.getItem('token'), challenge_id, redirect_url, csrftoken);
@@ -96,6 +105,7 @@ $(document).ready(function(){
             {% with "explorer/images/"|add:target.icon as icon_url %}<img class="img-fluid" src="{% static icon_url %}" alt="">
             <div class="target-name-holder">
               <span class="target-name">{{target.name}}</span>
+              <span class="target-desc" style="display:none;">{{target.description}}</span>
             </div>
         </a>
     </div>

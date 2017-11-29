@@ -34,7 +34,6 @@ class ChallengeView(LoginRequiredMixin, DetailView):
     model = Challenge
 
     def get(self, request, *args, **kwargs):
-
         if kwargs.get('mode',None) == 'failed':
             self.template_name = "explorer/challenge-message.html"
         else:
@@ -51,7 +50,6 @@ class ChallengeView(LoginRequiredMixin, DetailView):
             if mode == 'observe':
                 targets = Body.objects.filter(avm_code__startswith=obj.challenge.avm_code)
                 context['targets'] = targets
-        print(mode)
         return self.render_to_response(context)
 
 
