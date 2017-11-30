@@ -1,10 +1,12 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from django.conf import settings
 from django.contrib.sessions.backends.db import SessionStore
 import requests
 import logging
 import json
+
+from explorer.models import Body
 
 
 logger = logging.getLogger(__name__)
@@ -54,16 +56,17 @@ def submit_observation_request(params, token):
         logger.error("Could not send request: {}".format(r.content))
         return False, r.content
 
-def process_observation_request():
+def process_observation_request(params):
     if params['target_type'] == 'moving':
-        target, params = format_moving_object(object_id)
+        target, filters = format_moving_object(params['object_name'])
+        params['filters'] = filters
     else:
         target = format_sidereal_object(params['object_name'], params['object_ra'], params['object_dec'])
     obs_params = request_format(target, params['start'], params['end'], params['filters'], params['aperture'])
     resp_status, resp_msg = submit_observation_request(params=obs_params, token=params['token'])
     return resp_status, resp_msg
 
-def request_format(target, start,end, obs_filter, proposal, aperture='0m4'):
+def request_format(target, start, end, obs_filter, proposal, aperture='0m4'):
     '''
     Format a simple request using the schema the Scheduler understands
     '''
@@ -97,6 +100,7 @@ def request_format(target, start,end, obs_filter, proposal, aperture='0m4'):
         'start' : start, # str(datetime)
         'end' : end, # str(datetime)
         }
+    print(start, end)
 
     request = {
         "constraints" : {'max_airmass' : 2.0, "min_lunar_distance": 30.0,},
@@ -113,7 +117,7 @@ def request_format(target, start,end, obs_filter, proposal, aperture='0m4'):
         "requests" : [request],
         "type" : "compound_request",
         "ipp_value" : 1.0,
-        "group_id": "serol_{}_{}".format(object_name, datetime.utcnow().strftime("%Y%m%d")),
+        "group_id": "serol_{}_{}".format(target['name'], datetime.utcnow().strftime("%Y%m%d")),
         "observation_type": "NORMAL",
         "proposal": settings.PROPOSAL_CODE
         }
@@ -133,11 +137,11 @@ def format_sidereal_object(object_name, object_ra, object_dec):
         }
     return target
 
-def format_moving_object(body_id):
+def format_moving_object(tid):
     '''
     Format target for non-sidereal objects
     '''
-    body = Body.objects.get(id=body_id)
+    body = Body.objects.get(id=tid)
     target = {
         "name": body.name,
         "type": "NON_SIDEREAL",
@@ -152,9 +156,15 @@ def format_moving_object(body_id):
         target["meandist"] = body.meandist
         target["meananom"] = body.meananom
         if body.schema == 2:
-            target["dailymotion"] = body.dailymotion
+            target["dailymot"] = body.dailymotion
     elif body.schema == 1:
         target["perihdist"] = body.perihdist
         target["epochofperih"] = body.epochofperih
 
-    return target
+    # Add filters to inputs
+    filters = []
+    for f in json.loads(body.filter_list):
+        filter_item = {'name' : f, 'exposure' : body.exposuretime}
+        filters.append(filter_item)
+
+    return target, filters

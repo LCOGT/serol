@@ -223,7 +223,7 @@ function submit_to_serol(data, redirect_url){
 			cache: false,
 			data: data,
 			error: function(e){
-				console.log('Error: '+e);
+				console.log('Error: '+e[0]);
 				$('.modal-title').html("Error!");
 				$('.modal-body').html("<p>Sorry, there was a problem submitting your request. Please try later.</p>");
 			},

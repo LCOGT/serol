@@ -82,25 +82,24 @@ $(document).ready(function(){
 
   $("#submit_button").on("click", function(){
     console.log()
-    var tid = $(this).data('tid');
     var start = new Date();
     var end = startEnd(start);
 		var data = {start:start.toISOString().substr(0,19),
 					end:end.substr(0,19),
-					aperture:'0m4', //obs_vals[0]['aperture'],
-					filters:JSON.stringify(target.filters),
+					aperture:'0m4',
           target_type: target_type,
 					token: localStorage.getItem('token'),
           csrfmiddlewaretoken: csrftoken,
           challenge:challenge_id
 				};
     if (target_type == 'moving'){
-      data['object_name'] = $(this).data('name');
-      submit_to_serol(data, redirect_url);
+      var tid = $(this).data('tid');
+      data['object_name'] = tid;
     } else {
       data['object_name'] = target.name;
       data['object_ra'] = target.ra;
       data['object_dec'] = target.dec;
+      data['filters'] = JSON.stringify(target.filters);
     }
     submit_to_serol(data, redirect_url);
   });
@@ -111,7 +110,8 @@ $(document).ready(function(){
 
 {% block main-body %}
 <div class="centre-container">
-  <h1>{{object.action}}</h1>
+  <h1>{% trans 'Pick a target!' %}</h1>
+  <p>{% trans 'Serol will take a picture of your choice within 7 days' %}</p>
   <div class="row">
     {% if targets %}
     {% for target in targets %}
