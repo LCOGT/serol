@@ -44,7 +44,7 @@ class Body(models.Model):
     epochofel = models.FloatField(help_text='MJD')
     orbinc = models.FloatField(help_text='IN')
     longascnode = models.FloatField(help_text='OM')
-    argofperih = models.FloatField(help_text='Tp')
+    argofperih = models.FloatField(help_text='W')
     eccentricity = models.FloatField(help_text='EC')
     dailymotion = models.FloatField(help_text='n', blank=True, null=True)
     meananom = models.FloatField(help_text='MA', blank=True, null=True)
@@ -58,6 +58,9 @@ class Body(models.Model):
     icon = models.CharField(max_length=20, choices=ICONS)
     active = models.BooleanField(default=True)
     last_update = models.DateTimeField(default=datetime.utcnow)
+
+    class Meta:
+        verbose_name_plural = 'bodies'
 
     def __str__(self):
         return "{}".format(self.name)

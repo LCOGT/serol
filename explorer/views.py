@@ -46,7 +46,7 @@ class ChallengeView(LoginRequiredMixin, DetailView):
             if created:
                 obj.last_update = datetime.utcnow()
                 obj.save()
-                context['progress'] = obj
+            context['progress'] = obj
             if mode == 'observe':
                 targets = Body.objects.filter(avm_code__startswith=obj.challenge.avm_code)
                 context['targets'] = targets
