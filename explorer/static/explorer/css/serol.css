@@ -1,135 +1,55 @@
-#serol {
-    right:0;
-    max-width: 300px;
+.svg {
+  width: 100%;
+  height: auto;
 }
 
-#head {
+.a {
+  fill: #5E5E66;
+}
+.b {
+  fill: #8C8C8C;
+}
+.d {
+  fill: #8D8EA2;
+}
+.f {
+  fill: #1F2437;
+}
+.g {
+  fill: #A1A1A1;
+}
+.h {
+  fill: #FFF;
+}
+
+.svg .h {
+  fill: #FFF;
+}
+
+#svg-container{
+  margin:0 auto;
   width:100%;
 }
 
-#face {
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  border-radius: 10px;
-  border:12px #aaa solid;
-  background-color: #ccc;
-  height:90px;
-  width:90%;
-}
-.eye {
-  position: relative;
-  top:32%;
-  border-radius: 50%;
-  background-color:#222;
-  width:19%;
-  height:55%;
-}
-.left {
-  left:8%;
-  float:left;
-}
-.right{
-  right:8%;
-  float:right;
-}
-.pupil{
-  position: relative;
-  top:20%;
-  left:50%;
-  border-radius: 100%;
-  background-color:#fff;
-  width:20%;
-  height:20%;
-}
-
-#mouth {
-  position: relative;
-  top:75%;
-  left: 40%;
-  width:10%;
-  border-top: 15px solid #222;
-  border-left: 10px solid transparent;
-  border-right:30px solid transparent;
-  border-bottom:30px solid transparent;
-  transform: rotate(-5deg);
-  -ms-transform: rotate(-5deg); /* IE 9 */
-  -webkit-transform: rotate(-5deg); /* Safari and Chrome */
-  }
-
-  #neck {
-    background: linear-gradient(to right,
-                        transparent 0%,
-                        transparent calc(50% - 10px),
-                        #999 calc(50% - 10px),
-                        #999 calc(50% + 10px),
-                        transparent calc(50% + 10px),
-                        transparent 100%);
-    min-height: 15px;
-  }
-
-  #robotbody{
-    width:100%;
-  }
-
-  #torso{
-    margin:0 auto;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    border-radius: 10px;
-    border:12px #aaa solid;
-    background-color: #222;
-    min-height:150px;
-    width:48%;
-    display: inline-block;
-  }
-  .arm-wrapper {
-    display: inline-block;
-    width: 15%;
-  }
-  .arm {
-    height: 110px;
-    border: 20px dashed #999;
-    padding:0;
-  }
-  .left-arm {
-    border-width: 0 0 0 10px;
-    -moz-border-radius: 60px 0 0 0;
-    border-radius: 60px 0 0 0;
-    border-color: transparent transparent transparent #ccc;
-  }
-  .right-arm {
-    border-width: 0 10px 0 0;
-    -moz-border-radius: 0 60px 0 0;
-    border-radius: 0 60px 0 0;
-    border-color: transparent #ccc transparent transparent;
-  }
-
-  .hand-top {
-    width: 0;
-    height: 0;
-    border-right: 10px solid #aaa;
-    border-bottom: 30px solid transparent;
-    border-top: 10px solid transparent;
-    display: inline-block;
-  }
-  .hand-bottom {
-    width: 0;
-    height: 0;
-    border-left: 10px solid #aaa;
-    border-bottom: 10px solid transparent;
-    border-top: 10px solid transparent;
-    display: inline-block;
-  }
-
-  .foot-wrapper{
-    width:49%;
-    display:inline-block;
-  }
-  .foot {
-      height: 20px;
-      width: 40px;
-      border-top-left-radius: 40px;
-      border-top-right-radius: 40px;
-      margin:0 auto;
-      background:#ccc;
+.serol-head {
+  animation: turn-up 5s ease infinite;
+  transform-origin: center;
     }
+
+@keyframes serol-antenna-lights {
+  0%        {fill: #000}
+  20%       {fill: #fbcb43}
+  40%, 100% {fill: #000}
+}
+
+.serol-antenna {
+  animation: serol-antenna-lights 0.5s ease infinite;
+}
+
+
+
+@keyframes turn-up {
+  0%   {transform: rotate(0deg)}
+  50%  {transform: rotate(-10deg)}
+  100% {transform: rotate(0)}
+}
