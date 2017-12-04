@@ -26,27 +26,43 @@
   fill: #FFF;
 }
 
-#svg-container{
+#serol-figure{
   margin:0 auto;
   width:100%;
 }
 
+#svg-container {
+  top:-100px;
+  position: relative;
+}
+
+#status-info {
+  color:#21e423;
+  margin:0 auto;
+  position: relative;
+  top: 53%;
+  font-size: 2em;
+  z-index: 1;
+  max-width:200px;
+  line-height: 1.2em;
+}
+
 .serol-head {
-  animation: turn-up 5s ease infinite;
+  animation: turn-up 5s ease 2s 2;
   transform-origin: center;
-    }
+}
 
 @keyframes serol-antenna-lights {
-  0%        {fill: #000}
+  0%        {fill: #a1a1a1}
   20%       {fill: #fbcb43}
-  40%, 100% {fill: #000}
+  40%       {fill: #77ff33}
+  60%       {fill: #fbcb43}
+  100%      {fill: #a1a1a1}
 }
 
 .serol-antenna {
   animation: serol-antenna-lights 0.5s ease infinite;
 }
-
-
 
 @keyframes turn-up {
   0%   {transform: rotate(0deg)}

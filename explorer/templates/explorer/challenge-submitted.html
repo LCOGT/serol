@@ -3,14 +3,16 @@
 
 {% block wrapper-class%}challenge mission-{{object.mission.number}}-sidebar{%endblock%}
 
-{% block main-body %}
-<div class="centre-container">
-  <h1>{% trans "Observation Status" %}</h1>
+{% block main-content %}
     <div id="request-message">
       <div class="row">
-
+        <div id="serol-figure">
+          <div id="status-info">
+            <span id="request-site"><i class="far fa-cog fa-w-16 fa-spin fa-3x fa-fw"></i></span>
+            <span id="request-time"></span>
+          </div>
         <div id="svg-container">
-          <svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" viewBox="0 0 365.5 346.8">
+          <svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 365.5 346.8" preserveAspectRatio="xMaxYMax meet">
 
           <path d="M124.2 294.2h-5.1c-1.3 0-2.4 1.1-2.4 2.4v30.7c0 1.3 1.1 2.4 2.4 2.4h5.1c1.3 0 2.4-1.1 2.4-2.4v-30.7C126.6 295.3 125.5 294.2 124.2 294.2z" class="a"/>
           <path d="M247.1 293.8h-5.1c-1.3 0-2.4 1.1-2.4 2.4v30.7c0 1.3 1.1 2.4 2.4 2.4h5.1c1.3 0 2.4-1.1 2.4-2.4v-30.7C249.5 294.8 248.4 293.8 247.1 293.8z" class="a"/>
@@ -56,19 +58,22 @@
               <ellipse cx="3.5" cy="97.5" rx="3.4" ry="3.4" class="g serol-antenna"/>
               <path d="M321 34.6H45.4c-5.3 0-9.6 4.3-9.6 9.6v108.4c0 5.3 4.3 9.6 9.6 9.6h275.6c5.3 0 9.6-4.3 9.6-9.6V44.2C330.6 38.9 326.3 34.6 321 34.6z" class="g"/>
               <path d="M301 50.9H65.5c-6.6 0-12 5.4-12 12v71.3c0 6.6 5.4 12 12 12h235.4c6.6 0 12-5.4 12-12v-71.3C313 56.3 307.6 50.9 301 50.9z" fill="#D9D9DC"/>
-              <polygon points="149.5 123.1 163.6 138.2 208.6 135.5 217.4 128.7 " class="f serol-mouth"/>
-              <ellipse cx="104.5" cy="106.7" rx="23.8" ry="23.9" class="f"/>
-              <ellipse cx="113" cy="100.9" rx="7.4" ry="7.8" class="h"/>
-              <ellipse cx="260" cy="106.9" rx="23.8" ry="23.9" class="f"/>
-              <ellipse cx="268.4" cy="101.2" rx="7.4" ry="7.8" class="h"/>
+              <polygon points="149.5 123.1 163.6 138.2 208.6 135.5 217.4 128.7 " class="f serol-mouth-normal" />
+              <polygon points="149.5 120.1 163.6 138.2 208.6 138.2 217.4 120.1 " class="f serol-mouth-shock" style="display:none;"/>
+                <g class="serol-eyes">
+                  <ellipse cx="104.5" cy="106.9" rx="23.8" ry="23.9" class="f"/>
+                  <ellipse cx="113" cy="100.9" rx="7.4" ry="7.8" class="h serol-pupil-normal" />
+                  <ellipse cx="104.5" cy="106.9" rx="7.4" ry="7.8" class="h serol-pupil-shock"  style="display:none;"/>
+                </g>
+              <g class="serol-eyes">
+                <ellipse cx="260" cy="106.9" rx="23.8" ry="23.9" class="f"/>
+                <ellipse cx="268.4" cy="101.2" rx="7.4" ry="7.8" class="h serol-pupil-normal" />
+                <ellipse cx="260" cy="106.9" rx="7.4" ry="7.8" class="h serol-pupil-shock" style="display:none;"/>
+              </g>
             </g>
             </svg>
             </div>
-
-        <div id="status-info">
-          <span id="request-time"></span>
-          <span id="request-site"></span>
-        </div>
+          </div>
         </div>
       </div>
     </div>

@@ -197,6 +197,7 @@ h2.request-status-info {
   display: inline-block;
   font-size: 8rem;
 }
+
 #request-days,
 #request-time {
   font-family: "Aldrich";

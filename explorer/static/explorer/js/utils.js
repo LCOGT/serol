@@ -135,6 +135,7 @@ function status_userrequest(userrequestid, token) {
         var d1 = new Date();
         update_date(DateDiff.inDays(d1,d2), DateDiff.inHours(d1,d2), DateDiff.inMinutes(d1,d2));
         update_site(rdata[0]['site']);
+        serol_alert_animation();
       }
       console.log("SCHEDULED"+rdata);
       data = rdata
@@ -143,6 +144,12 @@ function status_userrequest(userrequestid, token) {
       console.log("FAIL "+rdata['detail']);
     });
     return data;
+}
+
+function serol_alert_animation(){
+  setTimeout(function () {
+    /* Switch back */
+  }, 5000);
 }
 
 function get_colour_image(token, frameid, mode){
@@ -195,13 +202,15 @@ function show_identify_answer(class_id){
 }
 
 function update_date(days, hours, minutes){
+  var txt;
   if  (days >0){
-    $('#request-time').html(days+" days");
+    txt = days+" days";
   }else if (hours >1){
-    $('#request-time').html(hours+" hours");
+    txt = hours+" hours";
   }else{
-    $('#request-time').html(minutes+" mins");
+    txt = minutes+" mins";
   }
+  $('#request-time').html("in<br/>"+txt)
 }
 
 function update_site(site){
