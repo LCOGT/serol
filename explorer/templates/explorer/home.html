@@ -27,18 +27,12 @@ $(document).ready(function(){
 
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item"><a class="nav-link" href="#">{% trans "Become a Cosmic Explorer" %}</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">{% trans "About Serol" %}</a></li>
+        <li class="nav-item"><a class="nav-link" href="/join/">{% trans "Become a Cosmic Explorer" %}</a></li>
+        <li class="nav-item"><a class="nav-link" href="/about/">{% trans "About Serol" %}</a></li>
+        <li class="nav-item"><a class="nav-link" href="/videos/">{% trans " Serol Videos" %}</a></li>
         {% if request.user.is_authenticated %}
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            {{ request.user}}
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item" href="{% url 'stickers' %}">{% trans "Your Stickers" %}</a>
-            <a class="dropdown-item" href="{% url 'auth_logout' %}" id="logout">{% trans "Logout" %}</a>
-          </div>
-        </li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'stickers' %}">{% trans "Your Stickers" %}</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'auth_logout' %}" id="logout">{% trans "Logout" %}</a></li>
         {% else %}
         <li class="nav-item" id="login"><a class="nav-link" href="{% url 'auth_login' %}">{% trans "Login" %}</a></li>
         {% endif %}

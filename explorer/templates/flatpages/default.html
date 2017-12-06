@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load markdown_deux_tags %}
+
+{% block title %}{{ flatpage.title }}{% endblock %}
+
+{% block main-content %}
+<div class="content-wrapper">
+  <div class="content-wrapper-inner">
+    <div class="container">
+      <div class="row">
+      <h1>{{flatpage.title}}</h1>
+      {{ flatpage.content|markdown }}
+    </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

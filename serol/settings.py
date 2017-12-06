@@ -6,6 +6,8 @@ from django.utils.crypto import get_random_string
 
 VERSION = '0.1'
 
+SITE_ID = 1
+
 CURRENT_PATH = os.path.dirname(os.path.realpath(__file__))
 PRODUCTION = True if CURRENT_PATH.startswith('/var/www') else False
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -28,6 +30,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    'django.contrib.flatpages',
+    'pagedown',
+    'markdown_deux',
     'rest_framework'
 ]
 

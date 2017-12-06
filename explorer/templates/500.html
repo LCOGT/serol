@@ -1,17 +1,15 @@
 {% extends 'explorer/challenge-base.html' %}
 {% load static i18n %}
 
-{% block wrapper-class%}challenge mission-{{object.mission.number}}-sidebar{%endblock%}
+{% block wrapper-class%}{%endblock%}
 
-{% block main-body %}
+{% block main-content %}
+<div class="container">
       <div class="row">
-        <div class="col-lg-10">
+        <div class="col-lg-12">
+          <h1>Oops</h1>
+          <p>Something broke!<br/>Please return <a href="{% url 'home' %}">home and try again</a>.</p>
         <div id="serol-figure">
-          <div id="status-info">
-            <span id="request-site"><i class="far fa-cog fa-w-16 fa-spin fa-3x fa-fw"></i></span>
-            <span id="request-time"></span>
-          </div>
-        <div id="svg-container">
           <svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 365.5 346.8" preserveAspectRatio="xMaxYMax meet">
 
           <path d="M124.2 294.2h-5.1c-1.3 0-2.4 1.1-2.4 2.4v30.7c0 1.3 1.1 2.4 2.4 2.4h5.1c1.3 0 2.4-1.1 2.4-2.4v-30.7C126.6 295.3 125.5 294.2 124.2 294.2z" class="a"/>
@@ -47,56 +45,37 @@
               <polygon points="186.4 0 181.2 41.8 192 40.8 " class="a"/>
               <path d="M194.8 24.6h-17c-2.6 0-4.6 2.1-4.6 4.6 0 2.6 2.1 4.6 4.6 4.6h17c2.6 0 4.6-2.1 4.6-4.6C199.4 26.7 197.3 24.6 194.8 24.6z" class="g"/>
               <path d="M200.1 30.4h-28.4c-2.6 0-4.6 2.1-4.6 4.6 0 2.6 2.1 4.6 4.6 4.6h28.4c2.6 0 4.6-2.1 4.6-4.6C204.7 32.5 202.6 30.4 200.1 30.4z" class="a"/>
-              <ellipse cx="186.6" cy="3.5" rx="3.4" ry="3.4" class="g serol-antenna"/>
+              <ellipse cx="186.6" cy="3.5" rx="3.4" ry="3.4" class="g serol-antenna serol-antenna-flash"/>
               <polygon points="323.8 94.8 324.8 105.6 365.5 100 " class="a"/>
               <path d="M336.3 86.7L336.3 86.7c-2.6 0-4.6 2.1-4.6 4.6v17c0 2.6 2.1 4.6 4.6 4.6h0c2.6 0 4.6-2.1 4.6-4.6V91.4C340.9 88.8 338.8 86.7 336.3 86.7z" class="g"/>
               <path d="M330.5 80.6c-2.6 0-4.6 2.1-4.6 4.6v28.4c0 2.6 2.1 4.6 4.6 4.6s4.6-2.1 4.6-4.6V85.3C335.1 82.7 333.1 80.6 330.5 80.6z" class="a"/>
-              <ellipse cx="362" cy="100.2" rx="3.4" ry="3.4" class="g serol-antenna"/>
+              <ellipse cx="362" cy="100.2" rx="3.4" ry="3.4" class="g serol-antenna serol-antenna-flash"/>
               <polygon points="40.8 92.2 0 97.8 41.8 103 " class="a"/>
               <path d="M29.2 84.7L29.2 84.7c-2.6 0-4.6 2.1-4.6 4.6v17c0 2.6 2.1 4.6 4.6 4.6h0c2.6 0 4.6-2.1 4.6-4.6V89.4C33.9 86.8 31.8 84.7 29.2 84.7z" class="g"/>
               <path d="M35 79.4c-2.6 0-4.6 2.1-4.6 4.6v28.4c0 2.6 2.1 4.6 4.6 4.6s4.6-2.1 4.6-4.6V84.1C39.7 81.5 37.6 79.4 35 79.4z" class="a"/>
-              <ellipse cx="3.5" cy="97.5" rx="3.4" ry="3.4" class="g serol-antenna"/>
+              <ellipse cx="3.5" cy="97.5" rx="3.4" ry="3.4" class="g serol-antenna serol-antenna-flash"/>
               <path d="M321 34.6H45.4c-5.3 0-9.6 4.3-9.6 9.6v108.4c0 5.3 4.3 9.6 9.6 9.6h275.6c5.3 0 9.6-4.3 9.6-9.6V44.2C330.6 38.9 326.3 34.6 321 34.6z" class="g"/>
               <path d="M301 50.9H65.5c-6.6 0-12 5.4-12 12v71.3c0 6.6 5.4 12 12 12h235.4c6.6 0 12-5.4 12-12v-71.3C313 56.3 307.6 50.9 301 50.9z" fill="#D9D9DC"/>
-              <polygon points="149.5 123.1 163.6 138.2 208.6 135.5 217.4 128.7 " class="f serol-mouth-normal" />
-              <polygon points="149.5 120.1 163.6 138.2 208.6 138.2 217.4 120.1 " class="f serol-mouth-shock" style="display:none;"/>
+              <polygon points="149.5 120.1 163.6 138.2 208.6 138.2 217.4 120.1 " class="f serol-mouth-shock" />
                 <g class="serol-eyes">
                   <ellipse cx="104.5" cy="106.9" rx="23.8" ry="23.9" class="f"/>
-                  <ellipse cx="113" cy="100.9" rx="7.4" ry="7.8" class="h serol-pupil-normal" />
-                  <ellipse cx="104.5" cy="106.9" rx="7.4" ry="7.8" class="h serol-pupil-shock"  style="display:none;"/>
+                  <ellipse cx="104.5" cy="106.9" rx="7.4" ry="7.8" class="h serol-pupil-shock"/>
                 </g>
               <g class="serol-eyes">
                 <ellipse cx="260" cy="106.9" rx="23.8" ry="23.9" class="f"/>
-                <ellipse cx="268.4" cy="101.2" rx="7.4" ry="7.8" class="h serol-pupil-normal" />
-                <ellipse cx="260" cy="106.9" rx="7.4" ry="7.8" class="h serol-pupil-shock" style="display:none;"/>
+                <ellipse cx="260" cy="106.9" rx="7.4" ry="7.8" class="h serol-pupil-shock"/>
               </g>
             </g>
             </svg>
-            </div>
+            <div id="status-info" class="serol-error"><i class="far fa-question fa-w-16 fa-3x fa-fw"></i></div>
           </div>
         </div>
-
-        <div class="col-lg-2">
-            <div class="bubble">
-              <p>{% trans "I'm asking my telescope friends to take a picture of " %} <strong>{{progress.target}}</strong>
-              {% trans "for you" %}</p>
-            </div>
-        </div>
-
       </div>
     </div>
 
 {% endblock %}
 
+{% block ribbon %}{% endblock %}
+
 {% block script-content %}
-<script src="{% static "explorer/js/utils.js" %}"  type="text/javascript" ></script>
-<script>
-var requestid = "{{progress.userrequestid}}";
-var resp;
-var resp_tmp;
-var redirect_url = "{% url 'challenge' object.id %}";
-$(document).ready(function(){
-  resp = status_request(requestid, localStorage.getItem('token'));
-});
-</script>
 {% endblock%}

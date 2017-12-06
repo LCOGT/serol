@@ -2,6 +2,13 @@
    * Globals
    */
 /* Links */
+
+@media (min-width: 1px) {
+  .container {
+    width: 992px;
+  }
+}
+
 a,
 a:focus,
 a:hover {
@@ -328,6 +335,7 @@ h1.mission-name {
  .title-right{
    background: url('../images/TitlePage-RIGHT.jpg') no-repeat center top;
    height:450px;
+   z-index:-1;
  }
 
 .target-name-holder {

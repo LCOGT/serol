@@ -47,6 +47,10 @@
   line-height: 1.2em;
 }
 
+.serol-error {
+  top: -230px !important;
+}
+
 .serol-head-bob {
   animation: turn-up 5s ease 2s 2;
   transform-origin: center;

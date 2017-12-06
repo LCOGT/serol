@@ -1,8 +1,9 @@
+from django.conf import settings
 from django.conf.urls import url
 from django.contrib import admin
-from django.contrib.staticfiles import views
 from django.contrib.auth.views import LoginView, LogoutView
-from django.conf import settings
+from django.contrib.flatpages.views import flatpage
+from django.contrib.staticfiles import views
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
 
@@ -13,6 +14,9 @@ from stickers.views import StickerView
 
 
 urlpatterns = [
+    url(r'^about/$', flatpage, {'url': '/about/'}, name='about'),
+    url(r'^videos/$', flatpage, {'url': '/videos/'}, name='videos'),
+    url(r'^join/$', flatpage, {'url': '/join/'}, name='join'),
     url(r'^mission/(?P<pk>[0-9]+)/$', MissionView.as_view(), name="mission"),
     url(r'missions/$', MissionListView.as_view(), name="missions"),
     url(r'^challenge/(?P<pk>[0-9]+)/start/$', ChallengeView.as_view(), {'mode':'start'}, name="start"),
