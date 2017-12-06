@@ -8,9 +8,22 @@ from django.contrib.auth.models import AbstractUser
 
 from explorer.models import Challenge, Mission
 
+class Proposal(models.Model):
+    code = models.CharField(max_length=20, unique=True)
+    active = models.BooleanField(default=True)
+
+    def __str__(self):
+        if self.active:
+            state = ""
+        else:
+            state = "NOT "
+        return "{} is {}active".format(self.code, state)
+
+
 class User(AbstractUser):
     token = models.CharField(help_text=_('Authentication for Valhalla'), max_length=50, blank=True, null=True)
     archive_token = models.CharField(help_text=_('Authentication for LCO archive'), max_length=50, blank=True, null=True)
+    default_proposal = models.ForeignKey(Proposal)
 
 class Progress(models.Model):
     user = models.ForeignKey(User)

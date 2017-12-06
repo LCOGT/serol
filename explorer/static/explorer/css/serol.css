@@ -40,14 +40,14 @@
   color:#21e423;
   margin:0 auto;
   position: relative;
-  top: 53%;
+  top: 375px;
   font-size: 2em;
   z-index: 1;
   max-width:200px;
   line-height: 1.2em;
 }
 
-.serol-head {
+.serol-head-bob {
   animation: turn-up 5s ease 2s 2;
   transform-origin: center;
 }
@@ -60,7 +60,7 @@
   100%      {fill: #a1a1a1}
 }
 
-.serol-antenna {
+.serol-antenna-flash {
   animation: serol-antenna-lights 0.5s ease infinite;
 }
 
@@ -68,4 +68,36 @@
   0%   {transform: rotate(0deg)}
   50%  {transform: rotate(-10deg)}
   100% {transform: rotate(0)}
+}
+
+.bubble
+{
+position: relative;
+width: 250px;
+height: 120px;
+padding: 0px;
+background: #FFFFFF;
+-webkit-border-radius: 10px;
+-moz-border-radius: 10px;
+border-radius: 10px;
+margin-top:20px;
+}
+
+.bubble:after
+{
+content: '';
+position: absolute;
+border-style: solid;
+border-width: 15px 15px 15px 0;
+border-color: transparent #FFFFFF;
+display: block;
+width: 0;
+z-index: 1;
+left: -15px;
+top: 73px;
+}
+.bubble p{
+  padding:5px;
+  font-size:1.2em;
+  color: #aaa;
 }

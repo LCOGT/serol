@@ -2,13 +2,11 @@ from django.contrib import admin
 from django.utils.translation import ugettext as _
 from django.contrib.auth.admin import UserAdmin
 
-from status.models import User, Progress, Answer, Question, UserAnswer
+from status.models import User, Progress, Answer, Question, UserAnswer, Proposal
 
 class CustomUserAdmin(UserAdmin):
-
-
     fieldsets = (
-        (None, {'fields': ('username', 'password', 'email', )}),
+        (None, {'fields': ('username', 'password', 'email', 'default_proposal' )}),
         (_('Tokens'), {'fields' :('token', 'archive_token')}),
         (_('Personal info'), {'fields': ('first_name', 'last_name')}),
         (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser',
@@ -27,5 +25,6 @@ class QuestionAdmin(admin.ModelAdmin):
 
 admin.site.register(User, CustomUserAdmin)
 admin.site.register(Question, QuestionAdmin)
+admin.site.register(Proposal)
 
 admin.site.site_header = 'SEROL admin'

@@ -1,9 +1,11 @@
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth.hashers import check_password
+from django.utils.translation import ugettext as _
 import requests
 import logging
 
-from status.models import User
+from status.models import User, Proposal
 
 logger = logging.getLogger(__name__)
 
@@ -14,7 +16,9 @@ class ValhallaBackend(object):
 
     def authenticate(self, request, username=None, password=None):
         token = api_auth(settings.PORTAL_TOKEN_URL, username, password)
-        profile = get_profile(token)
+        profile, msg = get_profile(token)
+        if msg:
+            messages.info(request, msg)
         archivetoken = api_auth(settings.ARCHIVE_TOKEN_URL, username, password)
         if token and profile and archivetoken:
             username = profile[0]
@@ -26,6 +30,7 @@ class ValhallaBackend(object):
                 user = User(username=username)
             user.token = token
             user.archive_token = archivetoken
+            user.default_proposal = profile[2]
             user.save()
             # Finally add these tokens as session variables
             request.session['token'] = token
@@ -73,11 +78,25 @@ def get_profile(token):
     except requests.exceptions.Timeout:
         msg = "Observing portal API timed out"
         logger.error(msg)
-        return False
+        return False, _("We are currently having problems. Please bear with us")
 
     if r.status_code in [200,201]:
         logger.debug('Profile successful')
-        return (r.json()['username'], r.json()['tokens']['archive'])
+        proposal = check_proposal_membership(r.json()['proposals'])
+        if proposal:
+            return (r.json()['username'], r.json()['tokens']['archive'], proposal), False
+        else:
+            logger.debug('No active proposal')
+            return False, _("Please join a participating <a href='http://lco.global/education/partners/'>LCO education partner</a> for access to SEROL")
     else:
         logger.error("Could not get profile {}".format(r.content))
+        return False, _("Please check your login details")
+
+def check_proposal_membership(proposals):
+    # Check user has a proposal we authorize
+    proposals = [p['id'] for p in proposals if p['current'] == True]
+    my_proposals = Proposal.objects.filter(code__in=proposals, active=True)
+    if my_proposals:
+        return my_proposals[0]
+    else:
         return False

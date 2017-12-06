@@ -48,7 +48,7 @@ class ChallengeView(LoginRequiredMixin, DetailView):
                 obj.save()
             context['progress'] = obj
             if mode == 'observe':
-                targets = Body.objects.filter(avm_code__startswith=obj.challenge.avm_code)
+                targets = Body.objects.filter(avm_code__startswith=obj.challenge.avm_code, active=True)
                 context['targets'] = targets
         return self.render_to_response(context)
 

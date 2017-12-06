@@ -58,10 +58,9 @@ $(document).ready(function(){
       </div>
     </div>
     <div class="col-lg-2">
-        <div class="speech-bubble">
-          <div class="arrow bottom right"></div>
-          {% trans "You asked for" %} <strong>{{progress.target}}</strong>.
-              {% trans "That's a" %} {{object.category}}.</p>
+        <div class="bubble">
+          <p>{% trans "You asked for" %} <strong>{{progress.target}}</strong>.
+              {% trans "That's a" %} {{object.category}}.<br/>
           {% trans "Click on your picture" %}</p>
         </div>
     </div>

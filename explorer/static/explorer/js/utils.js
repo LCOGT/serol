@@ -114,6 +114,10 @@ function status_request(requestid, token) {
       }else if (rdata['state'] == 'FAILED' && rdata['requests'].length > 0){
 
       }
+      serol_alert_animation();
+        setTimeout(function(){
+          serol_end_alert();
+        }, 5000);
       console.log("DONE"+data);
     })
     .fail(function(rdata){
@@ -135,9 +139,12 @@ function status_userrequest(userrequestid, token) {
         var d1 = new Date();
         update_date(DateDiff.inDays(d1,d2), DateDiff.inHours(d1,d2), DateDiff.inMinutes(d1,d2));
         update_site(rdata[0]['site']);
-        serol_alert_animation();
+        console.log("SCHEDULED"+rdata);
+        $('.bubble').html("<p>Your pictures will be taken on ...</p>");
+      } else {
+        $('.bubble').html("<p>No telescopes are free at the moment. Please check back later.</p>");
+        console.log("NOT SCHEDULED YET");
       }
-      console.log("SCHEDULED"+rdata);
       data = rdata
     })
     .fail(function(rdata){
@@ -147,9 +154,19 @@ function status_userrequest(userrequestid, token) {
 }
 
 function serol_alert_animation(){
-  setTimeout(function () {
-    /* Switch back */
-  }, 5000);
+  $('.serol-antenna').addClass('serol-antenna-flash');
+  $('.serol-pupil-normal').toggle();
+  $('.serol-pupil-shock').toggle();
+  $('.serol-mouth-normal').toggle();
+  $('.serol-mouth-shock').toggle();
+}
+
+function serol_end_alert(){
+  $('.serol-antenna').removeClass('serol-antenna-flash');
+  $('.serol-pupil-normal').toggle();
+  $('.serol-pupil-shock').toggle();
+  $('.serol-mouth-normal').toggle();
+  $('.serol-mouth-shock').toggle();
 }
 
 function get_colour_image(token, frameid, mode){

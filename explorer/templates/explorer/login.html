@@ -1,5 +1,5 @@
 {% extends 'explorer/base.html' %}
-{% load static %}
+{% load static i18n %}
 
 {% block script-content %}
 {% endblock %}
@@ -15,7 +15,10 @@
 {% block main-body %}
 
 			<h1>Serol</h1>
-			<h3>Log into your On Sky account</h3>
+			<h3>{% trans "Log into your Las Cumbres Observatory account" %}</h3>
+      {% for m in messages %}
+      <p class="bg-warning">{{m|safe}}</p>
+      {% endfor %}
       <form action="" method="post"  id="loginForm" >
         {% csrf_token %}
         <div class="row">
@@ -36,11 +39,6 @@
         		<div class="red">{{form.password.errors.as_text}}</div>
           </div>
       	</div>
-				{% if form.errors %}
-								{% for e in form.non_field_errors %}
-								<div class="text-danger" style="display:block;">{{e}}</div>
-								{% endfor %}
-				{% endif %}
           <input type="hidden" name="next" value="{{ next }}">
       		<button id="login-btn" class="btn btn-lg btn-4 btn-4a">Log me in</button>
         <p class="small">By logging in, you agree to <a href="http://lco.global/observatory/termsofuse" target="_blank">the Las Cumbres Observatory terms of use</a>.</p>
