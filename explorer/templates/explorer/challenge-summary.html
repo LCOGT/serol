@@ -21,11 +21,12 @@
 
           <p>
           {% trans "From looking at your picture, you said:"%}
-          <ul>
+          <dl>
             {% for answer in answers %}
-            <li>{{answer.answer.text}}</li>
+            <dt>{{answer.answer.question.text}}</dt>
+            <dd>{{answer.answer.text}}</dd>
             {% endfor %}
-          </ul>
+          </dl>
         </p>
         </div>
   </div>

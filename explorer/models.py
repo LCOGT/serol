@@ -24,15 +24,15 @@ class Mission(models.Model):
         return "{}".format(self.name)
 
 class Challenge(models.Model):
-    number = models.IntegerField()
+    number = models.IntegerField(help_text=_("Which number in the mission is this challenge?"))
     name = models.CharField(max_length=200)
     mission = models.ForeignKey(Mission)
-    description = models.TextField(help_text=_("Research page info"))
-    action = models.TextField(help_text=_("What the user should look for on investigate?"))
-    category = models.TextField(help_text=_("What type of object is this?"), blank=True, null=True)
+    description = models.TextField(help_text=_("Start page info"))
+    action = models.CharField(max_length=200, help_text=_("What the user should do on Observe page"))
+    category = models.CharField(max_length=30, help_text=_("What type of object is this?"), blank=True, null=True)
     avm_code = models.CharField(max_length=10, blank=True, null=True)
     active = models.BooleanField(default=True)
-    sticker_total = models.IntegerField(default=0)
+    sticker_total = models.IntegerField(default=1, blank=True, null=True)
     is_last = models.BooleanField(default=False)
 
     def __str__(self):

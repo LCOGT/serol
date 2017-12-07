@@ -15,6 +15,9 @@ class MissionAdmin(admin.ModelAdmin):
 
 class ChallengeAdmin(admin.ModelAdmin):
     list_display = ('name','number','mission')
+    formfield_overrides = {
+        models.TextField: {'widget': AdminPagedownWidget },
+    }
 
 # Define a new FlatPageAdmin
 class FlatPageAdmin(FlatPageAdmin):

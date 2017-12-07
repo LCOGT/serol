@@ -110,7 +110,7 @@ $(document).ready(function(){
 
 {% block main-body %}
 <div class="centre-container">
-  <h1>{% trans 'Pick a target!' %}</h1>
+  <h1>{{object.action}}</h1>
   <p>{% trans 'Serol will take a picture of your choice within 7 days' %}</p>
   <div class="row">
     {% if targets %}

@@ -15,6 +15,10 @@ a:hover {
   color: #ff5233;
 }
 
+a.btn {
+  color: #fff;
+}
+
 /* Custom default button */
 .btn-secondary,
 .btn-secondary:hover,
