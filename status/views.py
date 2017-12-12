@@ -16,7 +16,7 @@ from status.valhalla import process_observation_request, get_observation_status
 
 class RequestSerializer(serializers.Serializer):
     """
-    This serializer POSTing parameters to the Valhalla api.
+    POSTing parameters to the Valhalla api.
     """
     start = serializers.DateTimeField()
     end = serializers.DateTimeField()

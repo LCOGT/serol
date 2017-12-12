@@ -20,6 +20,7 @@ class ValhallaBackend(object):
         if msg:
             messages.info(request, msg)
         archivetoken = api_auth(settings.ARCHIVE_TOKEN_URL, username, password)
+        messages.info(request,"HELLO")
         if token and profile and archivetoken:
             username = profile[0]
             try:
