@@ -1,5 +1,6 @@
 local_settings.py
-*.db
+serol.db
+*.json
 media/
 
 # Byte-compiled / optimized / DLL files

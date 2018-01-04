@@ -133,6 +133,15 @@ DATABASES = {
 }
 
 
+MARKDOWN_DEUX_STYLES = {
+    "default": {
+        "extras": {
+            "code-friendly": None,
+        },
+        "safe_mode": False,
+    },
+}
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
