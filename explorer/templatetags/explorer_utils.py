@@ -17,8 +17,10 @@ def progress_url(user):
 
     if latest.status in ['Summary','Failed']:
         if not latest.challenge.is_last:
-            challenge = Challenge.objects.get(number=latest.challenge.number+1, mission=latest.challenge.mission)
-            url = reverse('challenge',kwargs={'pk':challenge.pk})
+            challenges = Challenge.objects.filter(number__gt=latest.challenge.number,
+                                                mission=latest.challenge.mission,
+                                                active=True).order_by('number')
+            url = reverse('challenge',kwargs={'pk':challenges[0].pk})
         else:
             # We have come to the end of the Mission
             url = reverse('missions')

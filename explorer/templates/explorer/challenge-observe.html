@@ -81,7 +81,7 @@ $(document).ready(function(){
   });
 
   $("#submit_button").on("click", function(){
-    console.log()
+    var tid = $(this).data('tid');
     var start = new Date();
     var end = startEnd(start);
 		var data = {start: start.toISOString().substr(0,19),
@@ -93,13 +93,12 @@ $(document).ready(function(){
           challenge:challenge_id
 				};
     if (target_type == 'moving'){
-      var tid = $(this).data('tid');
       data['object_name'] = tid;
     } else {
-      data['object_name'] = target.name;
-      data['object_ra'] = target.ra;
-      data['object_dec'] = target.dec;
-      data['filters'] = JSON.stringify(target.filters);
+      data['object_name'] = targets[tid].name;
+      data['object_ra'] = targets[tid].ra;
+      data['object_dec'] = targets[tid].dec;
+      data['filters'] = JSON.stringify(targets[tid].filters);
     }
     submit_to_serol(data, redirect_url);
   });
