@@ -5,15 +5,36 @@
 
 {% block challengename %}{{object.name}}{% endblock %}
 
-{% block main-content %}
-<div class="container">
-{% block main-header %}
-<h3><a href="{% url 'home' %}"><img src="{% static 'explorer/images/serol_logo_sm.png'%}" /></a> Challenge {{object.number}} : {{object.name}}</h3>
+{% block menubar %}
+<nav class="navbar navbar-toggleable-lg navbar-inverse">
+  <a class="navbar-brand" href="/"><img src="{% static 'explorer/images/serol_logo_sm.png'%}" /></a>
+  <button type="button" class="nav-link dropdown-toggle btn btn-outline-secondary btn-sm" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    <i class="far fa-bars"></i>
+</button>
+  <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+    <a class="nav-link" href="/">{% trans "Home" %}</a>
+    <a class="nav-link" href="/about/">{% trans "About Serol" %}</a>
+    <a class="nav-link" href="/videos/">{% trans "Videos" %}</a>
+    <a class="nav-link" href="{% url 'missions' %}">{% trans "Missions" %}</a>
+
+    {% if request.user.is_authenticated %}
+    <a class="nav-link" href="{% url 'stickers' %}">{% trans "My Progress" %}</a>
+    <a class="nav-link" href="{% url 'auth_logout' %}" id="logout">{% trans "Logout" %}</a>
+    {% else %}
+    <a class="nav-link" href="{% url 'auth_login' %}">{% trans "Login" %}</a>
+    {% endif %}
+  </div>
+
+  <h3> Challenge {{object.number}} : {{object.name}}</h3>
+</nav>
 {% endblock %}
+
 
 {% block main-body %}
 {% endblock %}
-</div>
+
+
+
 {% endblock %}
 
 {% block ribbon %}

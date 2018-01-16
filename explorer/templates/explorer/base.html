@@ -4,7 +4,6 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
@@ -13,7 +12,7 @@
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
-    <link href="https://fonts.googleapis.com/css?family=Oswald|Roboto|Aldrich" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Oswald|Aldrich" rel="stylesheet">
 
     <link href="{% static "explorer/css/layout.css" %}" rel="stylesheet">
     <link href="{% static "explorer/css/serol.css" %}" rel="stylesheet">
@@ -24,7 +23,30 @@
     <div class="site-wrapper {% block wrapper-class%}{%endblock%}">
 
       {% block menubar %}
-      {% endblock%}
+        <nav class="navbar navbar-home navbar-toggleable-md navbar-inverse fixed-top">
+          <button class="navbar-toggler navbar-toggler-left" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <a class="navbar-brand" href="/"><img src="{% static 'explorer/images/serol_logo_sm.png'%}" /></a>
+
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item"><a class="nav-link" href="/">{% trans "Home" %}</a></li>
+              <li class="nav-item"><a class="nav-link" href="/about/">{% trans "About Serol" %}</a></li>
+              <li class="nav-item"><a class="nav-link" href="/videos/">{% trans "Videos" %}</a></li>
+              <li class="nav-item"><a class="nav-link" href="{% url 'missions' %}">{% trans "Missions" %}</a></li>
+
+              {% if request.user.is_authenticated %}
+              <li class="nav-item nav-separator"><a class="nav-link" href="{% url 'stickers' %}">{% trans "My Progress" %}</a></li>
+              <li class="nav-item"><a class="nav-link" href="{% url 'auth_logout' %}" id="logout">{% trans "Logout" %}</a></li>
+              {% else %}
+              <li class="nav-item nav-separator" id="login"><a class="nav-link" href="{% url 'auth_login' %}">{% trans "Login" %}</a></li>
+              {% endif %}
+            </ul>
+          </div>
+        </nav>
+        {% endblock%}
+
       {% for message in messages %}
       <div class="alert">
        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
@@ -34,25 +56,18 @@
 
 {% block main-content %}
 <div class="container">
-{% block main-header %}
-{% endblock %}
-
-{% block main-body %}
-{% endblock %}
-</div>
-{% endblock %}
-
-{% block ribbon %}{% endblock %}
-
-<div class="mastfoot">
-  <div class="container-fluid">
-      <div class="footer-content">
-        &copy; {% now "Y" %} <a href="https://lco.global">Las Cumbres Observatory</a>
-      </div>
+  <div class="content-wrapper">
+  {% block main-body %}
+  {% endblock %}
   </div>
 </div>
-</div>
+{% endblock %}
 
+<footer class="footer">
+  <div class="container">
+    <span class="text-muted">&copy; {% now "Y" %} <a href="https://lco.global">Las Cumbres Observatory</a></span>
+  </div>
+</footer>
 
     <!-- Bootstrap core JavaScript
     ================================================== -->

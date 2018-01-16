@@ -15,9 +15,6 @@ class MissionAdmin(admin.ModelAdmin):
 
 class ChallengeAdmin(admin.ModelAdmin):
     list_display = ('name','number','mission')
-    formfield_overrides = {
-        models.TextField: {'widget': AdminPagedownWidget },
-    }
 
 # Define a new FlatPageAdmin
 class FlatPageAdmin(FlatPageAdmin):
@@ -32,9 +29,6 @@ class FlatPageAdmin(FlatPageAdmin):
             ),
         }),
     )
-    formfield_overrides = {
-        models.TextField: {'widget': AdminPagedownWidget },
-    }
 
     def formfield_for_manytomany(self, db_field, request=None, **kwargs):
         if db_field.name == "sites":

@@ -9,6 +9,14 @@
   }
 }
 
+html,
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    text-align: left;
+}
+
 a,
 a:focus,
 a:hover {
@@ -17,6 +25,26 @@ a:hover {
 
 a.btn {
   color: #fff;
+}
+
+/* Navbar */
+.navbar-home {
+  background-color: #252443;
+  box-shadow: 0px 5px 5px black;
+}
+
+.nav-separator {
+  border-left: 1px solid #aaa;
+  height: 40px;
+  margin: 0 9px;
+}
+.navbar-brand img {
+  max-height:40px;
+}
+.navbar h3{
+  padding-left: 10px;
+  padding-bottom:0;
+  text-shadow: 2px 2px 15px black;
 }
 
 /* Custom default button */
@@ -57,7 +85,7 @@ a.btn {
 }
 
 .btn-4:hover {
-	background: #24b662;
+	background: #ef5030;
 }
 
 .btn-4:before {
@@ -175,30 +203,32 @@ body {
 
 body {
   text-align: center;
-  font-family: 'Roboto', sans-serif;
+  font-family: Arial, sans-serif;
   background: url('../images/serol_bg_sm.jpg') repeat fixed #2b3e50;
   color: #fff;
 }
 
 .centre-container{
-  border: 2px solid #444;
   border-radius: 20px;
-  background: rgba(0,0,0,0.2);
+  background: #0d0c34;
+  padding:20px;
 }
 
 h1, h2, h3, h4, h5, h6, .target-name {
     font-family: 'Oswald', sans-serif;
     font-weight: 300;
     color: #fff;
+    text-align: left;
+    padding-bottom:20px;
 }
 
 h1 {
   font-size:4.5rem;
 }
 
-p {
+p.statement {
   font-size:2rem;
-  color:#bfd6e8;
+  font-family: 'Oswald', sans-serif;
 }
 
 #request-message {
@@ -254,6 +284,12 @@ h5.modal-title{
 /*
  * Colour and Art
  */
+
+ .info-blue {
+   padding: 15px;
+   background-color: #0d0c34;
+   border-radius: 20px;
+ }
 
  .mission-header{
    border-bottom:1px solid #fff;
@@ -375,7 +411,6 @@ img.identify-image {
 }
 
 .speech-bubble {
-    background-color: #222;
     border: 1px solid #c8c8c8;
     border-radius: 5px;
     text-align: center;
@@ -464,23 +499,6 @@ img.identify-image {
 .grow { transition: all 1.5s ease-in-out;
         transform: scale(2);}
 
-/* Stickers
-*/
-.blank-sticker {
-  -webkit-border-radius: 50%;
-  -moz-border-radius: 50%;
-  border-radius: 50%;
-  border-style: dashed;
-  border-color: #aaa;
-  border-width: 3px;
-  min-height: 100%;
-}
-.blank-sticker {
-  color: #aaa;
-  padding:10px;
-  font-size:800%;
-}
-
 /* Toggle switch for analyser
 */
 
@@ -522,6 +540,7 @@ img.identify-image {
   z-index: 9;
   cursor: pointer;
   -webkit-transition: all 0.25s linear;
+  text-align:left;
 }
 
 .question-container ul li:hover label{
@@ -581,6 +600,7 @@ input[type=radio]:checked ~ .check:active{
 */
 
 .content-wrapper {
+  padding: 60px 15px 0;
   display: table;
   width: 100%;
   height: 100%; /* For at least Firefox */
@@ -639,6 +659,19 @@ input[type=radio]:checked ~ .check:active{
    color: black;
 }
 
+/* footer */
+.footer {
+  position: relative;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 30px; /* Set the fixed height of the footer here */
+  line-height: 30px; /* Vertically center the text there */
+  background-color: #252443;
+  border-top:1px solid #0d0c34;
+  }
+
 
 @media (min-width: 40em) {
   /* Pull out the header and footer */
@@ -673,6 +706,9 @@ input[type=radio]:checked ~ .check:active{
   }
   .corner-ribbon h1{
     font-size: 2em;
+  }
+  .nav-separator {
+    border: none;
   }
 }
 

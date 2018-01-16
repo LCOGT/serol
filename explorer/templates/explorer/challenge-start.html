@@ -1,12 +1,12 @@
 {% extends 'explorer/challenge-base.html' %}
-{% load static i18n %}
+{% load static i18n markdown_deux_tags %}
 
 {% block wrapper-class%}challenge mission-{{object.mission.number}}-sidebar{%endblock%}
 
 {% block main-body %}
 <div class="centre-container">
   <h1>{% trans 'Challenge '%}{{object.number}}: {{object.name}}</h1>
-    <p>{{object.description|safe}}</p>
+    <p>{{object.description|safe|markdown}}</p>
     <p><a href="{% url 'observe' object.pk %}" class="btn btn-lg btn-4 btn-4a animated tada">{% trans 'Start the challenge' %}</a></p>
   </div>
 

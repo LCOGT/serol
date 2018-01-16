@@ -6,39 +6,48 @@
 {% block ribbon %}{% endblock %}
 
 {% block main-content %}
-
+<div class="content-wrapper">
+<div class="content-wrapper-inner">
 <div class="container">
-  <a href="{% url 'home' %}"><img src="{% static 'explorer/images/serol_logo_sm.png'%}" /></a>
-  <h1>{% trans "Stickers you've unlocked" %}</h1>
-  <p>{% trans "Below are the challenge stickers you have unlocked. Click each of them to see your pictures."%}</p>
-  {% for mission in missions %}
   <div class="row">
-    <div class="col-4">
-      <h2>Mission {{mission.number}}</h2>
-      <img src="{{MEDIA_PREFIX}}{{mission.patch}}" alt="Mission {{mission.number}} patch" class="img-fluid rounded" />
-      <h2>{{mission.name}}</h2>
-    </div>
-  <div class="col-8">
-    <h3>Challenge Stickers</h3>
-    <div class="row">
-  {% for challenge in mission.challenge_set.all %}
-  {% for  sticker in challenge.sticker_set.all %}
-    {% if sticker in object_list %}
-      <div class="col-2">
-        <a href="{% url 'summary' sticker.challenge.pk %}"><img src="{{MEDIA_PREFIX}}{{sticker.filename}}" alt="{{sticker.challenge.name}}" class="img-fluid rounded" /></a>
+    <h1>{% trans "Stickers you've unlocked" %}</h1>
+    <p>{% trans "Below are the challenge stickers you have unlocked. Click each of them to see your pictures."%}</p>
+  </div>
+  {% for mission in missions %}
+  <div class="row pb-5">
+    <h2>Mission {{mission.number}}</h2>
+    <div class="info-blue">
+      <div class="row">
+        <div class="col-4">
+          <h2>{{mission.name}}</h2>
+          <img src="{{MEDIA_PREFIX}}{{mission.patch}}" alt="Mission {{mission.number}} patch" class="img-fluid rounded" />
+        </div>
+        <div class="col-8">
+          <div class="row">
+          {% for challenge in mission.challenge_set.all %}
+          {% for  sticker in challenge.sticker_set.all %}
+            {% if sticker in object_list %}
+              <div class="col-4">
+                <a href="{% url 'summary' sticker.challenge.pk %}"><img src="{{MEDIA_PREFIX}}{{sticker.filename}}" alt="{{sticker.challenge.name}}" class="img-fluid" /></a>
+                <p>{{sticker.challenge.name}}</p>
+              </div>
+            {% else %}
+            <div class="col-4">
+              <img class="locked-sticker img-fluid" src="{% static 'explorer/images/locked.png' %}" alt="{% trans "This sticker is locked" %}">
+              <p>{{sticker.challenge.name}}</p>
+            </div>
+            {% endif %}
+            {% endfor %}
+          {% empty%}
+          <p>No stickers defined?</p>
+          {% endfor %}
+          </div>
+        </div>
       </div>
-    {% else %}
-    <div class="col-2">
-      <div class="blank-sticker">?</i></div>
     </div>
-    {% endif %}
-    {% endfor %}
-  {% empty%}
-  <p>No stickers defined?</p>
-  {% endfor %}
-</div>
-</div>
-</div>
+  </div>
   {% endfor %}
 </div>
 {% endblock %}
+</div>
+</div>

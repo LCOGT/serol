@@ -5,11 +5,13 @@
 
 {% block main-content %}
 <div class="content-wrapper">
+  <div class="content-wrapper-inner">
     <div class="container">
-      <div class="row">
+      <div class="centre-container">
       <h1>{{flatpage.title}}</h1>
-      {{ flatpage.content|safe|markdown }}
-      </div>
+      {{ flatpage.content|safe }}
     </div>
+  </div>
+</div>
 </div>
 {% endblock %}

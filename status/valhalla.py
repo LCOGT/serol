@@ -100,7 +100,6 @@ def request_format(target, start, end, obs_filter, proposal, aperture='0m4'):
         'start' : start, # str(datetime)
         'end' : end, # str(datetime)
         }
-    print(start, end)
 
     request = {
         "constraints" : {'max_airmass' : 2.0, "min_lunar_distance": 30.0,},

@@ -3,11 +3,13 @@
 
 {% block main-content %}
 
+<div class="content-wrapper">
+<div class="content-wrapper-inner">
 <div class="container">
-  <h1><a href="{% url 'home' %}" ><img src="{% static 'explorer/images/serol_logo_sm.png'%}" /></a> Missions</h1>
+  <h1>Missions</h1>
   <div class="row">
   {% for mission in object_list %}
-    <div class="col-4">
+    <div class="col-4 info-blue">
       <img src="{{MEDIA_PREFIX}}{{mission.patch}}" class="img-fluid"/>
       <h2>{% trans "Mission" %} {{mission.number}}</h1>
       <h3 class="mission-name">{{mission.name|safe}}</h1>
@@ -15,6 +17,8 @@
     </div>
   {% endfor %}
   </div>
+</div>
+</div>
 </div>
 
 {% endblock %}
