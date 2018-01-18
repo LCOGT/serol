@@ -29,13 +29,13 @@
 </nav>
 {% endblock %}
 
-
-{% block main-body %}
+{% block main-content %}
+<div class="container">
+  {% block main-body %}
+  {% endblock %}
+</div>
 {% endblock %}
 
-
-
-{% endblock %}
 
 {% block ribbon %}
 <div class="corner-ribbon sticky shadow mission-{{object.mission.number}}-colour"><h2>{% trans "Mission" %} {{object.mission.number}}</h2></div>
