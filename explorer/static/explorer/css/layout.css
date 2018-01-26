@@ -13,18 +13,19 @@
  * Base structure
  */
 
- html,
- body {
-     height: 100%;
-     margin: 0;
-     padding: 0;
-     text-align: left;
+ html {
+   position: relative;
+    min-height: 100%;
  }
+
 
 body {
   font-family: Arial, sans-serif;
   background: url('../images/serol_bg_sm.jpg') repeat fixed #2b3e50;
   color: #fff;
+  margin-bottom:30px;
+  text-align: left;
+
 }
 
 .centre-container{
@@ -246,12 +247,6 @@ h2.request-status-info {
 
 
 /* Extra markup and styles for table-esque vertical and horizontal centering */
-.site-wrapper {
-  display: table;
-  width: 100%;
-  height: 100%; /* For at least Firefox */
-  min-height: 100%;
-}
 .masthead, .mastfoot, .content {
   display: table-row;
   vertical-align: top;
@@ -306,30 +301,53 @@ h5.modal-title{
 }
 
  .mission-1-header {
-   background: url('../images/m1-heading.jpg') no-repeat center top;
+   background: url('../images/m1-heading.jpg') no-repeat center top,
+   url('../images/serol_bg_sm.jpg') repeat fixed #2b3e50;
  }
 
 .mission-3-sidebar {
-   background: url('../images/SidePanel-LifeandDeathofStars.jpg') no-repeat fixed left bottom;
+   background: url('../images/SidePanel-LifeandDeathofStars.jpg') no-repeat fixed left bottom,
+    url('../images/serol_bg_sm.jpg') repeat fixed #2b3e50;
  }
  .mission-2-header {
-   background: url('../images/M2WebGraphic.jpg') no-repeat center top;
+   background: url('../images/M2WebGraphic.jpg') no-repeat center top,
+   url('../images/serol_bg_sm.jpg') repeat fixed #2b3e50;
  }
 
 .mission-2-sidebar {
-   background: url('../images/SidePanel-UniverseAtLarge.jpg') no-repeat fixed left bottom;
+   background: url('../images/SidePanel-UniverseAtLarge.jpg') no-repeat fixed left bottom,
+   url('../images/serol_bg_sm.jpg') repeat fixed #2b3e50;
  }
  .mission-3-header {
-   background: url('../images/M3WebGraphic.jpg') no-repeat center top;
+   background: url('../images/M3WebGraphic.jpg') no-repeat center top,
+   url('../images/serol_bg_sm.jpg') repeat fixed #2b3e50;
  }
 
 .mission-1-sidebar {
-   background: url('../images/m1-SidePanel.jpg') no-repeat fixed left bottom;
+   background: url('../images/m1-SidePanel.jpg') no-repeat fixed left bottom,
+   url('../images/serol_bg_sm.jpg') repeat fixed #2b3e50;
  }
 
 .mission-1 {
     background: url('../images/M1UPPER.jpg') top center no-repeat,
-                url('../images/M1LOWER.jpg') bottom center no-repeat;
+                url('../images/M1LOWER.jpg') bottom center no-repeat,
+                url('../images/serol_bg_sm.jpg') repeat fixed #2b3e50;
+}
+
+.mission-2 {
+    background: url('../images/M1UPPER.jpg') top center no-repeat,
+                url('../images/M1LOWER.jpg') bottom center no-repeat,
+                url('../images/serol_bg_sm.jpg') repeat fixed #2b3e50;
+}
+
+.mission-2 {
+    background: url('../images/M1UPPER.jpg') top center no-repeat,
+                url('../images/M1LOWER.jpg') bottom center no-repeat,
+                url('../images/serol_bg_sm.jpg') repeat fixed #2b3e50;
+}
+
+.mission-content {
+  min-height: 700px;
 }
 
 .mission-content h1,
@@ -607,8 +625,6 @@ input[type=radio]:checked ~ .check:active{
   width: 100%;
   height: 100%; /* For at least Firefox */
   min-height: 100%;
-  -webkit-box-shadow: inset 0 0 5rem rgba(0,0,0,.5);
-          box-shadow: inset 0 0 5rem rgba(0,0,0,.5);
 }
 .content-wrapper-inner {
   display: table-cell;
@@ -623,16 +639,17 @@ input[type=radio]:checked ~ .check:active{
 
 
 .corner-ribbon{
-  width: 300px;
   position: absolute;
-  top: 50px;
-  left: -60px;
+  padding-right:50px;
+  padding-left:20px;
+  top: 60px;
+  left: 0px;
   text-align: center;
-  line-height: 50px;
   letter-spacing: 1px;
   color: #f0f0f0;
-  transform: rotate(-45deg);
-  -webkit-transform: rotate(-45deg);
+}
+.corner-ribbon h2 {
+  padding:0;
 }
 
 /* Messages */
@@ -662,17 +679,17 @@ input[type=radio]:checked ~ .check:active{
 }
 
 /* footer */
+
 .footer {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 30px; /* Set the fixed height of the footer here */
-  line-height: 30px; /* Vertically center the text there */
   background-color: #252443;
   border-top:1px solid #0d0c34;
-  }
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 30px;
+  line-height: 30px; /* Vertically center the text there */
+}
+
 
 
 @media (min-width: 40em) {

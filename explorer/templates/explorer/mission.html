@@ -1,11 +1,12 @@
 {% extends "explorer/base.html" %}
 {% load i18n explorer_utils %}
 
+{% block mission-class %}mission-{{object.number}}{% endblock %}
 
 {% block main-content %}
 
 <div class="content-wrapper">
-  <div class="container content-wrapper-inner challenge-header mission-{{object.number}}">
+  <div class="container content-wrapper-inner challenge-header">
   <div class="row">
     <div class="col-12  mission-content">
       <h1>{% trans "Mission" %} {{object.number}}</h1>

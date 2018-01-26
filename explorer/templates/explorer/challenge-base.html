@@ -1,7 +1,7 @@
 {% extends 'explorer/base.html' %}
 {% load static i18n %}
 
-{% block wrapper-class%}challenge mission-{{object.mission.number}}-sidebar{%endblock%}
+{% block mission-class %}mission-{{object.mission.number}}-sidebar{%endblock%}
 
 {% block challengename %}{{object.name}}{% endblock %}
 
@@ -29,12 +29,10 @@
 </nav>
 {% endblock %}
 
-{% block main-content %}
-<div class="container">
+
   {% block main-body %}
   {% endblock %}
-</div>
-{% endblock %}
+
 
 
 {% block ribbon %}

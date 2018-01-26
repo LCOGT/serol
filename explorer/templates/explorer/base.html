@@ -18,12 +18,11 @@
     <link href="{% static "explorer/css/serol.css" %}" rel="stylesheet">
   </head>
 
-  <body data-media-url="{{MEDIA_PREFIX}}">
+  <body data-media-url="{{MEDIA_PREFIX}}" class="{% block mission-class %}{%endblock%}">
 
-    <div class="site-wrapper {% block wrapper-class%}{%endblock%}">
-
+      <header>
       {% block menubar %}
-        <nav class="navbar navbar-home navbar-toggleable-sm navbar-inverse fixed-top">
+        <nav class="navbar navbar-home navbar-toggleable-sm navbar-inverse">
           <button class="navbar-toggler navbar-toggler-left" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -46,34 +45,37 @@
           </div>
         </nav>
         {% endblock%}
+      </header>
 
-      {% for message in messages %}
-      <div class="alert">
-       <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-       {{ message }}
-      </div>
-      {% endfor %}
+      <main>
+        {% for message in messages %}
+        <div class="alert">
+         <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+         {{ message }}
+        </div>
+        {% endfor %}
 
-{% block main-content %}
-<div class="content-wrapper">
-  <div class="content-wrapper-inner">
-    <div class="container">
-      <div class="centre-container">
-        {% block main-body %}
+        {% block main-content %}
+        <div class="content-wrapper">
+          <div class="content-wrapper-inner">
+            <div class="container">
+              <div class="centre-container">
+                {% block main-body %}
+                {% endblock %}
+              </div>
+            </div>
+          </div>
+        </div>
         {% endblock %}
-      </div>
-    </div>
-  </div>
-</div>
-{% endblock %}
+      </main>
 
 <footer class="footer">
   <div class="container">
     <span class="text-muted">&copy; {% now "Y" %} <a href="https://lco.global">Las Cumbres Observatory</a></span>
   </div>
 </footer>
-</div>
 
+{% block ribbon%}{% endblock %}
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->

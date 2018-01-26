@@ -12,12 +12,12 @@ class StickerView(LoginRequiredMixin, ListView):
 
     def get_context_data(self):
         context = super(StickerView, self).get_context_data()
-        context['missions'] = Mission.objects.all()#.order_by('challenge__mission','challenge__number')
+        context['missions'] = Mission.objects.all().order_by('number')
         return context
 
     def get_queryset(self):
         queryset = super(StickerView, self).get_queryset()
-        queryset = queryset.filter(personsticker__user__username=self.request.user).order_by('personsticker__sticker__challenge__number')
+        queryset = queryset.filter(personsticker__user__username=self.request.user).order_by('personsticker__sticker__mission', 'personsticker__sticker__challenge__number')
         return queryset
 
 def add_sticker(challenge, user, progress):
