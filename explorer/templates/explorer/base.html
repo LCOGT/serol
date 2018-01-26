@@ -23,7 +23,7 @@
     <div class="site-wrapper {% block wrapper-class%}{%endblock%}">
 
       {% block menubar %}
-        <nav class="navbar navbar-home navbar-toggleable-md navbar-inverse fixed-top">
+        <nav class="navbar navbar-home navbar-toggleable-sm navbar-inverse fixed-top">
           <button class="navbar-toggler navbar-toggler-left" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -55,10 +55,14 @@
       {% endfor %}
 
 {% block main-content %}
-<div class="container">
-  <div class="content-wrapper">
-  {% block main-body %}
-  {% endblock %}
+<div class="content-wrapper">
+  <div class="content-wrapper-inner">
+    <div class="container">
+      <div class="centre-container">
+        {% block main-body %}
+        {% endblock %}
+      </div>
+    </div>
   </div>
 </div>
 {% endblock %}
@@ -68,6 +72,7 @@
     <span class="text-muted">&copy; {% now "Y" %} <a href="https://lco.global">Las Cumbres Observatory</a></span>
   </div>
 </footer>
+</div>
 
     <!-- Bootstrap core JavaScript
     ================================================== -->

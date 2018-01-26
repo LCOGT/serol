@@ -101,6 +101,7 @@ $(document).ready(function(){
       data['filters'] = JSON.stringify(targets[tid].filters);
     }
     submit_to_serol(data, redirect_url);
+    console.log('Button pressed')
   });
 });
 </script>
@@ -109,7 +110,7 @@ $(document).ready(function(){
 
 {% block main-body %}
 <div class="centre-container">
-  <h1>{{object.action}}</h1>
+  <h1>{{object.name}}</h1>
   <p>{% trans 'Serol will take a picture of your choice within 7 days' %}</p>
   <div class="row">
     {% if targets %}

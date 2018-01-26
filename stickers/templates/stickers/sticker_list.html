@@ -10,12 +10,12 @@
 <div class="content-wrapper-inner">
 <div class="container">
   <div class="row">
-    <h1>{% trans "Stickers you've unlocked" %}</h1>
-    <p>{% trans "Below are the challenge stickers you have unlocked. Click each of them to see your pictures."%}</p>
+    <h1 class="bg-blur">{% trans "Stickers you've unlocked" %}</h1>
+    <p  class="bg-blur">{% trans "Below are the challenge stickers you have unlocked. Click each of them to see your pictures."%}</p>
   </div>
   {% for mission in missions %}
   <div class="row pb-5">
-    <h2>Mission {{mission.number}}</h2>
+    <h2  class="bg-blur">Mission {{mission.number}}</h2>
     <div class="info-blue">
       <div class="row">
         <div class="col-4">

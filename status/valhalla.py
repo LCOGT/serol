@@ -41,6 +41,7 @@ def submit_observation_request(params, token):
     '''
     headers = {'Authorization': 'Token {}'.format(token)}
     url = settings.PORTAL_REQUEST_API
+    logging.debug('Submitting request')
     try:
         r = requests.post(url, json=params, headers=headers, timeout=20.0)
     except requests.exceptions.Timeout:

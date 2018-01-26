@@ -50,6 +50,14 @@ p.statement {
   font-family: 'Oswald', sans-serif;
 }
 
+.bg-blur {
+  text-shadow: 0 2px 15px #555;
+}
+
+.bg-grey {
+  background-color: #888;
+}
+
 a,
 a:focus,
 a:hover {
@@ -332,12 +340,12 @@ h5.modal-title{
 
 .mission-name {
    vertical-align: middle;
-   text-shadow: 0 2px 0 #d84f4f, 0 4px 0 #d54646, 0 6px 0 #ce3333, 0 8px 0 #b92e2e, 0 10px 0 #912525, 0 12px 0 #721e1e, 0px 12px 10px rgba(0,0,0,0.5);
+   text-shadow: 0 2px 15 #d84f4f;
+   /*, 0 4px 0 #d54646, 0 6px 0 #ce3333, 0 8px 0 #b92e2e, 0 10px 0 #912525, 0 12px 0 #721e1e, 0px 12px 10px rgba(0,0,0,0.5);*/*/
  }
 
 h1.mission-name {
   font-size:4rem;
-  width:15rem;
 }
 
 .mission-1-colour,
@@ -357,6 +365,10 @@ h1.mission-name {
 
  .page-header h1 {
    margin: 5px 0 15px 0;
+ }
+
+ .title-main{
+   text-align: center;
  }
 
  .title-left{
@@ -651,7 +663,7 @@ input[type=radio]:checked ~ .check:active{
 
 /* footer */
 .footer {
-  position: relative;
+  position: absolute;
   right: 0;
   bottom: 0;
   left: 0;

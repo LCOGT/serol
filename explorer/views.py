@@ -26,9 +26,16 @@ class MissionView(LoginRequiredMixin, DetailView):
     model = Mission
     template_name = "explorer/mission.html"
 
+    def get_context_data(self, **kwargs):
+        context = super(MissionView, self).get_context_data(**kwargs)
+        first = Challenge.objects.get(mission=self.get_object(), number=1)
+        context['first_challenge'] = first
+        return context
+
 class MissionListView(LoginRequiredMixin, ListView):
     model = Mission
     template_name = "explorer/missionlist.html"
+
 
 class ChallengeView(LoginRequiredMixin, DetailView):
     model = Challenge
@@ -50,6 +57,7 @@ class ChallengeView(LoginRequiredMixin, DetailView):
             if mode == 'observe':
                 targets = Body.objects.filter(avm_code__startswith=obj.challenge.avm_code, active=True)
                 context['targets'] = targets
+
         return self.render_to_response(context)
 
 
@@ -60,12 +68,20 @@ class ChallengeSummary(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(ChallengeSummary, self).get_context_data(**kwargs)
 
-        progress = Progress.objects.get(challenge=self.get_object(), user=self.request.user)
-        stickers = PersonSticker.objects.filter(user=self.request.user, sticker__challenge=self.get_object() )
+        challenge = self.get_object()
+        progress = Progress.objects.get(challenge=challenge, user=self.request.user)
+        stickers = PersonSticker.objects.filter(user=self.request.user, sticker__challenge=challenge)
         answers = UserAnswer.objects.filter(answer__question__challenge=self.get_object(), user=self.request.user)
+        # if we are at the end of the mission make sure we mark it on the user profile
+        if challenge.is_last:
+            missionid = "mission_{}".format(challenge.mission.number)
+            self.request.user.__setattr__(missionid, True)
+
         context['progress'] = progress
         context['answers'] = answers
         context['stickers'] = stickers
+
+
         return context
 
 class AnalyseView(LoginRequiredMixin, DetailView):
@@ -124,7 +140,7 @@ class ChallengeRedirectView(LoginRequiredMixin, RedirectView):
                 urlpath = 'start'
             else:
                 urlpath = progress.status.lower()
-        except Exception as e:
+        except ObjectDoesNotExist as e:
             urlpath = 'start'
             logger.exception(e)
 

@@ -24,6 +24,9 @@ class User(AbstractUser):
     token = models.CharField(help_text=_('Authentication for Valhalla'), max_length=50, blank=True, null=True)
     archive_token = models.CharField(help_text=_('Authentication for LCO archive'), max_length=50, blank=True, null=True)
     default_proposal = models.ForeignKey(Proposal)
+    mission_1 = models.BooleanField(help_text=_('Has user competed Mission 1?'), default=False)
+    mission_2 = models.BooleanField(help_text=_('Has user competed Mission 2?'), default=False)
+    mission_3 = models.BooleanField(help_text=_('Has user competed Mission 3?'), default=False)
 
 class Progress(models.Model):
     user = models.ForeignKey(User)
@@ -70,7 +73,7 @@ class Progress(models.Model):
         pass
 
     class Meta:
-        verbose_name_plural = 'User Progress'
+        verbose_name_plural = 'Challenge Progress'
 
 class Question(models.Model):
     text = models.TextField()

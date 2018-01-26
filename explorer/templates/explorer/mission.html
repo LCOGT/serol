@@ -1,5 +1,5 @@
 {% extends "explorer/base.html" %}
-{% load i18n %}
+{% load i18n explorer_utils %}
 
 
 {% block main-content %}
@@ -10,7 +10,7 @@
     <div class="col-12  mission-content">
       <h1>{% trans "Mission" %} {{object.number}}</h1>
       <h1 class="mission-name">{{object.name|safe}}</h1>
-      <p><a class="btn btn-info btn-lg animated tada" href="{% url 'challenge' 1 %}" role="button">{% trans "Start the mission" %} &raquo;</a></p>
+      <p><a class="btn btn-info btn-lg animated tada" href="{% mission_progress_url request.user object.pk %}" role="button">{% trans "Start the mission" %} &raquo;</a></p>
     </div>
   </div>
 </div>

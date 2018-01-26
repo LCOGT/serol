@@ -6,7 +6,7 @@ from status.models import User, Progress, Answer, Question, UserAnswer, Proposal
 
 class CustomUserAdmin(UserAdmin):
     fieldsets = (
-        (None, {'fields': ('username', 'password', 'email', 'default_proposal' )}),
+        (None, {'fields': ('username', 'password', 'email', 'default_proposal', 'mission_1', 'mission_2', 'mission_3' )}),
         (_('Tokens'), {'fields' :('token', 'archive_token')}),
         (_('Personal info'), {'fields': ('first_name', 'last_name')}),
         (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser',

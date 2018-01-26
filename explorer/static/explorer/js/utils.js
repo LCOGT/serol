@@ -243,6 +243,7 @@ function startEnd(date) {
 
 function submit_to_serol(data, redirect_url){
     var url = '/api/schedule/';
+    console.log('In Submit to Serol')
 		$.ajax({
 			url: url,
 			method: 'POST',
