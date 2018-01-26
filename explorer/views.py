@@ -28,8 +28,13 @@ class MissionView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(MissionView, self).get_context_data(**kwargs)
-        first = Challenge.objects.get(mission=self.get_object(), number=1)
-        context['first_challenge'] = first
+        mission = self.get_object()
+        try:
+            latest = Progress.objects.filter(user=self.request.user, challenge__mission=mission).latest('last_update')
+            context['current_challenge'] = latest.challenge
+        except ObjectDoesNotExist:
+            context['current_challenge'] = Challenge.objects.get(mission=mission, number=1)
+
         return context
 
 class MissionListView(LoginRequiredMixin, ListView):
@@ -76,6 +81,7 @@ class ChallengeSummary(LoginRequiredMixin, DetailView):
         if challenge.is_last:
             missionid = "mission_{}".format(challenge.mission.number)
             self.request.user.__setattr__(missionid, True)
+            self.request.user.save()
 
         context['progress'] = progress
         context['answers'] = answers

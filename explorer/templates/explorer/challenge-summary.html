@@ -3,17 +3,24 @@
 
 {% block wrapper-class%}challenge mission-{{object.mission.number}}-sidebar{%endblock%}
 
-{% block challengename %}{{object.challenge.name}}{% endblock %}
+{% block title %}{{object.name}}{% endblock %}
 
 {% block main-body %}
 <div class="centre-container">
-<h1>{% trans "Challenge Completed!" %}</h1>
+<h1>{% if object.is_last%}{% trans "Mission Completed!" %}{% else %}{% trans "Challenge Completed!" %}{%endif%}</h1>
   <div class="row">
         <div class="col-lg-4">
           {% for sticker in stickers %}
           <img src="/media/{{MEDIA_URL}}{{sticker.sticker.filename}}" alt="{{sticker.sticker.desc}}"  class="img-fluid rounded" />
           {% endfor %}
+          <p>
+          {% if object.is_last %}
+          <a href="{% url 'missions' %}" class="btn btn-4 btn-4a">{% trans "start a new mission?" %}</a><br/>
+          <a href="{% url 'stickers' %}" class="btn btn-4 btn-4a">{% trans "see your stickers" %}</a>
+          {% else %}
           <a href="{% progress_url request.user %}" class="btn btn-4 btn-4a animated tada">{% trans "start a new challenge?" %}</a>
+          {% endif %}
+        </p>
         </div>
         <div class="col-lg-8">
           <img src="http://placehold.it/300x300" alt="{{object.name}}" class="img-fluid rounded" id="img-holder">

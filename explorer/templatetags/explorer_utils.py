@@ -35,7 +35,7 @@ def progress_url(user):
 @register.simple_tag
 def mission_progress_url(user, mission_id):
     '''
-    Returns latest challenge within a mission
+    Returns latest challenge URL within a mission
     '''
     try:
         latest = Progress.objects.filter(user=user, challenge__mission=mission_id).latest('last_update')
