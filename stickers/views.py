@@ -17,7 +17,7 @@ class StickerView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         queryset = super(StickerView, self).get_queryset()
-        queryset = queryset.filter(personsticker__user__username=self.request.user).order_by('personsticker__sticker__mission', 'personsticker__sticker__challenge__number')
+        queryset = queryset.filter(personsticker__user__username=self.request.user).order_by('challenge__mission','challenge__number')
         return queryset
 
 def add_sticker(challenge, user, progress):
