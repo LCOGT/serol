@@ -81,6 +81,8 @@ $(document).ready(function(){
   });
 
   $("#submit_button").on("click", function(){
+    $(this).prop("disabled", true);
+    console.log('Button pressed')
     var tid = $(this).data('tid');
     var start = new Date();
     var end = startEnd(start);
@@ -101,7 +103,6 @@ $(document).ready(function(){
       data['filters'] = JSON.stringify(targets[tid].filters);
     }
     submit_to_serol(data, redirect_url);
-    console.log('Button pressed')
   });
 });
 </script>

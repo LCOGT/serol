@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.conf import settings
+import time
 
 from rest_framework.decorators import api_view
 from rest_framework.renderers import JSONRenderer, BrowsableAPIRenderer
@@ -29,16 +30,16 @@ class RequestSerializer(serializers.Serializer):
     token = serializers.CharField()
     challenge = serializers.IntegerField()
 
-    def save(self, *args, **kwargs):
-        params = self.data
-        resp_status, resp_msg = process_observation_request(params)
-        if not resp_status:
-            return Response(resp_msg, status=status.HTTP_400_BAD_REQUEST)
-        resp_prog = save_progress(challenge=params['challenge'], user=kwargs['user'], request_id=resp_msg, target=params['object_name'])
-        if resp_status and resp_prog:
-            return Response("Success", status=status.HTTP_201_CREATED)
-        else:
-            return Response("Manipulating status", status=status.HTTP_400_BAD_REQUEST)
+    # def save(self, *args, **kwargs):
+    #     params = self.data
+    #     resp_status, resp_msg = process_observation_request(params)
+    #     if not resp_status:
+    #         return Response(resp_msg, status=status.HTTP_400_BAD_REQUEST)
+    #     resp_prog = save_progress(challenge=params['challenge'], user=kwargs['user'], request_id=resp_msg, target=params['object_name'])
+    #     if resp_status and resp_prog:
+    #         return Response("Success", status=status.HTTP_201_CREATED)
+    #     else:
+    #         return Response("Manipulating status", status=status.HTTP_400_BAD_REQUEST)
 
 
 class ScheduleView(APIView):
@@ -55,9 +56,24 @@ class ScheduleView(APIView):
         else:
             token = request.data.get('token', False)
             if not token:
+
                 return Response("Not authenticated.", status=status.HTTP_401_UNAUTHORIZED)
-            resp = ser.save(user=request.user)
-            return resp
+            # Send to Valhalla API
+            params = ser.data
+            resp_status, resp_msg = process_observation_request(params)
+            if not resp_status:
+
+                return Response(resp_msg, status=status.HTTP_400_BAD_REQUEST)
+
+            # As long as we can a good response from the API, save the progress state
+            resp_prog = save_progress(challenge=params['challenge'], user=request.user, request_id=resp_msg, target=params['object_name'])
+            if resp_status and resp_prog:
+
+                return Response("Success", status=status.HTTP_201_CREATED)
+            else:
+
+                return Response("Manipulating status", status=status.HTTP_400_BAD_REQUEST)
+
 
 class StatusView(APIView):
     renderer_classes = (JSONRenderer, BrowsableAPIRenderer)

@@ -146,9 +146,8 @@ class ChallengeRedirectView(LoginRequiredMixin, RedirectView):
                 urlpath = 'start'
             else:
                 urlpath = progress.status.lower()
-        except ObjectDoesNotExist as e:
+        except Progress.DoesNotExist:
             urlpath = 'start'
-            logger.exception(e)
 
         try:
             url = reverse(urlpath, args=args, kwargs=kwargs)
