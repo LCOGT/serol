@@ -189,6 +189,7 @@ function get_colour_image(token, frameid, mode){
 }
 
 function arrange_images(url){
+    images = shuffle(images).slice(0,3);
     images.push({'mine':true, 'url':url});
     images = shuffle(images);
     for (i=0;i<4;i++){

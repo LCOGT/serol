@@ -84,6 +84,7 @@ class StatusView(APIView):
             return Response("No observed yet", status=status.HTTP_403_FORBIDDEN)
         else:
             try:
+                print(userrequestid, request.user)
                 progress = Progress.objects.get(userrequestid=userrequestid,user=request.user)
             except:
                 return Response("Progress object not found", status=status.HTTP_404_NOT_FOUND)

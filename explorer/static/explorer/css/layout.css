@@ -368,17 +368,17 @@ h1.mission-name {
 
 .mission-1-colour,
 .mission-1-sidebar .page-header {
-   background-color:rgba(29, 220, 93, 0.7);
+   background-color:rgb(29, 220, 93);
  }
 
 .mission-2-colour,
 .mission-2-sidebar .page-header {
-    background-color:rgba(237, 80, 48, 0.7);
+    background-color:rgb(237, 80, 48);
   }
 
 .mission-3-colour,
 .mission-3-sidebar .page-header {
-     background-color:rgba(36, 209, 255, 0.7);
+     background-color:rgb(36, 209, 255);
    }
 
  .page-header h1 {
