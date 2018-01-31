@@ -23,16 +23,4 @@
 {% endblock %}
 
 {% block script-content %}
-{% if progress.status == "Submitted" %}
-<script src="{% static "explorer/js/utils.js" %}"  type="text/javascript" ></script>
-<script>
-var requestid = "{{progress.userrequestid}}";
-var resp;
-var resp_tmp;
-var redirect_url = "{% url 'challenge' object.id %}";
-$(document).ready(function(){
-  resp = status_request(requestid, localStorage.getItem('token'));
-});
-</script>
-{% endif %}
 {% endblock%}

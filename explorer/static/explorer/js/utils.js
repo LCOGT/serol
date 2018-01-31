@@ -255,10 +255,12 @@ function submit_to_serol(data, redirect_url){
 				$('.modal-body').html("<p>Sorry, there was a problem submitting your request. Please try later.</p>");
 			},
 			success: function(data){
+        $('#accept_button').attr('href',redirect_url);
+        $('#accept_button').show();
 				$('.modal-title').html("Success!");
 				$('.modal-body').html("<p>Your image will be ready in the next week.</p><img src='https://lco.global/files/edu/serol/serol_holding_cosmic_objects_sm.png'>");
-        $('#submit_button').html("Next >");
-        $('#submit_button').attr('href',redirect_url);
+        $('#submit_button').hide();
+        $('#submit_button').prop("disabled", true);
         $('#close_button').prop("disabled", true);
         window.setTimeout(function(){
           window.location.replace(redirect_url);

@@ -9,40 +9,44 @@ from status.models import User, Proposal
 
 logger = logging.getLogger(__name__)
 
+
 class ValhallaBackend(object):
     """
     Authenticate against the Vahalla API.
     """
 
     def authenticate(self, request, username=None, password=None):
-        token = api_auth(settings.PORTAL_TOKEN_URL, username, password)
-        profile, msg = get_profile(token)
-        if msg:
-            messages.info(request, msg)
-        archivetoken = api_auth(settings.ARCHIVE_TOKEN_URL, username, password)
-        if token and profile and archivetoken:
-            username = profile[0]
-            try:
-                user = User.objects.get(username=username)
-            except User.DoesNotExist:
-                # Create a new user. There's no need to set a password
-                # because Valhalla auth will always be used.
-                user = User(username=username)
-            user.token = token
-            user.archive_token = archivetoken
-            user.default_proposal = profile[2]
-            user.save()
-            # Finally add these tokens as session variables
-            request.session['token'] = token
-            request.session['archive_token'] = archivetoken
-            return user
-        return None
+        return lco_authenticate(request, username, password)
 
     def get_user(self, user_id):
         try:
             return User.objects.get(pk=user_id)
         except User.DoesNotExist:
             return None
+
+def lco_authenticate(request, username, password):
+    token = api_auth(settings.PORTAL_TOKEN_URL, username, password)
+    profile, msg = get_profile(token)
+    if msg:
+        messages.info(request, msg)
+    archivetoken = api_auth(settings.ARCHIVE_TOKEN_URL, username, password)
+    if token and profile and archivetoken:
+        username = profile[0]
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            # Create a new user. There's no need to set a password
+            # because Valhalla auth will always be used.
+            user = User(username=username)
+        user.token = token
+        user.archive_token = archivetoken
+        user.default_proposal = profile[2]
+        user.save()
+        # Finally add these tokens as session variables
+        request.session['token'] = token
+        request.session['archive_token'] = archivetoken
+        return user
+    return None
 
 
 def api_auth(url, username, password):

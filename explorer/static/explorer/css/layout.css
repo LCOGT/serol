@@ -335,14 +335,14 @@ h5.modal-title{
 }
 
 .mission-2 {
-    background: url('../images/M1UPPER.jpg') top center no-repeat,
-                url('../images/M1LOWER.jpg') bottom center no-repeat,
+    background: url('../images/M2UPPER.jpg') top center no-repeat,
+                url('../images/M2LOWER.jpg') bottom center no-repeat,
                 url('../images/serol_bg_sm.jpg') repeat fixed #2b3e50;
 }
 
 .mission-2 {
-    background: url('../images/M1UPPER.jpg') top center no-repeat,
-                url('../images/M1LOWER.jpg') bottom center no-repeat,
+    background: url('../images/M3UPPER.jpg') top center no-repeat,
+                url('../images/M3LOWER.jpg') bottom center no-repeat,
                 url('../images/serol_bg_sm.jpg') repeat fixed #2b3e50;
 }
 

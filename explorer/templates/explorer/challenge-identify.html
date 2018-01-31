@@ -8,10 +8,16 @@
 <script>
 var images = Array();
 var redirect_url = "{% url 'analyse' object.id %}?frameid="
+var avm_codes = {'1.1','2.2','5.1.1','3.6.4.1','3.6.4.2','4','4.1.2','4.1.3','5.1.4','5.1.6','5.5.2'};
 var requestid = {{ progress.requestids}};
 images.push({'mine':false, 'url':"https://lco.global/files/rtisba/faulkes-rti/imagearchive/2013/08/07/process-1835-2.jpg"});
 images.push({'mine':false, 'url':"https://lco.global/files/rtisba/faulkes-rti/imagearchive/2013/04/26/process-2408-1.jpg"});
 images.push({'mine':false, 'url':"https://lco.global/files/rtisba/faulkes-rti/imagearchive/2013/04/04/process-753-2.jpg"});
+
+function filter_tags(current) {
+  
+}
+
 $(document).ready(function(){
   $.when(
     $.get({url: 'https://archive-api.lco.global/frames/?limit=1&offset=1&ordering=-id&REQNUM='+requestid,
