@@ -34,7 +34,7 @@ urlpatterns = [
     url(r'^login/$', LoginView.as_view(template_name='explorer/login.html'), name='auth_login'),
     url(r'^logout/$', LogoutView.as_view(template_name= 'explorer/logout.html'), name='auth_logout'),
     url(r'^$', TemplateView.as_view(template_name="explorer/home.html"), name='home'),
-
+    url(r'^(?P<url>.*/)$', flatpage),
 ]
 
 if settings.DEBUG:
