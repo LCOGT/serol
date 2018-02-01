@@ -26,6 +26,7 @@
   </div>
 
   <h3> Challenge {{object.number}} : {{object.name}}</h3>
+  <div class="corner-ribbon sticky shadow mission-{{object.mission.number}}-colour"><h2>{% trans "Mission" %} {{object.mission.number}}</h2></div>
 </nav>
 {% endblock %}
 
@@ -33,11 +34,6 @@
   {% block main-body %}
   {% endblock %}
 
-
-
-{% block ribbon %}
-<div class="corner-ribbon sticky shadow mission-{{object.mission.number}}-colour"><h2>{% trans "Mission" %} {{object.mission.number}}</h2></div>
-{% endblock %}
 
 {% block script-content %}
 {% endblock %}

@@ -71,7 +71,7 @@ $(document).ready(function(){
       <div class="row">
         {% for i in "0123" %}
         <div class="col-6 pb-2">
-          <img src="http://placehold.it/300x300" alt="" class="identify-image img-fluid rounded" id="img-{{i}}">
+          <img src="{% static 'explorer/images/placeholder.jpg' %}" alt="" class="identify-image img-fluid rounded" id="img-{{i}}">
           <div class="identify-middle">
             <div class="identify-text" id="img-text-{{i}}" data-mine="">
               <i class="far fa-question fa-4x"></i>

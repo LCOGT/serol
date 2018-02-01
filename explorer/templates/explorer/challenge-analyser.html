@@ -74,7 +74,6 @@ function add_answers_to_form() {
       <img src="http://placehold.it/300x300" alt="{{object.name}}" class="img-fluid rounded" id="img-holder">
     </div>
     <div class="col-lg-4">
-      <div class="speech-bubble">
         <div class="arrow bottom right"></div>
       {% for question in questions %}
       <div class="question-wrapper" id="question-{{ forloop.counter0 }}" style="display:none;">
@@ -93,7 +92,6 @@ function add_answers_to_form() {
        </div>
      </div>
    {% endfor %}
-    </div>
     <div id="submit-answers"  style="display:none;">
       <form action="" method="post">
         {% csrf_token %}

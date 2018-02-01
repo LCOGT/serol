@@ -70,8 +70,6 @@ class FunctionalTest(StaticLiveServerTestCase):
     def wait_for_js_load(self, element_id, timeout=10):
         yield WebDriverWait(self.browser, timeout).until(
             visibility_of_element_located((By.ID, element_id))
-        )
-
 
 
 class NewVisitorTest(FunctionalTest):
@@ -118,6 +116,26 @@ class NewVisitorTest(FunctionalTest):
         with self.wait_for_page_load(timeout=10):
             self.assertTrue(self.browser.find_element_by_id("serol-figure"))
 
+    @patch('serol.auth_backend.lco_authenticate', mock_lco_authenticate)
+    @patch('status.valhalla.submit_observation_request', mock_submit_request)
+    def test_observe(self):
+        # Ada has heard about Serol. She goes
+        # to check out its homepage
+        self.browser.get(self.live_server_url)
+        # She notices the page title
+        self.assertIn('Serol', self.browser.title)
+        # She tries to login
+        with self.wait_for_page_load(timeout=10):
+            self.browser.find_element_by_link_text('Login').click()
+        username_input = self.browser.find_element_by_id("username")
+        username_input.send_keys(self.username)
+        password_input = self.browser.find_element_by_id("password")
+        password_input.send_keys(self.password)
+        with self.wait_for_page_load(timeout=10):
+            self.browser.find_element_by_id("login-btn").click()
+
+        # Ada navigates to the first Challenge and clicks start
+        self.browser.get('{}{}'.format(self.live_server_url,'/challenge/1/'))
 
 if __name__ == '__main__':
     unittest.main(warnings='ignore')

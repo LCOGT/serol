@@ -340,14 +340,14 @@ h5.modal-title{
                 url('../images/serol_bg_sm.jpg') repeat fixed #2b3e50;
 }
 
-.mission-2 {
+.mission-3 {
     background: url('../images/M3UPPER.jpg') top center no-repeat,
                 url('../images/M3LOWER.jpg') bottom center no-repeat,
                 url('../images/serol_bg_sm.jpg') repeat fixed #2b3e50;
 }
 
 .mission-content {
-  min-height: 700px;
+  min-height: 500px;
 }
 
 .mission-content h1,
@@ -712,6 +712,7 @@ input[type=radio]:checked ~ .check:active{
 }
 
 @media (max-width: 576px) {
+
   .mission-1 {
       background: url('../images/M1LOWER_sm.jpg') bottom center no-repeat;
   }
@@ -726,18 +727,16 @@ input[type=radio]:checked ~ .check:active{
   .corner-ribbon h1{
     font-size: 2em;
   }
-  .nav-separator {
-    border: none;
-  }
+
 }
-
-
-
 
 @media (max-width: 42rem) {
   .modal-dialog {
     min-height: -webkit-calc(100vh - 20px);
     min-height: -moz-calc(100vh - 20px);
     min-height: calc(100vh - 20px);
+  }
+  .nav-separator {
+    border-left:none;
   }
 }

@@ -23,16 +23,14 @@
       <header>
       {% block menubar %}
         <nav class="navbar navbar-home navbar-toggleable-sm navbar-inverse">
-          <button class="navbar-toggler navbar-toggler-left" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <a class="navbar-brand" href="/"><img src="{% static 'explorer/images/serol_logo_sm.png'%}" /></a>
+          <a class="navbar-brand" href="/" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"><img src="{% static 'explorer/images/serol_logo_sm.png'%}" /></a>
 
           <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav mr-auto">
               <li class="nav-item"><a class="nav-link" href="/">{% trans "Home" %}</a></li>
               <li class="nav-item"><a class="nav-link" href="/about/">{% trans "About Serol" %}</a></li>
               <li class="nav-item"><a class="nav-link" href="/videos/">{% trans "Videos" %}</a></li>
+              <li class="nav-item"><a class="nav-link" href="/resources/">{% trans "Resources" %}</a></li>
               <li class="nav-item"><a class="nav-link" href="{% url 'missions' %}">{% trans "Missions" %}</a></li>
 
               {% if request.user.is_authenticated %}
@@ -75,7 +73,6 @@
   </div>
 </footer>
 
-{% block ribbon%}{% endblock %}
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
