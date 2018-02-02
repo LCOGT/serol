@@ -46,10 +46,7 @@ class ChallengeView(LoginRequiredMixin, DetailView):
     model = Challenge
 
     def get(self, request, *args, **kwargs):
-        if kwargs.get('mode',None) == 'failed':
-            self.template_name = "explorer/challenge-message.html"
-        else:
-            self.template_name = "explorer/challenge-{}.html".format(kwargs['mode'])
+        self.template_name = "explorer/challenge-{}.html".format(kwargs['mode'])
         self.object = self.get_object()
         context = self.get_context_data(object=self.object)
         mode = kwargs.get('mode',None)
@@ -64,6 +61,20 @@ class ChallengeView(LoginRequiredMixin, DetailView):
                 context['targets'] = targets
 
         return self.render_to_response(context)
+
+class ChallengeRetry(LoginRequiredMixin, DetailView):
+    model = Challenge
+
+    def get(self, request, *args, **kwargs):
+        # this can only happen if the request has failed
+        try:
+            obj = Progress.objects.get(challenge=self.get_object(), user=self.request.user, status='Failed')
+            obj.retry()
+            obj.save()
+        except:
+            logger.debug("Challenge {} for {} has not failed".format(self.get_object(), self.request.user))
+        return HttpResponseRedirect(reverse('challenge', args=args, kwargs=kwargs))
+
 
 
 class ChallengeSummary(LoginRequiredMixin, DetailView):

@@ -30,17 +30,6 @@ class RequestSerializer(serializers.Serializer):
     token = serializers.CharField()
     challenge = serializers.IntegerField()
 
-    # def save(self, *args, **kwargs):
-    #     params = self.data
-    #     resp_status, resp_msg = process_observation_request(params)
-    #     if not resp_status:
-    #         return Response(resp_msg, status=status.HTTP_400_BAD_REQUEST)
-    #     resp_prog = save_progress(challenge=params['challenge'], user=kwargs['user'], request_id=resp_msg, target=params['object_name'])
-    #     if resp_status and resp_prog:
-    #         return Response("Success", status=status.HTTP_201_CREATED)
-    #     else:
-    #         return Response("Manipulating status", status=status.HTTP_400_BAD_REQUEST)
-
 
 class ScheduleView(APIView):
     """
@@ -91,7 +80,7 @@ class StatusView(APIView):
             progress.requestids = requestid
             if state == 'COMPLETED':
                 progress.observed()
-            elif state == 'FAILED':
+            elif state == 'WINDOW_EXPIRED' or state == 'CANCELED':
                 progress.failed()
             progress.save()
             return Response("Status updated", status=status.HTTP_200_OK)

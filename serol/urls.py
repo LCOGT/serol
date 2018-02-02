@@ -9,7 +9,7 @@ from django.views.generic import TemplateView
 
 from status.views import ScheduleView, StatusView
 from explorer.views import MissionView, MissionListView, ChallengeRedirectView, \
-    ChallengeView, AnalyseView, ChallengeSummary
+    ChallengeView, AnalyseView, ChallengeSummary, ChallengeRetry
 from stickers.views import StickerView
 
 
@@ -26,8 +26,10 @@ urlpatterns = [
     url(r'^challenge/(?P<pk>[0-9]+)/investigate/$', ChallengeView.as_view(), {'mode':'investigate'}, name="investigate"),
     url(r'^challenge/(?P<pk>[0-9]+)/submitted/$', ChallengeView.as_view(), {'mode':'submitted'}, name="submitted"),
     url(r'^challenge/(?P<pk>[0-9]+)/summary/$', ChallengeSummary.as_view(), {'mode':'summary'}, name="summary"),
+    url(r'^challenge/(?P<pk>[0-9]+)/failed/$', ChallengeView.as_view(), {'mode':'failed'}, name="failed"),
+    url(r'^challenge/(?P<pk>[0-9]+)/retry/$', ChallengeRetry.as_view(), name="retry"),
     url(r'^challenge/(?P<pk>[0-9]+)/$', ChallengeRedirectView.as_view(), name="challenge"),
-    url(r'^status/(?P<userrequestid>[0-9]+)/$', StatusView.as_view(), name="status"),
+    url(r'^api/status/(?P<userrequestid>[0-9]+)/$', StatusView.as_view(), name="status"),
     url(r'^api/schedule/$', ScheduleView.as_view(), name='schedule'),
     url(r'^stickers/$', StickerView.as_view(), name='stickers'),
     url(r'^admin/', admin.site.urls),

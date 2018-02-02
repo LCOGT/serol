@@ -85,7 +85,7 @@ function get_qs(n) {
 }
 
 function update_status(requestid, token) {
-  $.getJSON('/status/'+requestid+'/')
+  $.getJSON('/api/status/'+requestid+'/')
     .done(function(data){
       window.location.replace(redirect_url);
       console.log("DONE"+data);
@@ -109,11 +109,10 @@ function status_request(requestid, token) {
       data = rdata
       if (rdata['state'] == 'PENDING' && rdata['requests'].length > 0){
         status_userrequest(rdata['requests'][0]['id'], token);
-      } else if (rdata['state'] == 'COMPLETED'){
+      } else if (rdata['state'] == 'COMPLETED' || rdata['state'] == 'WINDOW_EXPIRED' || rdata['state'] == 'CANCELED'){
         update_status(requestid, token);
-      }else if (rdata['state'] == 'FAILED' && rdata['requests'].length > 0){
-
       }
+
       serol_alert_animation();
         setTimeout(function(){
           serol_end_alert();

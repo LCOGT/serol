@@ -44,12 +44,19 @@ class Progress(models.Model):
     class Meta:
         unique_together = (("user","challenge"),)
 
-    @transition(field=status, source=['New', 'Retry'], target='Submitted')
+    @transition(field=status, source=['New'], target='Submitted')
     def submit(self):
         pass
 
     @transition(field=status, source=['Submitted'], target='Failed')
-    def fail(self):
+    def failed(self):
+        pass
+
+    @transition(field=status, source=['Failed'], target='New')
+    def retry(self):
+        self.userrequestid = ''
+        self.requestids = ''
+        self.frameids = ''
         pass
 
     @transition(field=status, source=['Submitted'], target='Observed')
