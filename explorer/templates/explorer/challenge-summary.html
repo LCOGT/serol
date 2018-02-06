@@ -9,7 +9,9 @@
   <div class="row">
         <div class="col-lg-4">
           {% for sticker in stickers %}
+          <p>
           <img src="/media/{{MEDIA_URL}}{{sticker.sticker.filename}}" alt="{{sticker.sticker.desc}}"  class="img-fluid rounded" />
+        </p>
           {% endfor %}
           <p>
           {% if object.is_last %}
@@ -23,17 +25,15 @@
         <div class="col-lg-8">
           <img src="http://placehold.it/300x300" alt="{{object.name}}" class="img-fluid rounded" id="img-holder">
           <p>Your picture of {{progress.target}}</p>
-
-          <p>
-          {% trans "From looking at your picture, you said:"%}
-          <dl>
+        </div>
+    </div>
+          <h3>{% trans "From looking at your picture, your analysis was:"%}</h3>
+          <dl class="row">
             {% for answer in answers %}
-            <dt>{{answer.answer.question.text}}</dt>
-            <dd>{{answer.answer.text}}</dd>
+            <dt class="col-sm-6">{{answer.answer.question.text}}</dt>
+            <dd class="col-sm-6">{{answer.answer.text}}</dd>
             {% endfor %}
           </dl>
-        </p>
-        </div>
   </div>
 </div>
 {% endblock %}
