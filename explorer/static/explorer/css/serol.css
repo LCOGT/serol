@@ -32,7 +32,7 @@
 }
 
 #svg-container {
-  top:-100px;
+  top:-200px;
   position: relative;
 }
 
@@ -40,7 +40,7 @@
   color:#21e423;
   margin:0 auto;
   position: relative;
-  top: 400px;
+  top: 300px;
   font-size: 2em;
   z-index: 1;
   max-width:200px;

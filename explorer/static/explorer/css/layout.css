@@ -46,6 +46,12 @@ h1 {
   font-size:4.5rem;
 }
 
+.nav-heading {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 300;
+  font-size:1.5rem;
+}
+
 p.statement {
   font-size:2rem;
   font-family: 'Oswald', sans-serif;
@@ -639,15 +645,13 @@ input[type=radio]:checked ~ .check:active{
 
 
 .corner-ribbon{
-  position: absolute;
-  padding-right:50px;
+  position: relative;
   padding-left:20px;
-  top: 60px;
-  left: 0px;
-  text-align: center;
-  letter-spacing: 1px;
+  margin-left:-20px;
   color: #f0f0f0;
+  max-width: 200px;
 }
+
 .corner-ribbon h2 {
   padding:0;
 }
