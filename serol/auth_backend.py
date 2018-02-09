@@ -41,6 +41,7 @@ def lco_authenticate(request, username, password):
         user.token = token
         user.archive_token = archivetoken
         user.default_proposal = profile[2]
+        user.email = profile[3]
         user.save()
         # Finally add these tokens as session variables
         request.session['token'] = token
@@ -88,7 +89,7 @@ def get_profile(token):
         logger.debug('Profile successful')
         proposal = check_proposal_membership(r.json()['proposals'])
         if proposal:
-            return (r.json()['username'], r.json()['tokens']['archive'], proposal), False
+            return (r.json()['username'], r.json()['tokens']['archive'], proposal, r.json()['email']), False
         else:
             logger.debug('No active proposal')
             return False, _("Please join a participating <a href='http://lco.global/education/partners/'>LCO education partner</a> for access to SEROL")

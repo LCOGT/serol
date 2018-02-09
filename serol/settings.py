@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'explorer.apps.ExplorerConfig',
     'status.apps.StatusConfig',
     'stickers.apps.StickersConfig',
+    'notify.apps.NotifyConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -131,6 +132,12 @@ DATABASES = {
 
     }
 }
+
+#############
+# Email
+############
+
+EMAIL_FROM = 'portal@lco.global'
 
 
 MARKDOWN_DEUX_STYLES = {

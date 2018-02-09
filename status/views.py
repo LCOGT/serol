@@ -68,22 +68,28 @@ class StatusView(APIView):
     renderer_classes = (JSONRenderer, BrowsableAPIRenderer)
 
     def get(self, request, userrequestid, format=None):
-        requestid, state = get_observation_status(userrequestid, request.user.token)
-        if state == 'PENDING':
-            return Response("No observed yet", status=status.HTTP_403_FORBIDDEN)
-        else:
-            try:
-                print(userrequestid, request.user)
-                progress = Progress.objects.get(userrequestid=userrequestid,user=request.user)
-            except:
-                return Response("Progress object not found", status=status.HTTP_404_NOT_FOUND)
-            progress.requestids = requestid
-            if state == 'COMPLETED':
-                progress.observed()
-            elif state == 'WINDOW_EXPIRED' or state == 'CANCELED':
-                progress.failed()
-            progress.save()
-            return Response("Status updated", status=status.HTTP_200_OK)
+
+        return update_status(user=request.user, userrequestid=userrequestid)
+
+
+def update_status(user, userrequestid):
+    try:
+        progress = Progress.objects.get(userrequestid=userrequestid, user=user)
+    except:
+        return Response("Progress object not found", status=status.HTTP_404_NOT_FOUND)
+    if progress.status != 'Submitted':
+        return Response("Status mismatch", status=status.HTTP_403_FORBIDDEN)
+    requestid, state = get_observation_status(requestid=userrequestid, token=user.token)
+    if state == 'PENDING':
+        return Response("Not observed yet", status=status.HTTP_403_FORBIDDEN)
+    else:
+        progress.requestids = userrequestid
+        if state == 'COMPLETED':
+            progress.observed()
+        elif state == 'WINDOW_EXPIRED' or state == 'CANCELED':
+            progress.failed()
+        progress.save()
+        return Response("Status updated", status=status.HTTP_200_OK)
 
 def save_progress(challenge, user, request_id, target):
     '''
