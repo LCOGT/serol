@@ -1,0 +1,1 @@
+02 5 * * * source /var/www/serol/cronwrapper; python /var/www/serol/manage.py update_status >> /cron_debug.log
