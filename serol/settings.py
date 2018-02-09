@@ -137,8 +137,12 @@ DATABASES = {
 # Email
 ############
 
-EMAIL_FROM = 'portal@lco.global'
-
+EMAIL_USE_TLS       = True
+EMAIL_HOST          = 'smtp.gmail.com'
+EMAIL_PORT          =  587
+EMAIL_FROM  = 'Serol <serol@lco.global>'
+EMAIL_HOST_USER = os.environ.get('SEROL_EMAIL_USERNAME', '')
+EMAIL_HOST_PASSWORD = os.environ.get('SEROL_EMAIL_PASSWORD', '')
 
 MARKDOWN_DEUX_STYLES = {
     "default": {

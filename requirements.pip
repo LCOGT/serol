@@ -9,3 +9,9 @@ psycopg2
 Pillow
 requests
 six
+git+git://github.com/LCOGT/alipy.git#egg=alipy
+git+git://github.com/LCOGT/pretty_fits.git#egg=pretty_fits
+astropy
+astroscrappy
+ipython
+numpy
