@@ -6,6 +6,7 @@ djangorestframework-jsonp
 django-pagedown
 django-markdown-deux
 psycopg2
+numpy
 Pillow
 requests
 six
@@ -14,4 +15,3 @@ git+git://github.com/LCOGT/pretty_fits.git#egg=pretty_fits
 astropy
 astroscrappy
 ipython
-numpy

@@ -10,10 +10,11 @@ ENV DJANGO_SETTINGS_MODULE serol.settings
 
 # install and update packages
 RUN yum -y install epel-release \
-        && yum -y install cronie postgresql96 python-pip nginx supervisor uwsgi-plugin-python \
-        && yum -y install libjpeg-devel ImageMagick \
-        && yum -y install 'http://www.astromatic.net/download/stiff/stiff-2.4.0-1.x86_64.rpm' \
-        && yum -y install 'http://www.astromatic.net/download/sextractor/sextractor-2.19.5-1.x86_64.rpm' \
+        && yum -y install cronie postgresql96  nginx supervisor uwsgi-plugin-python \
+        && yum -y install libjpeg-devel ImageMagick python-devel python-pip \
+        && yum -y install 'https://www.astromatic.net/download/stiff/stiff-2.4.0-1.x86_64.rpm' \
+        && yum -y install 'https://www.astromatic.net/download/sextractor/sextractor-2.19.5-1.x86_64.rpm' \
+        && yum -y groupinstall "Development Tools" \
         && yum -y update \
         && yum -y clean all
 
