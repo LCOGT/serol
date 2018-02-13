@@ -82,6 +82,8 @@ def update_status(user, userrequestid):
     requestid, state = get_observation_status(requestid=userrequestid, token=user.token)
     if state == 'PENDING':
         return Response("Not observed yet", status=status.HTTP_403_FORBIDDEN)
+    elif not requestid:
+        return Response("Problem with the status", status=status.HTTP_403_FORBIDDEN)
     else:
         progress.requestids = userrequestid
         if state == 'COMPLETED':
