@@ -49,6 +49,7 @@ class ScheduleView(APIView):
                 return Response("Not authenticated.", status=status.HTTP_401_UNAUTHORIZED)
             # Send to Valhalla API
             params = ser.data
+            params['proposal'] = request.user.default_proposal.code
             resp_status, resp_msg = process_observation_request(params)
             if not resp_status:
 

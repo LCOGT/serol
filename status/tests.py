@@ -12,12 +12,109 @@ import time
 
 from .views import RequestSerializer, ScheduleView, StatusView, save_progress
 from status.models import User, Proposal
+from status.valhalla import process_observation_request, request_format, format_sidereal_object
 
 def mock_lco_authenticate(request, username, password):
     return None
 
 def mock_submit_request(params, token):
     return True, 'XXX'
+
+def mock_submit_request_check_proposal(params, token):
+    if params['proposal'] == 'LCOEPO2018A-001':
+        return True, 'XXX'
+    elif params['proposal'] == 'LCOEPO2018A-002':
+        return False, 'Wrong proposal'
+
+
+class ScheduleTest(TestCase):
+    def setUp(self):
+        proposal_params1 = {
+        'code': 'LCOEPO2018A-001',
+        'active': True
+        }
+        p1 = Proposal(**proposal_params1)
+        p1.save()
+
+        proposal_params2 = {
+        'code': 'LCOEPO2018A-002',
+        'active': True
+        }
+        p2 = Proposal(**proposal_params2)
+        p2.save()
+
+        self.proposal1 = p1
+        self.proposal2 = p2
+        self.username = 'ada'
+        self.password = 'jenkins'
+        self.email = 'ada@jenkins.org'
+        self.ada = User.objects.create_user(username=self.username, email=self.email, default_proposal = p2)
+        self.ada.set_password(self.password)
+        self.ada.first_name= 'Ada'
+        self.ada.last_name = 'Jenkins'
+        self.ada.is_active=1
+        self.ada.save()
+
+    def test_request_format(self):
+        # Check the user's default proposal is the one we get in the request format_moving_object
+        object_name = 'M1'
+        object_ra = 83.6330833
+        object_dec = 22.0145000
+        start = '2018-02-14T00:00:00'
+        end = '2018-02-28T00:00:00'
+        filters = [{'exposure': 10.0,'name':'v'},{'exposure': 20.0,'name':'rp'},{'exposure': 30.0,'name':'b'}]
+
+        target = format_sidereal_object(object_name, object_ra, object_dec)
+        params = request_format(target, start, end, filters, self.ada.default_proposal.code)
+
+        self.assertEqual(params['proposal'], self.ada.default_proposal.code)
+        for i, mol in enumerate(params['requests'][0]['molecules']):
+            self.assertEqual(mol['exposure_time'],  filters[i]['exposure'])
+            self.assertEqual(mol['filter'],  filters[i]['name'])
+        self.assertEqual(params['requests'][0]['target']['name'],object_name)
+
+    @patch('status.valhalla.submit_observation_request', mock_submit_request_check_proposal)
+    def test_wrong_proposal(self):
+        params = {
+        'object_name': 'M1',
+        'object_ra': 83.6330833,
+        'object_dec': 22.0145000,
+        'start': '2018-02-14T00:00:00',
+        'end': '2018-02-28T00:00:00',
+        'filters': [{'exposure': 10.0, 'name':'v'}],
+        'target_type' : 'static',
+        'aperture' : '0m4',
+        'token' : 'XXX'
+        }
+
+        params['proposal'] = self.ada.default_proposal.code
+
+        resp_status, resp_msg = process_observation_request(params)
+
+        self.assertFalse(resp_status)
+
+    @patch('status.valhalla.submit_observation_request', mock_submit_request_check_proposal)
+    def test_correct_proposal(self):
+        self.ada.default_proposal = self.proposal1
+        self.ada.save()
+        params = {
+        'object_name': 'M1',
+        'object_ra': 83.6330833,
+        'object_dec': 22.0145000,
+        'start': '2018-02-14T00:00:00',
+        'end': '2018-02-28T00:00:00',
+        'filters': [{'exposure': 10.0, 'name':'v'}],
+        'target_type' : 'static',
+        'aperture' : '0m4',
+        'token' : 'XXX'
+        }
+
+        params['proposal'] = self.ada.default_proposal.code
+
+        resp_status, resp_msg = process_observation_request(params)
+
+        self.assertTrue(resp_status)
+
 
 class FunctionalTest(StaticLiveServerTestCase):
 
@@ -51,12 +148,12 @@ class FunctionalTest(StaticLiveServerTestCase):
         self.username = 'ada'
         self.password = 'jenkins'
         self.email = 'ada@jenkins.org'
-        self.bart = User.objects.create_user(username=self.username, email=self.email, default_proposal = p1)
-        self.bart.set_password(self.password)
-        self.bart.first_name= 'Ada'
-        self.bart.last_name = 'Jenkins'
-        self.bart.is_active=1
-        self.bart.save()
+        self.ada = User.objects.create_user(username=self.username, email=self.email, default_proposal = p1)
+        self.ada.set_password(self.password)
+        self.ada.first_name= 'Ada'
+        self.ada.last_name = 'Jenkins'
+        self.ada.is_active=1
+        self.ada.save()
 
     @contextmanager
     def wait_for_page_load(self, timeout=30):
@@ -70,7 +167,7 @@ class FunctionalTest(StaticLiveServerTestCase):
     def wait_for_js_load(self, element_id, timeout=10):
         yield WebDriverWait(self.browser, timeout).until(
             visibility_of_element_located((By.ID, element_id))
-
+            )
 
 class NewVisitorTest(FunctionalTest):
 

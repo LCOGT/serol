@@ -63,7 +63,7 @@ def process_observation_request(params):
         params['filters'] = filters
     else:
         target = format_sidereal_object(params['object_name'], params['object_ra'], params['object_dec'])
-    obs_params = request_format(target, params['start'], params['end'], params['filters'], params['aperture'])
+    obs_params = request_format(target, params['start'], params['end'], params['filters'], params['proposal'], params['aperture'])
     resp_status, resp_msg = submit_observation_request(params=obs_params, token=params['token'])
     return resp_status, resp_msg
 
@@ -119,7 +119,7 @@ def request_format(target, start, end, obs_filter, proposal, aperture='0m4'):
         "ipp_value" : 1.0,
         "group_id": "serol_{}_{}".format(target['name'], datetime.utcnow().strftime("%Y%m%d")),
         "observation_type": "NORMAL",
-        "proposal": settings.PROPOSAL_CODE
+        "proposal": proposal
         }
 
     return user_request
