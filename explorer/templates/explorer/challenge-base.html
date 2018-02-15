@@ -28,8 +28,18 @@
 {% endblock %}
 
 
-  {% block main-body %}
-  {% endblock %}
+{% block main-content %}
+<div class="content-wrapper">
+  <div class="content-wrapper-inner">
+    <div class="container">
+      <div class="centre-container">
+        {% block main-body %}
+        {% endblock %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
 
 
 {% block script-content %}

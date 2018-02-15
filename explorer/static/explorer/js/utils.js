@@ -136,12 +136,13 @@ function status_userrequest(userrequestid, token) {
       if (rdata.length > 0){
         var d2 = new Date(rdata[0]['start']);
         var d1 = new Date();
-        update_date(DateDiff.inDays(d1,d2), DateDiff.inHours(d1,d2), DateDiff.inMinutes(d1,d2));
-        update_site(rdata[0]['site']);
+        var flexytime = update_date(DateDiff.inDays(d1,d2), DateDiff.inHours(d1,d2), DateDiff.inMinutes(d1,d2));
+        var site = site_codes[rdata[0]['site']];
         console.log("SCHEDULED"+rdata);
-        $('.bubble').html("<p>Your pictures will be taken on ...</p>");
+        $('.bubble').html("<p>Your picture will be taken in <strong>"+flexytime+"</strong> by a telescope in <strong>"+site+"</strong>");
+        update_site();
       } else {
-        $('.bubble').html("<p>No telescopes are free at the moment. Please check back later.</p>");
+        $('.bubble').html("<p>Hmmm. I'll need to think about this. Check back later!</p><p>I'll email you when I have your picture, too.</p>");
         console.log("NOT SCHEDULED YET");
       }
       data = rdata
@@ -227,12 +228,12 @@ function update_date(days, hours, minutes){
   }else{
     txt = minutes+" mins";
   }
-  $('#request-time').html("in<br/>"+txt)
+  return txt;
 }
 
-function update_site(site){
-  var name = site_codes[site];
-  $('#request-site').html(name)
+function update_site(){
+  var txt = '<i class="far fa-hourglass-start fa-w-16 fa-3x fa-fw"></i>';
+  $('#request-site').html(txt)
 }
 
 function startEnd(date) {
@@ -258,7 +259,7 @@ function submit_to_serol(data, redirect_url){
         $('#accept_button').attr('href',redirect_url);
         $('#accept_button').show();
 				$('.modal-title').html("Success!");
-				$('.modal-body').html("<p>Your image will be ready in the next week.</p><img src='https://lco.global/files/edu/serol/serol_holding_cosmic_objects_sm.png'>");
+				$('.modal-body').html("<p>Your image will be ready in a few days.</p><img src='https://lco.global/files/edu/serol/serol_holding_cosmic_objects_sm.png'>");
         $('#submit_button').hide();
         $('#submit_button').prop("disabled", true);
         $('#close_button').prop("disabled", true);

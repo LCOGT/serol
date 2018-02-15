@@ -31,16 +31,11 @@
   width:100%;
 }
 
-#svg-container {
-  top:-200px;
-  position: relative;
-}
-
 #status-info {
   color:#21e423;
-  margin:0 auto;
-  position: relative;
-  top: 300px;
+  position: fixed;
+  top: 470px;
+  left: 450px;
   font-size: 2em;
   z-index: 1;
   max-width:200px;
@@ -78,7 +73,7 @@
 {
 position: relative;
 width: 250px;
-height: 120px;
+min-height: 120px;
 padding: 0px;
 background: #FFFFFF;
 -webkit-border-radius: 10px;

@@ -3,14 +3,10 @@
 
 {% block wrapper-class%}challenge mission-{{object.mission.number}}-sidebar{%endblock%}
 
-{% block main-body %}
+{% block main-content %}
       <div class="row">
-        <div class="col-8">
+        <div class="col-6 offset-2">
         <div id="serol-figure">
-          <div id="status-info">
-            <span id="request-site"><i class="far fa-cog fa-w-16 fa-spin fa-3x fa-fw"></i></span>
-            <span id="request-time"></span>
-          </div>
         <div id="svg-container">
           <svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 365.5 346.8" preserveAspectRatio="xMaxYMax meet">
 
@@ -73,6 +69,9 @@
             </g>
             </svg>
             </div>
+          </div>
+          <div id="status-info">
+            <span id="request-site"><i class="far fa-cog fa-w-16 fa-spin fa-3x fa-fw"></i></span>
           </div>
         </div>
 
