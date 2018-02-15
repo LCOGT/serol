@@ -11,7 +11,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 import time
 
 from .views import RequestSerializer, ScheduleView, StatusView, save_progress
-from status.models import User, Proposal
+from status.models import User, Proposal, Progress
 from status.valhalla import process_observation_request, request_format, format_sidereal_object
 
 def mock_lco_authenticate(request, username, password):
@@ -89,7 +89,7 @@ class ScheduleTest(TestCase):
 
         params['proposal'] = self.ada.default_proposal.code
 
-        resp_status, resp_msg = process_observation_request(params)
+        resp_status, resp_msg, target = process_observation_request(params)
 
         self.assertFalse(resp_status)
 
@@ -111,9 +111,10 @@ class ScheduleTest(TestCase):
 
         params['proposal'] = self.ada.default_proposal.code
 
-        resp_status, resp_msg = process_observation_request(params)
+        resp_status, resp_msg, target = process_observation_request(params)
 
         self.assertTrue(resp_status)
+        self.assertEqual(target, params['object_name'])
 
 
 class FunctionalTest(StaticLiveServerTestCase):
@@ -178,7 +179,7 @@ class NewVisitorTest(FunctionalTest):
 
     @patch('serol.auth_backend.lco_authenticate', mock_lco_authenticate)
     @patch('status.valhalla.submit_observation_request', mock_submit_request)
-    def test_start(self):
+    def test_observe(self):
         # Ada has heard about Serol. She goes
         # to check out its homepage
         self.browser.get(self.live_server_url)
@@ -202,20 +203,23 @@ class NewVisitorTest(FunctionalTest):
             self.browser.find_element_by_id("start-btn").click()
 
         # Ada wants to observe Uranus
-        self.browser.find_element_by_id("target-img-Uranus").click()
+        self.browser.find_element_by_id("target-img-2").click()
         # Ada clicks submit
         with self.wait_for_js_load("submit_button", timeout=10):
             self.browser.find_element_by_id("submit_button").click()
-        # Ada seems a success message
+        # Ada sees a success message
         with self.wait_for_js_load("accept_button", timeout=10):
             self.browser.find_element_by_id("accept_button").click()
-        # Ada seems the Challenge submitted page and sees SEROL
+        # Ada sees the Challenge submitted page and sees SEROL
         with self.wait_for_page_load(timeout=10):
             self.assertTrue(self.browser.find_element_by_id("serol-figure"))
 
+        progress = Progress.objects.get(user=self.ada, challenge__id=1)
+        self.assertEqual(progress.target, 'Uranus')
+
     @patch('serol.auth_backend.lco_authenticate', mock_lco_authenticate)
     @patch('status.valhalla.submit_observation_request', mock_submit_request)
-    def test_observe(self):
+    def test_start(self):
         # Ada has heard about Serol. She goes
         # to check out its homepage
         self.browser.get(self.live_server_url)

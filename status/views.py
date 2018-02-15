@@ -50,13 +50,13 @@ class ScheduleView(APIView):
             # Send to Valhalla API
             params = ser.data
             params['proposal'] = request.user.default_proposal.code
-            resp_status, resp_msg = process_observation_request(params)
+            resp_status, resp_msg, target = process_observation_request(params)
             if not resp_status:
 
                 return Response(resp_msg, status=status.HTTP_400_BAD_REQUEST)
 
             # As long as we can a good response from the API, save the progress state
-            resp_prog = save_progress(challenge=params['challenge'], user=request.user, request_id=resp_msg, target=params['object_name'])
+            resp_prog = save_progress(challenge=params['challenge'], user=request.user, request_id=resp_msg, target=target)
             if resp_status and resp_prog:
 
                 return Response("Success", status=status.HTTP_201_CREATED)

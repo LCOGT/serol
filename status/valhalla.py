@@ -65,7 +65,7 @@ def process_observation_request(params):
         target = format_sidereal_object(params['object_name'], params['object_ra'], params['object_dec'])
     obs_params = request_format(target, params['start'], params['end'], params['filters'], params['proposal'], params['aperture'])
     resp_status, resp_msg = submit_observation_request(params=obs_params, token=params['token'])
-    return resp_status, resp_msg
+    return resp_status, resp_msg, target['name']
 
 def request_format(target, start, end, obs_filter, proposal, aperture='0m4'):
     '''
