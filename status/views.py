@@ -68,25 +68,25 @@ class ScheduleView(APIView):
 class StatusView(APIView):
     renderer_classes = (JSONRenderer, BrowsableAPIRenderer)
 
-    def get(self, request, userrequestid, format=None):
+    def get(self, request, requestid, format=None):
 
-        return update_status(user=request.user, userrequestid=userrequestid)
+        return update_status(user=request.user, requestid=requestid)
 
 
-def update_status(user, userrequestid):
+def update_status(user, requestid):
     try:
-        progress = Progress.objects.get(userrequestid=userrequestid, user=user)
+        progress = Progress.objects.get(requestid=requestid, user=user)
     except:
         return Response("Progress object not found", status=status.HTTP_404_NOT_FOUND)
     if progress.status != 'Submitted':
         return Response("Status mismatch", status=status.HTTP_403_FORBIDDEN)
-    requestid, state = get_observation_status(requestid=userrequestid, token=user.token)
+    requestid, state = get_observation_status(requestid=requestid, token=user.token)
     if state == 'PENDING':
         return Response("Not observed yet", status=status.HTTP_403_FORBIDDEN)
     elif not requestid:
         return Response("Problem with the status", status=status.HTTP_403_FORBIDDEN)
     else:
-        progress.requestids = userrequestid
+        progress.requestid = requestid
         if state == 'COMPLETED':
             progress.observed()
         elif state == 'WINDOW_EXPIRED' or state == 'CANCELED':
@@ -102,7 +102,7 @@ def save_progress(challenge, user, request_id, target):
         progress = Progress.objects.get(challenge=challenge, user=user)
     except ObjectNotFound:
         return False
-    progress.userrequestid = request_id
+    progress.requestid = request_id
     progress.target = target
     progress.submit()
     progress.save()

@@ -197,18 +197,18 @@ REST_FRAMEWORK = {
     ),
 }
 
-PORTAL_API_URL = 'https://observe.lco.global/api/'
-PORTAL_REQUEST_API = PORTAL_API_URL + 'userrequests/'
-PORTAL_TOKEN_URL = PORTAL_API_URL + 'api-token-auth/'
+PORTAL_API_URL     = 'https://observe.lco.global/api/'
+PORTAL_REQUEST_API = PORTAL_API_URL + 'requests/'
+PORTAL_TOKEN_URL   = PORTAL_API_URL + 'api-token-auth/'
 PORTAL_PROFILE_URL = PORTAL_API_URL + 'profile/'
-ARCHIVE_TOKEN_URL = 'https://archive-api.lco.global/api-token-auth/'
+ARCHIVE_URL        = 'https://archive-api.lco.global/'
+ARCHIVE_FRAMES_URL = ARCHIVE_URL + 'frames/'
+ARCHIVE_TOKEN_URL  = ARCHIVE_URL + 'api-token-auth/'
 
 DEFAULT_CAMERAS = { '1m0' : '1M0-SCICAM-SBIG',
                     '2m0' : '2M0-SCICAM-SPECTRAL',
                     '0m4' : '0M4-SCICAM-SBIG'
                     }
-
-PROPOSAL_CODE = 'LCOEPO2014B-010'
 
 LOGIN_URL = "/login/"
 LOGIN_REDIRECT_URL = "/"

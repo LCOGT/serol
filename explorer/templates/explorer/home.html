@@ -35,7 +35,7 @@ $(document).ready(function(){
           {% if request.user.is_authenticated %}
           <a href="{% progress_url request.user %}" class="btn btn-lg btn-4 btn-4a animated tada" >{% trans "Continue your adventure!" %}</a>
           {% else %}
-          <a href="#" class="btn btn-lg btn-4 btn-4a animated tada" data-toggle="modal" data-target="#exampleModal">{% trans "Start your adventure!" %}</a>
+          <a href="{% url 'getting-started' %}" class="btn btn-lg btn-4 btn-4a animated tada">{% trans "Start your adventure!" %}</a>
           {% endif %}
         </p>
       </div>
@@ -43,34 +43,8 @@ $(document).ready(function(){
     <div class="col-4 title-right">
     </div>
   </div>
-  <div class="row">
-
-  </div>
 </div>
 </div>
-</div>
-
-
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-video">
-          <div class="embed-responsive embed-responsive-16by9">
-              <iframe class="embed-responsive-item" width="560" height="315" src="https://www.youtube.com/embed/fNk-VL57HUg?rel=0&amp;showinfo=0" frameborder="0"
-              allow="autoplay; encrypted-media" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-          </div>
-      </div>
-      <div class="modal-footer">
-        <a href="{% url 'mission' 1 %}" class="btn btn-4 btn-4a" >Next ></a>
-      </div>
-    </div>
-  </div>
 </div>
 
 {% endblock %}

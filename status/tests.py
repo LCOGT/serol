@@ -18,7 +18,7 @@ def mock_lco_authenticate(request, username, password):
     return None
 
 def mock_submit_request(params, token):
-    return True, 'XXX'
+    return True, '000'
 
 def mock_submit_request_check_proposal(params, token):
     if params['proposal'] == 'LCOEPO2018A-001':
@@ -216,6 +216,7 @@ class NewVisitorTest(FunctionalTest):
 
         progress = Progress.objects.get(user=self.ada, challenge__id=1)
         self.assertEqual(progress.target, 'Uranus')
+        self.assertEqual(progress.requestid, '000')
 
     @patch('serol.auth_backend.lco_authenticate', mock_lco_authenticate)
     @patch('status.valhalla.submit_observation_request', mock_submit_request)

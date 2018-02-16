@@ -28,7 +28,7 @@ def get_observation_status(requestid, token):
     if r.status_code in [200,201]:
         logger.debug('Submitted request')
         req = r.json()
-        requestid = req['requests'][0]['id']
+        requestid = req['id']
         return requestid, req['state']
     else:
         logger.error("Could not send request: {}".format(r.content))
@@ -52,7 +52,8 @@ def submit_observation_request(params, token):
 
     if r.status_code in [200,201]:
         logger.debug('Submitted request')
-        return True, r.json()['id']
+        print(r.json()['requests'][0]['id'])
+        return True, r.json()['requests'][0]['id']
     else:
         logger.error("Could not send request: {}".format(r.content))
         return False, r.content

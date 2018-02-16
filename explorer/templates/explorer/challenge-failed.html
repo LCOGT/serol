@@ -6,7 +6,7 @@
 {% block main-body %}
 <div class="centre-container">
   <h1>{% trans "Bad news! " %}</h1>
-    <p>{% trans "Serol wasn't able to get you a picture. Let's give Challenge {{object.number}} another try!" %}</p>
+    <p>{% blocktrans %}Serol wasn't able to get you a picture. Let's give {{object}} another try!{% endblocktrans %}</p>
     <p><a href="{% url 'retry' object.pk %}" class="btn btn-lg btn-4 btn-4a animated tada" id="start-btn">{% trans 'Retry the challenge' %}</a></p>
   </div>
 

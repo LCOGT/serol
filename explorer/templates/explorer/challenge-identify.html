@@ -9,7 +9,7 @@
 var images = Array();
 var current_tag = "{{object.avm_code}}";
 var redirect_url = "{% url 'analyse' object.id %}?frameid="
-var requestid = {{ progress.requestids}};
+var requestid = {{ progress.requestid}};
 
 function filter_tags() {
   var static_url = "{% static 'explorer/identify/' %}";

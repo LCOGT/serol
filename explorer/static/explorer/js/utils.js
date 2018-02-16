@@ -100,7 +100,7 @@ function status_request(requestid, token) {
   var data;
   $.ajax(
     {
-    url:'https://observe.lco.global/api/userrequests/'+requestid+'/',
+    url:'https://observe.lco.global/api/requests/'+requestid+'/',
     type: "GET",
     headers: {"Authorization": "Token "+token},
     dataType: 'json',
@@ -126,9 +126,9 @@ function status_request(requestid, token) {
     return data;
 }
 
-function status_userrequest(userrequestid, token) {
+function status_userrequest(requestid, token) {
   var data;
-  $.getJSON('https://observe.lco.global/api/requests/'+userrequestid+'/blocks/?canceled=false',
+  $.getJSON('https://observe.lco.global/api/requests/'+requestid+'/blocks/?canceled=false',
     {headers: {'Authorization': 'Token '+token},
     dataType: 'json',
     contentType: 'application/json'})
@@ -314,7 +314,7 @@ function submit_to_serol(data, redirect_url){
         "requests": [request],
     }
     $.ajax({
-      url: 'https://observe.lco.global/api/userrequests/',
+      url: 'https://observe.lco.global/api/requests/',
       type: 'post',
       data: JSON.stringify(data),
       headers: {'Authorization': 'Token '+token},

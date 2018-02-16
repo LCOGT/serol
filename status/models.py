@@ -31,8 +31,7 @@ class User(AbstractUser):
 class Progress(models.Model):
     user = models.ForeignKey(User)
     challenge = models.ForeignKey(Challenge)
-    userrequestid = models.CharField(max_length=20, null=True, blank=True)
-    requestids = models.CharField(max_length=20, null=True, blank=True)
+    requestid = models.CharField(max_length=20, null=True, blank=True)
     frameids = models.CharField(max_length=20, null=True, blank=True)
     status = FSMField(default='New', choices=settings.PROGRESS_OPTIONS)
     last_update = models.DateTimeField(default=datetime.utcnow)
@@ -54,8 +53,7 @@ class Progress(models.Model):
 
     @transition(field=status, source=['Failed'], target='New')
     def retry(self):
-        self.userrequestid = ''
-        self.requestids = ''
+        self.requestid = ''
         self.frameids = ''
         pass
 
