@@ -39,7 +39,7 @@ def submit_observation_request(params, token):
     Send the observation parameters and the authentication cookie to the Scheduler API
     '''
     headers = {'Authorization': 'Token {}'.format(token)}
-    url = settings.PORTAL_REQUEST_API
+    url = settings.PORTAL_REQUEST_SUBMIT_API
     logging.debug('Submitting request')
     try:
         r = requests.post(url, json=params, headers=headers, timeout=20.0)
