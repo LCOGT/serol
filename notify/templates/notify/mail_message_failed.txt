@@ -1,0 +1,14 @@
+Hi {{ username }}!
+
+I have a special message for you about your picture of {{ target }}.
+
+Please come to Serol's Cosmic Adventures for more information about Challenge {{ challenge }} from Mission {{ mission }}!
+
+https://serol.lco.global{{ url }}
+
+See you soon!
+
+Serol
+--
+Serol's Cosmic Explorers is a Las Cumbres Observatory project
+https://lco.global

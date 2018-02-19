@@ -11,7 +11,7 @@ class Command(BaseCommand):
         pending = Progress.objects.filter(status='Submitted')
         messages = []
         for p in pending:
-            self.stdout.write('Checking {}'.format(p.requestid))
+            self.stdout.write('Checking {} for {} - PID: {}'.format(p.requestid, p.user, p.id))
             resp = update_status(p.user, p.requestid)
             if resp.status_code == 200:
                 message = render_email(p)

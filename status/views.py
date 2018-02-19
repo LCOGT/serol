@@ -86,7 +86,6 @@ def update_status(user, requestid):
     elif not requestid:
         return Response("Problem with the status", status=status.HTTP_403_FORBIDDEN)
     else:
-        progress.requestid = requestid
         if state == 'COMPLETED':
             progress.observed()
         elif state == 'WINDOW_EXPIRED' or state == 'CANCELED':

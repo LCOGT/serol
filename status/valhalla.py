@@ -28,7 +28,6 @@ def get_observation_status(requestid, token):
     if r.status_code in [200,201]:
         logger.debug('Submitted request')
         req = r.json()
-        requestid = req['id']
         return requestid, req['state']
     else:
         logger.error("Could not send request: {}".format(r.content))

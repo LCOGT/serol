@@ -4,7 +4,7 @@ I've taken your picture of {{ target }}.
 
 Have a look at it on Serol's Cosmic Adventures and complete Challenge {{ challenge }} from Mission {{ mission }}!
 
-https://serol.lco.global
+https://serol.lco.global{{ url }}
 
 See you soon!
 
