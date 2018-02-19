@@ -5,10 +5,20 @@ import glob
 import logging
 import os, sys
 import requests
+import tempfile
 
 logger = logging.getLogger(__name__)
 
 ssl_verify = True
+
+def make_image(progress_id):
+    tmpdir = tempfile.mkdtemp()
+    now = datetime.utcnow()
+    frames = download_files(frames, output_path)
+    jpeg_path = os.path.join(settings.IMAGE_BASE_PATH, now.strftime("%Y"), now.strftime("%m"), now.strftime("%d"))
+    if not os.path.exists(jpeg_path):
+        os.makedirs(jpeg_path)
+    return
 
 def lco_api_call(url, headers):
     try:
@@ -60,7 +70,19 @@ def fetch_archive_frames(auth_header, archive_url, frames):
 
     return frames
 
-def download_files(frames, output_path, verbose=False, dbg=False):
+def check_for_existing_file(filename, archive_md5):
+    if os.path.isfile(new_filename):
+        hash_md5 = md5()
+        with open(fname, "rb") as f:
+            for chunk in iter(lambda: f.read(4096), b""):
+                hash_md5.update(chunk)
+        if hash_md5.hexdigest() == archive_md5:
+            return True
+        else:
+            return False
+    return False
+
+def download_files(frames, output_path):
     '''Downloads and saves to disk, the specified files from the new Science
     Archive. Returns a list of the frames that were downloaded.
     Takes a dictionary <frames> (keyed by reduction levels and produced by
@@ -71,22 +93,17 @@ def download_files(frames, output_path, verbose=False, dbg=False):
     already exist. If [verbose] is set to True, the filename of the downloaded
     file will be printed.'''
 
-    if not os.path.exists(output_path):
-        os.makedirs(output_path)
     downloaded_frames = []
-    for reduction_lvl in frames.keys():
-        logger.debug(reduction_lvl)
-        frames_to_download = frames[reduction_lvl]
-        for frame in frames_to_download:
-            logger.debug(frame['filename'])
-            filename = os.path.join(output_path, frame['filename'])
-            archive_md5 = frame['version_set'][-1]['md5']
-            if check_for_existing_file(filename, archive_md5, dbg, verbose) or \
-                check_for_bad_file(filename):
-                logger.info("Skipping existing file {}".format(frame['filename']))
-            else:
-                logger.info("Writing file to {}".format(filename))
-                downloaded_frames.append(filename)
-                with open(filename, 'wb') as f:
-                    f.write(requests.get(frame['url']).content)
+    for frame in frames:
+        logger.debug(frame['filename'])
+        filename = os.path.join(output_path, frame['filename'])
+        archive_md5 = frame['version_set'][-1]['md5']
+        if check_for_existing_file(filename, archive_md5) or \
+            check_for_bad_file(filename):
+            logger.info("Skipping existing file {}".format(frame['filename']))
+        else:
+            logger.info("Writing file to {}".format(filename))
+            downloaded_frames.append(filename)
+            with open(filename, 'wb') as f:
+                f.write(requests.get(frame['url']).content)
     return downloaded_frames

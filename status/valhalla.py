@@ -39,22 +39,21 @@ def submit_observation_request(params, token):
     Send the observation parameters and the authentication cookie to the Scheduler API
     '''
     headers = {'Authorization': 'Token {}'.format(token)}
-    url = settings.PORTAL_REQUEST_API
+    url = settings.PORTAL_REQUEST_SUBMIT_API
     logging.debug('Submitting request')
     try:
         r = requests.post(url, json=params, headers=headers, timeout=20.0)
     except requests.exceptions.Timeout:
         msg = "Observing portal API timed out"
-        logger.error(msg)
+        logging.error(msg)
         params['error_msg'] = msg
         return False, msg
 
     if r.status_code in [200,201]:
-        logger.debug('Submitted request')
-        print(r.json()['requests'][0]['id'])
+        logging.debug('Submitted request')
         return True, r.json()['requests'][0]['id']
     else:
-        logger.error("Could not send request: {}".format(r.content))
+        logging.error("Could not send request: {}".format(r.content))
         return False, r.content
 
 def process_observation_request(params):

@@ -9,3 +9,6 @@ https://serol.lco.global{{ url }}
 See you soon!
 
 Serol
+--
+Serol's Cosmic Explorers is a Las Cumbres Observatory project
+https://lco.global
