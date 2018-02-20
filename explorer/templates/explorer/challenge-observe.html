@@ -131,7 +131,7 @@ $(document).ready(function(){
     {% for i in "012345" %}
     <div class="col-lg-4  col-sm-6 pb-5 target-holder">
         <a href="#" id="target-img-{{i}}" data-toggle="modal" data-target="#targetModal" data-tid="">
-            <img class="img-fluid" src="http://placehold.it/400x300" alt="">
+            <img class="img-fluid" src="{% static 'explorer/images/placeholder.jpg' %}" alt="">
             <div class="target-name-holder">
               <span class="target-name"></span>
             </div>

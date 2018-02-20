@@ -71,7 +71,7 @@ def fetch_archive_frames(auth_header, archive_url, frames):
     return frames
 
 def check_for_existing_file(filename, archive_md5):
-    if os.path.isfile(new_filename):
+    if os.path.isfile(filename):
         hash_md5 = md5()
         with open(fname, "rb") as f:
             for chunk in iter(lambda: f.read(4096), b""):
@@ -98,8 +98,7 @@ def download_files(frames, output_path):
         logger.debug(frame['filename'])
         filename = os.path.join(output_path, frame['filename'])
         archive_md5 = frame['version_set'][-1]['md5']
-        if check_for_existing_file(filename, archive_md5) or \
-            check_for_bad_file(filename):
+        if check_for_existing_file(filename, archive_md5):
             logger.info("Skipping existing file {}".format(frame['filename']))
         else:
             logger.info("Writing file to {}".format(filename))
