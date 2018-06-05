@@ -5,16 +5,16 @@ ENV PYTHONUNBUFFERED 1
 ENV C_FORCE_ROOT true
 
 # install depedencies
-COPY lco_global/requirements.pip /var/www/apps/lco_global/
-RUN apk --no-cache add mariadb-client-libs \
-        && apk --no-cache add --virtual .build-deps gcc mariadb-dev musl-dev git \
-        && apk --no-cache add libjpeg-turbo jpeg-dev libjpeg libjpeg-turbo-dev \
-        && pip --no-cache-dir --trusted-host=buildsba.lco.gtn install -r /var/www/apps/lco_global/requirements.pip \
+COPY requirements.pip /var/www/apps/serol/
+RUN apk --no-cache add postgresql-libs \
+        && apk --no-cache add --virtual .build-deps gcc git musl-dev postgresql-dev \
+        && apk --no-cache add libjpeg-turbo jpeg-dev libjpeg libjpeg-turbo-dev imagemagick zlib zlib-dev \
+        && pip --no-cache-dir --trusted-host=buildsba.lco.gtn install -r /var/www/apps/serol/requirements.pip \
         && apk --no-cache del .build-deps
 
 # install entrypoint
 COPY docker/init /
 
 # install web application
-COPY lco_global /var/www/apps/lco_global/
+COPY app /var/www/apps/serol/
 ENTRYPOINT [ "/init" ]

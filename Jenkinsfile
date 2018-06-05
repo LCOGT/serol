@@ -4,7 +4,7 @@
 pipeline {
 	agent any
 	environment {
-		DOCKER_IMG = "docker.lco.global/mezzanine"
+		DOCKER_IMG = "docker.lco.global/serol"
 		GIT_COMMIT_SHORT_ID = getCommit().take(12)
 		GIT_TAG_NAME = gitTagName()
 	}
@@ -54,11 +54,11 @@ String gitTagName() {
 	}
 	return null
 }
- 
+
 String getCommit() {
 	return sh(script: 'git rev-parse HEAD', returnStdout: true)?.trim()
 }
- 
+
 @NonCPS
 boolean isTag(String desc) {
 	match = desc =~ /.+-[0-9]+-g[0-9A-Fa-f]{6,}$/

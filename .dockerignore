@@ -1,0 +1,8 @@
+.dockerignore
+.git
+serol/static/media/files/*
+local_settings.py
+docker-compose.yml
+README.md
+LICENSE
+serol.db

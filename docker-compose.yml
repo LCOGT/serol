@@ -1,29 +1,28 @@
 version: '2'
 services:
-  nginx:
-    image: nginx:1.14-alpine
-    ports:
-      - "80:80"
-    volumes:
-      - ./docker/etc/nginx/conf.d:/etc/nginx/conf.d:ro
-      - ./files:/var/www/html/files:ro
+  serol:
     mem_limit: 256m
-    network_mode: bridge
-    depends_on:
-      - mezzanine
-    links:
-      - "mezzanine:mezzanine"
-
-  mezzanine:
-    image: docker.lco.global/mezzanine:latest
-    ports:
-      - "8080:8080"
-    volumes:
-      - ./files:/var/www/html/files:rw
+    image: docker.lco.global/serol:latest
     environment:
-      - DB_HOST=db.example.com
-      - DB_USER=username
-      - DB_PASS=password
-      - DB_NAME=databasename
-    mem_limit: 256m
+      DB_HOST: postgres
+      DB_NAME: serol
+      DB_PASSWD: PASSWORD
+      DB_USER: USERNAME
+      EMAIL_USERNAME: EMAIL
+      EMAIL_PASSWORD: EMAIL_PASSWORD
+    volumes:
+    - /mnt/docker/serol/media:/var/www/html/media
+    links:
+    - postgres:postgres
+    labels:
+      io.rancher.container.pull_image: always
+  postgres:
+    image: postgres:9.6
+    environment:
+      PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_DB: serol
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+    volumes:
+    - /mnt/docker/serol/db:/var/lib/postgresql/data/pgdata
     network_mode: bridge

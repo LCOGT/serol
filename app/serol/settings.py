@@ -39,6 +39,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -46,6 +47,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "rollbar.contrib.django.middleware.RollbarNotifierMiddleware",
 ]
 
 AUTHENTICATION_BACKENDS = (
@@ -110,8 +112,8 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
-
 STATIC_ROOT = '/var/www/html/static/'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL = '/media/'
 
@@ -124,10 +126,10 @@ DATABASES = {
     "default": {
         # Live DB
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ.get('SEROL_DB_NAME', ''),
-        "USER": os.environ.get('SEROL_DB_USER',''),
-        "PASSWORD": os.environ.get('SEROL_DB_PASSWD',''),
-        "HOST": os.environ.get('SEROL_DB_HOST',''),
+        "NAME": os.environ.get('DB_NAME', ''),
+        "USER": os.environ.get('DB_USER',''),
+        "PASSWORD": os.environ.get('DB_PASSWD',''),
+        "HOST": os.environ.get('DB_HOST',''),
         "PORT"   : '5432',
 
     }
