@@ -10,8 +10,10 @@
         <div class="col-lg-4">
           {% for sticker in stickers %}
           <p>
-          <img src="/media/{{MEDIA_URL}}{{sticker.sticker.filename}}" alt="{{sticker.sticker.desc}}"  class="img-fluid rounded" />
-        </p>
+            {% with "explorer/"|add:sticker.sticker.filename as icon_url %}
+            <img class="img-fluid rounded" src="{% static icon_url %}"  alt="{{sticker.sticker.desc}}">
+            {% endwith %}
+          </p>
           {% endfor %}
           <p>
           {% if object.is_last %}

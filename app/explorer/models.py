@@ -14,10 +14,16 @@ ICONS = (
         ('2.3-asteroid.png','Asteroid')
 )
 
+PATCHES = (
+    ('patches/GetToKnowTheNightSky_patch.png', 'Mission 1'),
+    ('patches/LifeAndDeathOfStars_patch.png', 'Mission 2'),
+    ('patches/universeatlarge_patch.png', 'Mission 3')
+)
+
 class Mission(models.Model):
     number = models.IntegerField()
     name = models.CharField(max_length=200)
-    patch = models.ImageField(upload_to='patches')
+    patch = models.CharField(max_length=40, choices=PATCHES)
     sticker_total = models.IntegerField(default=0)
 
     def __str__(self):
