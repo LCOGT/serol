@@ -118,8 +118,10 @@ MEDIA_URL = '/media/'
 
 MEDIA_ROOT = '/var/www/html/media/'
 
-chars = 'abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)'
-SECRET_KEY = get_random_string(50, chars)
+SECRET_KEY = os.environ.get('SECRET_KEY','')
+if not SECRET_KEY:
+    chars = 'abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)'
+    SECRET_KEY = get_random_string(50, chars)
 
 DATABASES = {
     "default": {
@@ -142,8 +144,8 @@ EMAIL_USE_TLS       = True
 EMAIL_HOST          = 'smtp.gmail.com'
 EMAIL_PORT          =  587
 EMAIL_FROM  = 'Serol <serol@lco.global>'
-EMAIL_HOST_USER = os.environ.get('SEROL_EMAIL_USERNAME', '')
-EMAIL_HOST_PASSWORD = os.environ.get('SEROL_EMAIL_PASSWORD', '')
+EMAIL_HOST_USER = os.environ.get('EMAIL_USERNAME', '')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD', '')
 
 MARKDOWN_DEUX_STYLES = {
     "default": {

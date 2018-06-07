@@ -23,7 +23,7 @@ class Proposal(models.Model):
 class User(AbstractUser):
     token = models.CharField(help_text=_('Authentication for Valhalla'), max_length=50, blank=True, null=True)
     archive_token = models.CharField(help_text=_('Authentication for LCO archive'), max_length=50, blank=True, null=True)
-    default_proposal = models.ForeignKey(Proposal)
+    default_proposal = models.ForeignKey(Proposal, null=True, blank=True)
     mission_1 = models.BooleanField(help_text=_('Has user competed Mission 1?'), default=False)
     mission_2 = models.BooleanField(help_text=_('Has user competed Mission 2?'), default=False)
     mission_3 = models.BooleanField(help_text=_('Has user competed Mission 3?'), default=False)

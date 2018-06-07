@@ -1,6 +1,8 @@
 FROM python:3.6-alpine
 MAINTAINER Edward Gomez <egomez@lco.global>
 
+EXPOSE 80
+
 ENV PYTHONUNBUFFERED 1
 ENV C_FORCE_ROOT true
 
