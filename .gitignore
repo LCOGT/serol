@@ -1,5 +1,6 @@
 local_settings.py
-serol.db
+*.db
+*.rdb
 *.json
 media/
 
