@@ -6,3 +6,5 @@ docker-compose.yml
 README.md
 LICENSE
 serol.db
+*.db
+*.rdb
