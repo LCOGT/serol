@@ -159,8 +159,8 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = TIME_ZONE
 
 CELERY_BEAT_SCHEDULE = {
-    'temp-10s': {
-        'task': 'notify.tasks.temp',
+    'update-observations-10mins': {
+        'task': 'notify.tasks.task_update_status',
         'schedule': 10.0
     }
 }
