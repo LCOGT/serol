@@ -26,3 +26,30 @@ services:
     volumes:
     - /mnt/docker/serol/db:/var/lib/postgresql/data/pgdata
     network_mode: bridge
+
+  celerybeat:
+    image: docker.lco.global/serol:latest
+    links:
+    - redis:redis
+    command:
+    - celery
+    - -A
+    - serol
+    - beat
+    - -l
+    - info
+
+  celery:
+    image: docker.lco.global/serol:latest
+    links:
+    - redis:redis
+    command:
+    - celery
+    - -A
+    - serol
+    - worker
+    - -l
+    - info
+
+  redis:
+    image: redis:3.2
