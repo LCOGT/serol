@@ -151,8 +151,8 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD', '')
 # CELERY
 ############
 
-CELERY_BROKER_URL = 'redis://localhost:6379'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_BROKER_URL = 'redis://{}:6379'.format(os.environ.get('REDIS_HOST', 'redis'))
+CELERY_RESULT_BACKEND = 'redis://{}:6379'.format(os.environ.get('REDIS_HOST', 'redis'))
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'

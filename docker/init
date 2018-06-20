@@ -1,4 +1,14 @@
 #!/bin/sh
-cd /var/www/apps/serol/
-python manage.py migrate --no-input
-python manage.py collectstatic --no-input
+exec "$@"
+case $1 in celery)
+   ... ;
+   break ;;
+celerybeat)
+  ... ;
+  break ;;
+gunicorn)
+  cd /var/www/apps/serol/
+  python manage.py migrate --no-input
+  python manage.py collectstatic --no-input
+  break ;;
+esac
