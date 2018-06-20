@@ -5,11 +5,10 @@ djangorestframework
 djangorestframework-jsonp
 django-pagedown
 django-markdown-deux
-psycopg2
+mysqlclient
 Pillow
 requests
 six
-ipython
 rollbar
 gunicorn[gevent]==19.8.1
 whitenoise==3.3.1
