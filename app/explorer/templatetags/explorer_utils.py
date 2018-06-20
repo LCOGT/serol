@@ -19,14 +19,14 @@ def progress_url(user):
         return url
 
     if latest.status in ['Summary','Failed']:
+        # Fallback
+        url = reverse('missions')
         if not latest.challenge.is_last:
             challenges = Challenge.objects.filter(number__gt=latest.challenge.number,
                                                 mission=latest.challenge.mission,
                                                 active=True).order_by('number')
-            url = reverse('challenge',kwargs={'pk':challenges[0].pk})
-        else:
-            # We have come to the end of the Mission
-            url = reverse('missions')
+            if challenges.count() != 0:
+                url = reverse('challenge',kwargs={'pk':challenges[0].pk})
     else:
         # We haven't completed this challenge so just take us to it
         url = reverse('challenge',kwargs={'pk':latest.challenge.pk})

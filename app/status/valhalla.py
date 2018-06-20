@@ -15,6 +15,9 @@ def get_observation_status(requestid, token):
     '''
     Get status of RequestID from the Valhalla API
     '''
+    if not requestid:
+        return False, "No request ID provided"
+        
     headers = {'Authorization': 'Token {}'.format(token)}
     url = settings.PORTAL_REQUEST_API + requestid
     try:
