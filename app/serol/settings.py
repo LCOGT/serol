@@ -35,7 +35,8 @@ INSTALLED_APPS = [
     'django.contrib.flatpages',
     'pagedown',
     'markdown_deux',
-    'rest_framework'
+    'rest_framework',
+    'django_celery_results'
 ]
 
 MIDDLEWARE = [
@@ -126,12 +127,12 @@ if not SECRET_KEY:
 DATABASES = {
     "default": {
         # Live DB
-        "ENGINE": "django.db.backends.postgresql",
+        "ENGINE": "django.db.backends.mysql",
         "NAME": os.environ.get('DB_NAME', ''),
         "USER": os.environ.get('DB_USER',''),
         "PASSWORD": os.environ.get('DB_PASSWD',''),
-        "HOST": os.environ.get('DB_HOST',''),
-        "PORT"   : '5432',
+        "HOST": os.environ.get('DB_HOST','mysql'),
+        "PORT"   : '3306',
 
     }
 }
@@ -152,7 +153,7 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD', '')
 ############
 
 CELERY_BROKER_URL = 'redis://{}:6379'.format(os.environ.get('REDIS_HOST', 'redis'))
-CELERY_RESULT_BACKEND = 'redis://{}:6379'.format(os.environ.get('REDIS_HOST', 'redis'))
+CELERY_RESULT_BACKEND = 'django-db'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
@@ -161,7 +162,7 @@ CELERY_TIMEZONE = TIME_ZONE
 CELERY_BEAT_SCHEDULE = {
     'update-observations-10mins': {
         'task': 'notify.tasks.task_update_status',
-        'schedule': 10.0
+        'schedule': 600.0
     }
 }
 
@@ -226,6 +227,8 @@ PORTAL_PROFILE_URL = PORTAL_API_URL + 'profile/'
 ARCHIVE_URL        = 'https://archive-api.lco.global/'
 ARCHIVE_FRAMES_URL = ARCHIVE_URL + 'frames/'
 ARCHIVE_TOKEN_URL  = ARCHIVE_URL + 'api-token-auth/'
+
+PORTAL_TOKEN = os.environ.get('PORTAL_TOKEN', 'redis')
 
 DEFAULT_CAMERAS = { '1m0' : '1M0-SCICAM-SBIG',
                     '2m0' : '2M0-SCICAM-SPECTRAL',

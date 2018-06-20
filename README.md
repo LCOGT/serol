@@ -15,6 +15,7 @@ of this document for notes on how to deploy the project on a live system.
 
 - [Docker](https://www.docker.com/)
 - [Docker Compose](https://docs.docker.com/compose/)
+- [Redis](https://redis.io)
 
 ### Run the application
 
@@ -46,6 +47,8 @@ configuration options and their defaults are listed below.
 - **`EMAIL_USER`** - SMTP Username (default: None)
 - **`EMAIL_PASS`** - SMTP Password (default: None)
 - **`ROLLBAR_TOKEN`** - Unknown: (default: None)
+- **`PORTAL_TOKEN`** - Token for administrator account on LCO observing portal: (default: None)
+- **`REDI_HOST`** - Redis hostname: (default: `redis`)
 
 ## Deployment
 

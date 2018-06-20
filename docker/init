@@ -1,14 +1,18 @@
 #!/bin/sh
-exec "$@"
-case $1 in celery)
-   ... ;
-   break ;;
-celerybeat)
-  ... ;
-  break ;;
-gunicorn)
-  cd /var/www/apps/serol/
-  python manage.py migrate --no-input
-  python manage.py collectstatic --no-input
-  break ;;
+
+case $1 in
+  gunicorn)
+    cd /var/www/apps/serol/
+    python manage.py migrate --no-input
+    python manage.py collectstatic --no-input
+    exec "$@"
+    break ;;
+  celery)
+    cd /var/www/apps/serol/
+    exec "$@"
+    break ;;
+  celerybeat)
+    cd /var/www/apps/serol/
+    exec "$@"
+    break ;;
 esac

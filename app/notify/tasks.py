@@ -1,6 +1,7 @@
 from __future__ import absolute_import, unicode_literals
 from celery import shared_task
 import logging
+from django.conf import settings
 
 from status.models import Progress
 from status.views import update_status
@@ -14,7 +15,7 @@ def task_update_status():
     messages = []
     for p in pending:
         logger.debug('Checking {} for {} - PID: {}'.format(p.requestid, p.user, p.id))
-        resp = update_status(p.user, p.requestid)
+        resp = update_status(user=p.user, requestid=p.requestid, token=settings.PORTAL_TOKEN)
         if resp.status_code == 200:
             message = render_email(p)
             if message:
@@ -22,9 +23,4 @@ def task_update_status():
 
     logger.debug('Sending {} emails'.format(len(messages)))
     # send_emails(messages)
-    return
-
-@shared_task
-def temp():
-    logger.debug('Testing periodic task')
     return
