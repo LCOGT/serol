@@ -12,3 +12,5 @@ six
 rollbar
 gunicorn[gevent]==19.8.1
 whitenoise==3.3.1
+git+git://github.com/LCOGT/lcoalipy.git#egg=lcoalipy
+git+git://github.com/LCOGT/fits2image.git#egg=fits2image

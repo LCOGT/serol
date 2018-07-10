@@ -4,25 +4,12 @@ services:
     mem_limit: 256m
     image: docker.lco.global/serol:latest
     environment:
-      DB_HOST: postgres
+      DB_HOST: mysql.db.location
       DB_NAME: serol
       DB_PASSWD: PASSWORD
       DB_USER: USERNAME
       EMAIL_USERNAME: EMAIL
       EMAIL_PASSWORD: EMAIL_PASSWORD
-    volumes:
-    - /mnt/docker/serol/media:/var/www/html/media
-    links:
-    - postgres:postgres
+      PORTAL_TOKEN: PORTAL_TOKEN
     labels:
       io.rancher.container.pull_image: always
-  postgres:
-    image: postgres:9.6
-    environment:
-      PGDATA: /var/lib/postgresql/data/pgdata
-      POSTGRES_DB: serol
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_USER: postgres
-    volumes:
-    - /mnt/docker/serol/db:/var/lib/postgresql/data/pgdata
-    network_mode: bridge

@@ -118,6 +118,8 @@ MEDIA_URL = '/media/'
 
 MEDIA_ROOT = '/var/www/html/media/'
 
+IMAGE_ROOT = os.path.join(MEDIA_ROOT,'/images/')
+
 SECRET_KEY = os.environ.get('SECRET_KEY','')
 if not SECRET_KEY:
     chars = 'abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)'
@@ -188,7 +190,7 @@ LOGGING = {
     'loggers': {
         'django.request': {
             'handlers': ['console'],
-            'level': 'DEBUG',
+            'level': 'INFO',
             'propagate': True,
         },
     }
@@ -209,10 +211,16 @@ ARCHIVE_URL        = 'https://archive-api.lco.global/'
 ARCHIVE_FRAMES_URL = ARCHIVE_URL + 'frames/'
 ARCHIVE_TOKEN_URL  = ARCHIVE_URL + 'api-token-auth/'
 
+PORTAL_TOKEN = os.environ.get('PORTAL_TOKEN','')
+ARCHIVE_TOKEN = os.environ.get('ARCHIVE_TOKEN','')
+
 DEFAULT_CAMERAS = { '1m0' : '1M0-SCICAM-SBIG',
                     '2m0' : '2M0-SCICAM-SPECTRAL',
                     '0m4' : '0M4-SCICAM-SBIG'
                     }
+
+COLOUR_TEMPLATE = {'rp':'1','V':'2','B':'3'}
+
 
 LOGIN_URL = "/login/"
 LOGIN_REDIRECT_URL = "/"
@@ -227,6 +235,12 @@ PROGRESS_OPTIONS =  (
                 ('Summary','Summary'),
                 ('Failed','Failed')
                 )
+
+FILTER_ORDER = {
+            'jupiter'   : {'up':1,'B':2,'zs':3},
+            'mars'      : {},
+            'saturn'    : {'zs':1}
+                }
 
 ##################
 # LOCAL SETTINGS #

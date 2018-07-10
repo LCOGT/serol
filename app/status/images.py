@@ -1,0 +1,171 @@
+import six
+import requests
+from tempfile import mkdtemp
+from glob import glob
+import shutil
+import logging
+import os
+from lco_alipy.ident import run
+from lco_alipy.align import affineremap
+from fits2image.conversions import fits_to_jpg
+from astroscrappy import detect_cosmics
+from astropy.io import fits
+from numpy import shape, median
+
+from django.conf import settings
+
+logger = logging.getLogger(__name__)
+
+def lco_api_call(url, token):
+    '''
+    Get status of RequestID from the Valhalla API
+    '''
+    headers = {'Authorization': 'Token {}'.format(token)}
+    try:
+        r = requests.get(url, headers=headers, timeout=20.0)
+    except requests.exceptions.Timeout:
+        msg = "Observing portal API timed out"
+        logger.error(msg)
+        params['error_msg'] = msg
+        return False, msg
+
+    if r.status_code in [200,201]:
+        logger.debug('Recieved data')
+        return True, r.json()
+    else:
+        logger.error("Could not send request: {}".format(r.content))
+        return False, r.content
+
+def get_archive_data(out_dir, request_id):
+    # Only look for data which has completed
+    url = "{}{}".format(settings.PORTAL_REQUEST_API, request_id)
+    state, req = lco_api_call(url, settings.PORTAL_TOKEN)
+    if not state:
+        logger.debug('Failed')
+        return
+    if req['state'] == 'COMPLETED':
+        subreq_id = req['id']
+        url = "{}?REQNUM={}&ordering=-id&RLEVEL=91".format(settings.ARCHIVE_FRAMES_URL, subreq_id)
+        success, r = lco_api_call(url, settings.ARCHIVE_TOKEN)
+        if success:
+            dl_sort_data_files(r, out_dir)
+    return True
+
+def download_file(out_file, url):
+    logger.debug("Downloading: {}".format(out_file))
+    dt = requests.get(url)
+    f = open(out_file, 'wb')
+    f.write(dt.content)
+    f.close()
+    return
+
+def dl_sort_data_files(r, out_path):
+    # Make subdirectory
+    if not os.path.exists(out_path):
+        os.makedirs(out_path)
+    for response in r['results']:
+        out_file = os.path.join(out_path, response['filename'])
+        download_file(out_file, response['url'])
+    return
+
+def write_clean_data(filelist):
+    '''
+    Overwrite FITS files with cleaned and scaled data
+    - Data is read into uncompressed FITS file to remove dependency on FPack
+    '''
+    img_list =[]
+    for i, file_in in enumerate(filelist):
+        data, hdrs = fits.getdata(file_in, header=True)
+        filtr = hdrs['filter']
+        new_filename = file_in.replace(".fits", "-{}.fits".format(filtr))
+        data = clean_data(data)
+        hdu = fits.PrimaryHDU(data, header=hdrs)
+        hdu.writeto(new_filename)
+        img_list.append(new_filename)
+
+    return img_list
+
+def reproject_files(ref_image, images_to_align, tmpdir='temp/'):
+    identifications = run(ref_image, images_to_align[1:], visu=False)
+    hdu = fits.open(ref_image)
+    data = hdu[1].data
+    outputshape = shape(data)
+
+    for id in identifications:
+        if id.ok:
+            affineremap(id.ukn.filepath, id.trans, shape=(outputshape[1],outputshape[0]), outdir=tmpdir)
+
+    aligned_images = sorted(glob(tmpdir+"/*_affineremap.fits"))
+
+    img_list = [ref_image]+aligned_images
+    if len(img_list) < 3:
+        logging.warning('Error creating image: Only {} source files'.format(len(img_list)))
+        return False
+
+    return img_list
+
+def remove_cr(data):
+    '''
+    Removes high value pixels which are presumed to be cosmic ray hits.
+    '''
+    m, imdata = detect_cosmics(data, readnoise=20., gain=1.4, sigclip=5., sigfrac=.5, objlim=6.)
+    return imdata
+
+def clean_data(data):
+    '''
+    - Remove bogus (i.e. negative) pixels
+    - Remove Cosmic Rays
+    - Subtract the median sky value
+    '''
+    # Level out the colour balance in the frames
+    logger.debug('--- Begin CR removal ---')
+    median_val = median(data)
+    data[data<0.]=median_val
+    # Run astroScrappy to remove pesky cosmic rays
+    data = remove_cr(data)
+    logger.debug('Median=%s' % median_val)
+    logger.debug('Max after median=%s' % data.max())
+    return data
+
+def sort_files_for_colour(file_list, colour_template):
+    colours = {v:k for k,v in colour_template.items()}
+    for f in file_list:
+        data, hdrs = fits.getdata(f, header=True)
+        filtr = hdrs['filter']
+        order = colour_template.get(filtr, None)
+        if not order:
+            logger.debug('{} is not a recognised colour filter'.format(filtr))
+            return False
+        colours[order] = f
+    file_list = [colours[str(i)] for i in range(1,4)]
+    assert len(file_list) == 3
+
+    return file_list
+
+def make_request_image(request_id, name=None):
+    if settings.TMP_DIR:
+        tmp_dir = os.path.join(settings.TMP_DIR,request_id)
+    else:
+        tmp_dir = mkdtemp()
+    resp = get_archive_data(tmp_dir, request_id)
+    if not resp:
+        logger.debug('Failed to get data')
+        shutil.rmtree(tmp_dir)
+        return False
+
+    if not name:
+        name = "{}.jpg".format(request_id)
+
+    img_list = sorted(glob(os.path.join(tmp_dir,"*.fz")))
+    new_filepath = os.path.join(settings.IMAGE_ROOT,name)
+    img_list = reproject_files(img_list[0], img_list, tmp_dir)
+    logger.debug('Reprojected {} files'.format(len(img_list)))
+    img_list = write_clean_data(img_list)
+    img_list = sort_files_for_colour(img_list, colour_template=settings.COLOUR_TEMPLATE)
+    r = fits_to_jpg(img_list, new_filepath, width=1000, height=1000, color=True)
+    if r:
+        shutil.rmtree(tmp_dir)
+        return new_filepath
+    else:
+        logger.error('Failed to make colour image')
+        return False
