@@ -12,10 +12,10 @@
       <h1>{% trans "Mission" %} {{object.number}}</h1>
       <h1 class="mission-name">{{object.name|safe}}</h1>
       <p><a class="btn btn-info btn-lg animated tada" href="{% url 'challenge' current_challenge.pk %}" role="button">
-        {% if current_challenge.number == 1 %}
-        {% trans "Start the mission" %}
+        {% if mission.pk in active_missions %}
+        {% trans "Continue mission" %} &raquo;</a>
         {% else %}
-        {% trans "Continue the mission" %}
+        {% trans "Start mission" %} &raquo;</a>
         {% endif %}
          &raquo;</a></p>
     </div>

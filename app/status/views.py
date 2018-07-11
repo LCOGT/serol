@@ -70,17 +70,17 @@ class StatusView(APIView):
 
     def get(self, request, requestid, format=None):
 
-        return update_status(user=request.user, requestid=requestid)
+        return update_status(user=request.user, requestid=requestid, token=request.user.token)
 
 
-def update_status(user, requestid):
+def update_status(user, requestid, token):
     try:
         progress = Progress.objects.get(requestid=requestid, user=user)
     except:
         return Response("Progress object not found", status=status.HTTP_404_NOT_FOUND)
     if progress.status != 'Submitted':
         return Response("Status mismatch", status=status.HTTP_403_FORBIDDEN)
-    requestid, state = get_observation_status(requestid=requestid, token=user.token)
+    requestid, state = get_observation_status(requestid=requestid, token=token)
     if state == 'PENDING':
         return Response("Not observed yet", status=status.HTTP_403_FORBIDDEN)
     elif not requestid:

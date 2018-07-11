@@ -98,6 +98,7 @@ function update_status(requestid, token) {
 
 function status_request(requestid, token) {
   var data;
+  console.log("Token - "+token)
   $.ajax(
     {
     url:'https://observe.lco.global/api/requests/'+requestid+'/',
@@ -107,8 +108,8 @@ function status_request(requestid, token) {
     contentType: 'application/json'})
     .done(function(rdata){
       data = rdata
-      if (rdata['state'] == 'PENDING' && rdata['requests'].length > 0){
-        status_userrequest(rdata['requests'][0]['id'], token);
+      if (rdata['state'] == 'PENDING' ){
+        status_userrequest(rdata['id'], token);
       } else if (rdata['state'] == 'COMPLETED' || rdata['state'] == 'WINDOW_EXPIRED' || rdata['state'] == 'CANCELED'){
         update_status(requestid, token);
       }
@@ -129,7 +130,7 @@ function status_request(requestid, token) {
 function status_userrequest(requestid, token) {
   var data;
   $.getJSON('https://observe.lco.global/api/requests/'+requestid+'/blocks/?canceled=false',
-    {headers: {'Authorization': 'Token '+token},
+    { 
     dataType: 'json',
     contentType: 'application/json'})
     .done(function(rdata){

@@ -35,11 +35,21 @@ class MissionView(LoginRequiredMixin, DetailView):
         except ObjectDoesNotExist:
             context['current_challenge'] = Challenge.objects.get(mission=mission, number=1)
 
+        active_missions = set(Progress.objects.filter(user=self.request.user).values_list('challenge__mission', flat=True))
+        context['active_missions'] = active_missions
+
         return context
 
 class MissionListView(LoginRequiredMixin, ListView):
     model = Mission
     template_name = "explorer/missionlist.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(MissionListView, self).get_context_data(**kwargs)
+        active_missions = set(Progress.objects.filter(user=self.request.user).values_list('challenge__mission', flat=True))
+        context['active_missions'] = active_missions
+
+        return context
 
 
 class ChallengeView(LoginRequiredMixin, DetailView):

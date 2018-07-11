@@ -9,12 +9,17 @@ from status.models import Progress
 def render_email(progress):
     if not progress.user.email:
         return False
-    if Progress.objects.get(id=progress.id).status == 'Failed':
+    if progress.status == 'Failed':
         plaintext = get_template('notify/mail_message_failed.txt')
         subject = 'Message from Serol!'
     else:
         plaintext = get_template('notify/mail_message.txt')
         subject = 'Update from Serol!'
+
+    if settings.DEBUG:
+        email = settings.DEMO_EMAIL
+    else:
+        email = progress.user.email
     data = {
                 'username' : progress.user.username,
                 'target'   : progress.target,
@@ -23,7 +28,7 @@ def render_email(progress):
                 'url'      : reverse('challenge',kwargs={'pk':progress.challenge.pk})
                  }
     text_content = plaintext.render(data)
-    message = (subject, text_content, settings.EMAIL_FROM, [progress.user.email])
+    message = (subject, text_content, settings.EMAIL_FROM, [email])
     return message
 
 def send_emails(messages):

@@ -16,7 +16,13 @@
       <h2>{% trans "Mission" %} {{mission.number}}</h1>
       <h3 class="mission-name">{{mission.name|safe}}</h1>
         {% if request.user|user_mission_state:mission.number %}
-        <p><a class="btn btn-info btn-lg" href="{% url 'mission' mission.pk %}" role="button">{% trans "Start the mission" %} &raquo;</a></p>
+        <p><a class="btn btn-info btn-lg" href="{% url 'mission' mission.pk %}" role="button">
+          {% if mission.pk in active_missions %}
+          {% trans "Continue mission" %} &raquo;</a>
+          {% else %}
+          {% trans "Start mission" %} &raquo;</a>
+          {% endif %}
+        </p>
         {% else %}
         <p class="p-3 mb-2 bg-grey text-white"><i class="far fa-lock-alt"></i> {% trans "Complete Mission 1 to unlock" %}</a></p>
         {% endif %}

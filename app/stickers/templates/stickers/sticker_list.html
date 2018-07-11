@@ -32,7 +32,7 @@
               <div class="col-4">
                 <a href="{% url 'summary' sticker.challenge.pk %}">
                   {% with "explorer/"|add:sticker.filename as icon_url %}
-                  <img class="img-fluid" src="{% static icon_url %}"  alt="{sticker.challenge.name}}">
+                  <img class="img-fluid" src="{% static icon_url %}"  alt="{{sticker.challenge.name}}">
                   {% endwith %}
                 </a>
                 <p>{{sticker.challenge.name}}</p>
