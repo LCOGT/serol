@@ -40,6 +40,7 @@ class MissionView(LoginRequiredMixin, DetailView):
 
         return context
 
+
 class MissionListView(LoginRequiredMixin, ListView):
     model = Mission
     template_name = "explorer/missionlist.html"
@@ -71,6 +72,28 @@ class ChallengeView(LoginRequiredMixin, DetailView):
                 context['targets'] = targets
 
         return self.render_to_response(context)
+
+
+class NextChallengeView(LoginRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        try:
+            latest = Progress.objects.filter(user=self.request.user,
+                                            status='Summary',
+                                            challenge__mission__number=kwargs['mission_num']
+                                            ).latest('last_update')
+            if not latest.challenge.is_last:
+                chal_id = Challenge.objects.get(number=latest.challenge.number + 1, mission=kwargs['mission_num']).id
+                return HttpResponseRedirect(reverse('challenge', kwargs={'pk':chal_id}))
+        except ObjectDoesNotExist:
+            if kwargs['mission_num'] in ['1', '2', '3']:
+                chals = {'1':'1','2':'6','3':'11'}
+                logger.debug('User accessing Mission {} for 1st time'.format(kwargs['mission_num']))
+                return HttpResponseRedirect(reverse('challenge', kwargs={'pk':chals[kwargs['mission_num']]}))
+            else:
+                logger.error("User tried to access mission {} which doesn't exist".format(kwargs['mission_num']))
+        return HttpResponseRedirect(reverse('missions'))
+
 
 class ChallengeRetry(LoginRequiredMixin, DetailView):
     model = Challenge

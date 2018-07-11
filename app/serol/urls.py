@@ -9,7 +9,7 @@ from django.views.generic import TemplateView
 
 from status.views import ScheduleView, StatusView
 from explorer.views import MissionView, MissionListView, ChallengeRedirectView, \
-    ChallengeView, AnalyseView, ChallengeSummary, ChallengeRetry
+    ChallengeView, AnalyseView, ChallengeSummary, ChallengeRetry, NextChallengeView
 from stickers.views import StickerView
 
 
@@ -19,6 +19,7 @@ urlpatterns = [
     url(r'^join/$', flatpage, {'url': '/join/'}, name='join'),
     url(r'^getting-started/$', flatpage, {'url' : '/getting-started/'}, name='getting-started'),
     url(r'^mission/(?P<pk>[0-9]+)/$', MissionView.as_view(), name="mission"),
+    url(r'^mission/(?P<mission_num>[0-9]+)/next/$', NextChallengeView.as_view(), name="challenge-next"),
     url(r'missions/$', MissionListView.as_view(), name="missions"),
     url(r'^challenge/(?P<pk>[0-9]+)/start/$', ChallengeView.as_view(), {'mode':'start'}, name="start"),
     url(r'^challenge/(?P<pk>[0-9]+)/observe/$', ChallengeView.as_view(), {'mode':'observe'}, name="observe"),

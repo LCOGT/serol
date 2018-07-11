@@ -20,7 +20,7 @@
           <a href="{% url 'missions' %}" class="btn btn-4 btn-4a">{% trans "start a new mission?" %}</a><br/>
           <a href="{% url 'stickers' %}" class="btn btn-4 btn-4a">{% trans "see your stickers" %}</a>
           {% else %}
-          <a href="{% progress_url request.user %}" class="btn btn-4 btn-4a animated tada">{% trans "start a new challenge?" %}</a>
+          <a href="{% url 'challenge-next' object.mission.number %}" class="btn btn-4 btn-4a animated tada">{% trans "start a new challenge?" %}</a>
           {% endif %}
         </p>
         </div>
