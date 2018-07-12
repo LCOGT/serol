@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.flatpages.views import flatpage
@@ -11,6 +11,7 @@ from status.views import ScheduleView, StatusView
 from explorer.views import MissionView, MissionListView, ChallengeRedirectView, \
     ChallengeView, AnalyseView, ChallengeSummary, ChallengeRetry, NextChallengeView
 from stickers.views import StickerView
+from highscore.views import HighScoreView
 
 
 urlpatterns = [
@@ -31,9 +32,12 @@ urlpatterns = [
     url(r'^challenge/(?P<pk>[0-9]+)/failed/$', ChallengeView.as_view(), {'mode':'failed'}, name="failed"),
     url(r'^challenge/(?P<pk>[0-9]+)/retry/$', ChallengeRetry.as_view(), name="retry"),
     url(r'^challenge/(?P<pk>[0-9]+)/$', ChallengeRedirectView.as_view(), name="challenge"),
+    url(r'^stickers/$', StickerView.as_view(), name='stickers'),
     url(r'^api/status/(?P<requestid>[0-9]+)/$', StatusView.as_view(), name="status"),
     url(r'^api/schedule/$', ScheduleView.as_view(), name='schedule'),
-    url(r'^stickers/$', StickerView.as_view(), name='stickers'),
+    # url(r'^api/highscore/add/$', AddHighScore.as_view() , name='highscore-add')
+    url(r'^api/highscore/leaders/', HighScoreView.as_view()),
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^admin/', admin.site.urls),
     url(r'^login/$', LoginView.as_view(template_name='explorer/login.html'), name='auth_login'),
     url(r'^logout/$', LogoutView.as_view(template_name= 'explorer/logout.html'), name='auth_logout'),

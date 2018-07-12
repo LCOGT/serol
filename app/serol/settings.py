@@ -21,6 +21,7 @@ ADMIN_SITE_HEADER = 'SEROL admin'
 # Application definition
 
 INSTALLED_APPS = [
+    'highscore.apps.HighscoreConfig',
     'explorer.apps.ExplorerConfig',
     'status.apps.StatusConfig',
     'stickers.apps.StickersConfig',

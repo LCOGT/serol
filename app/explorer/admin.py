@@ -8,6 +8,7 @@ from pagedown.widgets import AdminPagedownWidget
 from explorer.models import *
 from status.models import *
 from stickers.models import *
+from highscore.models import *
 
 
 class MissionAdmin(admin.ModelAdmin):
@@ -45,6 +46,8 @@ admin.site.register(Progress, ProgressAdmin)
 admin.site.register(Sticker)
 admin.site.register(PersonSticker)
 admin.site.register(Body)
+admin.site.register(Score)
+admin.site.register(LevelScore)
 
 # Re-register FlatPageAdmin
 admin.site.unregister(FlatPage)
