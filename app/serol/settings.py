@@ -36,7 +36,8 @@ INSTALLED_APPS = [
     'django.contrib.flatpages',
     'pagedown',
     'markdown_deux',
-    'rest_framework'
+    'rest_framework',
+    'rest_framework.authtoken'
 ]
 
 MIDDLEWARE = [
@@ -201,7 +202,14 @@ REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework_jsonp.renderers.JSONPRenderer',
     ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    )
 }
+
+
 
 PORTAL_API_URL     = 'https://observe.lco.global/api/'
 PORTAL_REQUEST_SUBMIT_API = PORTAL_API_URL + 'userrequests/'

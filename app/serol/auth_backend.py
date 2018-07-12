@@ -2,6 +2,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.hashers import check_password
 from django.utils.translation import ugettext as _
+from rest_framework.authtoken.models import Token
 import requests
 import logging
 
@@ -38,6 +39,8 @@ def lco_authenticate(request, username, password):
             # Create a new user. There's no need to set a password
             # because Valhalla auth will always be used.
             user = User(username=username)
+            # Give the new user a Django Rest Framework token
+            Token.objects.get_or_create(user=user)
         user.token = token
         user.archive_token = archivetoken
         user.default_proposal = profile[2]

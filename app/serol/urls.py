@@ -6,12 +6,13 @@ from django.contrib.flatpages.views import flatpage
 from django.contrib.staticfiles import views
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
+from rest_framework.authtoken.views import obtain_auth_token
 
 from status.views import ScheduleView, StatusView
 from explorer.views import MissionView, MissionListView, ChallengeRedirectView, \
     ChallengeView, AnalyseView, ChallengeSummary, ChallengeRetry, NextChallengeView
 from stickers.views import StickerView
-from highscore.views import HighScoreView
+from highscore.views import HighScoreView, AddHighScoreView
 
 
 urlpatterns = [
@@ -35,9 +36,9 @@ urlpatterns = [
     url(r'^stickers/$', StickerView.as_view(), name='stickers'),
     url(r'^api/status/(?P<requestid>[0-9]+)/$', StatusView.as_view(), name="status"),
     url(r'^api/schedule/$', ScheduleView.as_view(), name='schedule'),
-    # url(r'^api/highscore/add/$', AddHighScore.as_view() , name='highscore-add')
-    url(r'^api/highscore/leaders/', HighScoreView.as_view()),
-    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^api/highscore/add/$', AddHighScoreView.as_view() , name='highscore-add'),
+    url(r'^api/highscore/leaders/$', HighScoreView.as_view()),
+    url(r'^api-auth-token/$', obtain_auth_token),
     url(r'^admin/', admin.site.urls),
     url(r'^login/$', LoginView.as_view(template_name='explorer/login.html'), name='auth_login'),
     url(r'^logout/$', LogoutView.as_view(template_name= 'explorer/logout.html'), name='auth_logout'),
