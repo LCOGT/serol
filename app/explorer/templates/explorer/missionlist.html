@@ -1,0 +1,38 @@
+{% extends "explorer/base.html" %}
+{% load static i18n explorer_utils %}
+
+{% block main-content %}
+
+<div class="content-wrapper">
+<div class="content-wrapper-inner">
+<div class="container">
+  <h1 class="bg-blur">Missions</h1>
+  <div class="row  info-blue">
+  {% for mission in object_list %}
+    <div class="col-4">
+      {% with "explorer/"|add:mission.patch as icon_url %}
+      <img class="img-fluid" src="{% static icon_url %}"  alt="Mission {{mission.number}} patch">
+      {% endwith %}
+      <h2>{% trans "Mission" %} {{mission.number}}</h1>
+      <h3 class="mission-name">{{mission.name|safe}}</h1>
+        {% if request.user|user_mission_state:mission.number %}
+        <p><a class="btn btn-info btn-lg" href="{% url 'mission' mission.pk %}" role="button">
+          {% if mission.pk in active_missions %}
+          {% trans "Continue mission" %} &raquo;</a>
+          {% else %}
+          {% trans "Start mission" %} &raquo;</a>
+          {% endif %}
+        </p>
+        {% else %}
+        <p class="p-3 mb-2 bg-grey text-white"><i class="far fa-lock-alt"></i> {% trans "Complete Mission 1 to unlock" %}</a></p>
+        {% endif %}
+    </div>
+  {% endfor %}
+  </div>
+</div>
+</div>
+</div>
+
+{% endblock %}
+
+{% block ribbon %}{% endblock %}

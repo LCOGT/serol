@@ -1,0 +1,60 @@
+{% extends 'explorer/base.html' %}
+
+{% load i18n staticfiles %}
+
+{% block title %}{% trans "Your Stickers" %}{% endblock %}
+{% block ribbon %}{% endblock %}
+
+{% block main-content %}
+<div class="content-wrapper">
+<div class="content-wrapper-inner">
+<div class="container">
+  <div class="row">
+    <h1 class="bg-blur">{% trans "Stickers you've unlocked" %}</h1>
+    <p  class="bg-blur">{% trans "Below are the challenge stickers you have unlocked. Click each of them to see your pictures."%}</p>
+  </div>
+  {% for mission in missions %}
+  <div class="row pb-5">
+    <h2  class="bg-blur">Mission {{mission.number}}</h2>
+    <div class="info-blue">
+      <div class="row">
+        <div class="col-4">
+          <h2>{{mission.name}}</h2>
+          {% with "explorer/"|add:mission.patch as icon_url %}
+          <img class="img-fluid rounded" src="{% static icon_url %}"  alt="Mission {{mission.number}} patch">
+          <a href="{% url 'challenge-next' mission.number %}" class="btn btn-4 btn-4a animated tada">{% trans "start a new challenge?" %}</a>
+          {% endwith %}
+        </div>
+        <div class="col-8">
+          <div class="row">
+          {% for challenge in mission.challenge_set.all %}
+          {% for  sticker in challenge.sticker_set.all %}
+            {% if sticker in object_list %}
+              <div class="col-4">
+                <a href="{% url 'summary' sticker.challenge.pk %}">
+                  {% with "explorer/"|add:sticker.filename as icon_url %}
+                  <img class="img-fluid" src="{% static icon_url %}"  alt="{{sticker.challenge.name}}">
+                  {% endwith %}
+                </a>
+                <p>{{sticker.challenge.name}}</p>
+              </div>
+            {% else %}
+            <div class="col-4">
+              <img class="locked-sticker img-fluid" src="{% static 'explorer/images/locked.png' %}" alt="{% trans "This sticker is locked" %}">
+              <p>{{sticker.challenge.name}}</p>
+            </div>
+            {% endif %}
+            {% endfor %}
+          {% empty%}
+          <p>No stickers defined?</p>
+          {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}
+</div>
+</div>

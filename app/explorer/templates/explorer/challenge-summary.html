@@ -1,0 +1,52 @@
+{% extends 'explorer/challenge-base.html' %}
+{% load static i18n  explorer_utils %}
+
+{% block title %}{{object.name}}{% endblock %}
+
+{% block main-body %}
+<div class="centre-container">
+<h1>{% if object.is_last%}{% trans "Mission Completed!" %}{% else %}{% trans "Challenge Completed!" %}{%endif%}</h1>
+  <div class="row">
+        <div class="col-lg-4">
+          {% for sticker in stickers %}
+          <p>
+            {% with "explorer/"|add:sticker.sticker.filename as icon_url %}
+            <img class="img-fluid rounded" src="{% static icon_url %}"  alt="{{sticker.sticker.desc}}">
+            {% endwith %}
+          </p>
+          {% endfor %}
+          <p>
+          {% if object.is_last %}
+          <a href="{% url 'missions' %}" class="btn btn-4 btn-4a">{% trans "start a new mission?" %}</a><br/>
+          <a href="{% url 'stickers' %}" class="btn btn-4 btn-4a">{% trans "see your stickers" %}</a>
+          {% else %}
+          <a href="{% url 'challenge-next' object.mission.number %}" class="btn btn-4 btn-4a animated tada">{% trans "start a new challenge?" %}</a>
+          {% endif %}
+        </p>
+        </div>
+        <div class="col-lg-8">
+          <img src="{% static 'explorer/images/placeholder.jpg' %}" alt="{{object.name}}" class="img-fluid rounded" id="img-holder">
+          <p>Your picture of {{progress.target}}</p>
+        </div>
+    </div>
+          <h3>{% trans "From looking at your picture, your analysis was:"%}</h3>
+          <dl class="row">
+            {% for answer in answers %}
+            <dt class="col-sm-6">{{answer.answer.question.text}}</dt>
+            <dd class="col-sm-6">{{answer.answer.text}}</dd>
+            {% endfor %}
+          </dl>
+  </div>
+</div>
+{% endblock %}
+
+{% block script-content %}
+<script src="{% static 'explorer/js/utils.js' %}" ></script>
+<script>
+var frameid = {{ progress.frameids}};
+
+$(document).ready(function(){
+  get_colour_image(localStorage.getItem('archive_token'), frameid, mode='analyser');
+});
+</script>
+{% endblock %}

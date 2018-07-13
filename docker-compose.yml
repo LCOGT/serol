@@ -1,0 +1,15 @@
+version: '2'
+services:
+  serol:
+    mem_limit: 256m
+    image: docker.lco.global/serol:latest
+    environment:
+      DB_HOST: mysql.db.location
+      DB_NAME: serol
+      DB_PASSWD: PASSWORD
+      DB_USER: USERNAME
+      EMAIL_USERNAME: EMAIL
+      EMAIL_PASSWORD: EMAIL_PASSWORD
+      PORTAL_TOKEN: PORTAL_TOKEN
+    labels:
+      io.rancher.container.pull_image: always

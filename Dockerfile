@@ -1,34 +1,22 @@
-FROM centos:7
+FROM python:3.6-alpine
 MAINTAINER Edward Gomez <egomez@lco.global>
 
 EXPOSE 80
+
+ENV PYTHONUNBUFFERED 1
+ENV C_FORCE_ROOT true
+
+# install depedencies
+COPY requirements.pip /var/www/apps/serol/
+RUN apk --no-cache add mariadb-client-libs \
+        && apk --no-cache add --virtual .build-deps gcc git mariadb-dev musl-dev \
+        && apk --no-cache add libjpeg-turbo jpeg-dev libjpeg libjpeg-turbo-dev imagemagick zlib zlib-dev \
+        && pip --no-cache-dir --trusted-host=buildsba.lco.gtn install -r /var/www/apps/serol/requirements.pip \
+        && apk --no-cache del .build-deps
+
+# install entrypoint
+COPY docker/init /
+
+# install web application
+COPY app /var/www/apps/serol/
 ENTRYPOINT [ "/init" ]
-
-# Setup the Python Django environment
-ENV PYTHONPATH /var/www/serol
-ENV DJANGO_SETTINGS_MODULE serol.settings
-
-# install and update packages
-RUN yum -y install epel-release \
-        && yum -y install cronie postgresql96  nginx supervisor uwsgi-plugin-python \
-        && yum -y install libjpeg-devel ImageMagick python-devel python-pip \
-        && yum -y install 'https://www.astromatic.net/download/stiff/stiff-2.4.0-1.x86_64.rpm' \
-        && yum -y install 'https://www.astromatic.net/download/sextractor/sextractor-2.19.5-1.x86_64.rpm' \
-        && yum -y groupinstall "Development Tools" \
-        && yum -y update \
-        && yum -y clean all
-
-# install python requirements
-COPY requirements.pip /var/www/serol/requirements.pip
-RUN pip install --upgrade pip \
-        && pip install -r /var/www/serol/requirements.pip \
-        && rm -rf /root/.cache /root/.pip
-
-# Ensure crond will run on all host operating systems
-RUN sed -i -e 's/\(session\s*required\s*pam_loginuid.so\)/#\1/' /etc/pam.d/crond
-
-# install configuration
-COPY docker/ /
-
-# install webapp
-COPY . /var/www/serol

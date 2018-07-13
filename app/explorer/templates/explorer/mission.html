@@ -1,0 +1,29 @@
+{% extends "explorer/base.html" %}
+{% load i18n explorer_utils %}
+
+{% block mission-class %}mission-{{object.number}}{% endblock %}
+
+{% block main-content %}
+
+<div class="content-wrapper">
+  <div class="container content-wrapper-inner challenge-header">
+  <div class="row">
+    <div class="col-12  mission-content">
+      <h1>{% trans "Mission" %} {{object.number}}</h1>
+      <h1 class="mission-name">{{object.name|safe}}</h1>
+      <p>
+        <a href="{% url 'challenge-next' object.number %}" class="btn btn-info btn-lg animated tada">
+        {% if mission.pk in active_missions %}
+        {% trans "Continue mission" %} &raquo;</a>
+        {% else %}
+        {% trans "Start mission" %} &raquo;</a>
+        {% endif %}
+        </a></p>
+    </div>
+  </div>
+</div>
+</div>
+
+{% endblock %}
+
+{% block ribbon %}{% endblock %}
