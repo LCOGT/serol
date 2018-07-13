@@ -12,3 +12,4 @@ six
 rollbar
 gunicorn[gevent]==19.8.1
 whitenoise==3.3.1
+profanityfilter

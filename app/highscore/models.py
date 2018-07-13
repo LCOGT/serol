@@ -19,4 +19,4 @@ class LevelScore(models.Model):
         return "{} scored {} on level {}".format(self.user, self.score, self.level)
 
     class Meta:
-        unique_together = (("username","level"),)
+        unique_together = (("user","level"),)
