@@ -32,7 +32,7 @@ class Mission(models.Model):
 class Challenge(models.Model):
     number = models.IntegerField(help_text=_("Which number in the mission is this challenge?"))
     name = models.CharField(max_length=200)
-    mission = models.ForeignKey(Mission)
+    mission = models.ForeignKey(Mission, on_delete=models.CASCADE)
     description = models.TextField(help_text=_("Start page info"))
     action = models.CharField(max_length=200, help_text=_("What the user should do on Observe page"))
     category = models.CharField(max_length=30, help_text=_("What type of object is this?"), blank=True, null=True)

@@ -26,7 +26,7 @@ STICKERS = (
 class Sticker(models.Model):
     desc = models.CharField(max_length=200)
     filename = models.CharField(max_length=40, choices=STICKERS)
-    challenge = models.ForeignKey(Challenge, null=True, blank=True)
+    challenge = models.ForeignKey(Challenge, null=True, blank=True, on_delete=models.CASCADE)
     progress = models.CharField(max_length=20, choices=settings.PROGRESS_OPTIONS)
     active = models.BooleanField(default=True)
 
@@ -34,8 +34,8 @@ class Sticker(models.Model):
         return "{}".format(self.desc)
 
 class PersonSticker(models.Model):
-    user = models.ForeignKey(User)
-    sticker = models.ForeignKey(Sticker)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    sticker = models.ForeignKey(Sticker, on_delete=models.CASCADE)
 
     def __str__(self):
         return "{} for {}".format(self.sticker, self.user)
