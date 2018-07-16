@@ -70,12 +70,12 @@ class StatusView(APIView):
 
     def get(self, request, requestid, format=None):
 
-        return update_status(user=request.user, requestid=requestid, token=request.user.token)
+        return update_status(requestid=requestid, token=request.user.token)
 
 
-def update_status(user, requestid, token):
+def update_status(requestid, token):
     try:
-        progress = Progress.objects.get(requestid=requestid, user=user)
+        progress = Progress.objects.get(requestid=requestid)
     except:
         return Response("Progress object not found", status=status.HTTP_404_NOT_FOUND)
     if progress.status != 'Submitted':
