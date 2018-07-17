@@ -20,6 +20,8 @@ ADMIN_SITE_HEADER = 'SEROL admin'
 
 # Application definition
 
+CORS_ORIGIN_ALLOW_ALL=True
+
 INSTALLED_APPS = [
     'highscore.apps.HighscoreConfig',
     'explorer.apps.ExplorerConfig',
@@ -36,11 +38,13 @@ INSTALLED_APPS = [
     'django.contrib.flatpages',
     'pagedown',
     'markdown_deux',
+    'corsheaders',
     'rest_framework',
     'rest_framework.authtoken'
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
