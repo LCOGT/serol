@@ -1,5 +1,8 @@
 from django.core.management.base import BaseCommand, CommandError
+from django.conf import settings
+from rest_framework import status
 
+from status.images import make_request_image
 from status.views import update_status
 from status.models import Progress
 
@@ -11,7 +14,10 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         if options['request_id']:
-            update_status(options['request_id'], token=settings.PORTAL_TOKEN)
+            pgs = Progress.objects.filter(requestid=options['request_id'])
         else:
-            for pg in Progress.objects.filter(state=Submitted):
-                update_status(pg.requestid, token=settings.PORTAL_TOKEN)
+            pgs = Progress.objects.filter(state=Submitted)
+        for pg in pgs:
+            resp = update_status(pg.requestid, token=settings.PORTAL_TOKEN)
+            if status.is_success(resp.status_code):
+                make_request_image(request_id=pg.requestid, category=pg.challenge.avm_code, targetname=pg.target)

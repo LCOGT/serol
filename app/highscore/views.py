@@ -12,7 +12,7 @@ import logging
 
 from highscore.models import Score, LevelScore
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("status")
 
 class ScoreSerializer(serializers.ModelSerializer):
 
