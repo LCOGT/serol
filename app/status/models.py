@@ -23,14 +23,14 @@ class Proposal(models.Model):
 class User(AbstractUser):
     token = models.CharField(help_text=_('Authentication for Valhalla'), max_length=50, blank=True, null=True)
     archive_token = models.CharField(help_text=_('Authentication for LCO archive'), max_length=50, blank=True, null=True)
-    default_proposal = models.ForeignKey(Proposal, null=True, blank=True)
+    default_proposal = models.ForeignKey(Proposal, null=True, blank=True, on_delete=models.CASCADE)
     mission_1 = models.BooleanField(help_text=_('Has user competed Mission 1?'), default=False)
     mission_2 = models.BooleanField(help_text=_('Has user competed Mission 2?'), default=False)
     mission_3 = models.BooleanField(help_text=_('Has user competed Mission 3?'), default=False)
 
 class Progress(models.Model):
-    user = models.ForeignKey(User)
-    challenge = models.ForeignKey(Challenge)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    challenge = models.ForeignKey(Challenge, on_delete=models.CASCADE)
     requestid = models.CharField(max_length=20, null=True, blank=True)
     frameids = models.CharField(max_length=20, null=True, blank=True)
     status = FSMField(default='New', choices=settings.PROGRESS_OPTIONS)
@@ -82,15 +82,15 @@ class Progress(models.Model):
 
 class Question(models.Model):
     text = models.TextField()
-    challenge = models.ForeignKey(Challenge)
+    challenge = models.ForeignKey(Challenge, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name_plural = 'questions'
 
 class Answer(models.Model):
     text = models.TextField()
-    question = models.ForeignKey(Question)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
 
 class UserAnswer(models.Model):
-    answer = models.ForeignKey(Answer)
-    user = models.ForeignKey(User)
+    answer = models.ForeignKey(Answer, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)

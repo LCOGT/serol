@@ -71,7 +71,7 @@ function add_answers_to_form() {
   <h1>{% trans "Analyse your image!" %}</h1>
   <div class="row">
     <div class="col-lg-8">
-      <img src="http://placehold.it/300x300" alt="{{object.name}}" class="img-fluid rounded" id="img-holder">
+      <img src="{% static 'explorer/images/placeholder.jpg' %}" alt="{{object.name}}" class="img-fluid rounded" id="img-holder">
     </div>
     <div class="col-lg-4">
         <div class="arrow bottom right"></div>

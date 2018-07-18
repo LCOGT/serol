@@ -10,7 +10,7 @@ class Score(models.Model):
         return "{} scored {}".format(self.username, self.score)
 
 class LevelScore(models.Model):
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     level = models.IntegerField(default=1)
     score = models.FloatField(default=0.0)
     username = models.CharField(max_length=10)

@@ -18,6 +18,9 @@ class Command(BaseCommand):
                 message = render_email(p)
                 if message:
                     messages.append(message)
+                # Create an image with our pipeline
+                img_resp = make_image(p)
+                self.stdout.write('Image for {}: {}'.format(p.id, img_resp))
 
         self.stdout.write('Sending {} emails'.format(len(messages)))
         send_emails(messages)
