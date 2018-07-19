@@ -23,6 +23,11 @@ class ScoreSerializer(serializers.ModelSerializer):
     def validate_username(self, value):
         return check_username(value)
 
+    def validate_score(self, value):
+        if not value:
+            raise serializers.ValidationError(_("Score is required"))
+        return value
+
 class LevelScoreSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -31,6 +36,16 @@ class LevelScoreSerializer(serializers.ModelSerializer):
 
     def validate_username(self, value):
         return check_username(value)
+
+    def validate_score(self, value):
+        if not value:
+            raise serializers.ValidationError(_("Score is required"))
+        return value
+
+    def validate_level(self, value):
+        if not value:
+            raise serializers.ValidationError(_("Level is required"))
+        return value
 
 class HighScoreView(generics.ListAPIView):
     """
@@ -58,7 +73,6 @@ class AddHighScoreView(APIView):
                 oldscore = LevelScore.objects.get(user=request.user,level=data['level'])
                 ser = LevelScoreSerializer(oldscore, data=data)
             except ObjectDoesNotExist:
-                print(data)
                 ser = LevelScoreSerializer(data=data)
 
         if not ser.is_valid(raise_exception=True):

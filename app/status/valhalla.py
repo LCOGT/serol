@@ -17,7 +17,7 @@ def get_observation_status(requestid, token):
     '''
     if not requestid:
         return False, "No request ID provided"
-        
+
     headers = {'Authorization': 'Token {}'.format(token)}
     url = settings.PORTAL_REQUEST_API + requestid
     try:
@@ -92,8 +92,8 @@ def request_format(target, start, end, obs_filter, proposal, aperture='0m4'):
              # Optional fields. Defaults are as below.
             'type'            : 'EXPOSE',  # The type of the molecule
             'instrument_name' : default_camera, # This resolves to the main science camera on the scheduled resource
-            'bin_x'           : 2,                 # Your binning choice. Right now these need to be the same.
-            'bin_y'           : 2,
+            'bin_x'           : 1,                 # Your binning choice. Right now these need to be the same.
+            'bin_y'           : 1,
             'defocus'       : 0.0             # Mechanism movement of M2, or how much focal plane has moved (mm)
             }
         molecules.append(molecule)
@@ -108,7 +108,7 @@ def request_format(target, start, end, obs_filter, proposal, aperture='0m4'):
         "constraints" : {'max_airmass' : 2.0, "min_lunar_distance": 30.0,},
         "location" : location,
         "molecules" : molecules,
-        "observation_note" : "Serol Request",
+        "observation_note" : "SEROL",
         "target" : target,
         "type" : "request",
         "windows" : [window],
