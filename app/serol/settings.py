@@ -162,30 +162,26 @@ MARKDOWN_DEUX_STYLES = {
 
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': True,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
     'handlers': {
         'console': {
             'class': 'logging.StreamHandler',
+            'formatter': 'simple',
         },
     },
     'loggers': {
         '': {
             'handlers': ['console'],
             'propagate': True,
-            'level': 'INFO',
-        },
-        'django': {
-            'handlers': ['console'],
-            'level': 'INFO',
-        },
-       'status': {
-            'handlers': ['console'],
-            'level': 'INFO',
-            'propagate': True,
-        },
+            'level': 'DEBUG',
+        }
     },
 }
-
 
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (

@@ -15,7 +15,7 @@ import six
 
 from status.planet import planet_process
 
-logger = logging.getLogger("status")
+logger = logging.getLogger(__name__)
 
 def lco_api_call(url, token):
     '''
@@ -49,7 +49,11 @@ def get_archive_data(out_dir, request_id):
         url = "{}?REQNUM={}&ordering=-id".format(settings.ARCHIVE_FRAMES_URL, subreq_id)
         success, r = lco_api_call(url, settings.ARCHIVE_TOKEN)
         if success:
+            logger.debug('Downloading {}'.format(req['id']))
             dl_sort_data_files(r, out_dir)
+        else:
+            logger.debug('API call failed')
+            return False
     return True
 
 def download_file(out_file, url):
@@ -64,21 +68,26 @@ def dl_sort_data_files(r, out_path):
     '''
     Downloads the highest reduction level available
     '''
-    rlevels = {91:[],11:[],00:[]}
+    rlevels = {'91':[],'11':[],'0':[]}
+    raw = False
     # Make subdirectory
     if not os.path.exists(out_path):
         os.makedirs(out_path)
     for res in r['results']:
-        rlevels[res['RLEVEL']].append({'filename':res['filename'],'url':res['url']})
-    if len(rlevels[91]) >= len(rlevels[11]):
-        logger.info("BANSAI reduction")
-        files = rlevels[91]
-    elif len(rlevels[11]) >= len(rlevels[00]):
-        logger.info("Quicklook reduction")
-        files = rlevels[11]
+        rl = str(res['RLEVEL'])
+        rlevels[rl].append({'filename':res['filename'],'url':res['url']})
+    logger.debug(rlevels)
+    if (len(rlevels['91']) >= len(rlevels['11'])) and len(rlevels['91']) > 0:
+        files = rlevels['91']
+    elif (len(rlevels['11']) >= len(rlevels['0'])) and len(rlevels['91']) > 0:
+        files = rlevels['11']
+    elif len(rlevels['0']) > 0:
+        raw = True
+        files = rlevels['0']
     else:
-        logger.info("RAW")
-        files = rlevels[00]
+        logger.info("No Image files available")
+        return False
+    logger.debug(files)
     for response in files:
         out_file = os.path.join(out_path, response['filename'])
         download_file(out_file, response['url'])
@@ -175,6 +184,7 @@ def make_request_image(request_id, targetname, category=None, name=None):
 
     img_list = sorted(glob(os.path.join(tmp_dir,"*.fz")))
     new_filepath = os.path.join(settings.IMAGE_ROOT,name)
+    logger.info("{} files downloaded".format(len(img_list)))
     if category == '1.1':
         r = planet_process(infile=img_list[0],outfile=new_filepath, planet=targetname)
     else:
