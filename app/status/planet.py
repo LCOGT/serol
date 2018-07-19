@@ -11,8 +11,8 @@ def planet_data_scale(data):
     return data, cutoff
 
 def scale_for_jupiter(filename):
-    hdul = fits.open(filename)
-    data = hdul[1].data
+    data = fits.getdata(filename)
+    data = data.astype(np.float32)
     min_val = np.percentile(data,99.9)
     data -= min_val
     data, cutoff = planet_data_scale(data)
@@ -22,8 +22,8 @@ def scale_for_jupiter(filename):
     return scaled_planet
 
 def scale_for_moons(filename):
-    hdul = fits.open(filename)
-    data = hdul[1].data
+    data = fits.getdata(filename)
+    data = data.astype(np.float32)
     data[data<0.] = 0.
     data = np.arcsinh(data)
     moon_med = np.median(data)
@@ -48,6 +48,7 @@ def create_saturn_image(infile, outfile):
     Makes a single colour Saturn image, rotating and cropping appropriately
     '''
     data = fits.getdata(infile)
+    data = data.astype(np.float32)
     min_val = np.percentile(data,99.9)
     data -= min_val
     scaled_planet = data*256./(data.max())
