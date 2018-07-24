@@ -1,6 +1,8 @@
 {% extends "explorer/base.html" %}
 {% load static i18n explorer_utils %}
 
+{% block title %}{% trans "Missions" %}{% endblock %}
+
 {% block main-content %}
 
 <div class="content-wrapper">
@@ -16,7 +18,7 @@
       <h2>{% trans "Mission" %} {{mission.number}}</h1>
       <h3 class="mission-name">{{mission.name|safe}}</h1>
         {% if request.user|user_mission_state:mission.number %}
-        <p><a class="btn btn-info btn-lg" href="{% url 'mission' mission.pk %}" role="button">
+        <p><a class="btn btn-info btn-lg" href="{% url 'mission' mission.pk %}" role="button" id="mission-btn-{{mission.number}}">
           {% if mission.pk in active_missions %}
           {% trans "Continue mission" %} &raquo;</a>
           {% else %}
@@ -24,7 +26,7 @@
           {% endif %}
         </p>
         {% else %}
-        <p class="p-3 mb-2 bg-grey text-white"><i class="far fa-lock-alt"></i> {% trans "Complete Mission 1 to unlock" %}</a></p>
+        <p class="p-3 mb-2 bg-grey text-white" id="mission-btn-{{mission.number}}"><i class="far fa-lock-alt"></i> {% trans "Complete Mission 1 to unlock" %}</p>
         {% endif %}
     </div>
   {% endfor %}

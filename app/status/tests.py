@@ -10,22 +10,11 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.support.wait import WebDriverWait
 import time
 
+from serol.basetest import FunctionalTest
+from serol.mocks import *
 from .views import RequestSerializer, ScheduleView, StatusView, save_progress
 from status.models import User, Proposal, Progress
 from status.valhalla import process_observation_request, request_format, format_sidereal_object
-
-def mock_lco_authenticate(request, username, password):
-    return None
-
-def mock_submit_request(params, token):
-    return True, '000'
-
-def mock_submit_request_check_proposal(params, token):
-    if params['proposal'] == 'LCOEPO2018A-001':
-        return True, 'XXX'
-    elif params['proposal'] == 'LCOEPO2018A-002':
-        return False, 'Wrong proposal'
-
 
 class ScheduleTest(TestCase):
     def setUp(self):
@@ -117,65 +106,7 @@ class ScheduleTest(TestCase):
         self.assertEqual(target, params['object_name'])
 
 
-class FunctionalTest(StaticLiveServerTestCase):
-
-    fixtures = ['mission-data.json']
-
-    def __init__(self, *args, **kwargs):
-        super(FunctionalTest, self).__init__(*args, **kwargs)
-
-        if settings.DEBUG == False:
-            settings.DEBUG = True
-
-    def setUp(self):
-
-        fp = webdriver.FirefoxProfile()
-        fp.set_preference("browser.startup.homepage", "about:blank");
-        fp.set_preference("startup.homepage_welcome_url", "about:blank");
-        fp.set_preference("startup.homepage_welcome_url.additional", "about:blank");
-
-        if not hasattr(self, 'browser'):
-            firefox_capabilities = DesiredCapabilities.FIREFOX
-            self.browser = webdriver.Firefox(capabilities=firefox_capabilities, firefox_profile=fp)
-        self.browser.implicitly_wait(5)
-
-        proposal_params1 = {
-        'code': 'LCOEPO2014A-010',
-        'active': True
-        }
-        p1 = Proposal(**proposal_params1)
-        p1.save()
-
-        self.username = 'ada'
-        self.password = 'jenkins'
-        self.email = 'ada@jenkins.org'
-        self.ada = User.objects.create_user(username=self.username, email=self.email, default_proposal = p1)
-        self.ada.set_password(self.password)
-        self.ada.first_name= 'Ada'
-        self.ada.last_name = 'Jenkins'
-        self.ada.is_active=1
-        self.ada.save()
-
-    @contextmanager
-    def wait_for_page_load(self, timeout=30):
-        old_page = self.browser.find_element_by_tag_name('html')
-        yield
-        WebDriverWait(self.browser, timeout).until(
-            staleness_of(old_page)
-        )
-
-    @contextmanager
-    def wait_for_js_load(self, element_id, timeout=10):
-        yield WebDriverWait(self.browser, timeout).until(
-            visibility_of_element_located((By.ID, element_id))
-            )
-
 class NewVisitorTest(FunctionalTest):
-
-    def tearDown(self):
-        self.browser.refresh()
-        #        self.browser.implicitly_wait(5)
-        self.browser.quit()
 
     @patch('serol.auth_backend.lco_authenticate', mock_lco_authenticate)
     @patch('status.valhalla.submit_observation_request', mock_submit_request)
@@ -188,14 +119,7 @@ class NewVisitorTest(FunctionalTest):
         self.assertIn('Serol', self.browser.title)
 
         # She tries to login
-        with self.wait_for_page_load(timeout=10):
-            self.browser.find_element_by_link_text('Login').click()
-        username_input = self.browser.find_element_by_id("username")
-        username_input.send_keys(self.username)
-        password_input = self.browser.find_element_by_id("password")
-        password_input.send_keys(self.password)
-        with self.wait_for_page_load(timeout=10):
-            self.browser.find_element_by_id("login-btn").click()
+        self.login(self.username, self.password)
 
         # Ada navigates to the first Challenge and clicks start
         self.browser.get('{}{}'.format(self.live_server_url,'/challenge/1/'))
@@ -218,6 +142,8 @@ class NewVisitorTest(FunctionalTest):
         self.assertEqual(progress.target, 'Uranus')
         self.assertEqual(progress.requestid, '000')
 
+        self.tearDown()
+
     @patch('serol.auth_backend.lco_authenticate', mock_lco_authenticate)
     @patch('status.valhalla.submit_observation_request', mock_submit_request)
     def test_start(self):
@@ -238,6 +164,8 @@ class NewVisitorTest(FunctionalTest):
 
         # Ada navigates to the first Challenge and clicks start
         self.browser.get('{}{}'.format(self.live_server_url,'/challenge/1/'))
+
+        self.tearDown()
 
 if __name__ == '__main__':
     unittest.main(warnings='ignore')
