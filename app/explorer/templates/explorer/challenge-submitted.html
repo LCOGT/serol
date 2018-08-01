@@ -5,23 +5,26 @@
 
 {% block main-content %}
       <div class="row">
-        <div class="col-6 offset-2">
+        <div class="col-5 offset-2">
+          <div id="status-serol"></div>
+        </div>
 
-          <div id="clock"></div>
-
-          <div id="status-info">
-            <span id="request-site"><i class="far fa-cog fa-w-16 fa-spin fa-3x fa-fw"></i></span>
+        <div class="col">
+          <h3>{% trans "Where:"%} <span id="location-text"></span></h3>
+            <div class="worldMap container-fluid">
+        			<img src='{% static "explorer/images/serol_network_map.jpg" %}' class="bgMap rounded" />
+              <div class="location ogg" data-location="ogg"></div>
+              <div class="location elp" data-location="elp"></div>
+              <div class="location tfn" data-location="tfn"></div>
+              <div class="location cpt" data-location="cpt"></div>
+              <div class="location coj" data-location="coj"></div>
+              <div class="location lsc" data-location="lsc"></div>
           </div>
-        </div>
-
-        <div class="col-4">
-            <div class="bubble">
-              <p>{% trans "I'm asking my telescope friends to take a picture of " %} <strong>{{progress.target}}</strong>
-              {% trans "for you" %}</p>
-            </div>
-        </div>
-
       </div>
+    </div>
+
+    <div class="row">
+
     </div>
 
 {% endblock %}
@@ -50,5 +53,18 @@ var animData = {
     path: '{% static "explorer/js/clock.json" %}'
 };
 anim = lottie.loadAnimation(animData);
+
+var serolStatus = {
+    container: document.getElementById('status-serol'),
+    renderer: 'svg',
+    loop: true,
+    autoplay: true,
+    autoloadSegments: true,
+    rendererSettings: {
+        progressiveLoad:false
+    },
+    path: '{% static "explorer/js/status-serol.json" %}'
+};
+serolanim = lottie.loadAnimation(serolStatus);
 </script>
 {% endblock%}

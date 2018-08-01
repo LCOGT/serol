@@ -130,7 +130,7 @@ function status_request(requestid, token) {
 function status_userrequest(requestid, token) {
   var data;
   $.getJSON('https://observe.lco.global/api/requests/'+requestid+'/blocks/?canceled=false',
-    { 
+    {
     dataType: 'json',
     contentType: 'application/json'})
     .done(function(rdata){
@@ -141,7 +141,8 @@ function status_userrequest(requestid, token) {
         var site = site_codes[rdata[0]['site']];
         console.log("SCHEDULED"+rdata);
         $('.bubble').html("<p>Your picture will be taken in <strong>"+flexytime+"</strong> by a telescope in <strong>"+site+"</strong>");
-        update_site();
+        update_site(rdata[0]['site']);
+        $("."+rdata[0]['site']).addClass('location-highlight');
       } else {
         $('.bubble').html("<p>Hmmm. I'll need to think about this. Check back later!</p><p>I'll email you when I have your picture, too.</p>");
         console.log("NOT SCHEDULED YET");
@@ -154,21 +155,6 @@ function status_userrequest(requestid, token) {
     return data;
 }
 
-function serol_alert_animation(){
-  $('.serol-antenna').addClass('serol-antenna-flash');
-  $('.serol-pupil-normal').toggle();
-  $('.serol-pupil-shock').toggle();
-  $('.serol-mouth-normal').toggle();
-  $('.serol-mouth-shock').toggle();
-}
-
-function serol_end_alert(){
-  $('.serol-antenna').removeClass('serol-antenna-flash');
-  $('.serol-pupil-normal').toggle();
-  $('.serol-pupil-shock').toggle();
-  $('.serol-mouth-normal').toggle();
-  $('.serol-mouth-shock').toggle();
-}
 
 function get_colour_image(token, frameid, mode){
   $.get({url:'https://thumbnails.lco.global/'+frameid+'/?color=true&width=600&height=600',
@@ -232,9 +218,10 @@ function update_date(days, hours, minutes){
   return txt;
 }
 
-function update_site(){
-  var txt = '<i class="far fa-hourglass-start fa-w-16 fa-3x fa-fw"></i>';
-  $('#request-site').html(txt)
+function update_site(siteid){
+  var site = site_codes[siteid];
+  $("."+siteid).addClass('location-highlight');
+  $('#location-text').html(site)
 }
 
 function startEnd(date) {
