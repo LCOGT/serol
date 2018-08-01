@@ -114,10 +114,6 @@ function status_request(requestid, token) {
         update_status(requestid, token);
       }
 
-      serol_alert_animation();
-        setTimeout(function(){
-          serol_end_alert();
-        }, 5000);
       console.log("DONE"+data);
     })
     .fail(function(rdata){
@@ -137,10 +133,11 @@ function status_userrequest(requestid, token) {
       if (rdata.length > 0){
         var d2 = new Date(rdata[0]['start']);
         var d1 = new Date();
-        var flexytime = update_date(DateDiff.inDays(d1,d2), DateDiff.inHours(d1,d2), DateDiff.inMinutes(d1,d2));
+        var flextime = update_date(DateDiff.inDays(d1,d2), DateDiff.inHours(d1,d2), DateDiff.inMinutes(d1,d2));
         var site = site_codes[rdata[0]['site']];
         console.log("SCHEDULED"+rdata);
-        $('.bubble').html("<p>Your picture will be taken in <strong>"+flexytime+"</strong> by a telescope in <strong>"+site+"</strong>");
+        $('.calendar-outer .info').html(flextime['units']);
+        $('.calendar-inner .info').html(flextime['number']);
         update_site(rdata[0]['site']);
         $("."+rdata[0]['site']).addClass('location-highlight');
       } else {
@@ -207,15 +204,19 @@ function show_identify_answer(class_id){
 }
 
 function update_date(days, hours, minutes){
-  var txt;
+  var number;
+  var units;
   if  (days >0){
-    txt = days+" days";
+    number = days;
+    units = "days";
   }else if (hours >1){
-    txt = hours+" hours";
+    number = hours;
+    units = "hours";
   }else{
-    txt = minutes+" mins";
+    number = minutes;
+    units = "mins";
   }
-  return txt;
+  return {'number':number, 'units': units};
 }
 
 function update_site(siteid){
