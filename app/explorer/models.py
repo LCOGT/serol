@@ -14,6 +14,14 @@ ICONS = (
         ('2.3-asteroid.png','Asteroid')
 )
 
+FACT_CATEGORIES = (
+                ('En','Engineering'),
+                ('HU','Humour'),
+                ('AS','Astronomy'),
+                ('OP','Operations')
+)
+
+
 PATCHES = (
     ('patches/GetToKnowTheNightSky_patch.png', 'Mission 1'),
     ('patches/LifeAndDeathOfStars_patch.png', 'Mission 2'),
@@ -70,3 +78,15 @@ class Body(models.Model):
 
     def __str__(self):
         return "{}".format(self.name)
+
+class Fact(models.Model):
+    tagline = models.CharField(max_length=200)
+    desc = models.TextField(blank=True, null=True)
+    link = models.CharField(max_length=200, blank=True, null=True)
+    img = models.CharField(max_length=100, blank=True, null=True)
+    site = models.CharField(max_length=3, blank=True, null=True)
+    published = models.BooleanField(default=True)
+    category = models.CharField(max_length=2, choices=FACT_CATEGORIES, default='AS')
+
+    def __str__(self):
+        return "{}".format(self.tagline)

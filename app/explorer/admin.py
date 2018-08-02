@@ -40,6 +40,9 @@ class ProgressAdmin(admin.ModelAdmin):
     list_filter = ( 'status', 'challenge__number','challenge__mission__number')
     list_display = ('user','challenge','status','last_update')
 
+class FactAdmin(admin.ModelAdmin):
+    list_display = ('tagline','category','published')
+
 admin.site.register(Mission, MissionAdmin)
 admin.site.register(Challenge, ChallengeAdmin)
 admin.site.register(Progress, ProgressAdmin)
@@ -48,6 +51,7 @@ admin.site.register(PersonSticker)
 admin.site.register(Body)
 admin.site.register(Score)
 admin.site.register(LevelScore)
+admin.site.register(Fact, FactAdmin)
 
 # Re-register FlatPageAdmin
 admin.site.unregister(FlatPage)
