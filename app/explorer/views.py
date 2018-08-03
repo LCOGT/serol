@@ -37,6 +37,7 @@ class MissionView(LoginRequiredMixin, DetailView):
 
         active_missions = set(Progress.objects.filter(user=self.request.user).values_list('challenge__mission', flat=True))
         context['active_missions'] = active_missions
+        context['completed_missions'] = completed_missions
 
         return context
 

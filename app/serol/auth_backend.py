@@ -39,13 +39,13 @@ def lco_authenticate(request, username, password):
             # Create a new user. There's no need to set a password
             # because Valhalla auth will always be used.
             user = User(username=username)
-            # Give the new user a Django Rest Framework token
-            Token.objects.get_or_create(user=user)
         user.token = token
         user.archive_token = archivetoken
         user.default_proposal = profile[2]
         user.email = profile[3]
         user.save()
+        # Give the new user a Django Rest Framework token
+        Token.objects.get_or_create(user=user)
         # Finally add these tokens as session variables
         request.session['token'] = token
         request.session['archive_token'] = archivetoken

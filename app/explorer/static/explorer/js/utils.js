@@ -114,10 +114,6 @@ function status_request(requestid, token) {
         update_status(requestid, token);
       }
 
-      serol_alert_animation();
-        setTimeout(function(){
-          serol_end_alert();
-        }, 5000);
       console.log("DONE"+data);
     })
     .fail(function(rdata){
@@ -130,20 +126,22 @@ function status_request(requestid, token) {
 function status_userrequest(requestid, token) {
   var data;
   $.getJSON('https://observe.lco.global/api/requests/'+requestid+'/blocks/?canceled=false',
-    { 
+    {
     dataType: 'json',
     contentType: 'application/json'})
     .done(function(rdata){
       if (rdata.length > 0){
         var d2 = new Date(rdata[0]['start']);
         var d1 = new Date();
-        var flexytime = update_date(DateDiff.inDays(d1,d2), DateDiff.inHours(d1,d2), DateDiff.inMinutes(d1,d2));
+        var flextime = update_date(DateDiff.inDays(d1,d2), DateDiff.inHours(d1,d2), DateDiff.inMinutes(d1,d2));
         var site = site_codes[rdata[0]['site']];
         console.log("SCHEDULED"+rdata);
-        $('.bubble').html("<p>Your picture will be taken in <strong>"+flexytime+"</strong> by a telescope in <strong>"+site+"</strong>");
-        update_site();
+        $('.calendar-outer .info').html(flextime['units']);
+        $('.calendar-inner .info').html(flextime['number']);
+        update_site(rdata[0]['site']);
+        $("."+rdata[0]['site']).addClass('location-highlight');
       } else {
-        $('.bubble').html("<p>Hmmm. I'll need to think about this. Check back later!</p><p>I'll email you when I have your picture, too.</p>");
+        $('#location-text').html("Hmmm. I'll need to think about this. Check back later!");
         console.log("NOT SCHEDULED YET");
       }
       data = rdata
@@ -154,21 +152,6 @@ function status_userrequest(requestid, token) {
     return data;
 }
 
-function serol_alert_animation(){
-  $('.serol-antenna').addClass('serol-antenna-flash');
-  $('.serol-pupil-normal').toggle();
-  $('.serol-pupil-shock').toggle();
-  $('.serol-mouth-normal').toggle();
-  $('.serol-mouth-shock').toggle();
-}
-
-function serol_end_alert(){
-  $('.serol-antenna').removeClass('serol-antenna-flash');
-  $('.serol-pupil-normal').toggle();
-  $('.serol-pupil-shock').toggle();
-  $('.serol-mouth-normal').toggle();
-  $('.serol-mouth-shock').toggle();
-}
 
 function get_colour_image(token, frameid, mode){
   $.get({url:'https://thumbnails.lco.global/'+frameid+'/?color=true&width=600&height=600',
@@ -221,20 +204,25 @@ function show_identify_answer(class_id){
 }
 
 function update_date(days, hours, minutes){
-  var txt;
+  var number;
+  var units;
   if  (days >0){
-    txt = days+" days";
+    number = days;
+    units = "days";
   }else if (hours >1){
-    txt = hours+" hours";
+    number = hours;
+    units = "hours";
   }else{
-    txt = minutes+" mins";
+    number = minutes;
+    units = "mins";
   }
-  return txt;
+  return {'number':number, 'units': units};
 }
 
-function update_site(){
-  var txt = '<i class="far fa-hourglass-start fa-w-16 fa-3x fa-fw"></i>';
-  $('#request-site').html(txt)
+function update_site(siteid){
+  var site = site_codes[siteid];
+  $("."+siteid).addClass('location-highlight');
+  $('#location-text').html(site)
 }
 
 function startEnd(date) {
@@ -272,59 +260,27 @@ function submit_to_serol(data, redirect_url){
 		});
 	}
 
-  function submit_request(obj, token){
-    var target = {
-      "type": "SIDEREAL",
-      "name": obj.name,
-      "ra": obj.ra,
-      "dec": obj.dec,
-      "equinox": "J2000",
-      "epoch": 2000.0
-    }
-    var molecules = [
-                {
-                "type": "EXPOSE",
-                "instrument_name": "0M4-SCICAM-SBIG",
-                "filter": "rp",
-                "exposure_time": 30.0,
-                "exposure_count": 1,
-                "bin_x": 2,
-                "bin_y": 2,
-                "defocus": 0.0,
-              }
-    ]
-    var timewindow = {
-            "start": start.toISOString().substr(0,19),
-            "end": end.substr(0,19),
-      }
-    var request = {
-      "location":{"telescope_class":"0m4"},
-      "constraints":{"max_airmass":2.0},
-      "target": target,
-      "molecules": molecules,
-      "windows": [timewindow],
-      "observation_note" : "Serol",
-      "type":"request"
-    }
-    var data = {
-        "group_id": "sxe_201708_001",
-        "proposal": "LCOEPO2014B-010",
-        "ipp_value": 1.05,
-        "operator": "SINGLE",
-        "observation_type": "NORMAL",
-        "requests": [request],
-    }
-    $.ajax({
-      url: 'https://observe.lco.global/api/requests/',
-      type: 'post',
-      data: JSON.stringify(data),
-      headers: {'Authorization': 'Token '+token},
+  function get_facts() {
+    var data;
+    $.getJSON('/api/facts/',
+      {
       dataType: 'json',
       contentType: 'application/json'})
-      .done(function(resp){
-        console.log("DONE"+resp);
+      .done(function(rdata){
+        setInterval(function() {
+          show_facts(rdata);
+        }, 10000);
       })
-      .fail(function(resp){
-        console.log("FAIL "+resp);
+      .fail(function(rdata){
+        console.log("FAIL "+rdata['detail']);
       });
+      return data;
+  }
+
+  function show_facts(facts) {
+    console.log(facts);
+    var index = Math.floor(Math.random() * facts.length);
+    console.log(index);
+    console.log(facts[index]['desc']);
+    $(".fact-box p").html(facts[index]['desc']);
   }

@@ -11,6 +11,7 @@ from rest_framework.authtoken.views import obtain_auth_token
 from status.views import ScheduleView, StatusView
 from explorer.views import MissionView, MissionListView, ChallengeRedirectView, \
     ChallengeView, AnalyseView, ChallengeSummary, ChallengeRetry, NextChallengeView
+from explorer.serializers import FactsView
 from stickers.views import StickerView
 from highscore.views import HighScoreView, AddHighScoreView
 
@@ -35,6 +36,7 @@ urlpatterns = [
     url(r'^challenge/(?P<pk>[0-9]+)/$', ChallengeRedirectView.as_view(), name="challenge"),
     url(r'^stickers/$', StickerView.as_view(), name='stickers'),
     url(r'^api/status/(?P<requestid>[0-9]+)/$', StatusView.as_view(), name="status"),
+    url(r'^api/facts/$',FactsView.as_view(), name="facts"),
     url(r'^api/schedule/$', ScheduleView.as_view(), name='schedule'),
     url(r'^api/highscore/add/$', AddHighScoreView.as_view() , name='highscore-add'),
     url(r'^api/highscore/leaders/$', HighScoreView.as_view()),
