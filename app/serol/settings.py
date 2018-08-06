@@ -122,9 +122,9 @@ STATIC_ROOT = '/var/www/html/static/'
 
 MEDIA_URL = '/media/'
 
-MEDIA_ROOT = '/var/www/html/media/'
+MEDIA_ROOT = '/var/www/html/images/'
 
-IMAGE_ROOT = os.path.join(MEDIA_ROOT,'/images/')
+IMAGE_ROOT = MEDIA_ROOT
 
 SECRET_KEY = os.environ.get('SECRET_KEY','')
 if not SECRET_KEY:

@@ -57,7 +57,7 @@ def get_archive_data(out_dir, request_id):
     return True
 
 def download_file(out_file, url):
-    logger.info("Downloading: {}".format(out_file))
+    logger.debug("Downloading: {}".format(out_file))
     dt = requests.get(url)
     f = open(out_file, 'wb')
     f.write(dt.content)
