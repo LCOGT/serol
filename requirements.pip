@@ -13,7 +13,6 @@ gunicorn[gevent]==19.8.1
 whitenoise==3.3.1
 profanityfilter
 django-cors-headers
-scipy
 astropy
-astroscrappy
+#astroscrappy
 git+git://github.com/LCOGT/lcoalipy.git#egg=lcoalipy

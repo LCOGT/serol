@@ -1,5 +1,5 @@
 from astropy.io import fits
-from astroscrappy import detect_cosmics
+#from astroscrappy import detect_cosmics
 from django.conf import settings
 from fits2image.conversions import fits_to_jpg
 from glob import glob
@@ -144,13 +144,13 @@ def clean_data(data):
     - Subtract the median sky value
     '''
     # Level out the colour balance in the frames
-    logger.info('--- Begin CR removal ---')
     median_val = median(data)
     data[data<0.]=median_val
     # Run astroScrappy to remove pesky cosmic rays
-    data = remove_cr(data)
-    logger.info('Median=%s' % median_val)
-    logger.info('Max after median=%s' % data.max())
+    logger.debug('--- Begin CR removal ---')
+    #data = remove_cr(data)
+    logger.debug('Median=%s' % median_val)
+    logger.debug('Max after median=%s' % data.max())
     return data
 
 def sort_files_for_colour(file_list, colour_template):
