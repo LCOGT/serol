@@ -76,7 +76,6 @@ def dl_sort_data_files(r, out_path):
     for res in r['results']:
         rl = str(res['RLEVEL'])
         rlevels[rl].append({'filename':res['filename'],'url':res['url']})
-    logger.debug(rlevels)
     if (len(rlevels['91']) >= len(rlevels['11'])) and len(rlevels['91']) > 0:
         files = rlevels['91']
     elif (len(rlevels['11']) >= len(rlevels['0'])) and len(rlevels['91']) > 0:
@@ -87,7 +86,6 @@ def dl_sort_data_files(r, out_path):
     else:
         logger.info("No Image files available")
         return False
-    logger.debug(files)
     for response in files:
         out_file = os.path.join(out_path, response['filename'])
         download_file(out_file, response['url'])
@@ -102,6 +100,9 @@ def write_clean_data(filelist):
     for i, file_in in enumerate(filelist):
         data, hdrs = fits.getdata(file_in, header=True)
         filtr = hdrs['filter']
+        if not check_data_balance(hdrs):
+            # Don't pass cloudy data
+            continue
         new_filename = file_in.replace(".fits", "-{}.fits".format(filtr))
         data = clean_data(data)
         hdu = fits.PrimaryHDU(data, header=hdrs)
@@ -192,10 +193,22 @@ def make_request_image(request_id, targetname, category=None, name=None):
         logger.info('Reprojected {} files'.format(len(img_list)))
         img_list = write_clean_data(img_list)
         img_list = sort_files_for_colour(img_list, colour_template=settings.COLOUR_TEMPLATE)
-        r = fits_to_jpg(img_list, new_filepath, width=1000, height=1000, color=True)
+        if len(img_list) != 3:
+            r = fits_to_jpg(img_list[0], new_filepath, width=1000, height=1000)
+        else:
+            r = fits_to_jpg(img_list, new_filepath, width=1000, height=1000, color=True)
     if r:
         shutil.rmtree(tmp_dir)
         return new_filepath
     else:
         logger.error('Failed to make image for {}'.format(request_id))
+        return False
+
+def check_data_balance(header):
+    '''
+    Before attempting to make a colour image, make sure each image has actual data in it
+    '''
+    if header.get('L1MEDIAN', 0) > 100:
+        return True
+    else:
         return False

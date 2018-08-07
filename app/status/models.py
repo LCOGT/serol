@@ -8,6 +8,8 @@ from django.contrib.auth.models import AbstractUser
 
 from explorer.models import Challenge, Mission
 
+IMAGE_STATUS_OPTIONS = ((0,'No Image'), (1, 'Quicklook'), (2, 'Final'), (3,'Poor Quality'))
+
 class Proposal(models.Model):
     code = models.CharField(max_length=20, unique=True)
     active = models.BooleanField(default=True)
@@ -36,6 +38,8 @@ class Progress(models.Model):
     status = FSMField(default='New', choices=settings.PROGRESS_OPTIONS)
     last_update = models.DateTimeField(default=datetime.utcnow)
     target = models.CharField(max_length=100)
+    image_file = models.CharField(max_length=100, null=True, blank=True)
+    image_status = models.SmallIntegerField(default=0, choices=IMAGE_STATUS_OPTIONS)
 
     def __str__(self):
         return "{} is {} in {}".format(self.user.username, self.challenge, self.status)
