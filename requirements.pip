@@ -9,10 +9,10 @@ mysqlclient
 Pillow
 requests
 six
-gunicorn[gevent]==19.8.1
-whitenoise==3.3.1
+gunicorn[gevent]
+whitenoise
 profanityfilter
 django-cors-headers
-astropy
+#astropy
 #astroscrappy
-git+git://github.com/LCOGT/lcoalipy.git#egg=lcoalipy
+#git+git://github.com/LCOGT/lcoalipy.git#egg=lcoalipy

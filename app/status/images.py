@@ -31,7 +31,7 @@ def lco_api_call(url, token):
         return False, msg
 
     if r.status_code in [200,201]:
-        logger.info('Recieved data')
+        logger.debug('Recieved data')
         return True, r.json()
     else:
         logger.error("Could not send request: {}".format(r.content))
@@ -42,7 +42,7 @@ def get_archive_data(out_dir, request_id):
     url = "{}{}".format(settings.PORTAL_REQUEST_API, request_id)
     state, req = lco_api_call(url, settings.PORTAL_TOKEN)
     if not state:
-        logger.info('Failed')
+        logger.error('Failed')
         return
     if req['state'] == 'COMPLETED':
         subreq_id = req['id']
@@ -75,6 +75,9 @@ def dl_sort_data_files(r, out_path):
         os.makedirs(out_path)
     for res in r['results']:
         rl = str(res['RLEVEL'])
+        if rl not in ['91','11','0']:
+            logger.debug("Ancient pipeline product {}".format(rl))
+            continue
         rlevels[rl].append({'filename':res['filename'],'url':res['url']})
     if (len(rlevels['91']) >= len(rlevels['11'])) and len(rlevels['91']) > 0:
         files = rlevels['91']
@@ -84,7 +87,7 @@ def dl_sort_data_files(r, out_path):
         raw = True
         files = rlevels['0']
     else:
-        logger.info("No Image files available")
+        logger.debug("No Image files available")
         return False
     for response in files:
         out_file = os.path.join(out_path, response['filename'])
@@ -160,7 +163,7 @@ def sort_files_for_colour(file_list, colour_template):
         filtr = hdrs['filter']
         order = colour_template.get(filtr, None)
         if not order:
-            logger.info('{} is not a recognised colour filter'.format(filtr))
+            logger.debug('{} is not a recognised colour filter'.format(filtr))
             return False
         colours[order] = f
     file_list = [colours[str(i)] for i in range(1,4)]
@@ -169,13 +172,14 @@ def sort_files_for_colour(file_list, colour_template):
     return file_list
 
 def make_request_image(request_id, targetname, category=None, name=None):
+    image_status = 0
     if settings.TMP_DIR:
         tmp_dir = os.path.join(settings.TMP_DIR,request_id)
     else:
         tmp_dir = mkdtemp()
     resp = get_archive_data(tmp_dir, request_id)
     if not resp:
-        logger.info('Failed to get data')
+        logger.error('Failed to get data')
         shutil.rmtree(tmp_dir)
         return False
 
@@ -185,24 +189,30 @@ def make_request_image(request_id, targetname, category=None, name=None):
 
     img_list = sorted(glob(os.path.join(tmp_dir,"*.fz")))
     new_filepath = os.path.join(settings.IMAGE_ROOT,name)
-    logger.info("{} files downloaded".format(len(img_list)))
+    num_files = len(img_list)
+    if num_files == 0:
+        return False, image_status
+    logger.debug("{} files downloaded".format(num_files))
     if category == '1.1':
         r = planet_process(infile=img_list[0],outfile=new_filepath, planet=targetname)
+        image_status = 2
     else:
         img_list = reproject_files(img_list[0], img_list, tmp_dir)
-        logger.info('Reprojected {} files'.format(len(img_list)))
+        logger.debug('Reprojected {} files'.format(len(img_list)))
         img_list = write_clean_data(img_list)
         img_list = sort_files_for_colour(img_list, colour_template=settings.COLOUR_TEMPLATE)
         if len(img_list) != 3:
             r = fits_to_jpg(img_list[0], new_filepath, width=1000, height=1000)
+            image_status = 2
         else:
             r = fits_to_jpg(img_list, new_filepath, width=1000, height=1000, color=True)
+            image_status = 1
     if r:
         shutil.rmtree(tmp_dir)
-        return new_filepath
+        return new_filepath, image_status
     else:
         logger.error('Failed to make image for {}'.format(request_id))
-        return False
+        return False, image_status
 
 def check_data_balance(header):
     '''

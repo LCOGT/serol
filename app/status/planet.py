@@ -3,6 +3,7 @@ from astropy.io import fits
 import glob
 import logging
 import numpy as np
+from pathlib import Path
 
 def planet_data_scale(data):
     data[data<0.]=0.
@@ -68,10 +69,14 @@ def planet_centre_coord(filename):
     return x,y
 
 def crop_image(filename):
-    im = Image.open(filename)
-    area = (200, 0, 1300, 1000)
-    im.crop(area).save(filename)
-    return
+    im_file = Path(filename)
+    if im_file.is_file():
+        im = Image.open(filename)
+        area = (200, 0, 1300, 1000)
+        im.crop(area).save(filename)
+        return True
+    else:
+        return False
 
 def planet_process(infile, outfile, planet):
     if planet.lower() in ['jupiter','uranus']:
