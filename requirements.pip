@@ -1,4 +1,4 @@
-Django>=2,<3
+Django>=2,<2.1
 django-fsm
 django-rest-framework
 djangorestframework
@@ -13,6 +13,6 @@ gunicorn[gevent]
 whitenoise
 profanityfilter
 django-cors-headers
-#astropy
-#astroscrappy
-#git+git://github.com/LCOGT/lcoalipy.git#egg=lcoalipy
+astropy
+astroscrappy
+git+git://github.com/LCOGT/lcoalipy.git#egg=lcoalipy
