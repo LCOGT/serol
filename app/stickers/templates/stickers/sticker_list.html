@@ -22,7 +22,9 @@
           <h2>{{mission.name}}</h2>
           {% with "explorer/"|add:mission.patch as icon_url %}
           <img class="img-fluid rounded" src="{% static icon_url %}"  alt="Mission {{mission.number}} patch">
+          {% if mission.number not in completed_missions %}
           <a href="{% url 'challenge-next' mission.number %}" class="btn btn-4 btn-4a animated tada">{% trans "start a new challenge?" %}</a>
+          {% endif %}
           {% endwith %}
         </div>
         <div class="col-8">

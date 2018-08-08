@@ -5,6 +5,7 @@ from django.views.generic.list import ListView
 
 from stickers.models import PersonSticker, Sticker
 from explorer.models import Mission
+from explorer.utils import completed_missions
 
 class StickerView(LoginRequiredMixin, ListView):
 
@@ -13,6 +14,7 @@ class StickerView(LoginRequiredMixin, ListView):
     def get_context_data(self):
         context = super(StickerView, self).get_context_data()
         context['missions'] = Mission.objects.all().order_by('number')
+        context['completed_missions'] = completed_missions(self.request.user)
         return context
 
     def get_queryset(self):

@@ -16,6 +16,7 @@ from explorer.models import Mission, Challenge, Body
 from status.models import Progress, Answer, Question, UserAnswer
 from stickers.models import PersonSticker
 from stickers.views import add_sticker
+from explorer.utils import add_answers, completed_missions
 
 logger = logging.getLogger(__name__)
 
@@ -37,7 +38,7 @@ class MissionView(LoginRequiredMixin, DetailView):
 
         active_missions = set(Progress.objects.filter(user=self.request.user).values_list('challenge__mission', flat=True))
         context['active_missions'] = active_missions
-        context['completed_missions'] = completed_missions
+        context['completed_missions'] = completed_missions(self.request.user)
 
         return context
 
@@ -131,7 +132,7 @@ class ChallengeSummary(LoginRequiredMixin, DetailView):
         context['progress'] = progress
         context['answers'] = answers
         context['stickers'] = stickers
-
+        context['completed_missions'] = completed_missions(self.request.user)
 
         return context
 
@@ -200,10 +201,3 @@ class ChallengeRedirectView(LoginRequiredMixin, RedirectView):
         except NoReverseMatch:
             return None
         return super(ChallengeRedirectView, self).get_redirect_url(*args, **kwargs)
-
-def add_answers(answers, user):
-    for answer_id in answers:
-        aid = answer_id.replace('answer-', '')
-        answer = get_object_or_404(Answer, pk=aid)
-        created, ua = UserAnswer.objects.get_or_create(answer=answer, user=user)
-    return True
