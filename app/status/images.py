@@ -173,9 +173,9 @@ def sort_files_for_colour(file_list, colour_template):
 
 def make_request_image(request_id, targetname, category=None, name=None):
     image_status = 0
-    if settings.TMP_DIR:
+    try:
         tmp_dir = os.path.join(settings.TMP_DIR,request_id)
-    else:
+    except AttributeError:
         tmp_dir = mkdtemp()
     resp = get_archive_data(tmp_dir, request_id)
     if not resp:

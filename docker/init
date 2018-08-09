@@ -1,4 +1,23 @@
 #!/bin/sh
+
+TOPDIR="/var/www/apps/serol"
+
+# Generate cron wrapper to set correct environment variables
+cat > $TOPDIR/cronwrapper << EOF
+export PYTHONPATH="${PYTHONPATH}"
+export DJANGO_SETTINGS_MODULE="${DJANGO_SETTINGS_MODULE}"
+
+export DB_NAME="${DB_NAME}"
+export DB_HOST="${DB_HOST}"
+export DB_USER="${DB_USER}"
+export DB_PASSWD="${DB_PASSWD}"
+
+EOF
+
+# Make cron wrapper executable
+chmod +x $TOPDIR/cronwrapper
+
+echo "default-time-zone = 'UTC'" >> /etc/my.cnf
 cd /var/www/apps/serol/
 python manage.py migrate --no-input
 python manage.py collectstatic --no-input

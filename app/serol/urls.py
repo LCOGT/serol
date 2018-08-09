@@ -20,10 +20,12 @@ urlpatterns = [
     url(r'^about/$', flatpage, {'url': '/about/'}, name='about'),
     url(r'^videos/$', flatpage, {'url': '/videos/'}, name='videos'),
     url(r'^join/$', flatpage, {'url': '/join/'}, name='join'),
+    url(r'^game/$', flatpage, {'url': '/game/'}, name='game'),
     url(r'^getting-started/$', flatpage, {'url' : '/getting-started/'}, name='getting-started'),
+    url(r'^page/(?P<url>.*/)$', flatpage),
     url(r'^mission/(?P<pk>[0-9]+)/$', MissionView.as_view(), name="mission"),
     url(r'^mission/(?P<mission_num>[0-9]+)/next/$', NextChallengeView.as_view(), name="challenge-next"),
-    url(r'missions/$', MissionListView.as_view(), name="missions"),
+    url(r'^missions/$', MissionListView.as_view(), name="missions"),
     url(r'^challenge/(?P<pk>[0-9]+)/start/$', ChallengeView.as_view(), {'mode':'start'}, name="start"),
     url(r'^challenge/(?P<pk>[0-9]+)/observe/$', ChallengeView.as_view(), {'mode':'observe'}, name="observe"),
     url(r'^challenge/(?P<pk>[0-9]+)/identify/$', ChallengeView.as_view(), {'mode':'identify'}, name="identify"),
@@ -45,7 +47,6 @@ urlpatterns = [
     url(r'^login/$', LoginView.as_view(template_name='explorer/login.html'), name='auth_login'),
     url(r'^logout/$', LogoutView.as_view(template_name= 'explorer/logout.html'), name='auth_logout'),
     url(r'^$', TemplateView.as_view(template_name="explorer/home.html"), name='home'),
-    url(r'^(?P<url>.*/)$', flatpage),
 ]
 
 if settings.DEBUG:

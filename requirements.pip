@@ -1,3 +1,4 @@
+--extra-index-url=http://buildsba.lco.gtn/python/
 Django>=2,<2.1
 django-fsm
 django-rest-framework
@@ -16,3 +17,4 @@ django-cors-headers
 astropy
 astroscrappy
 git+git://github.com/LCOGT/lcoalipy.git#egg=lcoalipy
+git+git://github.com/LCOGT/fits2image.git@astropy#egg=fits2image

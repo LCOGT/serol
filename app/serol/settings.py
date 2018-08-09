@@ -118,8 +118,9 @@ USE_TZ = False
 
 STATIC_URL = '/static/'
 STATIC_ROOT = '/var/www/html/static/'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-MEDIA_URL = '/media/'
+MEDIA_URL = '/images/'
 
 MEDIA_ROOT = '/var/www/html/images/'
 
