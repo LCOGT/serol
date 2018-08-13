@@ -12,7 +12,7 @@ from rest_framework import status, serializers
 
 from status.models import Progress
 
-from status.valhalla import process_observation_request, get_observation_status
+from status.valhalla import process_observation_request, get_observation_status, get_observation_frameid
 
 
 class RequestSerializer(serializers.Serializer):
@@ -73,7 +73,7 @@ class StatusView(APIView):
         return update_status(requestid=requestid, token=request.user.token)
 
 
-def update_status(requestid, token):
+def update_status(requestid, token, archive_token):
     try:
         progress = Progress.objects.get(requestid=requestid)
     except:
@@ -87,7 +87,10 @@ def update_status(requestid, token):
         return Response("Problem with the status", status=status.HTTP_403_FORBIDDEN)
     else:
         if state == 'COMPLETED':
-            progress.observed()
+            frameid = get_observation_frameid(requestid=requestid, token=archive_token)
+            if frameid:
+                progress.frameids = frameid
+                progress.observed()
         elif state == 'WINDOW_EXPIRED' or state == 'CANCELED':
             progress.failed()
         progress.save()

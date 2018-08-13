@@ -23,6 +23,7 @@ ADMIN_SITE_HEADER = 'SEROL admin'
 CORS_ORIGIN_ALLOW_ALL=True
 
 INSTALLED_APPS = [
+    'whitenoise.runserver_nostatic',
     'highscore.apps.HighscoreConfig',
     'explorer.apps.ExplorerConfig',
     'status.apps.StatusConfig',

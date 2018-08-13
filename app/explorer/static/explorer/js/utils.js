@@ -98,7 +98,6 @@ function update_status(requestid, token) {
 
 function status_request(requestid, token) {
   var data;
-  console.log("Token - "+token)
   $.ajax(
     {
     url:'https://observe.lco.global/api/requests/'+requestid+'/',
@@ -154,22 +153,24 @@ function status_userrequest(requestid, token) {
 
 
 function get_colour_image(token, frameid, mode){
-  $.get({url:'https://thumbnails.lco.global/'+frameid+'/?color=true&width=600&height=600',
-        headers: {'Authorization': 'Token '+token},
-        dataType: 'json',
-        contentType: 'application/json'}
-      )
-    .done(function(data){
-      img_url = data.url;
-      if (mode == 'analyser'){
-          $("#img-holder").attr('src',img_url);
-      } else {
-        arrange_images(img_url);
-      }
-    })
-    .fail(function(rdata){
-      console.log("FAILED to get thumbnail");
-    });
+  $.when(
+    $.get({url:'https://thumbnails.lco.global/'+frameid+'/?color=true&width=600&height=600',
+          headers: {'Authorization': 'Token '+token},
+          dataType: 'json',
+          contentType: 'application/json'}
+        )
+      .done(function(data){
+        img_url = data.url;
+        if (mode == 'analyser'){
+            $("#img-holder").attr('src',img_url);
+        } else {
+          arrange_images(img_url);
+        }
+      })
+      .fail(function(rdata){
+        console.log("FAILED to get thumbnail");
+      })
+    );
 }
 
 function arrange_images(url){
@@ -177,17 +178,14 @@ function arrange_images(url){
     images.push({'mine':true, 'url':url});
     images = shuffle(images);
     for (i=0;i<4;i++){
-      console.log(images[i]['url']);
       $("#img-"+i).attr('src',images[i]['url']);
       $("#img-text-"+i).data('mine',images[i]['mine']);
     }
     $(".identify-text").on('click', function(d){
       if ($(this).data('mine') == true){
         show_identify_answer('.identify-yes');
-        console.log('YES')
       } else {
         show_identify_answer('.identify-no');
-        console.log('NO');
       }
     });
   }
@@ -278,9 +276,6 @@ function submit_to_serol(data, redirect_url){
   }
 
   function show_facts(facts) {
-    console.log(facts);
     var index = Math.floor(Math.random() * facts.length);
-    console.log(index);
-    console.log(facts[index]['desc']);
     $(".fact-box p").html(facts[index]['desc']);
   }

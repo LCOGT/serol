@@ -27,7 +27,7 @@ class Command(BaseCommand):
             self.stdout.write("Found {} Progress entries".format(pgs.count()))
         for pg in pgs:
             self.stdout.write("Updating {}".format(pg.requestid))
-            resp = update_status(pg.requestid, token=settings.PORTAL_TOKEN)
+            resp = update_status(pg.requestid, token=settings.PORTAL_TOKEN, archive_token=settings.ARCHIVE_TOKEN)
             if status.is_success(resp.status_code):
                 self.stdout.write(self.style.SUCCESS("Update of {} successful".format(pg.requestid)))
             else:

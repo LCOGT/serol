@@ -36,6 +36,30 @@ def get_observation_status(requestid, token):
         logger.error("Could not send request: {}".format(r.content))
         return False, r.content
 
+def get_observation_frameid(requestid, token):
+    '''
+    Get status of RequestID from the Valhalla API
+    '''
+    if not requestid:
+        return False, "No request ID provided"
+
+    headers = {'Authorization': 'Token {}'.format(token)}
+    url = "{}?limit=1&offset=0&ordering=-id&REQNUM={}".format(settings.ARCHIVE_FRAMES_URL, requestid)
+    try:
+        r = requests.get(url, headers=headers, timeout=20.0)
+    except requests.exceptions.Timeout:
+        msg = "Archive API timed out"
+        logger.error(msg)
+        return False
+
+    if r.status_code in [200,201]:
+        resp = r.json()
+        if len(resp['results']) > 0:
+            frameid = resp['results'][0]['id'];
+        return frameid
+    else:
+        logger.error("Could not send request: {}".format(r.content))
+        return False
 
 def submit_observation_request(params, token):
     '''

@@ -8,8 +8,10 @@
 <script>
 var images = Array();
 var current_tag = "{{object.avm_code}}";
-var redirect_url = "{% url 'analyse' object.id %}?frameid="
-var requestid = {{ progress.requestid}};
+var redirect_url = "{% url 'analyse' object.id %}?frameid=";
+var requestid = {{ progress.requestid }};
+var frameid = {{ progress.frameids }};
+var my_image {% if progress.image_file %} = "/images/{{ progress.image_file }}"{% endif %};
 
 function filter_tags() {
   var static_url = "{% static 'explorer/identify/' %}";
@@ -31,32 +33,17 @@ function filter_tags() {
   {
      if (key != current_tag){
        images.push({'mine':false, 'url':samples[key]});
-       console.log("key is "+key);
      }
   }
 }
 
 $(document).ready(function(){
   filter_tags();
-  $.when(
-    $.get({url: 'https://archive-api.lco.global/frames/?limit=1&offset=1&ordering=-id&REQNUM='+requestid,
-      headers: {'Authorization': 'Token '+localStorage.getItem('archive_token')},
-      dataType: 'json',
-      contentType: 'application/json'}))
-    .done(function(rdata){
-        var frameid;
-        if (rdata['results'].length > 0){
-          frameid = rdata['results'][0]['id'];
-          redirect_url+=frameid
-          get_colour_image(localStorage.getItem('archive_token'), frameid, mode='identify')
-        }
-        console.log("Number of Images ="+rdata['results'].length);
-    })
-    .fail(function(d){
-      console.log('Error' + d)
-    });
-
-
+  if (my_image.length > 0){
+    arrange_images(my_image);
+  } else {
+    get_colour_image(localStorage.getItem('archive_token'), frameid, mode='identify')
+  }
 });
 </script>
 {% endblock %}
