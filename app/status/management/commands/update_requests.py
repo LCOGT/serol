@@ -18,6 +18,7 @@ class Command(BaseCommand):
         parser.add_argument('--request_id', '-rid', help="[Optional] Request ID to update")
 
     def handle(self, *args, **options):
+        self.stdout.write(self.style.WARNING("Running requests update - {}".format(datetime.now().isoformat())))
         if options['request_id']:
             self.stdout.write("Looking for Progress matching ID={}".format(options['request_id']))
             pgs = Progress.objects.filter(requestid=options['request_id'])
@@ -27,19 +28,7 @@ class Command(BaseCommand):
         for pg in pgs:
             self.stdout.write("Updating {}".format(pg.requestid))
             resp = update_status(pg.requestid, token=settings.PORTAL_TOKEN)
-            self.stdout.write(resp.status_code)
             if status.is_success(resp.status_code):
-                self.stdout.write("Update of {} successful".format(pg.requestid))
+                self.stdout.write(self.style.SUCCESS("Update of {} successful".format(pg.requestid)))
             else:
-                self.stdout.write("Update of {} failed - {}".format(pg.requestid, resp.data))
-        for pg in Progress.objects.filter(status='Observed', image_status=0):
-            self.stdout.write("Download and make JPEG  - ReqID {}  ProgID {}".format(pg.requestid, pg.id))
-            new_filepath, image_status = make_request_image(request_id=pg.requestid, category=pg.challenge.avm_code, targetname=pg.target)
-            self.stdout.write("Processed {}: image {}, status {}".format(pg.requestid, new_filepath, image_status))
-            if image_status > 0:
-                path, filename = os.path.split(new_filepath)
-                pg.image_file = filename
-                pg.image_status = image_status
-                pg.last_update = datetime.now()
-                pg.save()
-                self.stdout.write(self.style.SUCCESS("Successfully created image for {}".format(pg.id))
+                self.stdout.write(self.style.ERROR("Update of {} failed - {}".format(pg.requestid, resp.data)))

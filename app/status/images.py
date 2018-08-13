@@ -100,12 +100,9 @@ def write_clean_data(filelist):
     - Data is read into uncompressed FITS file to remove dependency on FPack
     '''
     img_list =[]
-    for i, file_in in enumerate(filelist):
+    for file_in in filelist:
         data, hdrs = fits.getdata(file_in, header=True)
         filtr = hdrs['filter']
-        if not check_data_balance(hdrs):
-            # Don't pass cloudy data
-            continue
         new_filename = file_in.replace(".fits", "-{}.fits".format(filtr))
         data = clean_data(data)
         hdu = fits.PrimaryHDU(data, header=hdrs)
@@ -197,14 +194,17 @@ def make_request_image(request_id, targetname, category=None, name=None):
         r = planet_process(infile=img_list[0],outfile=new_filepath, planet=targetname)
         image_status = 2
     else:
-        img_list = reproject_files(img_list[0], img_list, tmp_dir)
-        logger.debug('Reprojected {} files'.format(len(img_list)))
+        if len(img_list) == 3:
+            logger.debug('Reprojecting {} files'.format(len(img_list)))
+            img_list = reproject_files(img_list[0], img_list, tmp_dir)
         img_list = write_clean_data(img_list)
-        img_list = sort_files_for_colour(img_list, colour_template=settings.COLOUR_TEMPLATE)
+        logger.debug('Sorting for colour')
         if len(img_list) != 3:
+            logger.debug('Creating colour image')
             r = fits_to_jpg(img_list[0], new_filepath, width=1000, height=1000)
             image_status = 2
         else:
+            img_list = sort_files_for_colour(img_list, colour_template=settings.COLOUR_TEMPLATE)
             r = fits_to_jpg(img_list, new_filepath, width=1000, height=1000, color=True)
             image_status = 1
     if r:
@@ -217,6 +217,7 @@ def make_request_image(request_id, targetname, category=None, name=None):
 def check_data_balance(header):
     '''
     Before attempting to make a colour image, make sure each image has actual data in it
+    ** Not implemented yet **
     '''
     if header.get('L1MEDIAN', 0) > 100:
         return True
