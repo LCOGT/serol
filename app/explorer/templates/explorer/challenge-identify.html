@@ -8,7 +8,7 @@
 <script>
 var images = Array();
 var current_tag = "{{object.avm_code}}";
-var redirect_url = "{% url 'analyse' object.id %}?frameid=";
+var redirect_url = "{% url 'analyse' object.id %}?frameid="+{{ progress.frameids }};
 var requestid = {{ progress.requestid }};
 var frameid = {{ progress.frameids }};
 var my_image {% if progress.image_file %} = "/images/{{ progress.image_file }}"{% endif %};

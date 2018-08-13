@@ -11,6 +11,7 @@ var requestid = {{ progress.requestid}};
 var frameid;
 var current_question=0;
 var question_total={{questions|length}};
+var my_image {% if progress.image_file %} = "/images/{{ progress.image_file }}"{% endif %};
 $(document).ready(function(){
   $('#question-0').show();
 
@@ -20,28 +21,11 @@ $(document).ready(function(){
       show_next_question();
   });
 
-  frameid = get_qs('frameid');
-  if (frameid == undefined){
-    $.when(
-      $.get({url: 'https://archive-api.lco.global/frames/?limit=1&offset=1&ordering=-id&REQNUM='+requestid,
-        headers: {'Authorization': 'Token '+localStorage.getItem('archive_token')},
-        dataType: 'json',
-        contentType: 'application/json'}))
-      .done(function(rdata){
-          var frameid;
-          if (rdata['results'].length > 0){
-            console.log(rdata);
-            frameid = rdata['results'][0]['id'];
-            get_colour_image(localStorage.getItem('archive_token'), frameid, mode='analyser')
-          }
-          console.log("Number of Images ="+rdata['results'].length);
-      })
-      .fail(function(d){
-
-      });
-    } else {
-      get_colour_image(localStorage.getItem('archive_token'), frameid, mode='analyser')
-    }
+  if (my_image.length > 0){
+    arrange_images(my_image);
+  } else {
+    get_colour_image(localStorage.getItem('archive_token'), frameid, mode='analyser')
+  }
 
 });
 
@@ -71,7 +55,7 @@ function add_answers_to_form() {
   <h1>{% trans "Analyse your image!" %}</h1>
   <div class="row">
     <div class="col-lg-8">
-      <img src="{% static 'explorer/images/placeholder.jpg' %}" alt="{{object.name}}" class="img-fluid rounded" id="img-holder">
+      <img src="{% if progress.image_file %}/images/{{ progress.image_file }}{% else %}{% static 'explorer/images/placeholder.jpg' %}{% endif %}" alt="{{object.name}}" class="img-fluid rounded" id="img-holder">
     </div>
     <div class="col-lg-4">
         <div class="arrow bottom right"></div>

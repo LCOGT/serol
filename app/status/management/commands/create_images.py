@@ -34,5 +34,6 @@ class Command(BaseCommand):
                 pg.image_file = filename
                 pg.image_status = image_status
                 pg.last_update = datetime.now()
+                pg.identify()
                 pg.save()
                 self.stdout.write(self.style.SUCCESS("Successfully created image for {}".format(pg.id)))
