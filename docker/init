@@ -1,26 +1,32 @@
-#!/bin/sh
+#!/bin/sh -x
 
 TOPDIR="/var/www/apps/serol"
 
 # Generate cron wrapper to set correct environment variables
-cat > $TOPDIR/cronwrapper << EOF
-export PYTHONPATH="${PYTHONPATH}"
-export DJANGO_SETTINGS_MODULE="${DJANGO_SETTINGS_MODULE}"
+cat > "$TOPDIR/cronwrapper" << EOF
+#export PYTHONPATH="${PYTHONPATH}"
+#export DJANGO_SETTINGS_MODULE="${DJANGO_SETTINGS_MODULE}"
 
-export DB_NAME="${DB_NAME}"
 export DB_HOST="${DB_HOST}"
+export DB_NAME="${DB_NAME}"
 export DB_USER="${DB_USER}"
-export DB_PASSWD="${DB_PASSWD}"
-
+export DB_PASS="${DB_PASS}"
 EOF
 
-# Start cron
-crond -f -l 8 -b
 # Make cron wrapper executable
-chmod +x $TOPDIR/cronwrapper
+chmod +x "$TOPDIR/cronwrapper"
 
+# Needed to get nginx to run correctly
+mkdir /run/nginx
+
+# set MySQL default timezone to UTC
 echo "default-time-zone = 'UTC'" >> /etc/my.cnf
-cd /var/www/apps/serol/
-python manage.py migrate --no-input
-python manage.py collectstatic --no-input
-exec gunicorn -w 4 -k gevent -b 0.0.0.0:8080 serol.wsgi
+
+# perform database migrations
+python "$TOPDIR/manage.py" migrate --no-input
+
+# collect static files
+python "$TOPDIR/manage.py" collectstatic --no-input
+
+# run under supervisord
+exec /usr/bin/supervisord -n -c /etc/supervisord.conf

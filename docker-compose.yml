@@ -6,7 +6,7 @@ services:
     environment:
       DB_HOST: mysql.db.location
       DB_NAME: serol
-      DB_PASSWD: PASSWORD
+      DB_PASS: PASSWORD
       DB_USER: USERNAME
       EMAIL_USERNAME: EMAIL
       EMAIL_PASSWORD: EMAIL_PASSWORD
