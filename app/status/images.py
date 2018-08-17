@@ -3,8 +3,8 @@ from astropy.io import fits
 from django.conf import settings
 from fits2image.conversions import fits_to_jpg
 from glob import glob
-from lco_alipy.align import affineremap
-from lco_alipy.ident import run
+from fits_align.align import affineremap
+from fits_align.ident import make_transforms
 from numpy import shape, median
 from tempfile import mkdtemp
 import logging
@@ -50,7 +50,10 @@ def get_archive_data(out_dir, request_id):
         success, r = lco_api_call(url, settings.ARCHIVE_TOKEN)
         if success:
             logger.debug('Downloading {}'.format(req['id']))
-            dl_sort_data_files(r, out_dir)
+            dl_status = dl_sort_data_files(r, out_dir)
+            if not dl_status:
+                logger.debug('No files available')
+                return False
         else:
             logger.debug('API call failed')
             return False
@@ -70,6 +73,7 @@ def dl_sort_data_files(r, out_path):
     '''
     rlevels = {'91':[],'11':[],'0':[]}
     raw = False
+    files = []
     # Make subdirectory
     if not os.path.exists(out_path):
         os.makedirs(out_path)
@@ -81,18 +85,15 @@ def dl_sort_data_files(r, out_path):
         rlevels[rl].append({'filename':res['filename'],'url':res['url']})
     if (len(rlevels['91']) >= len(rlevels['11'])) and len(rlevels['91']) > 0:
         files = rlevels['91']
-    elif (len(rlevels['11']) >= len(rlevels['0'])) and len(rlevels['91']) > 0:
+    elif (len(rlevels['11']) >= len(rlevels['0'])) and len(rlevels['11']) > 0:
         files = rlevels['11']
-    elif len(rlevels['0']) > 0:
-        raw = True
-        files = rlevels['0']
     else:
         logger.debug("No Image files available")
         return False
     for response in files:
         out_file = os.path.join(out_path, response['filename'])
         download_file(out_file, response['url'])
-    return
+    return True
 
 def write_clean_data(filelist):
     '''
@@ -112,7 +113,7 @@ def write_clean_data(filelist):
     return img_list
 
 def reproject_files(ref_image, images_to_align, tmpdir='temp/'):
-    identifications = run(ref_image, images_to_align[1:], visu=False)
+    identifications = make_transforms(ref_image, images_to_align[1:], visu=False)
     hdu = fits.open(ref_image)
     data = hdu[1].data
     outputshape = shape(data)
@@ -178,7 +179,7 @@ def make_request_image(request_id, targetname, category=None, name=None):
     if not resp:
         logger.error('Failed to get data')
         shutil.rmtree(tmp_dir)
-        return False
+        return False, image_status
 
     if not name:
         name = "{}-{}.jpg".format(targetname.replace(" ",""), request_id)
