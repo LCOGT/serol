@@ -21,6 +21,8 @@ urlpatterns = [
     url(r'^videos/$', flatpage, {'url': '/videos/'}, name='videos'),
     url(r'^join/$', flatpage, {'url': '/join/'}, name='join'),
     url(r'^game/$', flatpage, {'url': '/game/'}, name='game'),
+    url(r'^resources/$', flatpage, {'url': '/resources/'}, name='resources'),
+    url(r'^resources/workshops/$', flatpage, {'url': '/resources/workshops/'}, name='resources'workshops/),
     url(r'^getting-started/$', flatpage, {'url' : '/getting-started/'}, name='getting-started'),
     url(r'^page/(?P<url>.*/)$', flatpage),
     url(r'^mission/(?P<pk>[0-9]+)/$', MissionView.as_view(), name="mission"),
