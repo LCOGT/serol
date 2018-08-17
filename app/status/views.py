@@ -70,7 +70,7 @@ class StatusView(APIView):
 
     def get(self, request, requestid, format=None):
 
-        return update_status(requestid=requestid, token=request.user.token, archive_token=request.user.archive_token))
+        return update_status(requestid=requestid, token=request.user.token, archive_token=request.user.archive_token)
 
 
 def update_status(requestid, token, archive_token):

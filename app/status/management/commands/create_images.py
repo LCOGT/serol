@@ -23,7 +23,8 @@ class Command(BaseCommand):
             pgs = Progress.objects.filter(requestid=options['request_id'])
             self.stdout.write("Looking for Progress matching ID={}".format(options['request_id']))
         else:
-            pgs = Progress.objects.filter(status='Observed', image_status=0)
+            # Pick up any successful observation with no image
+            pgs = Progress.objects.filter(status__in=('Observed','Identify','Analyse','Investigate','Summary'), image_status=0)
             self.stdout.write("Processing {} observations".format(len(pgs)))
         for pg in pgs:
             self.stdout.write("Download and make JPEG  - ReqID {}  ProgID {}".format(pg.requestid, pg.id))
@@ -34,6 +35,7 @@ class Command(BaseCommand):
                 pg.image_file = filename
                 pg.image_status = image_status
                 pg.last_update = datetime.now()
-                pg.identify()
+                if pg.status == 'Observed':
+                    pg.identify()
                 pg.save()
                 self.stdout.write(self.style.SUCCESS("Successfully created image for {}".format(pg.id)))

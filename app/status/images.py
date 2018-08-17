@@ -113,7 +113,7 @@ def write_clean_data(filelist):
     return img_list
 
 def reproject_files(ref_image, images_to_align, tmpdir='temp/'):
-    identifications = make_transforms(ref_image, images_to_align[1:], visu=False)
+    identifications = make_transforms(ref_image, images_to_align[1:])
     hdu = fits.open(ref_image)
     data = hdu[1].data
     outputshape = shape(data)
