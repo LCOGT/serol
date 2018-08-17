@@ -126,8 +126,8 @@ def reproject_files(ref_image, images_to_align, tmpdir='temp/'):
 
     img_list = [ref_image]+aligned_images
     if len(img_list) < 3:
-        logging.warning('Error creating image: Only {} source files'.format(len(img_list)))
-        return False
+        logging.error('Error creating image: Only {} source files'.format(len(img_list)))
+        return images_to_align
 
     return img_list
 
