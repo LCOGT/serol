@@ -11,7 +11,7 @@ var requestid = {{ progress.requestid}};
 var frameid;
 var current_question=0;
 var question_total={{questions|length}};
-var my_image {% if progress.image_file %} = "/images/{{ progress.image_file }}"{% endif %};
+var my_image {% if progress.image_file %} = "{{ MEDIA_PREFIX }}{{ progress.image_file }}"{% endif %};
 $(document).ready(function(){
   $('#question-0').show();
 
@@ -21,7 +21,7 @@ $(document).ready(function(){
       show_next_question();
   });
 
-  if (my_image.length > 0){
+  if (typeof(my_image) != 'undefined'){
     arrange_images(my_image);
   } else {
     get_colour_image(localStorage.getItem('archive_token'), frameid, mode='analyser')

@@ -36,10 +36,6 @@ class FlatPageAdmin(FlatPageAdmin):
             kwargs["initial"] = [Site.objects.get_current()]
         return super(FlatPageAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
 
-class ProgressAdmin(admin.ModelAdmin):
-    list_filter = ( 'status', 'challenge__number','challenge__mission__number')
-    list_display = ('user','challenge','status','last_update')
-
 class FactAdmin(admin.ModelAdmin):
     list_display = ('tagline','category','published')
 

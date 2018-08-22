@@ -1,14 +1,25 @@
 from datetime import datetime
 
 from django.db import models
+from django.contrib import admin
 from django.conf import settings
 from django_fsm import FSMField, transition
+from django.utils.html import format_html
 from django.utils.translation import ugettext as _
 from django.contrib.auth.models import AbstractUser
 
 from explorer.models import Challenge, Mission
 
 IMAGE_STATUS_OPTIONS = ((0,'No Image'), (1, 'Quicklook'), (2, 'Final'), (3,'Poor Quality'))
+COLOUR_STATE = {'New': '000',
+                'Submitted': 'F1C40F',
+                'Observed':'5DADE2',
+                'Identify':'E67E22',
+                'Analyse':'A569BD',
+                'Investigate':'aaa',
+                'Summary':'2ECC71',
+                'Failed':'E74C3C'
+                }
 
 class Proposal(models.Model):
     code = models.CharField(max_length=20, unique=True)
@@ -41,11 +52,26 @@ class Progress(models.Model):
     image_file = models.CharField(max_length=100, null=True, blank=True)
     image_status = models.SmallIntegerField(default=0, choices=IMAGE_STATUS_OPTIONS)
 
+    def has_image(self):
+        if self.image_file is not None:
+            return True
+        else:
+            return False
+    has_image.boolean = True
+
+    def coloured_state(self):
+        return format_html(
+            '<span style="color: #{};">{}</span>',
+            COLOUR_STATE[self.status],
+            self.status,
+        )
+
     def __str__(self):
         return "{} is {} in {}".format(self.user.username, self.challenge, self.status)
 
     class Meta:
         unique_together = (("user","challenge"),)
+        verbose_name_plural = 'Challenge Progress'
 
     @transition(field=status, source=['New'], target='Submitted')
     def submit(self):
@@ -81,8 +107,9 @@ class Progress(models.Model):
     def completed(self):
         pass
 
-    class Meta:
-        verbose_name_plural = 'Challenge Progress'
+class ProgressAdmin(admin.ModelAdmin):
+    list_filter = ( 'status', 'challenge__number','challenge__mission__number')
+    list_display = ('user','challenge','coloured_state','last_update', 'has_image')
 
 class Question(models.Model):
     text = models.TextField()

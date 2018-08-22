@@ -11,7 +11,7 @@ var current_tag = "{{object.avm_code}}";
 var redirect_url = "{% url 'analyse' object.id %}?frameid="+{{ progress.frameids }};
 var requestid = {{ progress.requestid }};
 var frameid = {{ progress.frameids }};
-var my_image {% if progress.image_file %} = "/images/{{ progress.image_file }}"{% endif %};
+var my_image {% if progress.image_file %} = "{{ MEDIA_PREFIX }}{{ progress.image_file }}"{% endif %};
 
 function filter_tags() {
   var static_url = "{% static 'explorer/identify/' %}";
@@ -39,7 +39,7 @@ function filter_tags() {
 
 $(document).ready(function(){
   filter_tags();
-  if (my_image.length > 0){
+  if (typeof(my_image) != 'undefined'){
     arrange_images(my_image);
   } else {
     get_colour_image(localStorage.getItem('archive_token'), frameid, mode='identify')
