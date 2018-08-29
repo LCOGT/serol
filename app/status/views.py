@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.conf import settings
 import time
 
+from registration.forms import RegistrationForm
 from rest_framework.decorators import api_view
 from rest_framework.renderers import JSONRenderer, BrowsableAPIRenderer
 from rest_framework.response import Response
@@ -10,10 +11,15 @@ from rest_framework.views import APIView
 from rest_framework_jsonp.renderers import JSONPRenderer
 from rest_framework import status, serializers
 
-from status.models import Progress
+from status.models import Progress, User
 
 from status.valhalla import process_observation_request, get_observation_status, get_observation_frameid
 
+
+class SerolUserForm(RegistrationForm):
+    class Meta:
+        model = User
+        fields = ('username','password1','password2','email')
 
 class RequestSerializer(serializers.Serializer):
     """
@@ -44,12 +50,16 @@ class ScheduleView(APIView):
             return Response(ser.errors, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
             token = request.data.get('token', False)
-            if not token:
-
+            if not token and request.user.is_authenticated:
+                params['token'] = settings.PORTAL_TOKEN
+            elif not token and request.user.is_anonymous:
                 return Response("Not authenticated.", status=status.HTTP_401_UNAUTHORIZED)
             # Send to Valhalla API
             params = ser.data
-            params['proposal'] = request.user.default_proposal.code
+            if request.user.default_proposal:
+                params['proposal'] = request.user.default_proposal.code
+            else:
+                params['proposal'] = settings.DEFAULT_PROPOSAL
             resp_status, resp_msg, target = process_observation_request(params)
             if not resp_status:
 
@@ -69,7 +79,7 @@ class StatusView(APIView):
     renderer_classes = (JSONRenderer, BrowsableAPIRenderer)
 
     def get(self, request, requestid, format=None):
-
+        token, archive_token = check_token(request.user)
         return update_status(requestid=requestid, token=request.user.token, archive_token=request.user.archive_token)
 
 
@@ -109,3 +119,14 @@ def save_progress(challenge, user, request_id, target):
     progress.submit()
     progress.save()
     return True
+
+def check_token(user):
+    if not user.token:
+        token = settings.PORTAL_TOKEN
+    else:
+        token = user.token
+    if not user.archive_token:
+        archive_token = settings.ARCHIVE_TOKEN
+    else:
+        archive_token = user.archive_token
+    return token, archive_token

@@ -1,0 +1,13 @@
+{% autoescape off %}
+Hi {{ user.username }},
+
+Welcome to Serol's Cosmic Explorers
+
+Please click on the link below to confirm your registration:
+
+https://{{ site }}{% url 'registration_activate' activation_key=activation_key %}
+
+See you soon,
+
+Serol
+{% endautoescape %}

@@ -1,0 +1,46 @@
+{% extends 'explorer/base.html' %}
+{% load static i18n %}
+
+{% block script-content %}
+{% endblock %}
+
+{%block wrapper-class %}{% endblock %}
+
+{% block ribbon %}{% endblock %}
+
+{% block main-header %}
+<a href="{% url 'home' %}"><img src="{% static 'explorer/images/serol_logo_sm.png'%}" /></a>
+{% endblock %}
+
+{% block main-body %}
+			<h1>Serol</h1>
+			<h2>{% trans "Sign up to start your cosmic adventure!" %}</h2>
+      {% for m in messages %}
+      <p class="bg-warning">{{m|safe}}</p>
+      {% endfor %}
+        <form method="post">
+          {% csrf_token %}
+          {% for field in form %}
+          <div class="row">
+            <div class="col">
+              {{ field.label_tag }}<br/>
+              {% if field.help_text %}
+                <small style="color: grey">{{ field.help_text|safe }}</small>
+              {% endif %}
+              {% for error in field.errors %}
+                <p style="color: red">{{ error }}</p>
+              {% endfor %}
+            </div>
+            <div class="col">
+              {{ field }}
+            </div>
+          </div>
+          {% endfor %}
+          <div class="row">
+            <div class="col">
+            <button type="submit"  class="btn btn-lg btn-4 btn-4a">Sign up</button>
+            <p class="small">By registering in, you agree to <a href="http://lco.global/observatory/termsofuse" target="_blank">the Las Cumbres Observatory terms of use</a>.</p>
+          </div>
+          </div>
+        </form>
+{% endblock %}

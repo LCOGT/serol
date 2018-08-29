@@ -7,8 +7,9 @@ from django.contrib.staticfiles import views
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
 from rest_framework.authtoken.views import obtain_auth_token
+from registration.backends.hmac.views import RegistrationView
 
-from status.views import ScheduleView, StatusView
+from status.views import ScheduleView, StatusView, SerolUserForm
 from explorer.views import MissionView, MissionListView, ChallengeRedirectView, \
     ChallengeView, AnalyseView, ChallengeSummary, ChallengeRetry, NextChallengeView
 from explorer.serializers import FactsView
@@ -46,8 +47,10 @@ urlpatterns = [
     url(r'^api/highscore/leaders/$', HighScoreView.as_view()),
     url(r'^api-auth-token/$', obtain_auth_token),
     url(r'^admin/', admin.site.urls),
-    url(r'^login/$', LoginView.as_view(template_name='explorer/login.html'), name='auth_login'),
-    url(r'^logout/$', LogoutView.as_view(template_name= 'explorer/logout.html'), name='auth_logout'),
+    url(r'^accounts/register/$',RegistrationView.as_view(form_class=SerolUserForm), name='registration_register'),
+    url(r'^accounts/login/$', LoginView.as_view(template_name='explorer/login.html'), name='auth_login'),
+    url(r'^accounts/logout/$', LogoutView.as_view(template_name= 'explorer/logout.html'), name='auth_logout'),
+    url(r'^accounts/', include('registration.backends.hmac.urls')),
     url(r'^$', TemplateView.as_view(template_name="explorer/home.html"), name='home'),
 ]
 

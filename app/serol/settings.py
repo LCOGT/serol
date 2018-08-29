@@ -57,8 +57,8 @@ MIDDLEWARE = [
 ]
 
 AUTHENTICATION_BACKENDS = (
-    'serol.auth_backend.ValhallaBackend',
     'django.contrib.auth.backends.ModelBackend',
+    'serol.auth_backend.ValhallaBackend',
 )
 
 AUTH_USER_MODEL = 'status.User'
@@ -145,6 +145,8 @@ DATABASES = {
     }
 }
 
+ACCOUNT_ACTIVATION_DAYS = 28
+
 #############
 # Email
 ############
@@ -217,6 +219,7 @@ DEFAULT_CAMERAS = { '1m0' : '1M0-SCICAM-SBIG',
                     '2m0' : '2M0-SCICAM-SPECTRAL',
                     '0m4' : '0M4-SCICAM-SBIG'
                     }
+DEFAULT_PROPOSAL = 'LCOEPO2014-010B'
 
 COLOUR_TEMPLATE = {'rp':'1','V':'2','B':'3'}
 

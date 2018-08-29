@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.hashers import check_password
+from django.contrib.auth import authenticate
 from django.utils.translation import ugettext as _
 from rest_framework.authtoken.models import Token
 import requests
@@ -18,6 +19,7 @@ class ValhallaBackend(object):
 
     def authenticate(self, request, username=None, password=None):
         return lco_authenticate(request, username, password)
+        # return authenticate(request, username=username, password=password)
 
     def get_user(self, user_id):
         try:
