@@ -21,9 +21,7 @@ $(document).ready(function(){
       show_next_question();
   });
 
-  if (typeof(my_image) != 'undefined'){
-    arrange_images(my_image);
-  } else {
+  if (typeof(my_image) == 'undefined'){
     get_colour_image(localStorage.getItem('archive_token'), frameid, mode='analyser')
   }
 

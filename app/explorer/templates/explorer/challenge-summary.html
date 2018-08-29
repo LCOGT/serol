@@ -48,7 +48,7 @@ var my_image {% if progress.image_file %} = "{{ MEDIA_PREFIX }}{{ progress.image
 
 $(document).ready(function(){
 
-  if (typeof(my_image) != 'undefined'){
+  if (typeof(my_image) == 'undefined'){
     get_colour_image(localStorage.getItem('archive_token'), frameid, mode='summary')
   }
 

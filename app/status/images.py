@@ -1,6 +1,7 @@
 from astropy.io import fits
-#from astroscrappy import detect_cosmics
+from astroscrappy import detect_cosmics
 from django.conf import settings
+from django.utils.text import get_valid_filename
 from fits2image.conversions import fits_to_jpg
 from glob import glob
 from fits_align.align import affineremap
@@ -114,13 +115,10 @@ def write_clean_data(filelist):
 
 def reproject_files(ref_image, images_to_align, tmpdir='temp/'):
     identifications = make_transforms(ref_image, images_to_align[1:])
-    hdu = fits.open(ref_image)
-    data = hdu[1].data
-    outputshape = shape(data)
 
     for id in identifications:
         if id.ok:
-            affineremap(id.ukn.filepath, id.trans, shape=(outputshape[1],outputshape[0]), outdir=tmpdir)
+            affineremap(id.ukn.filepath, id.trans, outdir=tmpdir)
 
     aligned_images = sorted(glob(tmpdir+"/*_affineremap.fits"))
 
@@ -149,7 +147,7 @@ def clean_data(data):
     data[data<0.]=median_val
     # Run astroScrappy to remove pesky cosmic rays
     logger.debug('--- Begin CR removal ---')
-    #data = remove_cr(data)
+    data = remove_cr(data)
     logger.debug('Median=%s' % median_val)
     logger.debug('Max after median=%s' % data.max())
     return data
@@ -184,7 +182,7 @@ def make_request_image(request_id, targetname, category=None, name=None):
     if not name:
         name = "{}-{}.jpg".format(targetname.replace(" ",""), request_id)
 
-
+    name = get_valid_filename(name)
     img_list = sorted(glob(os.path.join(tmp_dir,"*.fz")))
     new_filepath = os.path.join(settings.IMAGE_ROOT,name)
     num_files = len(img_list)
