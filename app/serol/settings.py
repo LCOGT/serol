@@ -154,7 +154,7 @@ ACCOUNT_ACTIVATION_DAYS = 28
 EMAIL_USE_TLS       = True
 EMAIL_HOST          = 'smtp.gmail.com'
 EMAIL_PORT          =  587
-EMAIL_FROM  = 'Serol <serol@lco.global>'
+EMAIL_FROM  = 'Serol <portal@lco.global>'
 EMAIL_HOST_USER = os.environ.get('EMAIL_USERNAME', '')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD', '')
 
@@ -219,7 +219,7 @@ DEFAULT_CAMERAS = { '1m0' : '1M0-SCICAM-SBIG',
                     '2m0' : '2M0-SCICAM-SPECTRAL',
                     '0m4' : '0M4-SCICAM-SBIG'
                     }
-DEFAULT_PROPOSAL = 'LCOEPO2014-010B'
+DEFAULT_PROPOSAL = 'LCOEPO2014B-010'
 
 COLOUR_TEMPLATE = {'rp':'1','V':'2','B':'3'}
 

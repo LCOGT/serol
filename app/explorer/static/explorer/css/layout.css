@@ -656,44 +656,6 @@ input[type=radio]:checked ~ .check:active{
   max-width: 200px;
 }
 
-.corner-ribbon {
-  display: block;
-  -webkit-box-sizing: content-box;
-  -moz-box-sizing: content-box;
-  box-sizing: content-box;
-  float: none;
-  z-index: auto;
-  width: 0;
-  height: 100px;
-  position: relative;
-  cursor: default;
-  opacity: 1;
-  margin: 0;
-  padding: 0;
-  overflow: visible;
-  border: 50px solid #1abc9c;
-  border-top: 0 solid;
-  border-bottom: 35px solid rgba(0,0,0,0);
-  -webkit-border-radius: 0;
-  border-radius: 0;
-  font: normal 100%/normal Arial, Helvetica, sans-serif;
-  color: rgba(0,0,0,1);
-  -o-text-overflow: clip;
-  text-overflow: clip;
-  background: none;
-  -webkit-box-shadow: none;
-  box-shadow: none;
-  text-shadow: none;
-  -webkit-transition: none;
-  -moz-transition: none;
-  -o-transition: none;
-  transition: none;
-  -webkit-transform: none;
-  transform: none;
-  -webkit-transform-origin: 50% 50% 0;
-  transform-origin: 50% 50% 0;
-}
-
 .corner-ribbon h2 {
   padding:0;
 }

@@ -49,13 +49,15 @@ class ScheduleView(APIView):
             logger.error('Request was not valid')
             return Response(ser.errors, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
-            token = request.data.get('token', False)
-            if not token and request.user.is_authenticated:
+            params = ser.data
+            token = request.user.token
+            user_logged_in = request.user.is_authenticated()
+            if not token and user_logged_in:
                 params['token'] = settings.PORTAL_TOKEN
-            elif not token and request.user.is_anonymous:
+            elif not token and not user_logged_in:
+
                 return Response("Not authenticated.", status=status.HTTP_401_UNAUTHORIZED)
             # Send to Valhalla API
-            params = ser.data
             if request.user.default_proposal:
                 params['proposal'] = request.user.default_proposal.code
             else:
