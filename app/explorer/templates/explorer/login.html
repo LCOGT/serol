@@ -14,7 +14,9 @@
 
 {% block main-body %}
 			<h1>Serol</h1>
-			<h3>{% trans "Log in with your Las Cumbres Observatory account" %}</h3>
+			<h3>{% trans "Log in with your Serol or Las Cumbres Observatory account" %}</h3>
+      <p>{% trans "Want to join Serol's Cosmic Explorers?" %} <a href="{% url 'registration_register' %}">{% trans "Register for an account!" %}</a>
+      </p>
       {% for m in messages %}
       <p class="bg-warning">{{m|safe}}</p>
       {% endfor %}
@@ -41,10 +43,8 @@
           <input type="hidden" name="next" value="{{ next }}">
       		<button id="login-btn" class="btn btn-lg btn-4 btn-4a">Log me in</button>
         <p class="small">By logging in, you agree to <a href="http://lco.global/observatory/termsofuse" target="_blank">the Las Cumbres Observatory terms of use</a>.</p>
-      	<p class="small">
-      		<a href="https://observe.lco.global/accounts/register/">Need an account?</a>
-      		&nbsp;
-      		<a href="https://observe.lco.global/accounts/password/reset/">Forgot your password?</a>
+      	<p>
+      		<a href="{% url 'password_reset' %}">Forgot your password?</a>
       	</p>
       </form>
 {% endblock %}

@@ -219,7 +219,7 @@ DEFAULT_CAMERAS = { '1m0' : '1M0-SCICAM-SBIG',
                     '2m0' : '2M0-SCICAM-SPECTRAL',
                     '0m4' : '0M4-SCICAM-SBIG'
                     }
-DEFAULT_PROPOSAL = 'LCOEPO2014B-010'
+DEFAULT_PROPOSAL = os.environ.get('DEFAULT_PROPOSAL','LCOEPO2018B-002')
 
 COLOUR_TEMPLATE = {'rp':'1','V':'2','B':'3'}
 

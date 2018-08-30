@@ -1,13 +1,15 @@
 from django.conf import settings
 from django.conf.urls import url, include
 from django.contrib import admin
+from django.contrib.auth import urls as django_auth_urls
 from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth import views as auth_views
 from django.contrib.flatpages.views import flatpage
 from django.contrib.staticfiles import views
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
 from rest_framework.authtoken.views import obtain_auth_token
-from registration.backends.hmac.views import RegistrationView
+from registration.backends.hmac.views import RegistrationView, ActivationView
 
 from status.views import ScheduleView, StatusView, SerolUserForm
 from explorer.views import MissionView, MissionListView, ChallengeRedirectView, \
@@ -50,7 +52,19 @@ urlpatterns = [
     url(r'^accounts/register/$',RegistrationView.as_view(form_class=SerolUserForm), name='registration_register'),
     url(r'^accounts/login/$', LoginView.as_view(template_name='explorer/login.html'), name='auth_login'),
     url(r'^accounts/logout/$', LogoutView.as_view(template_name= 'explorer/logout.html'), name='auth_logout'),
-    url(r'^accounts/', include('registration.backends.hmac.urls')),
+    url(r'^accounts/activate/complete/$',
+        TemplateView.as_view(
+            template_name='registration/activation_complete.html'),
+        name='registration_activation_complete'),
+    url(r'^accounts/activate/(?P<activation_key>[-:\w]+)/$',
+        ActivationView.as_view(),
+        name='registration_activate'),
+    url(r'^accounts/register/complete/$',
+        TemplateView.as_view(
+            template_name='registration/registration_complete.html'),
+        name='registration_complete'),
+    # url(r'^accounts/', include('registration.backends.hmac.urls')),
+    url(r'^accounts/', include(django_auth_urls)),
     url(r'^$', TemplateView.as_view(template_name="explorer/home.html"), name='home'),
 ]
 
