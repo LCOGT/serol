@@ -1,0 +1,45 @@
+{% extends 'explorer/base.html' %}
+{% load static i18n %}
+
+{% block title %}{% trans "Project Complete!" %}{% endblock %}
+
+{% block mission-class %}{%endblock%}
+
+{% block main-content %}
+<div class="container">
+    <div class="row">
+      <div class="col-12">
+        <h1>{% trans "Project Complete!" %}</h1>
+        <div id="celebration-serol"></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+          <p class="statement">{% trans "You have reached the end of Serol's Cosmic Explorer missions!" %}</p>
+          <p class="statement">{% trans "Have a look back at all of your" %} <a href="{% url 'stickers' %}">{% trans "challenges and cosmic pictures!" %}</a> </p>
+        </div>
+      </div>
+    </div>
+</div>
+{% endblock %}
+{% block script-content %}
+<script src="{% static "explorer/js/utils.js" %}"  type="text/javascript" ></script>
+<script src="{% static "explorer/js/lottie.js" %}"  type="text/javascript" ></script>
+<script>
+
+var anim;
+var animData = {
+    container: document.getElementById('celebration-serol'),
+    renderer: 'svg',
+    loop: true,
+    autoplay: true,
+    autoloadSegments: true,
+    rendererSettings: {
+        progressiveLoad:false
+    },
+    path: '{% static "explorer/js/project_complete.json" %}'
+};
+anim = lottie.loadAnimation(animData);
+
+</script>
+{% endblock%}

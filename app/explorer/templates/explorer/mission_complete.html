@@ -1,0 +1,42 @@
+{% extends 'explorer/base.html' %}
+{% load static i18n %}
+
+{% block title %}{% trans "Mission Complete!" %}{% endblock %}
+
+{% block mission-class %}{%endblock%}
+
+{% block main-content %}
+<div class="container-fluid">
+      <div class="row justify-content-center">
+          <div class="col-3">
+            <a href="{% url 'missions' %}" class="btn btn-lg btn-4 btn-4a animated tada">Start a new mission!</a>
+          </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div id="celebration-serol"></div>
+        </div>
+      </div>
+</div>
+{% endblock %}
+{% block script-content %}
+<script src="{% static "explorer/js/utils.js" %}"  type="text/javascript" ></script>
+<script src="{% static "explorer/js/lottie.js" %}"  type="text/javascript" ></script>
+<script>
+
+var anim;
+var animData = {
+    container: document.getElementById('celebration-serol'),
+    renderer: 'svg',
+    loop: true,
+    autoplay: true,
+    autoloadSegments: true,
+    rendererSettings: {
+        progressiveLoad:false
+    },
+    path: '{% static "explorer/js/mission_complete.json" %}'
+};
+anim = lottie.loadAnimation(animData);
+
+</script>
+{% endblock%}

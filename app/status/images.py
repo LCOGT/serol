@@ -196,7 +196,7 @@ def make_request_image(request_id, targetname, category=None, name=None):
         if len(img_list) == 3:
             logger.debug('Reprojecting {} files'.format(len(img_list)))
             img_list = reproject_files(img_list[0], img_list, tmp_dir)
-        img_list = write_clean_data(img_list)
+        # img_list = write_clean_data(img_list)
         logger.debug('Sorting for colour')
         if len(img_list) != 3:
             logger.debug('Creating colour image')

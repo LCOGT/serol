@@ -13,7 +13,8 @@ from registration.backends.hmac.views import RegistrationView, ActivationView
 
 from status.views import ScheduleView, StatusView, SerolUserForm
 from explorer.views import MissionView, MissionListView, ChallengeRedirectView, \
-    ChallengeView, AnalyseView, ChallengeSummary, ChallengeRetry, NextChallengeView
+    ChallengeView, AnalyseView, ChallengeSummary, ChallengeRetry, NextChallengeView, \
+    MissionComplete
 from explorer.serializers import FactsView
 from stickers.views import StickerView
 from highscore.views import HighScoreView, AddHighScoreView
@@ -28,8 +29,10 @@ urlpatterns = [
     url(r'^resources/workshops/$', flatpage, {'url': '/resources/workshops/'}, name='workshops'),
     url(r'^getting-started/$', flatpage, {'url' : '/getting-started/'}, name='getting-started'),
     url(r'^page/(?P<url>.*/)$', flatpage),
+    url(r'^finish-line/$', TemplateView.as_view(template_name='explorer/project_complete.html'), name="project-complete"),
     url(r'^mission/(?P<pk>[0-9]+)/$', MissionView.as_view(), name="mission"),
     url(r'^mission/(?P<mission_num>[0-9]+)/next/$', NextChallengeView.as_view(), name="challenge-next"),
+    url(r'^mission/(?P<pk>[0-9]+)/complete/$', MissionComplete.as_view(), name="mission-complete"),
     url(r'^missions/$', MissionListView.as_view(), name="missions"),
     url(r'^challenge/(?P<pk>[0-9]+)/start/$', ChallengeView.as_view(), {'mode':'start'}, name="start"),
     url(r'^challenge/(?P<pk>[0-9]+)/observe/$', ChallengeView.as_view(), {'mode':'observe'}, name="observe"),

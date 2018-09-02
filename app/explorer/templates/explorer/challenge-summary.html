@@ -16,8 +16,8 @@
           </p>
           {% endfor %}
           <p>
-          {% if object.is_last or object.mission.number in completed_missions %}
-          <a href="{% url 'missions' %}" class="btn btn-4 btn-4a">{% trans "start a new mission?" %}</a><br/>
+          {% if object.mission.number in completed_missions %}
+          <a href="{% url 'mission-complete' object.mission.number  %}" class="btn btn-4 btn-4a">{% trans "continue" %}</a><br/>
           <a href="{% url 'stickers' %}" class="btn btn-4 btn-4a">{% trans "see your stickers" %}</a>
           {% else %}
           <a href="{% url 'challenge-next' object.mission.number %}" class="btn btn-4 btn-4a animated tada">{% trans "start a new challenge?" %}</a>

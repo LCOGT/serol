@@ -224,7 +224,7 @@ DEFAULT_PROPOSAL = os.environ.get('DEFAULT_PROPOSAL','LCOEPO2018B-002')
 COLOUR_TEMPLATE = {'rp':'1','V':'2','B':'3'}
 
 
-LOGIN_URL = "/login/"
+LOGIN_URL = "/accounts/login/"
 LOGIN_REDIRECT_URL = "/"
 
 PROGRESS_OPTIONS =  (

@@ -84,7 +84,7 @@ function get_qs(n) {
     return half !== undefined ? decodeURIComponent(half.split('&')[0]) : null;
 }
 
-function update_status(requestid, token) {
+function update_status(requestid) {
   $.getJSON('/api/status/'+requestid+'/')
     .done(function(data){
       window.location.replace(redirect_url);
@@ -110,9 +110,8 @@ function status_request(requestid, token) {
       if (rdata['state'] == 'PENDING' ){
         status_userrequest(rdata['id'], token);
       } else if (rdata['state'] == 'COMPLETED' || rdata['state'] == 'WINDOW_EXPIRED' || rdata['state'] == 'CANCELED'){
-        update_status(requestid, token);
+        update_status(requestid);
       }
-
       console.log("DONE"+data);
     })
     .fail(function(rdata){

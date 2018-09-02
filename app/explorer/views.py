@@ -15,6 +15,7 @@ import json
 from explorer.models import Mission, Challenge, Body
 from status.models import Progress, Answer, Question, UserAnswer
 from stickers.models import PersonSticker
+from status.views import check_token
 from stickers.views import add_sticker
 from explorer.utils import add_answers, completed_missions
 
@@ -43,6 +44,10 @@ class MissionView(LoginRequiredMixin, DetailView):
         return context
 
 
+class MissionComplete(LoginRequiredMixin, DetailView):
+    model = Mission
+    template_name = "explorer/mission_complete.html"
+
 class MissionListView(LoginRequiredMixin, ListView):
     model = Mission
     template_name = "explorer/missionlist.html"
@@ -53,6 +58,13 @@ class MissionListView(LoginRequiredMixin, ListView):
         context['active_missions'] = active_missions
 
         return context
+
+    def get(self, request):
+        if request.user.mission_1 and request.user.mission_2 and request.user.mission_3:
+            url = reverse('project-complete')
+            return HttpResponseRedirect(url)
+        else:
+            return super(MissionListView, self).get(request)
 
 
 class ChallengeView(LoginRequiredMixin, DetailView):
@@ -72,6 +84,9 @@ class ChallengeView(LoginRequiredMixin, DetailView):
             if mode == 'observe':
                 targets = Body.objects.filter(avm_code__startswith=obj.challenge.avm_code, active=True)
                 context['targets'] = targets
+            if mode == 'submitted':
+                token, archive_token = check_token(request.user)
+                request.session['token'] = token
 
         return self.render_to_response(context)
 

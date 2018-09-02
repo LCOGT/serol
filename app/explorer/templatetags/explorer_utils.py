@@ -51,7 +51,10 @@ def mission_progress_url(user, mission_id):
             url = reverse('challenge',kwargs={'pk':challenges[0].pk})
         else:
             # We have come to the end of the Mission
-            url = reverse('missions')
+            if user.mission_1 and user.mission_2 and user.mission_3:
+                url = reverse('project-complete')
+            else:
+                url = reverse('mission-complete',kwargs={'pk':mission_id})
     else:
         # We haven't completed this challenge so just take us to it
         url = reverse('challenge',kwargs={'pk':latest.challenge.pk})

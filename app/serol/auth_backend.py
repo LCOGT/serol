@@ -19,7 +19,6 @@ class ValhallaBackend(object):
 
     def authenticate(self, request, username=None, password=None):
         return lco_authenticate(request, username, password)
-        # return authenticate(request, username=username, password=password)
 
     def get_user(self, user_id):
         try:
