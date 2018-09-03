@@ -178,9 +178,9 @@ function arrange_images(url){
     images = shuffle(images);
     for (i=0;i<4;i++){
       $("#img-"+i).attr('src',images[i]['url']);
-      $("#img-text-"+i).data('mine',images[i]['mine']);
+      $("#img-"+i).data('mine',images[i]['mine']);
     }
-    $(".identify-text").on('click', function(d){
+    $("img.identify-image").on('click', function(d){
       if ($(this).data('mine') == true){
         show_identify_answer('.identify-yes');
       } else {

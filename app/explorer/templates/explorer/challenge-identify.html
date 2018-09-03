@@ -11,7 +11,7 @@ var current_tag = "{{object.avm_code}}";
 var redirect_url = "{% url 'analyse' object.id %}?frameid="+{{ progress.frameids }};
 var requestid = {{ progress.requestid }};
 var frameid = {{ progress.frameids }};
-var my_image {% if progress.image_file %} = "{{ MEDIA_PREFIX }}{{ progress.image_file }}"{% endif %};
+var my_image_url {% if progress.image_file %} = "{{ MEDIA_PREFIX }}{{ progress.image_file }}"{% endif %};
 
 function filter_tags() {
   var static_url = "{% static 'explorer/identify/' %}";
@@ -39,8 +39,8 @@ function filter_tags() {
 
 $(document).ready(function(){
   filter_tags();
-  if (typeof(my_image) != 'undefined'){
-    arrange_images(my_image);
+  if (typeof(my_image_url) != 'undefined'){
+    arrange_images(my_image_url);
   } else {
     get_colour_image(localStorage.getItem('archive_token'), frameid, mode='identify')
   }
@@ -58,12 +58,7 @@ $(document).ready(function(){
       <div class="row">
         {% for i in "0123" %}
         <div class="col-6 pb-2">
-          <img src="{% static 'explorer/images/placeholder.jpg' %}" alt="" class="identify-image img-fluid rounded" id="img-{{i}}">
-          <div class="identify-middle">
-            <div class="identify-text" id="img-text-{{i}}" data-mine="">
-              <i class="far fa-question fa-4x"></i>
-            </div>
-          </div>
+          <img src="{% static 'explorer/images/placeholder.jpg' %}" alt="" class="identify-image img-fluid rounded" id="img-{{i}}" data-mine="">
         </div>
         {% endfor %}
       </div>
@@ -71,7 +66,7 @@ $(document).ready(function(){
     <div class="col-lg-2">
         <div class="bubble">
           <p>{% trans "You asked for" %} <strong>{{progress.target}}</strong>.
-              {% trans "That's a" %} {{object.category}}.<br/>
+              {% trans "That's a" %} <strong>{{object.category}}</strong>.<br/>
           {% trans "Click on your picture" %}</p>
         </div>
     </div>

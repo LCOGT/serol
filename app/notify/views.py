@@ -6,6 +6,10 @@ from django.urls import reverse
 
 from status.models import Progress
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 def render_email(progress):
     if not progress.user.email:
         return False
@@ -27,10 +31,16 @@ def render_email(progress):
                 'mission'  : progress.challenge.mission.number,
                 'url'      : reverse('challenge',kwargs={'pk':progress.challenge.pk})
                  }
+    logger.debug("Rendering email to {} for Prog ID {}".format(progress.user.username, progress.pk))
     text_content = plaintext.render(data)
     message = (subject, text_content, settings.EMAIL_FROM, [email])
     return message
 
-def send_emails(messages):
+def send_notifications(progress_updates):
+    messages = []
+    for progress in progress_updates:
+        message = render_email(progress)
+        messages.append(message)
+    logger.debug("Sending {} emails".format(len(messages)))
     send_mass_mail(messages, fail_silently=False)
     return

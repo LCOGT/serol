@@ -8,6 +8,7 @@ import logging
 from status.images import make_request_image
 from status.views import update_status
 from status.models import Progress
+from notify.views import send_notifications
 
 logger = logging.getLogger(__name__)
 
@@ -18,6 +19,7 @@ class Command(BaseCommand):
         parser.add_argument('--request_id', '-rid', help="[Optional] Request ID to update")
 
     def handle(self, *args, **options):
+        success = []
         self.stdout.write(self.style.WARNING("Running requests update - {}".format(datetime.now().isoformat())))
         if options['request_id']:
             self.stdout.write("Looking for Progress matching ID={}".format(options['request_id']))
@@ -30,5 +32,8 @@ class Command(BaseCommand):
             resp = update_status(pg.requestid, token=settings.PORTAL_TOKEN, archive_token=settings.ARCHIVE_TOKEN)
             if status.is_success(resp.status_code):
                 self.stdout.write(self.style.SUCCESS("Update of {} successful".format(pg.requestid)))
+                success.append(pg)
             else:
                 self.stdout.write(self.style.ERROR("Update of {} failed - {}".format(pg.requestid, resp.data)))
+        # Email all successfully completed progresses
+        send_notifications(success)

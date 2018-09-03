@@ -8,7 +8,7 @@
 <script>
 var answers = Array();
 var requestid = {{ progress.requestid}};
-var frameid;
+var frameid = {{ progress.frameids }};
 var current_question=0;
 var question_total={{questions|length}};
 var my_image {% if progress.image_file %} = "{{ MEDIA_PREFIX }}{{ progress.image_file }}"{% endif %};
