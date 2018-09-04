@@ -2,11 +2,12 @@ from datetime import datetime
 
 from django.db import models
 from django.contrib import admin
+from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 from django_fsm import FSMField, transition
 from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext as _
-from django.contrib.auth.models import AbstractUser
 
 from explorer.models import Challenge, Mission
 
@@ -66,6 +67,10 @@ class Progress(models.Model):
             self.status,
         )
 
+    def image_tag(self):
+        return mark_safe('<img src="{}{}" width="150" height="150" />'.format(settings.MEDIA_URL, self.image_file))
+    image_tag.short_description = 'Image'
+
     def __str__(self):
         return "{} is {} in {}".format(self.user.username, self.challenge, self.status)
 
@@ -106,10 +111,6 @@ class Progress(models.Model):
     @transition(field=status, source=['Analyse','Investigate'], target='Summary')
     def completed(self):
         pass
-
-class ProgressAdmin(admin.ModelAdmin):
-    list_filter = ( 'status', 'challenge__number','challenge__mission__number')
-    list_display = ('user','challenge','coloured_state','last_update', 'has_image')
 
 class Question(models.Model):
     text = models.TextField()

@@ -41,7 +41,6 @@ class FactAdmin(admin.ModelAdmin):
 
 admin.site.register(Mission, MissionAdmin)
 admin.site.register(Challenge, ChallengeAdmin)
-admin.site.register(Progress, ProgressAdmin)
 admin.site.register(Sticker)
 admin.site.register(PersonSticker)
 admin.site.register(Body)

@@ -22,9 +22,20 @@ class QuestionAdmin(admin.ModelAdmin):
     list_display = ('challenge', 'text')
     inlines = [AnswerInline,]
 
+def remove_images(modeladmin, request, queryset):
+    queryset.update(image_file=None, image_status=0)
+remove_images.short_description = "Remove images"
+
+class ProgressAdmin(admin.ModelAdmin):
+    list_filter = ( 'status', 'challenge__number','challenge__mission__number')
+    list_display = ('user','target','challenge','coloured_state','last_update', 'has_image')
+    actions = [remove_images]
+    fields = ['user','challenge', 'target', 'requestid', 'frameids', 'status', 'last_update', 'image_tag', 'image_status']
+    readonly_fields = ['image_tag']
 
 admin.site.register(User, CustomUserAdmin)
 admin.site.register(Question, QuestionAdmin)
 admin.site.register(Proposal)
+admin.site.register(Progress, ProgressAdmin)
 
 admin.site.site_header = 'SEROL admin'
