@@ -96,7 +96,7 @@ def get_profile(token):
             return (r.json()['username'], r.json()['tokens']['archive'], proposal, r.json()['email']), False
         else:
             logger.debug('No active proposal')
-            return False, _("Please join a participating <a href='http://lco.global/education/partners/'>LCO education partner</a> for access to SEROL")
+            return False, _("Please <a href='/accounts/register/'>register</a> or join a participating <a href='https://lco.global/education/partners/'>LCO education partner</a> for access to SEROL")
     else:
         logger.error("Could not get profile {}".format(r.content))
         return False, _("Please check your login details")
