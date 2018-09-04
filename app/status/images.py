@@ -190,6 +190,7 @@ def make_request_image(request_id, targetname, category=None, name=None):
         return False, image_status
     logger.debug("{} files downloaded".format(num_files))
     if category == '1.1':
+        logger.debug("Processing planet")
         r = planet_process(infile=img_list[0],outfile=new_filepath, planet=targetname)
         image_status = 2
     else:

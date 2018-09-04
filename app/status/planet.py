@@ -72,7 +72,8 @@ def crop_image(filename):
     im_file = Path(filename)
     if im_file.is_file():
         im = Image.open(filename)
-        area = (200, 0, 1300, 1000)
+        s = im.size
+        area = (0.25*s[0], 0.25*s[1], 0.75*s[0], 0.75*s[1])
         im.crop(area).save(filename)
         return True
     else:
