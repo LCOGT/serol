@@ -39,11 +39,14 @@ class FlatPageAdmin(FlatPageAdmin):
 class FactAdmin(admin.ModelAdmin):
     list_display = ('tagline','category','published')
 
+class BodyAdmin(admin.ModelAdmin):
+    list_display = ('name','icon','active')
+
 admin.site.register(Mission, MissionAdmin)
 admin.site.register(Challenge, ChallengeAdmin)
 admin.site.register(Sticker)
 admin.site.register(PersonSticker)
-admin.site.register(Body)
+admin.site.register(Body, BodyAdmin)
 admin.site.register(Score)
 admin.site.register(LevelScore)
 admin.site.register(Fact, FactAdmin)
