@@ -9,7 +9,7 @@ from django.contrib.staticfiles import views
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
 from rest_framework.authtoken.views import obtain_auth_token
-from registration.backends.hmac.views import RegistrationView, ActivationView
+from django_registration.backends.activation.views import RegistrationView, ActivationView
 
 from status.views import ScheduleView, StatusView, SerolUserForm
 from explorer.views import MissionView, MissionListView, ChallengeRedirectView, \

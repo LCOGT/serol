@@ -80,7 +80,7 @@ def crop_image(filename):
         return False
 
 def planet_process(infile, outfile, planet):
-    if planet.lower() in ['jupiter','uranus']:
+    if planet.lower() in ['jupiter','uranus','mars']:
         create_jupiter_image(infile, outfile)
     elif planet.lower() == 'saturn':
         create_saturn_image(infile, outfile)

@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.conf import settings
 import time
 
-from registration.forms import RegistrationForm
+from django_registration.forms import RegistrationForm
 from rest_framework.decorators import api_view
 from rest_framework.renderers import JSONRenderer, BrowsableAPIRenderer
 from rest_framework.response import Response

@@ -1,5 +1,5 @@
 --extra-index-url=http://buildsba.lco.gtn/python/
-Django>=1.11,<2
+Django>2.1,<2.2
 django-fsm
 django-rest-framework
 djangorestframework
