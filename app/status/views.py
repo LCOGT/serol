@@ -51,7 +51,7 @@ class ScheduleView(APIView):
         else:
             params = ser.data
             token = request.user.token
-            user_logged_in = request.user.is_authenticated()
+            user_logged_in = request.user.is_authenticated
             if not token and user_logged_in:
                 params['token'] = settings.PORTAL_TOKEN
             elif not token and not user_logged_in:

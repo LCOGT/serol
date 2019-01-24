@@ -57,14 +57,14 @@ urlpatterns = [
     url(r'^accounts/logout/$', LogoutView.as_view(template_name= 'explorer/logout.html'), name='auth_logout'),
     url(r'^accounts/activate/complete/$',
         TemplateView.as_view(
-            template_name='registration/activation_complete.html'),
-        name='registration_activation_complete'),
+            template_name='django_registration/activation_complete.html'),
+        name='django_registration_activation_complete'),
     url(r'^accounts/activate/(?P<activation_key>[-:\w]+)/$',
         ActivationView.as_view(),
         name='registration_activate'),
     url(r'^accounts/register/complete/$',
         TemplateView.as_view(
-            template_name='registration/registration_complete.html'),
+            template_name='django_registration/registration_complete.html'),
         name='registration_complete'),
     # url(r'^accounts/', include('registration.backends.hmac.urls')),
     url(r'^accounts/', include(django_auth_urls)),
