@@ -1,6 +1,8 @@
 # Serol
 Serol's Cosmic Explorer website
 
+[![Build Status](http://jenkins.lco.gtn/job/lcogt/job/serol/job/master/badge/icon)](http://jenkins.lco.gtn/job/lcogt/job/serol/job/master/)
+
 ## An astronomy exploration website for LCO education partners
 
 At present Serol is only available for [LCO education partners](https://lco.global/education/partners/).
