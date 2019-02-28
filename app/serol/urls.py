@@ -61,7 +61,7 @@ urlpatterns = [
         name='django_registration_activation_complete'),
     url(r'^accounts/activate/(?P<activation_key>[-:\w]+)/$',
         ActivationView.as_view(),
-        name='django_registration_activate'),
+        name='registration_activate'),
     url(r'^accounts/register/complete/$',
         TemplateView.as_view(
             template_name='django_registration/registration_complete.html'),
