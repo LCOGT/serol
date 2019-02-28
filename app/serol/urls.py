@@ -61,11 +61,11 @@ urlpatterns = [
         name='django_registration_activation_complete'),
     url(r'^accounts/activate/(?P<activation_key>[-:\w]+)/$',
         ActivationView.as_view(),
-        name='registration_activate'),
+        name='django_registration_activate'),
     url(r'^accounts/register/complete/$',
         TemplateView.as_view(
             template_name='django_registration/registration_complete.html'),
-        name='registration_complete'),
+        name='django_registration_complete'),
     # url(r'^accounts/', include('registration.backends.hmac.urls')),
     url(r'^accounts/', include(django_auth_urls)),
     url(r'^$', TemplateView.as_view(template_name="explorer/home.html"), name='home'),
