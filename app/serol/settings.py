@@ -16,6 +16,8 @@ DEBUG=False
 
 ALLOWED_HOSTS = ['*']
 
+ADMINS = [('Edward Gomez','egomez@lco.global')]
+
 ADMIN_SITE_HEADER = 'SEROL admin'
 
 # Application definition
