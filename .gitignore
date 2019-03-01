@@ -1,6 +1,6 @@
 local_settings.py
 serol.db
-*.json
+fixtures/
 media/
 
 # Byte-compiled / optimized / DLL files
