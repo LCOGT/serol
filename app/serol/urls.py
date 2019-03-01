@@ -74,4 +74,6 @@ urlpatterns = [
 if settings.DEBUG:
     urlpatterns += [
         url(r'^static/(?P<path>.*)$', views.serve),
+        url(r'^500/$', TemplateView.as_view(template_name='500.html'), name="error500"),
+        url(r'^404/$', TemplateView.as_view(template_name='404.html'), name="error404"),
     ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
