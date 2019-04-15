@@ -37,7 +37,6 @@ class Command(BaseCommand):
                 if image_status > 0:
                     name = "{}-{}.jpg".format(pg.target.replace(" ",""), pg.requestid)
                     name = get_valid_filename(name)
-                    # with open(tmpfile, 'rb') as f:
                     pg.image_file.save(name, File(tmpfile), save=True)
                     pg.image_status = image_status
                     pg.last_update = datetime.now()
