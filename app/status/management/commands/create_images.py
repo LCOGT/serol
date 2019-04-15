@@ -1,8 +1,11 @@
-from django.core.management.base import BaseCommand, CommandError
-from django.conf import settings
 from datetime import datetime
-import os
+from django.conf import settings
+from django.core.files import File
+from django.core.management.base import BaseCommand, CommandError
+from django.utils.text import get_valid_filename
+from tempfile import NamedTemporaryFile
 
+import os
 import logging
 
 from status.images import make_request_image
@@ -28,14 +31,17 @@ class Command(BaseCommand):
             self.stdout.write("Processing {} observations".format(len(pgs)))
         for pg in pgs:
             self.stdout.write("Download and make JPEG  - ReqID {}  ProgID {}".format(pg.requestid, pg.id))
-            new_filepath, image_status = make_request_image(request_id=pg.requestid, category=pg.challenge.avm_code, targetname=pg.target)
-            self.stdout.write("Processed {}: image {}, status {}".format(pg.requestid, new_filepath, image_status))
-            if image_status > 0:
-                path, filename = os.path.split(new_filepath)
-                pg.image_file = filename
-                pg.image_status = image_status
-                pg.last_update = datetime.now()
-                if pg.status == 'Observed':
-                    pg.identify()
-                pg.save()
-                self.stdout.write(self.style.SUCCESS("Successfully created image for {}".format(pg.id)))
+            with NamedTemporaryFile() as tmpfile:
+                image_status = make_request_image(filename=tmpfile.name, request_id=pg.requestid, category=pg.challenge.avm_code, targetname=pg.target)
+                self.stdout.write("Processed {}: image of {}, status {}".format(pg.requestid, pg.target, image_status))
+                if image_status > 0:
+                    name = "{}-{}.jpg".format(pg.target.replace(" ",""), pg.requestid)
+                    name = get_valid_filename(name)
+                    # with open(tmpfile, 'rb') as f:
+                    pg.image_file.save(name, File(tmpfile), save=True)
+                    pg.image_status = image_status
+                    pg.last_update = datetime.now()
+                    if pg.status == 'Observed':
+                        pg.identify()
+                    pg.save()
+                    self.stdout.write(self.style.SUCCESS("Successfully created image for {}".format(pg.id)))
