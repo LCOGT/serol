@@ -50,7 +50,7 @@ class Progress(models.Model):
     status = FSMField(default='New', choices=settings.PROGRESS_OPTIONS)
     last_update = models.DateTimeField(default=datetime.utcnow)
     target = models.CharField(max_length=100)
-    image_file = models.CharField(max_length=100, null=True, blank=True)
+    image_file = models.FileField(null=True, blank=True, upload_to='images')
     image_status = models.SmallIntegerField(default=0, choices=IMAGE_STATUS_OPTIONS)
 
     def has_image(self):

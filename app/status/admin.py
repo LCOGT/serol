@@ -30,7 +30,7 @@ class ProgressAdmin(admin.ModelAdmin):
     list_filter = ( 'status', 'challenge__number','challenge__mission__number')
     list_display = ('user','target','challenge','coloured_state','last_update', 'has_image')
     actions = [remove_images]
-    fields = ['user','challenge', 'target', 'requestid', 'frameids', 'status', 'last_update', 'image_tag', 'image_status']
+    fields = ['user','challenge', 'target', 'requestid', 'frameids', 'status', 'last_update', 'image_file', 'image_tag', 'image_status']
     readonly_fields = ['image_tag']
 
 admin.site.register(User, CustomUserAdmin)

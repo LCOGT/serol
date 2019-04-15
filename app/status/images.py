@@ -184,7 +184,7 @@ def make_request_image(request_id, targetname, category=None, name=None):
 
     name = get_valid_filename(name)
     img_list = sorted(glob(os.path.join(tmp_dir,"*.fz")))
-    new_filepath = os.path.join(settings.IMAGE_ROOT,name)
+    new_filepath = os.path.join(settings.MEDIA_ROOT,name)
     num_files = len(img_list)
     if num_files == 0:
         return False, image_status
