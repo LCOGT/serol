@@ -17,5 +17,5 @@ profanityfilter
 django-cors-headers
 astropy
 astroscrappy
+fits2image>=0.4.0
 fits_align>=0.4.3
-git+git://github.com/LCOGT/fits2image.git@astropy#egg=fits2image
