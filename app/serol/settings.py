@@ -132,17 +132,17 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = '/var/www/html/static/'
+STATIC_ROOT = '/static/'
 
 MEDIA_URL = '/images/'
-
-MEDIA_ROOT = '/var/www/html/images/'
+MEDIA_ROOT = '/images/'
 
 SECRET_KEY = os.getenv('SECRET_KEY','')
 if not SECRET_KEY:
     chars = 'abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)'
     SECRET_KEY = get_random_string(50, chars)
 
+# Use AWS S3 for Media Files
 if str2bool(os.getenv('USE_S3', 'False')):
     # aws settings
     AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
@@ -155,10 +155,6 @@ if str2bool(os.getenv('USE_S3', 'False')):
     PUBLIC_MEDIA_LOCATION = 'media'
     MEDIA_URL = f'https://s3-{AWS_S3_REGION_NAME}.amazonaws.com/{AWS_STORAGE_BUCKET_NAME}/{PUBLIC_MEDIA_LOCATION}/'
     DEFAULT_FILE_STORAGE = 'serol.storage_backends.PublicMediaStorage'
-    # s3 public static files storage settings
-    PUBLIC_STATIC_LOCATION = 'static'
-    STATIC_URL = f'https://s3-{AWS_S3_REGION_NAME}.amazonaws.com/{AWS_STORAGE_BUCKET_NAME}/{PUBLIC_STATIC_LOCATION}/'
-    STATICFILES_STORAGE = 'serol.storage_backends.StaticStorage'
 
 DATABASES = {
     "default": {
