@@ -1,7 +1,6 @@
 from astropy.io import fits
 from astroscrappy import detect_cosmics
 from django.conf import settings
-from django.utils.text import get_valid_filename
 from fits2image.conversions import fits_to_jpg
 from glob import glob
 from fits_align.align import affineremap
@@ -167,7 +166,7 @@ def sort_files_for_colour(file_list, colour_template):
 
     return file_list
 
-def make_request_image(request_id, targetname, category=None, name=None):
+def make_request_image(filename, request_id, targetname, category=None, name=None):
     image_status = 0
     try:
         tmp_dir = os.path.join(settings.TMP_DIR,request_id)
@@ -177,21 +176,17 @@ def make_request_image(request_id, targetname, category=None, name=None):
     if not resp:
         logger.error('Failed to get data')
         shutil.rmtree(tmp_dir)
-        return False, image_status
+        return image_status
 
-    if not name:
-        name = "{}-{}.jpg".format(targetname.replace(" ",""), request_id)
-
-    name = get_valid_filename(name)
     img_list = sorted(glob(os.path.join(tmp_dir,"*.fz")))
-    new_filepath = os.path.join(settings.IMAGE_ROOT,name)
     num_files = len(img_list)
     if num_files == 0:
-        return False, image_status
+        return image_status
+
     logger.debug("{} files downloaded".format(num_files))
     if category == '1.1':
         logger.debug("Processing planet")
-        r = planet_process(infile=img_list[0],outfile=new_filepath, planet=targetname)
+        r = planet_process(infile=img_list[0], outfile=filename, planet=targetname)
         image_status = 2
     else:
         if len(img_list) == 3:
@@ -201,18 +196,18 @@ def make_request_image(request_id, targetname, category=None, name=None):
         logger.debug('Sorting for colour')
         if len(img_list) != 3:
             logger.debug('Creating colour image')
-            r = fits_to_jpg(img_list[0], new_filepath, width=1000, height=1000)
+            r = fits_to_jpg(img_list[0], filename, width=1000, height=1000)
             image_status = 2
         else:
             img_list = sort_files_for_colour(img_list, colour_template=settings.COLOUR_TEMPLATE)
-            r = fits_to_jpg(img_list, new_filepath, width=1000, height=1000, color=True)
+            r = fits_to_jpg(img_list, filename, width=1000, height=1000, color=True)
             image_status = 1
     if r:
         shutil.rmtree(tmp_dir)
-        return new_filepath, image_status
+        return image_status
     else:
         logger.error('Failed to make image for {}'.format(request_id))
-        return False, image_status
+        return image_status
 
 def check_data_balance(header):
     '''

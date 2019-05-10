@@ -4,7 +4,20 @@
 import os, sys
 from django.utils.crypto import get_random_string
 
-VERSION = '0.1'
+def str2bool(value):
+    '''Convert a string value to a boolean'''
+    value = value.lower()
+
+    if value in ('t', 'true', 'y', 'yes', '1', ):
+        return True
+
+    if value in ('f', 'false', 'n', 'no', '0', ):
+        return False
+
+    raise RuntimeError('Unable to parse {} as a boolean value'.format(value))
+
+
+VERSION = '0.2'
 
 SITE_ID = 1
 
@@ -25,7 +38,6 @@ ADMIN_SITE_HEADER = 'SEROL admin'
 CORS_ORIGIN_ALLOW_ALL=True
 
 INSTALLED_APPS = [
-    'whitenoise.runserver_nostatic',
     'highscore.apps.HighscoreConfig',
     'explorer.apps.ExplorerConfig',
     'status.apps.StatusConfig',
@@ -43,13 +55,13 @@ INSTALLED_APPS = [
     'markdown_deux',
     'corsheaders',
     'rest_framework',
-    'rest_framework.authtoken'
+    'rest_framework.authtoken',
+    'storages',
 ]
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -120,19 +132,30 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = '/var/www/html/static/'
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATIC_ROOT = '/static/'
 
 MEDIA_URL = '/images/'
+MEDIA_ROOT = '/images/'
 
-MEDIA_ROOT = '/var/www/html/images/'
-
-IMAGE_ROOT = MEDIA_ROOT
-
-SECRET_KEY = os.environ.get('SECRET_KEY','')
+SECRET_KEY = os.getenv('SECRET_KEY','')
 if not SECRET_KEY:
     chars = 'abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)'
     SECRET_KEY = get_random_string(50, chars)
+
+# Use AWS S3 for Media Files
+if str2bool(os.getenv('USE_S3', 'False')):
+    # aws settings
+    AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+    AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
+    AWS_S3_REGION_NAME = os.getenv('AWS_DEFAULT_REGION', 'us-west-2')
+    AWS_DEFAULT_ACL = None
+    AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
+    AWS_S3_SIGNATURE_VERSION = 's3v4'
+    # s3 public media settings
+    PUBLIC_MEDIA_LOCATION = 'media'
+    MEDIA_URL = f'https://s3-{AWS_S3_REGION_NAME}.amazonaws.com/{AWS_STORAGE_BUCKET_NAME}/{PUBLIC_MEDIA_LOCATION}/'
+    DEFAULT_FILE_STORAGE = 'serol.storage_backends.PublicMediaStorage'
 
 DATABASES = {
     "default": {
@@ -187,7 +210,7 @@ LOGGING = {
         '': {
             'handlers': ['console'],
             'propagate': True,
-            'level': 'DEBUG',
+            'level': 'ERROR',
         }
     },
 }

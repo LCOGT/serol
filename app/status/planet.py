@@ -41,7 +41,7 @@ def create_jupiter_image(infile, outfile):
     im = Image.blend(im_j.convert('RGB'), im_m.convert('RGB'), 0.4)
     if im.mode != 'L':
         im = im.convert('L')
-    im.save(outfile)
+    im.save(outfile, format='JPEG')
     return
 
 def create_saturn_image(infile, outfile):
@@ -57,7 +57,7 @@ def create_saturn_image(infile, outfile):
     tmp_im.crop((w/2-dp, h/2-dp, w/2+200, h/2+200))
     tmp_im.transpose(method=Image.ROTATE_90)
     tmp_im.convert('RGB')
-    tmp_im.save(outfile)
+    tmp_im.save(outfile, format='JPEG')
     return
 
 
@@ -74,7 +74,7 @@ def crop_image(filename):
         im = Image.open(filename)
         s = im.size
         area = (0.25*s[0], 0.25*s[1], 0.75*s[0], 0.75*s[1])
-        im.crop(area).save(filename)
+        im.crop(area).rotate(angle=270).save(filename, format='JPEG')
         return True
     else:
         return False

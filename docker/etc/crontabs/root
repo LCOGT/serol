@@ -1,2 +1,0 @@
-*/30 * * * * source /var/www/apps/serol/cronwrapper; python /var/www/apps/serol/manage.py update_requests >> /var/www/apps/serol/request.log
-*/30 * * * * source /var/www/apps/serol/cronwrapper; python /var/www/apps/serol/manage.py create_images >> /var/www/apps/serol/pipeline.log

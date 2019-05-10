@@ -11,7 +11,7 @@ var requestid = {{ progress.requestid}};
 var frameid = {{ progress.frameids }};
 var current_question=0;
 var question_total={{questions|length}};
-var my_image {% if progress.image_file %} = "{{ MEDIA_PREFIX }}{{ progress.image_file }}"{% endif %};
+var my_image {% if progress.image_file %} = "{{ progress.image_file.url|safe }}"{% endif %};
 $(document).ready(function(){
   $('#question-0').show();
 

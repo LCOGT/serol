@@ -1,5 +1,4 @@
 {% load static i18n %}
-{% get_media_prefix as MEDIA_PREFIX %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -21,7 +20,7 @@
     <link href="{% static "explorer/css/layout.css" %}" rel="stylesheet">
   </head>
 
-  <body data-media-url="{{MEDIA_PREFIX}}" class="{% block mission-class %}{%endblock%}">
+  <body  class="{% block mission-class %}{%endblock%}">
 
       <header>
       {% block menubar %}
