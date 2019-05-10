@@ -11,7 +11,7 @@ var current_tag = "{{object.avm_code}}";
 var redirect_url = "{% url 'analyse' object.id %}?frameid="+{{ progress.frameids }};
 var requestid = {{ progress.requestid }};
 var frameid = {{ progress.frameids }};
-var my_image_url {% if progress.image_file %} = "{{ MEDIA_PREFIX }}{{ progress.image_file }}"{% endif %};
+var my_image_url {% if progress.image_file %} = "{{ progress.image_file.url|safe }}"{% endif %};
 
 function filter_tags() {
   var static_url = "{% static 'explorer/identify/' %}";
