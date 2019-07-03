@@ -2,6 +2,7 @@ from datetime import datetime
 
 from django import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.staticfiles.templatetags.staticfiles import static
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, Http404
@@ -74,15 +75,16 @@ class ChallengeView(LoginRequiredMixin, DetailView):
         self.template_name = "explorer/challenge-{}.html".format(kwargs['mode'])
         self.object = self.get_object()
         context = self.get_context_data(object=self.object)
+        context['icon'] = target_icon(self.object.avm_code)
         mode = kwargs.get('mode',None)
         if mode != 'start':
-            obj,created = Progress.objects.get_or_create(challenge=self.get_object(), user=self.request.user)
+            obj,created = Progress.objects.get_or_create(challenge=self.object, user=self.request.user)
             if created:
                 obj.last_update = datetime.utcnow()
                 obj.save()
             context['progress'] = obj
             if mode == 'observe':
-                targets = Body.objects.filter(avm_code__startswith=obj.challenge.avm_code, active=True)
+                targets = Body.objects.filter(avm_code=self.object.avm_code, active=True)
                 context['targets'] = targets
             if mode == 'submitted':
                 token, archive_token = check_token(request.user)
@@ -104,9 +106,9 @@ class NextChallengeView(LoginRequiredMixin, View):
                 return HttpResponseRedirect(reverse('challenge', kwargs={'pk':chal_id}))
         except ObjectDoesNotExist:
             if kwargs['mission_num'] in ['1', '2', '3']:
-                chals = {'1':'1','2':'6','3':'11'}
                 logger.debug('User accessing Mission {} for 1st time'.format(kwargs['mission_num']))
-                return HttpResponseRedirect(reverse('challenge', kwargs={'pk':chals[kwargs['mission_num']]}))
+                chal = Challenge.objects.get(number=1,mission__id=kwargs['mission_num'])
+                return HttpResponseRedirect(reverse('challenge', kwargs={'pk':chal.id}))
             else:
                 logger.error("User tried to access mission {} which doesn't exist".format(kwargs['mission_num']))
         return HttpResponseRedirect(reverse('missions'))
@@ -148,6 +150,7 @@ class ChallengeSummary(LoginRequiredMixin, DetailView):
         context['answers'] = answers
         context['stickers'] = stickers
         context['completed_missions'] = completed_missions(self.request.user)
+        context['icon'] = target_icon(challenge.avm_code)
 
         return context
 
@@ -216,3 +219,27 @@ class ChallengeRedirectView(LoginRequiredMixin, RedirectView):
         except NoReverseMatch:
             return None
         return super(ChallengeRedirectView, self).get_redirect_url(*args, **kwargs)
+
+def target_icon(avmcode):
+    avm_files = {
+        '5.5' : 'explorer/images/5.5-groupofgalaxies.png' ,
+        '5.1.1' : 'explorer/images/5.1.1-spiral_galaxy.png' ,
+        '5.1.4' : 'explorer/images/5.1.4-elliptical_galaxy.png' ,
+        '5.1.6' : 'explorer/images/5.1.6-interacting_galaxy.png' ,
+        '5' : 'explorer/images/5-galaxy.png' ,
+        '4.1.4' : 'explorer/images/4.1.4-supernova_remnant.png' ,
+        '4.1.3' : 'explorer/images/4.1.3-planetary_nebula.png' ,
+        '4.1.2' : 'explorer/images/4-nebula.png' ,
+        '4' : 'explorer/images/4-nebula.png' ,
+        '3.6.4' : 'explorer/images/3.6.4.1-open_cluster.png' ,
+        '3.6.4.1' : 'explorer/images/3.6.4.1-open_cluster.png' ,
+        '3.6.4.2' : 'explorer/images/3.6.4.2-globular_cluster.png' ,
+        '2.3' : 'explorer/images/2.3-asteroid.png' ,
+        '2.2' : 'explorer/images/2.2-comet.png' ,
+        '1.1' : 'explorer/images/1.1.2-saturn.png'
+    }
+    avm_file = avm_files.get(avmcode,'')
+    if avm_file:
+        return static(avm_file)
+    else:
+        return static('explorer/images/serol_logo_sm.png')

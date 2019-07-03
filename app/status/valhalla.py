@@ -66,7 +66,7 @@ def submit_observation_request(params, token):
     Send the observation parameters and the authentication cookie to the Scheduler API
     '''
     headers = {'Authorization': 'Token {}'.format(token)}
-    url = settings.PORTAL_REQUEST_SUBMIT_API
+    url = settings.PORTAL_REQUEST_API
     logging.debug('Submitting request')
     try:
         r = requests.post(url, json=params, headers=headers, timeout=20.0)
@@ -104,23 +104,34 @@ def request_format(target, start, end, obs_filter, proposal, aperture='0m4'):
     location = {
         'telescope_class' : aperture,
         }
-    molecules = []
 
-    # f_str = json.loads(obs_filter)
+    constraints = {
+            'max_airmass': 1.6,
+            'min_lunar_distance': 30.0
+        }
+
+    inst_configs = []
+
     for f in obs_filter:
-        molecule = {
-            # Required fields
-            'exposure_time'   : f['exposure'],   # Exposure time, in secs
-            'exposure_count'  : 1,     # The number of consecutive exposures
-            'filter'          : f['name'],            # The generic filter name
-             # Optional fields. Defaults are as below.
-            'type'            : 'EXPOSE',  # The type of the molecule
-            'instrument_name' : default_camera, # This resolves to the main science camera on the scheduled resource
-            'bin_x'           : 1,                 # Your binning choice. Right now these need to be the same.
-            'bin_y'           : 1,
-            'defocus'       : 0.0             # Mechanism movement of M2, or how much focal plane has moved (mm)
+        config = {
+            'exposure_time': f['exposure'],
+            'exposure_count': 1,
+            'optical_elements': {
+                'filter': f['name']
             }
-        molecules.append(molecule)
+        }
+        inst_configs.append(config)
+
+    configurations = [
+        {
+            'type': 'EXPOSE',
+            'instrument_type': default_camera,
+            'target': target,
+            'constraints': constraints,
+            'acquisition_config': {},
+            'guiding_config': {},
+            'instrument_configs': inst_configs
+        }]
 
     # Do the observation between these dates
     window = {
@@ -128,27 +139,21 @@ def request_format(target, start, end, obs_filter, proposal, aperture='0m4'):
         'end' : end, # str(datetime)
         }
 
-    request = {
-        "constraints" : {'max_airmass' : 2.0, "min_lunar_distance": 30.0,},
-        "location" : location,
-        "molecules" : molecules,
-        "observation_note" : "SEROL",
-        "target" : target,
-        "type" : "request",
-        "windows" : [window],
-        }
-
-    user_request = {
+    request_group = {
         "operator" : "SINGLE",
-        "requests" : [request],
         "type" : "compound_request",
-        "ipp_value" : 1.0,
-        "group_id": "serol_{}_{}".format(target['name'], datetime.utcnow().strftime("%Y%m%d")),
+        "ipp_value" : 1.05,
+        "name": "serol_{}_{}".format(target['name'], datetime.utcnow().strftime("%Y%m%d")),
         "observation_type": "NORMAL",
-        "proposal": proposal
+        "proposal": proposal,
+        'requests': [{
+                'configurations': configurations,
+                'windows': [window],
+                'location': location,
+            }]
         }
 
-    return user_request
+    return request_group
 
 def format_sidereal_object(object_name, object_ra, object_dec):
     '''
@@ -159,7 +164,7 @@ def format_sidereal_object(object_name, object_ra, object_dec):
            'ra'                : object_ra, # RA (degrees)
            'dec'               : object_dec, # Dec (Degrees)
            'epoch'             : 2000,
-           'type'              : 'SIDEREAL'
+           'type'              : 'ICRS'
         }
     return target
 
@@ -170,7 +175,7 @@ def format_moving_object(tid):
     body = Body.objects.get(id=tid)
     target = {
         "name": body.name,
-        "type": "NON_SIDEREAL",
+        "type": "ORBITAL_ELEMENTS",
         "epochofel": body.epochofel,
         "scheme": body.get_schema_display(),
         "orbinc": body.orbinc,

@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.core.mail import send_mass_mail
+from django.core.mail import send_mail
 from django.conf import settings
 from django.template.loader import get_template
 from django.urls import reverse
@@ -19,6 +19,7 @@ def render_email(progress):
     else:
         plaintext = get_template('notify/mail_message.txt')
         subject = 'Update from Serol!'
+        htmltext = get_template('notify/mail_message.html')
 
     if settings.DEBUG:
         email = settings.DEMO_EMAIL
@@ -28,19 +29,21 @@ def render_email(progress):
                 'username' : progress.user.username,
                 'target'   : progress.target,
                 'challenge': progress.challenge.number,
-                'mission'  : progress.challenge.mission.number,
-                'url'      : reverse('challenge',kwargs={'pk':progress.challenge.pk})
+                'mission_name'  : progress.challenge.mission.name,
+                'url'      : reverse('challenge',kwargs={'pk':progress.challenge.pk}),
+                'image_url': progress.image_file.url,
+                'BASE_URL' : settings.BASE_URL
                  }
     logger.debug("Rendering email to {} for Prog ID {}".format(progress.user.username, progress.pk))
     text_content = plaintext.render(data)
-    message = (subject, text_content, settings.EMAIL_FROM, [email])
-    return message
+    html_content = htmltext.render(data)
+    num = send_mail(subject, text_content, settings.EMAIL_FROM, [email], fail_silently=False, html_message=html_content)
+
+    return num
 
 def send_notifications(progress_updates):
     messages = []
     for progress in progress_updates:
         message = render_email(progress)
-        messages.append(message)
-    logger.debug("Sending {} emails".format(len(messages)))
-    send_mass_mail(messages, fail_silently=False)
+    logger.debug("Sent emails")
     return

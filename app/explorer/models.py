@@ -52,6 +52,9 @@ class Challenge(models.Model):
     def __str__(self):
         return "Challenge {} from Mission {}".format(self.number, self.mission.number)
 
+    class Meta:
+        unique_together = ['number','mission','active']
+
 class Body(models.Model):
     name = models.CharField(max_length=20)
     schema = models.IntegerField(choices=BODY_TYPES)

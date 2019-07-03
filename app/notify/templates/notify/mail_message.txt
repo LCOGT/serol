@@ -2,7 +2,7 @@ Hi {{ username }}!
 
 I've taken your picture of {{ target }}.
 
-Have a look at it on Serol's Cosmic Adventures and complete Challenge {{ challenge }} from Mission {{ mission }}!
+Have a look at it on Serol's Cosmic Adventures and complete Challenge {{ challenge }} from "{{ mission_name }}"!
 
 https://serol.lco.global{{ url }}
 

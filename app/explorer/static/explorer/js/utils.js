@@ -245,7 +245,7 @@ function submit_to_serol(data, redirect_url){
         $('#accept_button').attr('href',redirect_url);
         $('#accept_button').show();
 				$('.modal-title').html("Success!");
-				$('.modal-body').html("<p>Your image will be ready in a few days.</p><img src='https://lco.global/files/edu/serol/serol_holding_cosmic_objects_sm.png'>");
+				$('.modal-body').html("<p>Your image will be ready in a few days.</p>");
         $('#submit_button').hide();
         $('#submit_button').prop("disabled", true);
         $('#close_button').prop("disabled", true);

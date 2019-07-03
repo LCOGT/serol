@@ -1,61 +1,114 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en">
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
-  <title></title>
-
-  <style type="text/css">
-
-  </style>
+{% load static %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Serol's Cosmic Explorers</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
-<body style="margin:0; padding:0; background-color:#F2F2F2;">
-  <center>
-    <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#F2F2F2">
-        <tr>
-            <td align="center" valign="top">
-
-              <tr>
-                <td align="center" height="100%" valign="top" width="100%">
-                  <!--[if (gte mso 9)|(IE)]>
-                  <table align="center" border="0" cellspacing="0" cellpadding="0" width="600">
-                  <tr>
-                  <td align="center" valign="top" width="600">
-                  <![endif]-->
-                    <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:600px;" bgcolor="#ffffff">
-                      <tr>
-                        <td>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td align="center" valign="top" style="font-size:14px;">
-
-                          <h1>Serol's Cosmic Explorers</h1>
-
-                        </td>
-                      </tr>
-
-                      <tr>
-                        <td align="center" valign="top" style="font-size:14px;">
-
-                          <img src="http://placehold.it/640x400" width="640" height="400" style="margin:0; padding:0; border:none; display:block;" border="0" class="imgClass" alt="" />
-
-                        </td>
-                      </tr>
-                    </table>
-                  <!--[if (gte mso 9)|(IE)]>
-                  </td>
-                  </tr>
-                  </table>
-                  <![endif]-->
-                </td>
-              </tr>
-
-            </td>
-        </tr>
-    </table>
-  </center>
-</body>
 </html>
+
+<body style="margin: 0; padding: 0;">
+ <table border="0" cellpadding="0" cellspacing="0" width="100%">
+  <tr>
+   <td>
+    <table align="center" style="border: 1px solid #cccccc;" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse;">
+ <tr>
+  <td align="center" bgcolor="#ffffff" style="padding: 0 0 0 0;">
+  	<img src="{{BASE_URL}}{% static 'explorer/images/serol-email-banner-01.jpg' %}" alt="It's here!" width="600" height="320" style="display: block;" />
+  </td>
+ </tr>
+ <tr>
+  <td bgcolor="#ffffff" style="padding: 30px 30px 30px 30px;">
+   <table border="0" cellpadding="0" cellspacing="0" width="100%">
+  <tr>
+   <td>
+   	<p style="font-family:verdana">
+    Hi {{ username }},
+	</p>
+   </td>
+  </tr>
+  <tr>
+   <td style="padding: 20px 0 0 0;">
+   	<div style="text-align:center">
+   	<p style="font-family:verdana">
+   	I've taken your picture of
+   	</p>
+   </div>
+   </td>
+  </tr>
+  <tr>
+   <td style="padding: 0 0 0 0;">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+ <tr>
+  <td align="right" bgcolor="#ffffff" style="padding: 0 5px 0 0;">
+   <img src="{{BASE_URL}}{% static 'explorer/images/stars-left-01.jpg' %}" width="35" height="32" style="display: block;" />
+  </td>
+  <td width="40%" valign="center">
+  	<div style="text-align:center">
+  	<p style="font-family:verdana;font-size:2em;">
+   	{{ target }}
+   	</p>
+   </div>
+  </td>
+  <td align="left" bgcolor="#ffffff" style="padding: 0 0 0 5px;" >
+   <img src="{{BASE_URL}}{% static 'explorer/images/stars-right-01.jpg' %}" width="35" height="32" style="display: block;" />
+  </td>
+ </tr>
+</table>
+   </td>
+  </tr>
+  <tr>
+   <td style="padding: 0 0 0 0;">
+   	<div style="text-align:center">
+      <img src="{{image_url|safe}}" alt="Your image of {{ target }}" width="600" />
+   </div>
+   </td>
+  </tr>
+  <tr>
+   <td style="padding: 20px 0 20px 0;">
+   	<div style="text-align:center">
+   	<p style="font-family:verdana">
+    Have a closer look at it on Serol's Cosmic Explorers and complete Challenge {{ challenge }} from "{{ mission_name }}"!
+	</p>
+	</div>
+   </td>
+  </tr>
+  <tr>
+   <td align="center" bgcolor="#ffffff" style="padding: 0 0 0 0;">
+    <a href="https://serol.lco.global{{ url }}">
+      <img src="{{BASE_URL}}{% static 'explorer/images/look-button-01.jpg' %}" alt="Take a closer look!" width="221" height="49" style="display: block;" />
+    </a>
+   </td>
+  </tr>
+  <tr>
+   <td style="padding: 50px 0 0 0;">
+   	<div style="text-align:center">
+   	<p style="font-family:verdana">
+    See you soon!
+	</p>
+	</div>
+   </td>
+  </tr>
+  <tr>
+   <td style="padding: 2px 0 0 0;">
+   	<div style="text-align:center">
+   	<p style="font-family:verdana">
+    Serol
+	</p>
+	</div>
+   </td>
+  </tr>
+ </table>
+  </td>
+ </tr>
+ <tr>
+  <td align="center" bgcolor="#ffffff" style="padding: 0 0 0 0;">
+   <img src="{{BASE_URL}}{% static 'explorer/images/serol-email-footer-01.jpg' %}" alt="Serol's Cosmic Explorers" width="600" height="65" style="display: block;" />
+  </td>
+ </tr>
+</table>
+   </td>
+  </tr>
+ </table>
+</body>

@@ -1,20 +1,8 @@
 # -*- coding: utf-8 -*-
 # Django settings for SEROL project.
 
-import os, sys
+import os, ast
 from django.utils.crypto import get_random_string
-
-def str2bool(value):
-    '''Convert a string value to a boolean'''
-    value = value.lower()
-
-    if value in ('t', 'true', 'y', 'yes', '1', ):
-        return True
-
-    if value in ('f', 'false', 'n', 'no', '0', ):
-        return False
-
-    raise RuntimeError('Unable to parse {} as a boolean value'.format(value))
 
 
 VERSION = '0.2'
@@ -25,7 +13,7 @@ CURRENT_PATH = os.path.dirname(os.path.realpath(__file__))
 PRODUCTION = True if CURRENT_PATH.startswith('/var/www') else False
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DEBUG=False
+DEBUG= ast.literal_eval(os.environ.get('DEBUG', 'False'))
 
 ALLOWED_HOSTS = ['*']
 
@@ -114,8 +102,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
-# https://docs.djangoproject.com/en/1.11/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
 
@@ -127,9 +113,7 @@ USE_L10N = True
 
 USE_TZ = False
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.11/howto/static-files/
+BASE_URL = 'https://serol.lco.global'
 
 STATIC_URL = '/static/'
 STATIC_ROOT = '/static/'
@@ -143,7 +127,7 @@ if not SECRET_KEY:
     SECRET_KEY = get_random_string(50, chars)
 
 # Use AWS S3 for Media Files
-if str2bool(os.getenv('USE_S3', 'False')):
+if ast.literal_eval(os.environ.get('USE_S3', 'False')):
     # aws settings
     AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
     AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
@@ -229,8 +213,7 @@ REST_FRAMEWORK = {
 
 
 PORTAL_API_URL     = 'https://observe.lco.global/api/'
-PORTAL_REQUEST_SUBMIT_API = PORTAL_API_URL + 'userrequests/'
-PORTAL_REQUEST_API = PORTAL_API_URL + 'requests/'
+PORTAL_REQUEST_API = PORTAL_API_URL + 'requestgroups/'
 PORTAL_TOKEN_URL   = PORTAL_API_URL + 'api-token-auth/'
 PORTAL_PROFILE_URL = PORTAL_API_URL + 'profile/'
 ARCHIVE_URL        = 'https://archive-api.lco.global/'
