@@ -1,8 +1,10 @@
 from django.contrib import admin
 from django.utils.translation import ugettext as _
 from django.contrib.auth.admin import UserAdmin
+from django.contrib import messages
 
 from status.models import User, Progress, Answer, Question, UserAnswer, Proposal
+from notify.views import send_notifications
 
 class CustomUserAdmin(UserAdmin):
     fieldsets = (
@@ -26,12 +28,21 @@ def remove_images(modeladmin, request, queryset):
     queryset.update(image_file=None, image_status=0)
 remove_images.short_description = "Remove images"
 
+def resend_email(modeladmin, request, queryset):
+    queryset = queryset.filter(status__in=['Summary','Analyse','Identify'])
+    if queryset:
+        send_notifications(queryset)
+        messages.success(request, "ReSend {} emails".format(queryset.count()))
+    else:
+        messages.error(request, "No valid Progress")
+resend_email.short_description = 'Resend email'
+
 class ProgressAdmin(admin.ModelAdmin):
     list_filter = ( 'status', 'challenge__number','challenge__mission__number')
     list_display = ('user','target','challenge','coloured_state','last_update', 'has_image')
-    actions = [remove_images]
     fields = ['user','challenge', 'target', 'requestid', 'frameids', 'status', 'last_update', 'image_file', 'image_tag', 'image_status']
     readonly_fields = ['image_tag']
+    actions = [remove_images, resend_email]
 
 admin.site.register(User, CustomUserAdmin)
 admin.site.register(Question, QuestionAdmin)

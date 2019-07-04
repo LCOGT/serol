@@ -110,28 +110,25 @@ def request_format(target, start, end, obs_filter, proposal, aperture='0m4'):
             'min_lunar_distance': 30.0
         }
 
-    inst_configs = []
+    configurations = []
 
     for f in obs_filter:
         config = {
-            'exposure_time': f['exposure'],
-            'exposure_count': 1,
-            'optical_elements': {
-                'filter': f['name']
-            }
-        }
-        inst_configs.append(config)
-
-    configurations = [
-        {
             'type': 'EXPOSE',
             'instrument_type': default_camera,
             'target': target,
             'constraints': constraints,
             'acquisition_config': {},
             'guiding_config': {},
-            'instrument_configs': inst_configs
-        }]
+            'instrument_configs': [{
+                'exposure_time': f['exposure'],
+                'exposure_count': 1,
+                'optical_elements': {
+                    'filter': f['name']
+                    }
+                }]
+            }
+        configurations.append(config)
 
     # Do the observation between these dates
     window = {

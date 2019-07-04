@@ -84,6 +84,7 @@ $(document).ready(function(){
       $(".modal-body").html(targets[tid].desc);
     }
     $("#submit_button").data('tid',tid);
+    $('#submit_button').prop("disabled", false);
   });
 
   $("#submit_button").on("click", function(){

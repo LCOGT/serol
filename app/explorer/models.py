@@ -54,6 +54,7 @@ class Challenge(models.Model):
 
     class Meta:
         unique_together = ['number','mission','active']
+        ordering = ['mission','number']
 
 class Body(models.Model):
     name = models.CharField(max_length=20)
