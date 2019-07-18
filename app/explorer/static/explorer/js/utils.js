@@ -123,7 +123,7 @@ function status_request(requestid, token) {
 
 function status_userrequest(requestid, token) {
   var data;
-  $.getJSON('https://observe.lco.global/api/requests/'+requestid+'/blocks/?canceled=false',
+  $.getJSON('https://observe.lco.global/api/requests/'+requestid+'/observations/?exclude_canceled=true',
     {
     dataType: 'json',
     contentType: 'application/json'})

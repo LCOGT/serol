@@ -68,7 +68,7 @@ class Progress(models.Model):
         )
 
     def image_tag(self):
-        return mark_safe('<img src="{}{}" width="150" height="150" />'.format(settings.MEDIA_URL, self.image_file))
+        return mark_safe('<img src="{}" width="150" height="150" />'.format(self.image_file.url))
     image_tag.short_description = 'Image'
 
     def __str__(self):

@@ -34,7 +34,7 @@ body {
   padding:20px;
 }
 
-h1, h2, h3, h4, h5, h6, .target-name {
+h1, h2, h3, h4, h5, h6, .target-name, .mission-label {
     font-family: 'Oswald', sans-serif;
     font-weight: 300;
     color: #fff;
@@ -59,6 +59,18 @@ h1 {
 p.statement {
   font-size:2rem;
   font-family: 'Oswald', sans-serif;
+}
+
+.oswald {
+  font-family: 'Oswald', sans-serif;
+}
+
+.black {
+  color:#000;ß
+}
+
+.text-large {
+  font-size: 1.5rem;
 }
 
 .bg-blur {
@@ -381,15 +393,27 @@ h1.mission-name {
    background-color:rgb(29, 220, 93);
  }
 
+ .mission-1-colour-text {
+   color:rgb(29, 220, 93);
+ }
+
 .mission-2-colour,
 .mission-2-sidebar .page-header {
     background-color:rgb(237, 80, 48);
+  }
+
+.mission-2-colour-text {
+    color:rgb(237, 80, 48);
   }
 
 .mission-3-colour,
 .mission-3-sidebar .page-header {
      background-color:rgb(36, 209, 255);
    }
+
+.mission-3-colour-text {
+     color:rgb(36, 209, 255);
+}
 
  .page-header h1 {
    margin: 5px 0 15px 0;
@@ -630,7 +654,7 @@ input[type=radio]:checked ~ .check:active{
 */
 
 .content-wrapper {
-  padding: 60px 15px 0;
+  padding: 15px 0;
   display: table;
   width: 100%;
   height: 100%; /* For at least Firefox */
@@ -648,16 +672,10 @@ input[type=radio]:checked ~ .check:active{
 /* Ribbon styles */
 
 
-.corner-ribbon{
-  position: relative;
-  padding-left:20px;
-  margin-left:-20px;
-  color: #f0f0f0;
-  max-width: 200px;
-}
-
-.corner-ribbon h2 {
-  padding:0;
+.mission-label {
+  width:100%;
+  font-size: 2em;
+  height:1.3em;
 }
 
 /* Messages */

@@ -15,18 +15,20 @@
             {% endwith %}
           </p>
           {% endfor %}
-          <p>
-          {% if object.mission.number in completed_missions %}
-          <a href="{% url 'mission-complete' object.mission.number  %}" class="btn btn-4 btn-4a">{% trans "continue" %}</a><br/>
-          <a href="{% url 'stickers' %}" class="btn btn-4 btn-4a">{% trans "see your stickers" %}</a>
-          {% else %}
-          <a href="{% url 'challenge-next' object.mission.number %}" class="btn btn-4 btn-4a animated tada">{% trans "start a new challenge?" %}</a>
-          {% endif %}
-        </p>
+          <p class="text-center">
+            <a href="{% url 'stickers' %}"><i class="fas fa-stars"></i> {% trans "Take a look at your stickers" %} <i class="fas fa-stars"></i></a>
+          </p>
+          <p class="text-center">
+            {% if object.mission.number in completed_missions %}
+            <a href="{% url 'mission-complete' object.mission.number  %}" class="btn btn-4 btn-4a oswald">{% trans "Continue your adventure!" %}</a>
+            {% else %}
+            <a href="{% url 'challenge-next' object.mission.number %}" class="btn btn-4 btn-4a oswald">{% trans "start a new challenge?" %}</a>
+            {% endif %}
+          </p>
         </div>
         <div class="col-lg-8">
-          <img src="{% if progress.image_file %}{{ progress.image_file.url|safe }}{% else %}{% static 'explorer/images/placeholder.jpg' %}{% endif %}" alt="{{object.name}}" class="img-fluid rounded" id="img-holder">
-          <p>Your picture of {{progress.target}}</p>
+          <span class="text-right rounded mission-{{object.mission.number}}-colour p-2 oswald black">Your picture of {{progress.target}}</span>
+          <img src="{% if progress.image_file %}{{ progress.image_file.url|safe }}{% else %}{% static 'explorer/images/placeholder.jpg' %}{% endif %}" alt="{{object.name}}" class="img-fluid img-thumbnail" id="img-holder">
         </div>
     </div>
           <h3>{% trans "From looking at your picture, your analysis was:"%}</h3>
