@@ -82,7 +82,7 @@ def submit_observation_request(params, token):
 
     if r.status_code in [200,201]:
         logging.debug('Submitted request')
-        return True, r.json()['requests'][0]['id']
+        return True, r.json()['id']
     else:
         logging.error("Could not send request: {}".format(r.content))
         return False, r.content
