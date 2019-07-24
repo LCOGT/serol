@@ -39,24 +39,32 @@ def lco_api_call(url, token):
 
 def get_archive_data(out_dir, request_id):
     # Only look for data which has completed
-    url = "{}{}".format(settings.PORTAL_REQUEST_API, request_id)
-    state, req = lco_api_call(url, settings.PORTAL_TOKEN)
-    if not state:
-        logger.error('Failed')
-        return
-    if req['state'] == 'COMPLETED':
-        subreq_id = req['id']
-        url = "{}?REQNUM={}&ordering=-id".format(settings.ARCHIVE_FRAMES_URL, subreq_id)
-        success, r = lco_api_call(url, settings.ARCHIVE_TOKEN)
-        if success:
-            logger.debug('Downloading {}'.format(req['id']))
-            dl_status = dl_sort_data_files(r, out_dir)
-            if not dl_status:
-                logger.debug('No files available')
-                return False
-        else:
-            logger.debug('API call failed')
+    url = "{}?REQNUM={}&ordering=-id".format(settings.ARCHIVE_FRAMES_URL, request_id)
+    success, r = lco_api_call(url, settings.ARCHIVE_TOKEN)
+    if success:
+        logger.debug('Downloading {}'.format(request_id))
+        dl_status = dl_sort_data_files(r, out_dir)
+        if not dl_status:
+            logger.debug('No files available')
             return False
+    else:
+        logger.debug('API call failed')
+        return False
+    return True
+
+def get_thumbnail(out_file, frameid):
+    # Only look for data which has completed
+    url = settings.THUMB_SERVICE.format(frameid)
+    success, r = lco_api_call(url, settings.ARCHIVE_TOKEN)
+    if success:
+        logger.debug('Downloading {}'.format(request_id))
+        dl_status = download_file(out_file, r['url'])
+        if not dl_status:
+            logger.debug('No colour image available')
+            return False
+    else:
+        logger.debug('API call failed')
+        return False
     return True
 
 def download_file(out_file, url):
@@ -71,7 +79,7 @@ def dl_sort_data_files(r, out_path):
     '''
     Downloads the highest reduction level available
     '''
-    rlevels = {'91':[],'11':[],'0':[]}
+    rlevels = {'91':[],'0':[]}
     raw = False
     files = []
     # Make subdirectory
@@ -79,18 +87,14 @@ def dl_sort_data_files(r, out_path):
         os.makedirs(out_path)
     for res in r['results']:
         rl = str(res['RLEVEL'])
-        if rl not in ['91','11','0']:
+        if rl not in ['91','0']:
             logger.debug("Ancient pipeline product {}".format(rl))
             continue
         rlevels[rl].append({'filename':res['filename'],'url':res['url']})
-    if (len(rlevels['91']) >= len(rlevels['11'])) and len(rlevels['91']) > 0:
-        files = rlevels['91']
-    elif (len(rlevels['11']) >= len(rlevels['0'])) and len(rlevels['11']) > 0:
-        files = rlevels['11']
-    else:
+    if len(rlevels['91']) == 0:
         logger.debug("No Image files available")
         return False
-    for response in files:
+    for response in rlevels['91']:
         out_file = os.path.join(out_path, response['filename'])
         download_file(out_file, response['url'])
     return True
@@ -191,12 +195,13 @@ def make_request_image(filename, request_id, targetname, category=None, name=Non
     else:
         if len(img_list) == 3:
             logger.debug('Reprojecting {} files'.format(len(img_list)))
-            img_list = reproject_files(img_list[0], img_list, tmp_dir)
+            # img_list = reproject_files(img_list[0], img_list, tmp_dir)
         # img_list = write_clean_data(img_list)
         logger.debug('Sorting for colour')
         if len(img_list) != 3:
             logger.debug('Creating colour image')
-            r = fits_to_jpg(img_list[0], filename, width=1000, height=1000)
+            r = get_thumbnail(filename, frameid)
+            # r = fits_to_jpg(img_list[0], filename, width=1000, height=1000)
             image_status = 2
         else:
             img_list = sort_files_for_colour(img_list, colour_template=settings.COLOUR_TEMPLATE)

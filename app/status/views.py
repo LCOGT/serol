@@ -101,6 +101,7 @@ def update_status(requestid, token, archive_token):
         if state == 'COMPLETED':
             frameid = get_observation_frameid(requestid=requestid, token=archive_token)
             if frameid:
+                progress.requestid = requestid
                 progress.frameids = frameid
                 progress.observed()
         elif state == 'WINDOW_EXPIRED' or state == 'CANCELED':

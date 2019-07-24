@@ -18,6 +18,8 @@ class ValhallaBackend(object):
     """
 
     def authenticate(self, request, username=None, password=None):
+        request.session['token'] = settings.PORTAL_TOKEN
+        request.session['archive_token'] = settings.ARCHIVE_TOKEN
         return lco_authenticate(request, username, password)
 
     def get_user(self, user_id):
@@ -29,8 +31,8 @@ class ValhallaBackend(object):
 def lco_authenticate(request, username, password):
     token = api_auth(settings.PORTAL_TOKEN_URL, username, password)
     profile, msg = get_profile(token)
-    if msg:
-        messages.info(request, msg)
+    # if msg:
+    #     messages.info(request, msg)
     archivetoken = api_auth(settings.ARCHIVE_TOKEN_URL, username, password)
     if token and profile and archivetoken:
         username = profile[0]
@@ -50,6 +52,7 @@ def lco_authenticate(request, username, password):
         # Finally add these tokens as session variables
         request.session['token'] = token
         request.session['archive_token'] = archivetoken
+
         return user
     return None
 

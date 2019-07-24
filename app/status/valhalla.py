@@ -13,7 +13,8 @@ logger = logging.getLogger(__name__)
 
 def get_observation_status(requestid, token):
     '''
-    Get status of RequestID from the Valhalla API
+    Get status of Requestgroup from the Observing Portal API
+    Pass sub-request ID back and replace this on the model if COMPLETED
     '''
     if not requestid:
         return False, "No request ID provided"
@@ -29,9 +30,9 @@ def get_observation_status(requestid, token):
         return False, msg
 
     if r.status_code in [200,201]:
-        logger.debug('Submitted request')
         req = r.json()
-        return requestid, req['state']
+        logger.debug('Request {} is {}'.format(req['id'], req['requests'][0]['state']))
+        return req['requests'][0]['id'], req['requests'][0]['state']
     else:
         logger.error("Could not send request: {}".format(r.content))
         return False, r.content
@@ -56,7 +57,10 @@ def get_observation_frameid(requestid, token):
         resp = r.json()
         if len(resp['results']) > 0:
             frameid = resp['results'][0]['id'];
-        return frameid
+            return frameid
+        else:
+            logger.error("No frames found for {}".format(requestid))
+            return False
     else:
         logger.error("Could not send request: {}".format(r.content))
         return False

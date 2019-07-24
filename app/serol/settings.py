@@ -59,8 +59,8 @@ MIDDLEWARE = [
 ]
 
 AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
     'serol.auth_backend.ValhallaBackend',
+    'django.contrib.auth.backends.ModelBackend',
 )
 
 AUTH_USER_MODEL = 'status.User'
@@ -219,6 +219,8 @@ PORTAL_PROFILE_URL = PORTAL_API_URL + 'profile/'
 ARCHIVE_URL        = 'https://archive-api.lco.global/'
 ARCHIVE_FRAMES_URL = ARCHIVE_URL + 'frames/'
 ARCHIVE_TOKEN_URL  = ARCHIVE_URL + 'api-token-auth/'
+
+THUMB_SERVICE = 'https://thumbnails.lco.global/{}/?width=4000&height=4000&color=true'
 
 PORTAL_TOKEN = os.environ.get('PORTAL_TOKEN','')
 ARCHIVE_TOKEN = os.environ.get('ARCHIVE_TOKEN','')

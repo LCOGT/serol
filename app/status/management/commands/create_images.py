@@ -12,6 +12,9 @@ from status.images import make_request_image
 from status.views import update_status
 from status.models import Progress
 
+from notify.views import send_notifications
+
+
 logger = logging.getLogger(__name__)
 
 class Command(BaseCommand):
@@ -21,6 +24,7 @@ class Command(BaseCommand):
         parser.add_argument('--request_id', '-rid', help="[Optional] Request ID to update")
 
     def handle(self, *args, **options):
+        success = []
         self.stdout.write(self.style.WARNING("Running image pipeline - {}".format(datetime.now().isoformat())))
         if options['request_id']:
             pgs = Progress.objects.filter(requestid=options['request_id'])
@@ -43,4 +47,7 @@ class Command(BaseCommand):
                     if pg.status == 'Observed':
                         pg.identify()
                     pg.save()
+                    success.append(pg)
                     self.stdout.write(self.style.SUCCESS("Successfully created image for {}".format(pg.id)))
+            # Email all successfully completed progresses
+            send_notifications(success)
