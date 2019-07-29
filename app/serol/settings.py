@@ -59,8 +59,8 @@ MIDDLEWARE = [
 ]
 
 AUTHENTICATION_BACKENDS = (
-    'serol.auth_backend.ValhallaBackend',
-    'django.contrib.auth.backends.ModelBackend',
+    'serol.auth_backend.PortalBackend',
+    'serol.auth_backend.AddTokenBackend',
 )
 
 AUTH_USER_MODEL = 'status.User'
