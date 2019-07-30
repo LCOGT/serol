@@ -170,7 +170,7 @@ def sort_files_for_colour(file_list, colour_template):
 
     return file_list
 
-def make_request_image(filename, request_id, targetname, category=None, name=None):
+def make_request_image(filename, request_id, targetname, category=None, name=None, frameid=None):
     image_status = 0
     try:
         tmp_dir = os.path.join(settings.TMP_DIR,request_id)
@@ -195,13 +195,14 @@ def make_request_image(filename, request_id, targetname, category=None, name=Non
     else:
         if len(img_list) == 3:
             logger.debug('Reprojecting {} files'.format(len(img_list)))
-            # img_list = reproject_files(img_list[0], img_list, tmp_dir)
-        # img_list = write_clean_data(img_list)
+            img_list = reproject_files(img_list[0], img_list, tmp_dir)
+        img_list = write_clean_data(img_list)
         logger.debug('Sorting for colour')
         if len(img_list) != 3:
             logger.debug('Creating colour image')
-            r = get_thumbnail(filename, frameid)
-            # r = fits_to_jpg(img_list[0], filename, width=1000, height=1000)
+            r = fits_to_jpg(img_list[0], filename, width=1000, height=1000)
+            if not r and frameid:
+                r = get_thumbnail(filename, frameid)
             image_status = 2
         else:
             img_list = sort_files_for_colour(img_list, colour_template=settings.COLOUR_TEMPLATE)

@@ -1,12 +1,10 @@
 from datetime import datetime
+from tempfile import NamedTemporaryFile
+
 from django.conf import settings
 from django.core.files import File
 from django.core.management.base import BaseCommand, CommandError
 from django.utils.text import get_valid_filename
-from tempfile import NamedTemporaryFile
-
-import os
-import logging
 
 from status.images import make_request_image
 from status.views import update_status
@@ -14,8 +12,6 @@ from status.models import Progress
 
 from notify.views import send_notifications
 
-
-logger = logging.getLogger(__name__)
 
 class Command(BaseCommand):
     help = 'Update requests and call pipeline'
@@ -36,7 +32,7 @@ class Command(BaseCommand):
         for pg in pgs:
             self.stdout.write("Download and make JPEG  - ReqID {}  ProgID {}".format(pg.requestid, pg.id))
             with NamedTemporaryFile() as tmpfile:
-                image_status = make_request_image(filename=tmpfile.name, request_id=pg.requestid, category=pg.challenge.avm_code, targetname=pg.target)
+                image_status = make_request_image(filename=tmpfile.name, request_id=pg.requestid, category=pg.challenge.avm_code, targetname=pg.target, frameid=pg.frameids)
                 self.stdout.write("Processed {}: image of {}, status {}".format(pg.requestid, pg.target, image_status))
                 if image_status > 0:
                     name = "{}-{}.jpg".format(pg.target.replace(" ",""), pg.requestid)
