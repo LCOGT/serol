@@ -13,6 +13,8 @@ import requests
 import shutil
 import six
 
+from memory_profiler import profile
+
 from status.planet import planet_process
 
 logger = logging.getLogger(__name__)
@@ -105,32 +107,35 @@ def write_clean_data(filelist):
     - Data is read into uncompressed FITS file to remove dependency on FPack
     '''
     img_list =[]
-    for file_in in filelist:
+    for i, file_in in enumerate(filelist):
         data, hdrs = fits.getdata(file_in, header=True)
         filtr = hdrs['filter']
-        new_filename = file_in.replace(".fits", "-{}.fits".format(filtr))
+        path = os.path.split(file_in)[0]
+        new_filename = os.path.join(path,"{}.fits".format(filtr))
         data = clean_data(data)
         hdu = fits.PrimaryHDU(data, header=hdrs)
         hdu.writeto(new_filename)
         img_list.append(new_filename)
 
+    del hdu
+    del data
     return img_list
 
-def reproject_files(ref_image, images_to_align, tmpdir='temp/'):
-    identifications = make_transforms(ref_image, images_to_align[1:])
+def reproject_files(ref_image, images_to_align, tmpdir):
+    logger.info("Reprojecting data")
+    identifications = make_transforms(ref_image, images_to_align[1:3])
 
+    aligned_images = []
     for id in identifications:
         if id.ok:
-            affineremap(id.ukn.filepath, id.trans, outdir=tmpdir)
-
-    aligned_images = sorted(glob(tmpdir+"/*_affineremap.fits"))
+            aligned_img = affineremap(id.ukn.filepath, id.trans, outdir=tmpdir)
+            aligned_images.append(aligned_img)
 
     img_list = [ref_image]+aligned_images
-    if len(img_list) < 3:
-        logging.error('Error creating image: Only {} source files'.format(len(img_list)))
+    if len(img_list) != 3:
         return images_to_align
-
     return img_list
+
 
 def remove_cr(data):
     '''
@@ -146,10 +151,10 @@ def clean_data(data):
     - Subtract the median sky value
     '''
     # Level out the colour balance in the frames
+    logger.info('--- Begin CR removal ---')
     median_val = median(data)
     data[data<0.]=median_val
     # Run astroScrappy to remove pesky cosmic rays
-    logger.debug('--- Begin CR removal ---')
     data = remove_cr(data)
     logger.debug('Median=%s' % median_val)
     logger.debug('Max after median=%s' % data.max())
@@ -159,6 +164,7 @@ def sort_files_for_colour(file_list, colour_template):
     colours = {v:k for k,v in colour_template.items()}
     for f in file_list:
         data, hdrs = fits.getdata(f, header=True)
+        del data # free up memory
         filtr = hdrs['filter']
         order = colour_template.get(filtr, None)
         if not order:
@@ -169,6 +175,7 @@ def sort_files_for_colour(file_list, colour_template):
     assert len(file_list) == 3
 
     return file_list
+
 
 def make_request_image(filename, request_id, targetname, category=None, name=None, frameid=None):
     image_status = 0
