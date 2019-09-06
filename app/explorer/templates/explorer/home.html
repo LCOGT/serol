@@ -55,13 +55,21 @@ $(document).ready(function(){
 <div class="modal fade" id="surveyModal" tabindex="-1" role="dialog" aria-labelledby="surveyModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Education Feedback</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
       <div class="modal-body">
-        <img src="https://cdn.lco.global/mainstyle/img/LCO_logo_Color_Horizontal_sm.jpg" alt="LCO logo" /></br/>
         Can you spare 20 seconds to give us feedback?<br/>
+      </div>
+      <div class="modal-footer">
         <a href="https://survey.lco.global/eef70ea6-ff58-45a3-9170-5a43f086eccd/" class="btn btn-secondary" target="_blank" onclick="setCookie('lco_fb_serol','eef70ea6-ff58-45a3-9170-5a43f086eccd','180');$('#surveyModal').modal('hide');window.open('https://survey.lco.global/eef70ea6-ff58-45a3-9170-5a43f086eccd/',
                          'newwindow',
                          'width=600,height=600'); return false;">Yes!</a>
         <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="setCookie('lco_fb_serol','eef70ea6-ff58-45a3-9170-5a43f086eccd','30')">No</button>
+        <img src="https://cdn.lco.global/mainstyle/img/LCO_logo_Color_Horizontal_sm.jpg" alt="LCO logo" />
 
       </div>
     </div>
