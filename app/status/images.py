@@ -13,8 +13,6 @@ import requests
 import shutil
 import six
 
-from memory_profiler import profile
-
 from status.planet import planet_process
 
 logger = logging.getLogger(__name__)
