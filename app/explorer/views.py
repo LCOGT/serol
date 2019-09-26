@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from django import forms
+from django.conf.urls.static import static
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.staticfiles.templatetags.staticfiles import static
 from django.core.exceptions import ObjectDoesNotExist
@@ -13,7 +14,7 @@ from django.urls import reverse, NoReverseMatch
 import logging
 import json
 
-from explorer.models import Mission, Challenge, Body
+from explorer.models import Mission, Challenge, Body, Season
 from status.models import Progress, Answer, Question, UserAnswer
 from stickers.models import PersonSticker
 from status.views import check_token
@@ -21,6 +22,15 @@ from stickers.views import add_sticker
 from explorer.utils import add_answers, completed_missions
 
 logger = logging.getLogger(__name__)
+
+def home(request):
+    now = datetime.now()
+    season = Season.objects.filter(start__lte=now, end__gte=now, active=True)
+    if season:
+        seasonfile = static('explorer/js/{}'.format(season[0].jsfile))
+    else:
+        seasonfile = None
+    return render(request, 'explorer/home.html', {'seasonfile':seasonfile,'seasonal_msg':season[0].message})
 
 class AnalyseForm(forms.Form):
     answers = forms.CharField(label='Your Answers', max_length=100)

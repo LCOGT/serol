@@ -4,8 +4,8 @@
 {% block ribbon %}{% endblock %}
 
 {% block script-content %}
-{% if request.user.is_authenticated %}
 <script>
+{% if request.user.is_authenticated %}
 $(document).ready(function(){
   if (localStorage.getItem('token') == null){
     localStorage.setItem('token','{{request.user.token}}');
@@ -19,38 +19,61 @@ $(document).ready(function(){
   }
 
 });
-</script>
 {% endif %}
+
+var serolStatus = {
+    container: document.getElementById('seasonal-serol'),
+    renderer: 'svg',
+    loop: true,
+    autoplay: true,
+    autoloadSegments: true,
+    rendererSettings: {
+        progressiveLoad:false
+    },
+    {% if not seasonfile %}
+    path: '{% static "explorer/js/default-serol.json" %}'
+    {% else %}
+    path : '{{seasonfile}}'
+    {% endif %}
+};
+serolanim = lottie.loadAnimation(serolStatus);
+</script>
+
 {% endblock %}
 
 {% block main-content %}
 
-<div class="content-wrapper">
-<div class="content-wrapper-inner">
-<div class="container">
+<div class="container-fluid">
   <div class="row">
-    <div class="col-4 title-left">
-    </div>
-    <div class="col-4 ">
-      <img src="{% static 'explorer/images/serol_logo_lg.png' %}" alt="serol logo" class="img-fluid" />
-      <h1 class="title-main">{% trans "SEROL" %}</h1>
-      <div class="info-blue">
-        <p class="statement">{% trans "Join Serol and become a Cosmic Explorer" %}</p>
-        <p class="statement">
-          {% if request.user.is_authenticated %}
-          <a href="{% progress_url request.user %}" class="btn btn-lg btn-4 btn-4a animated tada" >{% trans "Continue your adventure!" %}</a>
-          {% else %}
-          <a href="{% url 'getting-started' %}" class="btn btn-lg btn-4 btn-4a animated tada">{% trans "Start your adventure!" %}</a>
-          {% endif %}
-        </p>
+    <div class="col-12 col-md-4 pt-5">
+      <div class="row">
+        <div class="col-md-12 col-6">
+        <img src="{% static 'explorer/images/serol_logo_lg.png' %}" alt="serol logo" class="img-fluid" />
+        <h1 class="title-main">{% trans "SEROL" %}</h1>
+        </div>
+        <div class="col-md-12 col-6">
+          <div class="info-blue">
+          <p class="statement">{% trans "Become a Cosmic Explorer with Serol" %}</p>
+        </div>
+        </div>
       </div>
     </div>
-    <div class="col-4 title-right">
+    <div class="col-12 col-md-8 order-first">
+      <div id="seasonal-serol"></div>
+      {% if seasonal_msg %}
+      <p class="statement text-center">{{seasonal_msg}}</p>
+      {% endif %}
+      <p class="statement text-center">
+        {% if request.user.is_authenticated %}
+        <a href="{% progress_url request.user %}" class="btn btn-lg btn-4 btn-4a" >{% trans "Continue your adventure!" %}</a>
+        {% else %}
+        <a href="{% url 'getting-started' %}" class="btn btn-lg btn-4 btn-4a">{% trans "Start your adventure!" %}</a>
+        {% endif %}
+      </p>
     </div>
   </div>
 </div>
-</div>
-</div>
+
 
 <div class="modal fade" id="surveyModal" tabindex="-1" role="dialog" aria-labelledby="surveyModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">

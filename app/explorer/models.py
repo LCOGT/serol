@@ -28,6 +28,16 @@ PATCHES = (
     ('patches/universeatlarge_patch.png', 'Mission 3')
 )
 
+SEASON_FILES = (
+    ('halloween.json', 'halloween'),
+    ('asteroid-day.json', 'asteroid day'),
+    ('equinox.json', 'equinox'),
+    ('new-year.json', 'new year'),
+    ('earth-day.json', 'earth day'),
+    ('perseids.json', 'perseids'),
+    ('christmas.json', 'christmas'),
+)
+
 class Mission(models.Model):
     number = models.IntegerField()
     name = models.CharField(max_length=200)
@@ -94,3 +104,14 @@ class Fact(models.Model):
 
     def __str__(self):
         return "{}".format(self.tagline)
+
+class Season(models.Model):
+    name = models.CharField(max_length=100)
+    start = models.DateTimeField()
+    end = models.DateTimeField()
+    active = models.BooleanField(default=True)
+    jsfile = models.CharField(max_length=20, choices=SEASON_FILES)
+    message = models.CharField(max_length=100, blank=True, null=True)
+
+    def __str__(self):
+        return self.name

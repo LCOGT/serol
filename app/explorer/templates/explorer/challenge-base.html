@@ -8,7 +8,7 @@
 {% block menubar %}
 <div class="container-fluid">
   <div class="row">
-    <div class="col-2">
+    <div class="col-6 col-md-2">
       <div class="dropdown">
 
         <button class="btn-link dropdown-toggle" type="button" id="dropdownMenuLink" data-toggle="dropdown">
@@ -24,9 +24,12 @@
         </div>
       </div>
     </div>
+    <div class="col">
+      <h3>{{object.mission.name}}</h3>
+    </div>
 </div>
   <div class="row">
-    <div class="col-2">
+    <div class="col-12 col-md-2">
     <div class="mission-label mission-{{object.mission.number}}-colour pl-2">{% trans "Mission" %} {{object.mission.number}}</div>
     </div>
     <div class="col">

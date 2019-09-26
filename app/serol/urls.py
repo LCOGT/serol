@@ -14,7 +14,7 @@ from django_registration.backends.activation.views import RegistrationView, Acti
 from status.views import ScheduleView, StatusView, SerolUserForm
 from explorer.views import MissionView, MissionListView, ChallengeRedirectView, \
     ChallengeView, AnalyseView, ChallengeSummary, ChallengeRetry, NextChallengeView, \
-    MissionComplete
+    MissionComplete, home
 from explorer.serializers import FactsView
 from stickers.views import StickerView
 from highscore.views import HighScoreView, AddHighScoreView
@@ -68,7 +68,7 @@ urlpatterns = [
         name='django_registration_complete'),
     # url(r'^accounts/', include('registration.backends.hmac.urls')),
     url(r'^accounts/', include(django_auth_urls)),
-    url(r'^$', TemplateView.as_view(template_name="explorer/home.html"), name='home'),
+    url(r'^$', home, name='home'),
 ]
 
 if settings.DEBUG:
