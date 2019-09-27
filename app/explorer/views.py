@@ -28,9 +28,11 @@ def home(request):
     season = Season.objects.filter(start__lte=now, end__gte=now, active=True)
     if season:
         seasonfile = static('explorer/js/{}'.format(season[0].jsfile))
+        msg = season[0].message
     else:
         seasonfile = None
-    return render(request, 'explorer/home.html', {'seasonfile':seasonfile,'seasonal_msg':season[0].message})
+        msg = None
+    return render(request, 'explorer/home.html', {'seasonfile':seasonfile,'seasonal_msg':msg})
 
 class AnalyseForm(forms.Form):
     answers = forms.CharField(label='Your Answers', max_length=100)

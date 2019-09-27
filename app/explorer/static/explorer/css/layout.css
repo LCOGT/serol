@@ -735,8 +735,18 @@ dt { text-align: right;}
 
 @media (max-width: 576px) {
 
+  h1 {
+    font-size: 3rem;
+  }
+  h2 {
+    font-size: 1.75rem;
+  }
+  h3 {
+    font-size:1.5rem;
+  }
+
   .mission-1 {
-      background: url('../images/M1LOWER_sm.jpg') bottom center no-repeat;
+      background: url('../images/M1LOWER_sm.jpg') bottom center no-repeat #252443;
   }
 
   .corner-ribbon.top-right{

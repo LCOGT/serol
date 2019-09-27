@@ -7,8 +7,9 @@
 
 {% block main-content %}
 <div class="container-fluid">
+  <div class="info-blue">
       <div class="row">
-        <div class="col-5">
+        <div class="col-md-5">
           <h3>{% trans "While you wait, try Serol's ...." %} <a href="/game/" class="btn btn-lg btn-4 btn-4a animated tada" target=_top>{% trans "Video Game" %}</a></h3>
           <div id="status-serol"></div>
         </div>
@@ -28,19 +29,19 @@
     </div>
 
     <div class="row mt-2">
-      <div class="col-5 offset-1">
+      <div class="col-md-5 offset-1">
         <h3>{% trans "Fun Fact" %}</h3>
         <div class="fact-box rounded p-2">
           <p>{% trans "loading..."%}</p>
         </div>
       </div>
 
-      <div class="col-2">
+      <div class="col-md-2">
         <h3>When:</h3>
         <div id="clock"></div>
       </div>
 
-      <div class="col-2">
+      <div class="col-md-2">
         <div class="calendar-outer rounded mt-5">
           <div class="calendar-inner-wrapper p-2">
           <div class="calendar-inner rounded mx-auto">
@@ -52,6 +53,7 @@
       </div>
 
     </div>
+  </div>
 </div>
 {% endblock %}
 

@@ -54,7 +54,15 @@ serolanim = lottie.loadAnimation(serolStatus);
         <div class="col-md-12 col-6">
           <div class="info-blue">
           <p class="statement">{% trans "Become a Cosmic Explorer with Serol" %}</p>
+          <p class="statement text-center">
+            {% if request.user.is_authenticated %}
+            <a href="{% progress_url request.user %}" class="btn btn-lg btn-4 btn-4a" >{% trans "Continue your adventure!" %}</a>
+            {% else %}
+            <a href="{% url 'getting-started' %}" class="btn btn-lg btn-4 btn-4a">{% trans "Start your adventure!" %}</a>
+            {% endif %}
+          </p>
         </div>
+
         </div>
       </div>
     </div>
@@ -63,13 +71,6 @@ serolanim = lottie.loadAnimation(serolStatus);
       {% if seasonal_msg %}
       <p class="statement text-center">{{seasonal_msg}}</p>
       {% endif %}
-      <p class="statement text-center">
-        {% if request.user.is_authenticated %}
-        <a href="{% progress_url request.user %}" class="btn btn-lg btn-4 btn-4a" >{% trans "Continue your adventure!" %}</a>
-        {% else %}
-        <a href="{% url 'getting-started' %}" class="btn btn-lg btn-4 btn-4a">{% trans "Start your adventure!" %}</a>
-        {% endif %}
-      </p>
     </div>
   </div>
 </div>

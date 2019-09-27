@@ -8,7 +8,7 @@
 {% block menubar %}
 <div class="container-fluid">
   <div class="row">
-    <div class="col-6 col-md-2">
+    <div class="col col-md-2">
       <div class="dropdown">
 
         <button class="btn-link dropdown-toggle" type="button" id="dropdownMenuLink" data-toggle="dropdown">
@@ -23,9 +23,6 @@
           <a class="dropdown-item" href="{% url 'auth_logout' %}" id="logout">{% trans "Logout" %}</a>
         </div>
       </div>
-    </div>
-    <div class="col">
-      <h3>{{object.mission.name}}</h3>
     </div>
 </div>
   <div class="row">
