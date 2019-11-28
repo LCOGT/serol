@@ -1,0 +1,150 @@
+body {
+      font-family: 'Oswald', sans-serif;
+  background-color: #0d0c34;
+  background-image: url('../imgs/serol_bg_sm.jpg');
+  color:#fff;
+  font-size:60%;
+}
+
+.heading {
+  padding:5px;
+    font-weight: 300;
+    color: #fff;
+    text-align: left;
+    font-size:2em;
+}
+.update {
+  background-color: #ef5030;
+  border-radius: 25px;
+  font-size:70%;
+  padding-left: 10px;
+}
+
+.controls i {
+  font-size: 2em;
+}
+
+img.logo{
+ width: 100%;
+ max-width:300px;
+ max-heigh:100px;
+}
+
+.label img {
+  max-height: 25px;
+  max-width: 25px;
+  display:inline-block;
+}
+
+.serol {
+  width:100%;
+  height:100%;
+}
+
+.container {
+  background-color: #0d0c34;
+  padding:5px;
+  display:inline-block;
+  border-radius: 25px;
+}
+
+.site {
+  border: 5px solid #aaa;
+  background-color: #0d0c34;
+  padding:5px;
+  display:inline-block;
+  border-radius: 25px;
+  z-index: 30;
+}
+.telescope{
+  display:inline-block;
+  height:100px;
+}
+
+.tfn {border-color: #263c6f;}
+.ogg {border-color: #3366dd;}
+.tlv {border-color: #0038b8 ;}
+.coj {border-color:#fac900;}
+.cpt {border-color:#004f00;}
+.elp {border-color:#700000;}
+.lsc {border-color: #f04e23;}
+
+
+.fa-sun{
+  color:#FFCE33;
+}
+
+.fa-clouds-sun{
+  --fa-secondary-color:#FFCE33;
+}
+
+.fa-toggle-on {
+  --fa-primary-color:green;
+  --fa-primary-opacity:1.0;
+  --fa-secondary-color:white;
+  --fa-secondary-opacity:1.0;
+}
+
+.fa-toggle-off {
+  --fa-primary-color:white;
+  --fa-secondary-color:#FFCE33;
+}
+
+.title{
+    font-size:2em;
+    display:inline-block;
+    margin:0;
+    padding:5px 0;
+}
+.telescopes{
+  display:block;
+}
+
+.worldMap {
+  height:100%
+}
+
+#buffer {
+  display: none;
+}
+
+.status canvas{
+  max-width: 100px;
+  max-height: 100px;
+}
+
+@media (min-width: 768px) {
+  .status { max-width:50px; max-height: 50px;}
+
+  .status canvas{
+    max-width: 50px;
+    max-height: 50px;
+  }
+  body {
+    font-size: 70%;
+  }
+}
+
+@media (min-width: 1024px){
+.status { max-width:75px; max-height: 75px;}
+  .status canvas {
+    max-width: 75px;
+    max-height: 75px;
+    width:100%;
+  }
+  body {
+    font-size: 80%;
+  }
+}
+
+@media (min-width: 1200px){
+.status { max-width:100px; max-height: 100px;}
+  .status canvas {
+    max-width: 100px;
+    max-height: 100px;
+    width:100%;
+  }
+  body {
+    font-size: 100%;
+  }
+}

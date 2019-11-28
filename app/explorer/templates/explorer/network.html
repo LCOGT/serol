@@ -1,0 +1,290 @@
+{% load static %}
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Serol's Network Viewer</title>
+  <meta name="description" content="Serol's Network Viewer">
+  <meta name="author" content="Edward Gomez">
+
+  <link rel="stylesheet" href="{% static 'explorer/network/css/styles.css' %}">
+  <link rel="stylesheet" href="{% static 'explorer/network/css/grid.css' %}">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.5.9/lottie.min.js"></script>
+  <script src="https://kit.fontawesome.com/a6b928a86b.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script type="module" src="{% static 'explorer/network/js/suncalc.js' %}"></script>
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js" type="text/javascript"></script>
+  <script src="{% static 'explorer/network/js/terminator.js' %}"></script>
+  <script>
+	var map;
+  var static_url = '{{static_url}}';
+	window.onload = function() {
+		// Add location placemarks
+		var placemarks = new Array();
+		placemarks.push({lon:-156.26,lat:20.71,label:'Haleakala',link:'https://lco.global/observatory/sites/haleakala',id:'ogg'});
+		placemarks.push({lon:149.06,lat:-31.27,label:'Siding\nSpring',link:'https://lco.global/observatory/sites/siding-spring',align:"left",id:'coj'});
+		placemarks.push({lon:-16.51,lat:28.13,label:"Teide",link:'https://lco.global/observatory/sites/teide',align:"left", id:'tfn'});
+		placemarks.push({lon:-70.81,lat:-30.17,label:"Cerro Tololo",link:'https://lco.global/observatory/sites/cerro-tololo',id:'lsc'});
+		placemarks.push({lon:20.81,lat:-32.38,label:"Sutherland",link:'https://lco.global/observatory/sites/sutherland',id:'cpt'});
+		placemarks.push({lon:-104.01,lat:30.68,label:"McDonald",link:'https://lco.global/observatory/sites/mcdonald',id:'elp'});
+		placemarks.push({lon:30.595833,lat:34.763333,label:"Wise",link:'https://lco.global/observatory/sites/wise'});
+
+		map = new WorldMap({placemarks:placemarks,container:'body'});
+		setInterval("map.update()",60000);	// Update every minute
+    $('.controls i').click( function(e){
+      $('.fa-toggle-on').toggle();
+      $('.fa-toggle-off').toggle();
+      $('.site').toggle();
+    });
+	}
+	</script>
+
+</head>
+
+<body>
+  <div id="sites" class="wrapper">
+      <div class="header">
+        <div class="heading">
+          Live updates from our Global Telescope Network
+        </div>
+        <div class="heading">
+          <div class="update">
+          Updated: [[updated]]
+          </div>
+        </div>
+      </div>
+
+      <div class="controls">
+        Show all sites<br/>
+        <i class="fad fa-toggle-on"></i>
+        <i class="fad fa-toggle-off" style="display:none;"></i>
+      </div>
+
+      <div class="key container">
+        Telescopes:
+
+        <span class="label">
+          <img src="{% static 'explorer/network/imgs/0m4.svg' %}" />
+          0.4-meter
+        </span>
+        <span class="label">
+          <img src="{% static 'explorer/network/imgs/1m0.svg' %}" />
+          1-meter
+        </span>
+        <span class="label">
+          <img src="{% static 'explorer/network/imgs/2m0.svg' %}" />
+          2-meter
+        </span>
+        <div>
+          <img src="{% static 'explorer/network/imgs/LCO-logo.png' %}"  class="logo" />
+        </div>
+      </div>
+
+
+      <div id="serol-status" class="serol">
+      </div>
+      <div id="map" class="worldMap">
+        	<img id="day" src="{% static 'explorer/network/imgs/map-edit1-01.jpg' %}" style="display:none;" />
+        	<img id="night" src="{% static 'explorer/network/imgs/map-night-edit1-01.jpg' %}" style="display:none;" />
+      </div>
+    <div v-for="(value, name) in sitecodes" :class="'site ' +name" >
+        <div class="site-info">
+        <div class="title">[[ value.name ]]</div>
+        <p class="title" v-if="value.weather.day">
+          <span v-if="value.weather.current"><i class="fas fa-sun"></i></span>
+          <span v-else><i class="fad fa-clouds-sun"></i></span>
+        <p  class="title" v-else>
+          <span v-if="value.weather.current"><i class="fas fa-stars"></i></span>
+          <span v-else><i class="fad fa-clouds-moon"></i></span>
+        </p>
+        <div class="telescopes">
+          <div v-for="tel in value.tels" class="telescope">
+           <div :id="tel.name" class="status" :title="tel.state"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+<script>
+  var display_
+
+  var app = new Vue({
+  delimiters: ['[[', ']]'],
+  el: '#sites',
+  props: ['sites', 'sitestatus'],
+  data: {
+    sitecodes: {},
+    updated: null,
+    timer: undefined
+  },
+  created() {
+    var self = this;
+    this.getJsonData();
+    this.timer = setInterval(function(){
+        Promise.all([self.siteCheck()])
+      },60000);
+  },
+  beforeDestroy() {
+      if (this.timer) {
+        clearInterval(this.timer)
+        this.timer = undefined
+      }
+    },
+    mounted() {
+      addAnimation('serol-status','serol-active',true);
+      var now = new Date();
+      var end = now.toISOString();
+      now.setDate(now.getDate()-1);
+      var start = now.toISOString();
+      Promise.all([this.checkWeather('ogg',start,end),
+                this.checkWeather('coj',start,end),
+                this.checkWeather('tfn',start,end),
+                this.checkWeather('tlv',start,end),
+                this.checkWeather('cpt',start,end),
+                this.checkWeather('lsc',start,end),
+                this.checkWeather('elp',start,end),
+                this.getTelData()])
+       .then(values => {
+         var tmparr = this.sitecodes;
+         var now = new Date();
+         for (var value in values){
+           if (values[value]['site'] != undefined) {
+             var site = values[value]['site'];
+             var position = SunCalc.getPosition(now, this.sitecodes[site]['lat'], this.sitecodes[site]['lng']);
+             tmparr[site]['weather']['day'] = (position.altitude < 0) ? false : true;
+             tmparr[site]['weather']['current'] =  values[value]['state'];
+           }else{
+             this.loadTelData(values[value]['data']);
+           }
+         }
+         this.setAnimations();
+       })
+       .catch(error => {
+          this.msg = "This didn't work";
+        });
+      addAnimation('serol-status','serol-plain',true);
+    },
+    methods: {
+      siteCheck: async function(){
+        addAnimation('serol-status','serol-active',true);
+        await this.weather();
+        let response = await this.getTelData();
+        this.loadTelData(response['data'])
+        this.setAnimations();
+        setTimeout(function(){addAnimation('serol-status','serol-plain',true);}, 5000); /* here just to show the animation */
+
+      },
+      getTelData() {
+        return axios.get('https://observe.lco.global/api/telescope_states/?format=json')
+      },
+      loadTelData(json) {
+        var tmpdate = new Date();
+        var options = { dateStyle:"long", timeStyle:"long" }
+        this.updated = tmpdate.toLocaleDateString("en-GB", options);
+        var tmparr = this.sitecodes;
+        var instate;
+        for (var s in this.sitecodes){
+          var day = this.sitecodes[s]['weather']['day'];
+          this.sitecodes[s]['tels'].forEach(function(el, i){
+            if (json[el.name] != undefined){
+              if (day){
+                instate = 'DAY';
+              }else{
+                instate = json[el.name][0]['event_type'];
+              }
+              tmparr[s]['tels'][i].state = instate;
+              tmptime = json[el.name][0]['start'];
+            }
+          })
+        }
+      },
+      setTelData: async function(){
+        let response = await this.getTelData();
+        loadTelData(response.data);
+      },
+      getJsonData () {
+        fetch( "{% static 'explorer/network/js/sites.js' %}" ).then( resp => resp.json() ).then( json => { this.sitecodes = json; });
+      },
+      cancelAutoUpdate () {
+        clearInterval(this.timer)
+      },
+      weather: async function() {
+        var tmparr = this.sitecodes;
+        var now = new Date();
+        var end = now.toISOString();
+        now.setDate(now.getDate()-1);
+        var start = now.toISOString();
+        for (var site in this.sitecodes){
+          var position = SunCalc.getPosition(now, this.sitecodes[site]['lat'], this.sitecodes[site]['lng']);
+          tmparr[site]['weather']['day'] = (position.altitude < 0) ? false : true;
+          state = await this.checkWeather(site, start, end);
+          tmparr[site]['weather']['current'] =  state['state'];
+        }
+      },
+      checkWeather: function(site,start,end) {
+        return axios.get('https://weather-api.lco.global/query?site='+site+'&datumname=Weather%20Ok%20To%20Open&agg=False&start='+start+'&end='+end)
+          .then(response => response.data)
+          .then(json => {
+            if (json!=null){
+              var state = json[json.length-1]['ValueString']=='true' ? true : false;
+            }else{
+              var state = false;
+            }
+            return {'state':state, 'site':site}
+        });
+      },
+      setAnimations() {
+          for (var s in this.sitecodes){
+            this.sitecodes[s]['tels'].forEach(function(el, i){
+                addAnimation(el.name, el.state);
+            })
+          }
+      }
+    }
+});
+
+
+function addAnimation(id, state, serol=false){
+
+  var size = id.substr(9,3);
+  var statusfile;
+  var statefile = {
+    'AVAILABLE' : 'active.json',
+    'NOT_OK_TO_OPEN': 'angry.json',
+    'ENCLOSURE_INTERLOCK': 'sick.json',
+    'UNKNOWN': 'sleep.json',
+    'SEQUENCER_DISABLED' : 'sick.json',
+    'SITE_AGENT_UNRESPONSIVE' : 'sleep.json',
+    'DAY' : 'sleep.json',
+    'serol-active':'serol-active.json',
+    'serol-plain':'serol.json',
+  }
+  if (serol == true){
+    statusfile = static_url+'explorer/network/js/'+statefile[state];
+  } else {
+    statusfile = static_url+"explorer/network/js/"+size+"/"+statefile[state];
+  }
+  // anims
+  lottie.destroy(id);
+  lottie.loadAnimation({
+      name : id,
+      animationID: id,
+      container: document.getElementById(id),
+      renderer: 'canvas',
+      loop: true,
+      autoplay: true,
+      autoloadSegments: true,
+      rendererSettings: {
+          progressiveLoad:false
+      },
+      path: statusfile
+  });
+}
+
+
+
+</script>
+</body>
+</html>

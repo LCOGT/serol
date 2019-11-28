@@ -25,6 +25,7 @@ urlpatterns = [
     url(r'^videos/$', flatpage, {'url': '/videos/'}, name='videos'),
     url(r'^join/$', flatpage, {'url': '/join/'}, name='join'),
     url(r'^game/$', flatpage, {'url': '/game/'}, name='game'),
+    url('^network/$',TemplateView.as_view(template_name='explorer/network.html'),{'static_url': settings.STATIC_URL}),
     url(r'^resources/$', flatpage, {'url': '/resources/'}, name='resources'),
     url(r'^resources/workshops/$', flatpage, {'url': '/resources/workshops/'}, name='workshops'),
     url(r'^getting-started/$', flatpage, {'url' : '/getting-started/'}, name='getting-started'),
