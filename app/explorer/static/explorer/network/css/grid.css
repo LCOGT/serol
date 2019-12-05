@@ -60,8 +60,8 @@
     grid-row-end: 5;
   }
 
-  .site.cpt{
-    grid-column-start: 7;
+  .site.coj{
+    grid-column-start: 6;
     grid-column-end: 11;
     grid-row-start: 9;
     grid-row-end: 12;
@@ -81,8 +81,8 @@
     grid-row-end: 12;
   }
 
-  .site.coj {
-    grid-column-start: 7;
+  .site.cpt {
+    grid-column-start: 8;
     grid-column-end: 12;
     grid-row-start: 5;
     grid-row-end: 8;

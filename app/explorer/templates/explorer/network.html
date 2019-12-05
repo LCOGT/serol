@@ -62,8 +62,6 @@
       </div>
 
       <div class="key container">
-        Telescopes:
-
         <span class="label">
           <img src="{% static 'explorer/network/imgs/0m4.svg' %}" />
           0.4-meter
@@ -100,7 +98,7 @@
         </p>
         <div class="telescopes">
           <div v-for="tel in value.tels" class="telescope">
-           <div :id="tel.name" class="status" :title="tel.state"></div>
+           <div :id="tel.name" class="status" :title="tel.txtstate"></div>
           </div>
         </div>
       </div>
@@ -117,7 +115,14 @@
   data: {
     sitecodes: {},
     updated: null,
-    timer: undefined
+    timer: undefined,
+    statecodes: {'UNKNOWN':'Awaiting Status',
+    'AVAILABLE' : 'Observing',
+    'NOT_OK_TO_OPEN': 'Waiting for weather to clear',
+    'ENCLOSURE_INTERLOCK': 'Undergoing Maintenance',
+    'SEQUENCER_DISABLED' : 'Undergoing Maintenance',
+    'SITE_AGENT_UNRESPONSIVE' : 'Awaiting Status',
+    'DAY' : 'Day Time'}
   },
   created() {
     var self = this;
@@ -181,9 +186,10 @@
       },
       loadTelData(json) {
         var tmpdate = new Date();
-        var options = { dateStyle:"long", timeStyle:"long" }
-        this.updated = tmpdate.toLocaleDateString("en-GB", options);
+        var options = { year: 'numeric', month: 'long', day: 'numeric', hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:false };
+        this.updated = tmpdate.toLocaleDateString("en-US", options);
         var tmparr = this.sitecodes;
+        var states = this.statecodes;
         var instate;
         for (var s in this.sitecodes){
           var day = this.sitecodes[s]['weather']['day'];
@@ -195,6 +201,8 @@
                 instate = json[el.name][0]['event_type'];
               }
               tmparr[s]['tels'][i].state = instate;
+              var txtstate = (states[instate] === undefined) ? instate : states[instate];
+              tmparr[s]['tels'][i]['txtstate'] = txtstate;
               tmptime = json[el.name][0]['start'];
             }
           })
@@ -253,9 +261,9 @@ function addAnimation(id, state, serol=false){
   var statefile = {
     'AVAILABLE' : 'active.json',
     'NOT_OK_TO_OPEN': 'angry.json',
-    'ENCLOSURE_INTERLOCK': 'sick.json',
+    'ENCLOSURE_INTERLOCK': 'sleep.json',
     'UNKNOWN': 'sleep.json',
-    'SEQUENCER_DISABLED' : 'sick.json',
+    'SEQUENCER_DISABLED' : 'sleep.json',
     'SITE_AGENT_UNRESPONSIVE' : 'sleep.json',
     'DAY' : 'sleep.json',
     'serol-active':'serol-active.json',

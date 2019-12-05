@@ -118,7 +118,7 @@
 			"day": false
 		},
 		"tels": [{
-			"name": "ogg.clma.0m4a",
+			"name": "ogg.clma.0m4c",
 			"state": "UNKNOWN"
 		}, {
 			"name": "ogg.clma.0m4b",
