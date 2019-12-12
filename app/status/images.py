@@ -109,7 +109,8 @@ def write_clean_data(filelist):
         data, hdrs = fits.getdata(file_in, header=True)
         filtr = hdrs['filter']
         path = os.path.split(file_in)[0]
-        new_filename = os.path.join(path,"{}.fits".format(filtr))
+        old_name = hdrs['ORIGNAME'].split('.')[0]
+        new_filename = os.path.join(path,f"{old_name}-{filtr}.fits")
         data = clean_data(data)
         hdu = fits.PrimaryHDU(data, header=hdrs)
         hdu.writeto(new_filename)
