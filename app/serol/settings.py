@@ -142,16 +142,14 @@ if ast.literal_eval(os.environ.get('USE_S3', 'False')):
     DEFAULT_FILE_STORAGE = 'serol.storage_backends.PublicMediaStorage'
 
 DATABASES = {
-    "default": {
-        # Live DB
-        "ENGINE": "django.db.backends.mysql",
-        "NAME": os.environ.get('DB_NAME', ''),
-        "USER": os.environ.get('DB_USER',''),
-        "PASSWORD": os.environ.get('DB_PASS',''),
-        "HOST": os.environ.get('DB_HOST','mysql'),
-        "PORT"   : '3306',
-
-    }
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.environ.get('DB_NAME', ''),
+        'USER': os.environ.get('DB_USER',''),
+        'PASSWORD': os.environ.get('DB_PASS',''),
+        'HOST': os.environ.get('DB_HOST',''),
+        'PORT'   : int(os.environ.get('DB_PORT', '5432')),
+    },
 }
 
 ACCOUNT_ACTIVATION_DAYS = 28

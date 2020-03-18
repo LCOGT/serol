@@ -7,7 +7,7 @@ COPY requirements.txt .
 RUN apk --no-cache add \
             libgomp \
             libjpeg-turbo \
-            mariadb-connector-c \
+            postgresql-libs \
             openblas \
             zlib \
         && apk --no-cache add --virtual .build-deps \
@@ -15,7 +15,7 @@ RUN apk --no-cache add \
             gcc \
             git \
             libjpeg-turbo-dev \
-            mariadb-dev \
+            postgresql-dev \
             musl-dev \
             openblas-dev \
             zlib-dev \
