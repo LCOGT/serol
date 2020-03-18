@@ -31,7 +31,7 @@ PATCHES = (
 SEASON_FILES = (
     ('halloween.json', 'halloween'),
     ('asteroid-day.json', 'asteroid day'),
-    ('equinox.json', 'equinox'),
+    ('equinox2020.json', 'equinox'),
     ('new-year.json', 'new year'),
     ('earth-day.json', 'earth day'),
     ('perseids.json', 'perseids'),
