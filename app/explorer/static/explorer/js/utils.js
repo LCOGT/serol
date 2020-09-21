@@ -145,6 +145,7 @@ function status_userrequest(requestid, token) {
       data = rdata
     })
     .fail(function(rdata){
+      $('#location-text').html("Hmmm. I'm having trouble updating that.");
       console.log("FAIL "+rdata['detail']);
     });
     return data;
