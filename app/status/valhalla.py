@@ -143,7 +143,7 @@ def request_format(target, start, end, obs_filter, proposal, aperture='0m4'):
     request_group = {
         "operator" : "SINGLE",
         "type" : "compound_request",
-        "ipp_value" : 1.05,
+        "ipp_value" : 1.0,
         "name": "serol_{}_{}".format(target['name'], datetime.utcnow().strftime("%Y%m%d")),
         "observation_type": "NORMAL",
         "proposal": proposal,

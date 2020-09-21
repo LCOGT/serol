@@ -108,7 +108,7 @@ function status_request(requestid, token) {
     .done(function(rdata){
       data = rdata
       if (rdata['state'] == 'PENDING' ){
-        status_userrequest(rdata['id'], token);
+        status_userrequest(rdata['requests'][0]['id'], token);
       } else if (rdata['state'] == 'COMPLETED' || rdata['state'] == 'WINDOW_EXPIRED' || rdata['state'] == 'CANCELED'){
         update_status(requestid);
       }
@@ -123,7 +123,7 @@ function status_request(requestid, token) {
 
 function status_userrequest(requestid, token) {
   var data;
-  $.getJSON('https://observe.lco.global/api/requestgroups/'+requestid+'/observations/?exclude_canceled=true',
+  $.getJSON('https://observe.lco.global/api/requests/'+requestid+'/observations/?exclude_canceled=true',
     {
     dataType: 'json',
     contentType: 'application/json'})
