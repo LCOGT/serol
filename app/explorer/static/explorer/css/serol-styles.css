@@ -1,0 +1,63 @@
+/*
+ * Base structure
+ */
+
+
+body {
+  font-family: 'Aldrich',  Arial, sans-serif;
+  background: #fff;
+  color: #555;
+}
+
+
+h1, h2, h3, h4, h5, h6, .target-name, .mission-label {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 300;
+    color: #33D7FF;
+    text-align: left;
+    padding-bottom:20px;
+}
+
+h1 {
+  font-size:3rem;
+}
+
+a,
+a:focus,
+a:hover {
+  color: #ff5233;
+}
+
+a.btn {
+  color: #fff;
+}
+
+.starry-bg {
+ background: url('../images/serol_bg_sm.jpg') repeat fixed #2b3e50;
+ color: #fff;
+}
+
+.statement {
+  font-size: 1.5rem;
+}
+
+.focus-home {
+  background-color: #CEECFC;
+  padding: 5rem 0;
+}
+
+.navbar{
+  border-bottom: 5px solid transparent;
+  border-image: linear-gradient(to bottom right, #b827fc 0%, #2c90fc 25%, #b8fd33 50%, #fec837 75%, #fd1892 100%);
+  border-image-slice: 1;
+}
+
+.footer{
+  background-color:#0d0c34;
+  color: #fff;
+}
+
+.footer h4,
+.footer a {
+  color: #fff;
+}

@@ -14,9 +14,9 @@
 
 
 body {
-  font-family: Arial, sans-serif;
-  background: url('../images/serol_bg_sm.jpg') repeat fixed #2b3e50;
-  color: #fff;
+  font-family:Arial, sans-serif;
+  background: #fff;
+  color: #555;
   margin-bottom:30px;
   text-align: left;
 
@@ -31,13 +31,13 @@ body {
 h1, h2, h3, h4, h5, h6, .target-name, .mission-label {
     font-family: 'Oswald', sans-serif;
     font-weight: 300;
-    color: #fff;
+    color: #33D7FF;
     text-align: left;
     padding-bottom:20px;
 }
 
 h1 {
-  font-size:4.5rem;
+  font-size:3rem;
 }
 
 .nav-heading {
@@ -60,7 +60,7 @@ p.statement {
 }
 
 .black {
-  color:#000;ß
+  color:#000;
 }
 
 .text-large {
@@ -85,91 +85,6 @@ a.btn {
   color: #fff;
 }
 
-/* Navbar */
-.navbar-home {
-  background-color: #252443;
-  box-shadow: 0px 5px 5px black;
-}
-
-.nav-separator {
-  border-left: 1px solid #aaa;
-  height: 40px;
-  margin: 0 9px;
-}
-.navbar-brand img {
-  max-height:40px;
-}
-.navbar h3{
-  padding-left: 10px;
-  padding-bottom:0;
-  text-shadow: 2px 2px 15px black;
-}
-
-/* Custom default button */
-.btn-secondary,
-.btn-secondary:hover,
-.btn-secondary:focus {
-  text-shadow: none; /* Prevent inheritance from `body` */
-  border: .05rem solid #fff;
-}
-
-.btn {
-	border: none;
-	color: #fff;
-	background: #222;
-	cursor: pointer;
-	display: inline-block;
-	text-transform: uppercase;
-}
-
-.btn:after {
-	content: '';
-	position: absolute;
-	z-index: -1;
-	-webkit-transition: all 0.3s;
-	-moz-transition: all 0.3s;
-	transition: all 0.3s;
-}
-
-.btn-4 {
-	border-radius: 50px;
-	border: 3px solid #fff;
-	color: #fff;
-	overflow: hidden;
-}
-.btn-4:active {
-	border-color: #17954c;
-	color: #17954c;
-}
-
-.btn-4:hover {
-	background: #ef5030;
-}
-
-.btn-4:before {
-	position: absolute;
-	height: 100%;
-	font-size: 125%;
-	line-height: 3.5;
-	color: #fff;
-	-webkit-transition: all 0.3s;
-	-moz-transition: all 0.3s;
-	transition: all 0.3s;
-}
-
-.btn-4:active:before {
-	color: #17954c;
-}
-
-/* Button 4a */
-.btn-4a:before {
-	left: 130%;
-	top: 0;
-}
-
-.btn-4a:hover:before {
-	left: 80%;
-}
 
 /* Analyse buttons */
 
@@ -262,19 +177,6 @@ h2.request-status-info {
 }
 
 
-/* Extra markup and styles for table-esque vertical and horizontal centering */
-.masthead, .mastfoot, .content {
-  display: table-row;
-  vertical-align: top;
-}
-
-/*
- * Header
- */
-
-.nav-head {
-  border-bottom: 1px solid #555;
-}
 
 /*
  * Modals
@@ -293,6 +195,11 @@ h5.modal-title{
 /*
  * Colour and Art
  */
+
+ .starry-bg {
+  background: url('../images/serol_bg_sm.jpg') repeat fixed #2b3e50;
+  color: #fff;
+ }
 
  .info-blue {
    padding: 15px;
@@ -458,34 +365,6 @@ img.identify-image {
   margin-bottom: 1rem;
 }
 
-.speech-bubble {
-    border: 1px solid #c8c8c8;
-    border-radius: 5px;
-    text-align: center;
-    padding: 1vw;
-    color:#555;
-}
-
-.speech-bubble .arrow {
-    border-style: solid;
-    position: absolute;
-}
-
-.bottom {
-    border-color: #c8c8c8 transparent transparent transparent;
-    border-width: 8px 8px 0px 8px;
-    bottom: -8px;
-}
-
-.bottom:after {
-    border-color: #222 transparent transparent transparent;
-    border-style: solid;
-    border-width: 7px 7px 0px 7px;
-    bottom: 1px;
-    content: "";
-    position: absolute;
-    left: -7px;
-}
 
 /* Image identify
 */
@@ -699,18 +578,6 @@ input[type=radio]:checked ~ .check:active{
 }
 
 dt { text-align: right;}
-
-/* footer */
-
-.footer {
-  background-color: #252443;
-  border-top:1px solid #0d0c34;
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: 30px;
-  line-height: 30px; /* Vertically center the text there */
-}
 
 
 

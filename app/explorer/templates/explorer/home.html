@@ -43,60 +43,83 @@ serolanim = lottie.loadAnimation(serolStatus);
 
 {% block main-content %}
 
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-12 col-md-4 pt-5">
-      <div class="row">
-        <div class="col-md-12 col-6">
-        <img src="{% static 'explorer/images/serol_logo_lg.png' %}" alt="serol logo" class="img-fluid" />
-        <h1 class="title-main">{% trans "SEROL" %}</h1>
-        </div>
-        <div class="col-md-12 col-6">
-          <div class="info-blue">
-          <p class="statement">{% trans "Become a Cosmic Explorer with Serol" %}</p>
-          <p class="statement text-center">
-            {% if request.user.is_authenticated %}
-            <a href="{% progress_url request.user %}" class="btn btn-lg btn-4 btn-4a" >{% trans "Continue your adventure!" %}</a>
-            {% else %}
-            <a href="{% url 'getting-started' %}" class="btn btn-lg btn-4 btn-4a">{% trans "Start your adventure!" %}</a>
-            {% endif %}
-          </p>
-        </div>
-
-        </div>
-      </div>
+<section class="section pb-6 pt-6">
+<div class="container">
+  <div class="columns">
+    <div class="column is-two-fifths">
+        <figure class="image">
+        <img src="{% static 'explorer/images/serol-logo-blue.png' %}" alt="serol logo" style="width:200px" />
+        </figure>
+        <h1>{% trans "Serol's Cosmic Explorers" %}</h1>
+        <p class="statement">{% trans "Explore the Universe with robotic telescopes, for children and adults from 8 years and up, for free!" %}</p>
     </div>
-    <div class="col-12 col-md-8 order-first">
-      <div id="seasonal-serol"></div>
-      {% if seasonal_msg %}
-      <p class="statement text-center">{{seasonal_msg}}</p>
-      {% endif %}
+    <div class="column">
+      <figure class="image">
+      <img src="{% static 'explorer/images/rocket-scene-colour.png' %}" alt="Serol in a rocket" class="img-fluid" />
+      </figure>
     </div>
   </div>
 </div>
+</section>
 
+<section class="section focus-home">
+  <div class="container">
+    <h1 class="has-text-centered">{% trans "Investigate the Universe using Las Cumbres Observatory" %}</h1>
+    <p class="statement  has-text-centered">{% trans "Serol is the brain behind our unique network of robotic telescopes. With their help you will choose targets for the robotic telescopes to observe, just for you. You will be emailed when your pictures have been taken and are ready for you to analyse."%}</p>
+  </div>
+</section>
 
-<div class="modal fade" id="surveyModal" tabindex="-1" role="dialog" aria-labelledby="surveyModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Education Feedback</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+<section class="section starry-bg">
+  <div class="container">
+    <div class="columns">
+      <div class="column is-three-fifths">
+          <div id="seasonal-serol"></div>
+          {% if seasonal_msg %}
+          <p class="statement text-center">{{seasonal_msg}}</p>
+          {% endif %}
       </div>
-      <div class="modal-body">
-        Can you spare 20 seconds to give us feedback?<br/>
-      </div>
-      <div class="modal-footer">
-        <a href="https://survey.lco.global/eef70ea6-ff58-45a3-9170-5a43f086eccd/" class="btn btn-secondary" target="_blank" onclick="setCookie('lco_fb_serol','eef70ea6-ff58-45a3-9170-5a43f086eccd','180');$('#surveyModal').modal('hide');window.open('https://survey.lco.global/eef70ea6-ff58-45a3-9170-5a43f086eccd/',
-                         'newwindow',
-                         'width=600,height=600'); return false;">Yes!</a>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="setCookie('lco_fb_serol','eef70ea6-ff58-45a3-9170-5a43f086eccd','30')">No</button>
-        <img src="https://cdn.lco.global/mainstyle/img/LCO_logo_Color_Horizontal_sm.jpg" alt="LCO logo" />
-
-      </div>
+      <div class="column">
+        <p class="buttons">
+        <button class="button is-rounded is-large">Join as an Individual</button>
+        <button class="button is-primary is-rounded is-large">Join as a Teacher</button>
+        </p>
+        </div>
     </div>
   </div>
-</div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <figure class="image is-16by9">
+    <iframe class="has-ratio" width="560" height="315" src="https://www.youtube.com/embed/Pq9dr9ICOl8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </figure>
+  </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h1 class="has-text-centered">{% trans "Core Aims" %}</h1>
+      <div class="columns">
+        <div class="column is-one-thirds">
+          <p class="title has-text-centered">Robotic Telescopes</p>
+          <p class="statement has-text-centered">{% trans "By simplifying the use of robotic telescopes, Serol allows anyone to become an astronomer"%}</p>
+        </div>
+        <div class="column is-one-thirds">
+          <p class="title has-text-centered">Ownership</p>
+          <p class="statement  has-text-centered">{% trans "You choose what to observe. We never send you a picture taken by someone else"%}</p>
+        </div>
+        <div class="column is-one-thirds">
+          <p class="title has-text-centered">Science</p>
+          <p class="statement  has-text-centered">{% trans "With Serol, you will learn about the different types of objects in space, and analyse your own pictures of them."%}</p>
+        </div>
+      </div>
+  </section>
+
+  <section class="section focus-home">
+    <div class="container">
+      <h1 class="has-text-centered">{% trans "How does it work?" %}</h1>
+      <p class="statement  has-text-centered">{% trans "It is free to join Serol and become a Cosmic Explorer. With Serol, we have created a way for children 8 years and up to explore the Universe, using Las Cumbres Observatory’s robotic telescopes. You don’t need to know anything about astronomy to start the adventure. You just need a sense of adventure!"%}</p>
+    </div>
+  </section>
+
 {% endblock %}

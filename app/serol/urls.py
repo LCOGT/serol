@@ -21,6 +21,7 @@ from highscore.views import HighScoreView, AddHighScoreView
 
 
 urlpatterns = [
+    url(r'^demo/$', TemplateView.as_view(template_name='explorer/demo.html')),
     url(r'^about/$', flatpage, {'url': '/about/'}, name='about'),
     url(r'^videos/$', flatpage, {'url': '/videos/'}, name='videos'),
     url(r'^join/$', flatpage, {'url': '/join/'}, name='join'),
