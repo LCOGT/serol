@@ -16,31 +16,38 @@
 			<h1>Serol</h1>
 			<h2>{% trans "Sign up to start your cosmic adventure!" %}</h2>
       {% for m in messages %}
-      <p class="bg-warning">{{m|safe}}</p>
+      <p class="notifcation is-warning">{{m|safe}}</p>
       {% endfor %}
+      <div class="card">
+        <div class="card-content">
         <form method="post">
           {% csrf_token %}
           {% for field in form %}
-          <div class="row">
-            <div class="col">
-              {{ field.label_tag }}<br/>
+          <div class="field">
+            <label class="label" for="{{ field.id_for_label }}">
+              {{ field.label}}
+              </label>
+              <div class="control">
+                {% if field.html_name == 'password2' or field.html_name == 'password1'%}
+                <input type="password" class="input" name="{{ field.html_name }}" />
+                {% else %}
+                <input type="text" class="input" name="{{ field.html_name }}" />
+                {% endif %}
+                </div>
               {% if field.help_text %}
-                <small style="color: grey">{{ field.help_text|safe }}</small>
+                 <p class="help">{{ field.help_text|safe }}</p>
               {% endif %}
               {% for error in field.errors %}
-                <p style="color: red">{{ error }}</p>
+                <p class="help is-danger">{{ error }}</p>
               {% endfor %}
-            </div>
-            <div class="col">
-              {{ field }}
-            </div>
-          </div>
           {% endfor %}
-          <div class="row">
-            <div class="col">
-            <button type="submit"  class="btn btn-lg btn-4 btn-4a">Sign up</button>
-            <p class="small">By registering in, you agree to <a href="http://lco.global/observatory/termsofuse" target="_blank">the Las Cumbres Observatory terms of use</a>.</p>
+          <div class="field is-grouped">
+            <div class="control">
+            <button type="submit"  class="button">Sign up</button>
           </div>
           </div>
+            <p class="small">By registering in, you agree to <a href="https://lco.global/observatory/privacy-policy/" target="_blank">the Las Cumbres Observatory privacy policy</a>.</p>
         </form>
+        </div>
+        </div>
 {% endblock %}

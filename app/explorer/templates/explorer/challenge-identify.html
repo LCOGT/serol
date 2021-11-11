@@ -51,18 +51,17 @@ $(document).ready(function(){
 {% block challengename %}{{object.challenge.name}}{% endblock %}
 
 {% block main-body %}
-  <div class="row">
-    <div class="col">
-    <h1>{% trans "Click on your picture" %}</h1>
-    <p class="oswald text-large">{% trans "You asked for" %} <strong>{{progress.target}}</strong>.
+    <h1>Identify</h1>
+      <p><i class="fas fa-stars"></i> {% trans "Click on your picture" %} <i class="fas fa-stars"></i> </p>
+    <p>{% trans "You asked for" %} <strong>{{progress.target}}</strong>.
         {% trans "That's a" %} <strong>{{object.category}}</strong>.
       </p>
-      </div>
-  </div>
-      <div class="row">
+      <div class="columns is-multiline">
         {% for i in "0123" %}
-        <div class="col-6 pb-2">
-          <img src="{% static 'explorer/images/placeholder.jpg' %}" alt="" class="identify-image img-fluid img-thumbnail" id="img-{{i}}" data-mine="">
+        <div class="column is-half pb-2">
+          <figure class="image">
+          <img src="{% static 'explorer/images/placeholder.jpg' %}" alt="" class="identify-image rounded-corners" id="img-{{i}}" data-mine="">
+          </figure>
         </div>
         {% endfor %}
       </div>

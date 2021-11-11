@@ -1,60 +1,88 @@
-{% extends 'explorer/challenge-base.html' %}
+{% extends 'explorer/base.html' %}
 {% load static i18n %}
 
 {% block title %}{% trans "Observation Status" %}{% endblock %}
 
 {% block mission-class %}{%endblock%}
 
-{% block main-content %}
-<div class="container-fluid">
-  <div class="info-blue">
-      <div class="row">
-        <div class="col-md-5">
-          <h3>{% trans "While you wait, try Serol's ...." %} <a href="/game/" class="btn btn-lg btn-4 btn-4a animated tada" target=_top>{% trans "Video Game" %}</a></h3>
-          <div id="status-serol"></div>
-        </div>
+{% block main-body %}
+          <h2>{% trans "While you wait ...." %}</h2>
+          <div class="columns">
+            <div class="column is-half">
+              <div id="status-serol"></div>
+            </div>
+            <div class="column">
+              <div class="icon-text">
+                <span class="icon blue is-large">
+                  <i class="fas fa-pencil-ruler fa-2x"></i>
+                </span>
+                <span class="is-size-3">Activity 1</span>
+              </div>
+              <p class="block">
+                This is some placeholder text until we decide on the actual activity we will showcase here.
+              </p>
+              <!-- Activity 2 -->
+              <div class="icon-text">
+                <span class="icon yellow is-large">
+                  <i class="fas fa-ruler-triangle fa-2x"></i>
+                </span>
+                <span class="is-size-3">Activity 1</span>
+              </div>
+              <p class="block">
+                This is some placeholder text until we decide on the actual activity we will showcase here.
+              </p>
+              <!-- Activity 3 -->
+              <div class="icon-text">
+                <span class="icon green is-large">
+                  <i class="fas fa-paint-brush fa-2x"></i>
+                </span>
+                <span class="is-size-3">Activity 3</span>
+              </div>
+              <p class="block">
+                This is some placeholder text until we decide on the actual activity we will showcase here.
+              </p>
+            </div>
+          </div>
 
-        <div class="col">
-          <h3>{% trans "Where:"%} <span id="location-text"></span></h3>
-            <div class="worldMap container-fluid">
-        			<img src='{% static "explorer/images/serol_network_map.jpg" %}' class="bgMap rounded" />
-              <div class="location ogg" data-location="ogg"></div>
-              <div class="location elp" data-location="elp"></div>
-              <div class="location tfn" data-location="tfn"></div>
-              <div class="location cpt" data-location="cpt"></div>
-              <div class="location coj" data-location="coj"></div>
-              <div class="location lsc" data-location="lsc"></div>
+          <div class="columns is-centered">
+            <div class="column is-half">
+              <p class="has-text-centered">
+                <span class="icon-text">
+                <span class="icon is-large"><i class="fas fa-gamepad red fa-2x"></i></span>
+                <span class="is-size-4">or try the <a href="/game/">Serol Video Game</a></span>
+                </span>
+                </p>
+              </div>
+            </div>
+
+          <div class="columns">
+        <div class="column is-half">
+          <div class="box yellow-bg">
+            <div class="block">
+              <span class="is-size-4">{% trans "Where:"%} <span id="location-text"></span></span>
+              </div>
+          <div class="block">
+          <span class="is-size-4">When: </span>
+          <span class="icon-text is-size-4">
+            <span class="icon">
+              <i class="fad fa-clock" style="--fa-secondary-color:#ffc312;"></i>
+            </span>
+            <span id="calendar-value"></span>&nbsp;<span id="calendar-units"></span>
+          </span>
+          </div>
           </div>
       </div>
-    </div>
-
-    <div class="row mt-2">
-      <div class="col-md-5 offset-1">
+      <div class="column">
+        <div class="box green-bg">
         <h3>{% trans "Fun Fact" %}</h3>
         <div class="fact-box rounded p-2">
           <p>{% trans "loading..."%}</p>
         </div>
       </div>
-
-      <div class="col-md-2">
-        <h3>When:</h3>
-        <div id="clock"></div>
       </div>
-
-      <div class="col-md-2">
-        <div class="calendar-outer rounded mt-5">
-          <div class="calendar-inner-wrapper p-2">
-          <div class="calendar-inner rounded mx-auto">
-            <h3 class="info">?</h3>
-          </div>
-          <h3 class="info"></h3>
-          </div>
-        </div>
-      </div>
-
     </div>
-  </div>
-</div>
+
+
 {% endblock %}
 
 {% block script-content %}
@@ -67,19 +95,6 @@ $(document).ready(function(){
   resp = status_request(requestid, "{{ request.session.token }}");
   get_facts();
 });
-var anim;
-var animData = {
-    container: document.getElementById('clock'),
-    renderer: 'svg',
-    loop: true,
-    autoplay: true,
-    autoloadSegments: true,
-    rendererSettings: {
-        progressiveLoad:false
-    },
-    path: '{% static "explorer/js/clock.json" %}'
-};
-anim = lottie.loadAnimation(animData);
 
 var serolStatus = {
     container: document.getElementById('status-serol'),

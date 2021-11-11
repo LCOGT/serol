@@ -24,23 +24,21 @@ var image_files = {
     '2.2' : "{% static 'explorer/images/2.2-comet.png' %}",
     '1.1' : "{% static 'explorer/images/1.1.2-saturn.png' %}"
                   };
-
+var start = new Date();
+var end = startEnd(start);
+var csrftoken = '{{ csrf_token }}';
+var challenge_id = '{{object.id}}'
+var redirect_url = "{% url 'challenge' object.id %}";
+var image_file = image_files[category];
+var whatsupurl = "https://whatsup.lco.global/range/?aperture=0m4&format=jsonp";
+var target_type;
 
 function add_targets(i, data){
   var item = "#target-img-"+i;
   $(item+" .target-name").html(data);
 }
 
-$(document).ready(function(){
-  var start = new Date();
-  var end = startEnd(start);
-  var csrftoken = '{{ csrf_token }}';
-  var challenge_id = '{{object.id}}'
-  var redirect_url = "{% url 'challenge' object.id %}";
-  var image_file = image_files[category];
-  var whatsupurl = "https://whatsup.lco.global/range/?aperture=0m4&format=jsonp";
-  var target_type;
-
+function get_targets(){
   if (category == '2.3' || category == '2.2' || category == '1.1'){
     target_type = 'moving';
   } else {
@@ -55,36 +53,54 @@ $(document).ready(function(){
       success: function( data ) {
         targets = data.targets;
         var target;
-        var max_length = targets.length > 6 ? 6 : targets.length;
-        // Hide all the image placeholders
-        $(".target-holder").hide();
+        var max_length = targets.length > 3 ? 3 : targets.length;
 
         for (i=0;i<max_length;i++){
           target = data.targets[i];
           var item = "#target-img-"+i;
           $(item+" .target-name").html(target.name);
-          $(item+" img").attr('src',image_file);
-          $(item).data('tid',i);
-          // Show parent target holder
-          $(item).parent().show();
+          $(item+" .target-desc").html(trim_text(target.desc));
         }
       }
     });
   }
+}
+
+function trim_text(text) {
+  if (text.length < 98){
+    return text
+  }
+  var shortenedString = text.substr(0,100);
+  return `${shortenedString}&hellip;`
+}
+
+$(document).ready(function(){
+
+  get_targets();
+
+  $("#target_refresh").on("click", function(){
+    get_targets()
+    });
 
   $(".target-holder a").on("click", function(){
+    $('#submit_modal').show();
     var tid = $(this).data('tid');
+    console.log(tid, targets[tid])
     if (target_type=='moving'){
       var title = $(this).find(".target-name").html();
       var desc = $(this).find(".target-desc").html();
-      $(".modal-title").html(title);
-      $(".modal-body").html(desc);
+      $(".modal-card-title").html(title);
+      $(".modal-card-body").html(desc);
     } else {
-      $(".modal-title").html(targets[tid].name);
-      $(".modal-body").html(targets[tid].desc);
+      $(".modal-card-title").html(targets[tid].name);
+      $("#target_desc_modal").html(targets[tid].desc);
     }
     $("#submit_button").data('tid',tid);
     $('#submit_button').prop("disabled", false);
+  });
+
+  $("#cancel_button").on("click", function(){
+    $('#submit_modal').hide();
   });
 
   $("#submit_button").on("click", function(){
@@ -117,56 +133,83 @@ $(document).ready(function(){
 {% block wrapper-class%}challenge mission-{{object.mission.number}}-sidebar{%endblock%}
 
 {% block main-body %}
-<div class="centre-container">
-  <h1>{{object.name}}</h1>
-  <p>{% trans 'Serol will take a picture of your choice within 7 days' %}</p>
-  <div class="row">
+<nav class="level" >
+  <div class="level-left">
+    <h2>Mission {{object.mission.number}}: {{object.mission.name}}</h2>
+  </div>
+  <div class="level-right">
+    <img src="{% static 'explorer/images/mission1-outlineheader1.svg'%}" style="height: 100px;" />
+  </div>
+</nav>
+
+  <div class="blue-bg rounded-corners p-2">
+  <article class="media mb-5">
+  <figure class="media-left">
+    <p class="image is-128x128">
+      <img class="img-fluid" src="{{ icon }}" alt="">
+    </p>
+  </figure>
+  <div class="media-content">
+    <div class="content">
+    <h1>Challenge {{object.number}}: {{object.name}}</h1>
+    <p>{% trans 'Serol will take a picture of your choice within 7 days' %}</p>
+    </div>
+  </div>
+</article>
+
+  <div class="columns is-multiline is-centered">
     {% if targets %}
     {% for target in targets %}
-    <div class="col-lg-4  col-sm-6 pb-5 target-holder">
-        <a href="#" id="target-img-{{target.id}}" data-toggle="modal" data-target="#targetModal" data-tid="{{target.id}}" data-name="{{target.name}}">
-            {% with "explorer/images/"|add:target.icon as icon_url %}<img class="img-fluid" src="{% static icon_url %}" alt="">
+    <div class="column is-one-third target-holder">
             <div class="target-name-holder">
-              <span class="target-name">{{target.name}}</span>
-              <span class="target-desc" style="display:none;">{{target.description}}</span>
+              <a href="#" id="target-img-{{target.id}}" data-toggle="modal" data-target="#targetModal" data-tid="{{target.id}}" data-name="{{target.name}}">
+              <div class="target-name">{{target.name}}</div>
+              </a>
+              <span class="target-desc">{{target.description}}</span>
             </div>
-        </a>
     </div>
-    {% endwith %}
     {% endfor %}
     {% else %}
-    {% for i in "012345" %}
-    <div class="col-lg-4  col-sm-6 pb-5 target-holder">
-        <a href="#" id="target-img-{{i}}" data-toggle="modal" data-target="#targetModal" data-tid="">
-            <img class="img-fluid" src="{% static 'explorer/images/placeholder.jpg' %}" alt="">
-            <div class="target-name-holder">
-              <span class="target-name"></span>
+    {% for i in "012" %}
+    <div class="column is-one-third target-holder">
+            <div class="target-name-holder" id="target-img-{{i}}">
+              <a href="#" data-toggle="modal" data-target="#targetModal" data-tid="{{i}}" class="button target-name colour-option-{{i}} has-text-centered is-fullwidth">
+              </a>
+              <div class="target-desc black has-text-centered mt-3"></div>
             </div>
-        </a>
     </div>
     {% endfor %}
     {% endif %}
+    <div class="column is-one-third ">
+      <a class="button colour-option-3 is-fullwidth" id="target_refresh"><i class="fas fa-sync"></i>&nbsp;Refresh Targets</a>
+    </div>
   </div>
+
   </div>
 
 <!-- Modal -->
-<div class="modal fade" id="targetModal" tabindex="-1" role="dialog" aria-labelledby="targetModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title"></h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="close_button">
-          <span aria-hidden="true">&times;</span>
-        </button>
+<div class="modal" style="display:none;" id="submit_modal">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title"></p>
+      <button class="delete" aria-label="close" id="cancel_button"></button>
+    </header>
+    <section class="modal-card-body">
+      <article class="media mb-5">
+      <figure class="media-left">
+        <p class="image is-128x128">
+          <img class="img-fluid" src="{{ icon }}" alt="">
+        </p>
+      </figure>
+      <div class="media-content" id="target_desc_modal">
       </div>
-      <div class="modal-body">
-        <p></p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-4 btn-4a" id="submit_button">Take a picture! ></button>
-        <button type="button" class="btn btn-4 btn-4a" id="accept_button" style="display:none;">Next ></button>
-      </div>
-    </div>
+      </article>
+    </section>
+    <footer class="modal-card-foot">
+      <button class="button is-success"  id="submit_button">Take Picture!</button>
+      <button class="button" id="accept_button" style="display:none;">Next <i class="far fa-chevron-right"></i></button>
+    </footer>
   </div>
 </div>
 {% endblock %}

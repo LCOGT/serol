@@ -6,47 +6,40 @@
 {% block ribbon %}{% endblock %}
 
 {% block main-content %}
-<div class="content-wrapper">
-<div class="content-wrapper-inner">
+<section class="section">
 <div class="container">
-  <div class="row">
     <h1 class="bg-blur">{% trans "Stickers you've unlocked" %}</h1>
     <p  class="bg-blur">{% trans "Below are the challenge stickers you have unlocked. Click each of them to see your pictures."%}</p>
-  </div>
-  {% for mission in missions %}
-  <div class="row pb-5">
-    <h2  class="bg-blur">Mission {{mission.number}}</h2>
-    <div class="info-blue">
-      <div class="row">
-        <div class="col-4">
-          <h2>{{mission.name}}</h2>
-          {% with "explorer/"|add:mission.patch as icon_url %}
-          <img class="img-fluid rounded" src="{% static icon_url %}"  alt="Mission {{mission.number}} patch">
-          {% if mission.number not in completed_missions %}
-          <a href="{% url 'challenge-next' mission.number %}" class="btn btn-4 btn-4a animated tada">{% trans "start a new challenge?" %}</a>
+  {% for progress in object_list %}
+    <div class="{% cycle 'green-bg' 'red-bg' 'blue-bg' %} mt-4 mb-4 p-6 rounded-corners">
+      <div class="columns">
+        <div class="column is-one-third">
+          {% with "explorer/"|add:progress.mission.patch as icon_url %}
+          <img class="img-fluid rounded" src="{% static icon_url %}"  alt="Mission {{progress.mission.number}} patch">
+          <h2>Mission {{progress.mission.number}}: {{progress.mission.name}}</h2>
+          {% if progress.mission.number not in completed_missions %}
+          <a href="{% url 'challenge-next' progress.mission.number %}" class="button colour-option-{{progress.mission.number}}">{% trans "start a new challenge?" %}</a>
           {% endif %}
           {% endwith %}
         </div>
-        <div class="col-8">
-          <div class="row">
-          {% for challenge in mission.challenge_set.all %}
-          {% for  sticker in challenge.sticker_set.all %}
-            {% if sticker in object_list %}
-              <div class="col-4">
-                <a href="{% url 'summary' sticker.challenge.pk %}">
-                  {% with "explorer/"|add:sticker.filename as icon_url %}
-                  <img class="img-fluid" src="{% static icon_url %}"  alt="{{sticker.challenge.name}}">
-                  {% endwith %}
-                </a>
-                <p>{{sticker.challenge.name}}</p>
-              </div>
-            {% else %}
-            <div class="col-4">
-              <img class="locked-sticker img-fluid" src="{% static 'explorer/images/locked.png' %}" alt="{% trans "This sticker is locked" %}">
-              <p>{{sticker.challenge.name}}</p>
+        <div class="column">
+          <div class="columns is-multiline">
+          {% for challenge in progress.challenges %}
+          <div class="column is-one-third">
+            <figure class="image image-with-sticker">
+              {% if challenge.complete %}
+              <a href="{% url 'summary' challenge.challenge.id %}">
+                <img src="{% if challenge.image %}{{ challenge.image.url|safe }}{% else %}{% static 'explorer/images/placeholder2.png' %}{% endif %}" />
+                {% with "explorer/"|add:challenge.sticker as icon_url %}
+                <img src="{% static icon_url %}" class="sticker-over-image" />
+                {% endwith%}
+              </a>
+              {% else %}
+              <img src="{% static 'explorer/images/placeholder2.png' %}" />
+              {% endif %}
+              <p>{{challenge.challenge.name}}</p>
+            </figure>
             </div>
-            {% endif %}
-            {% endfor %}
           {% empty%}
           <p>No stickers defined?</p>
           {% endfor %}
@@ -54,9 +47,7 @@
         </div>
       </div>
     </div>
-  </div>
   {% endfor %}
 </div>
+</section>
 {% endblock %}
-</div>
-</div>

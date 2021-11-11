@@ -1,40 +1,57 @@
 /*
  * Base structure
  */
-
-
 body {
-  font-family: 'Aldrich',  Arial, sans-serif;
+  font-family: 'Aldrich', Arial, sans-serif;
   background: #fff;
   color: #555;
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
 }
 
+#page-wrapper {
+  flex: 1;
+}
 
-h1, h2, h3, h4, h5, h6, .target-name, .mission-label {
-    font-family: 'Oswald', sans-serif;
-    font-weight: 300;
-    color: #33D7FF;
-    text-align: left;
-    padding-bottom:20px;
+h1, h2, h3, h4, h5, h6, .mission-label {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 300;
+  color: #00adef;
+  text-align: left;
+  padding-bottom: 20px;
 }
 
 h1 {
-  font-size:3rem;
+  font-size: 3rem;
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+h3 {
+  font-size: 1.3rem;
 }
 
 a,
-a:focus,
-a:hover {
+a:focus,{
   color: #ff5233;
 }
 
-a.btn {
+a:hover {
+  background-color: #cceffc;
   color: #fff;
 }
 
+p {
+  font-size: 1.2em;
+  margin-bottom:1em;
+}
+
 .starry-bg {
- background: url('../images/serol_bg_sm.jpg') repeat fixed #2b3e50;
- color: #fff;
+  background: url('../images/serol_bg_sm.jpg') repeat fixed #2b3e50;
+  color: #fff;
 }
 
 .statement {
@@ -42,22 +59,126 @@ a.btn {
 }
 
 .focus-home {
-  background-color: #CEECFC;
+  background-color: #cceffc;
   padding: 5rem 0;
 }
 
-.navbar{
+.navbar {
   border-bottom: 5px solid transparent;
   border-image: linear-gradient(to bottom right, #b827fc 0%, #2c90fc 25%, #b8fd33 50%, #fec837 75%, #fd1892 100%);
   border-image-slice: 1;
 }
 
-.footer{
-  background-color:#0d0c34;
+.footer {
+  background-color: #0d0c34;
   color: #fff;
 }
 
 .footer h4,
 .footer a {
   color: #fff;
+}
+
+.overlay-badge {
+  position: absolute;
+  bottom: -20px;
+  right: -20px;
+  background-color: #ffc312;
+  font-size: 65%;
+  border-radius: 30px;
+  padding: 5px;
+}
+
+.image-with-sticker {
+  position:relative;
+}
+
+.sticker-over-image {
+  position:absolute;
+  top:0;
+  right:0;
+  max-width:30%;
+}
+
+.register-button-home {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+a.register-ind{
+  background-color: #00adef;
+  border-color:#00adef;
+  color: white;
+}
+a.register-teacher{
+  background-color: #ef4123;
+  border-color:#ef4123;
+  color: white;
+}
+
+.red-bg {
+  background-color: #fcd9d3;
+}
+
+.yellow-bg {
+  background-color:#fff3d0;
+}
+
+.green-bg {
+  background-color: #edf5d7;
+}
+
+.blue-bg {
+  background-color: #cceffc;
+}
+
+.colour-option-0 {
+  background-color: #ffc312;
+}
+
+.colour-option-1 {
+  background-color: #a6ce39;
+}
+
+.colour-option-2 {
+  background-color: #ef4123;
+  color: #fff;
+}
+
+.colour-option-3 {
+  background-color: #00adef;
+  color: #fff;
+}
+
+.red {
+  color:#ef4123;
+}
+
+.yellow {
+  color: #ffc312;
+}
+
+.green {
+  color:#a6ce39;
+}
+
+.blue {
+  color: #00adef;
+}
+
+.black {
+  color: #555;
+}
+
+.rounded-corners {
+  border-radius: 25px;
+}
+
+.target-name {
+  font-size:1.2em;
+}
+
+a.button:hover {
+    background-color: #edf5d7;
 }

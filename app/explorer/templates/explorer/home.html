@@ -69,7 +69,7 @@ serolanim = lottie.loadAnimation(serolStatus);
   </div>
 </section>
 
-<section class="section starry-bg">
+<section class="starry-bg">
   <div class="container">
     <div class="columns">
       <div class="column is-three-fifths">
@@ -78,14 +78,16 @@ serolanim = lottie.loadAnimation(serolStatus);
           <p class="statement text-center">{{seasonal_msg}}</p>
           {% endif %}
       </div>
-      <div class="column">
-        <p class="buttons">
-        <button class="button is-rounded is-large">Join as an Individual</button>
-        <button class="button is-primary is-rounded is-large">Join as a Teacher</button>
-        </p>
+      <div class="column is-flex is-align-items-center">
+        <div class="buttons">
+        <a class="button is-rounded is-large is-fullwidth mb-5 register-ind" href="{% url 'registration_register' %}">Join as an individual</a>
+        <a class="button is-rounded is-large is-fullwidth register-teacher" >Join as a teacher
+          <span class="overlay-badge">coming soon</span>
+        </a>
+          </div>
+          </div>
         </div>
     </div>
-  </div>
 </section>
 
 <section class="section">
@@ -101,14 +103,32 @@ serolanim = lottie.loadAnimation(serolStatus);
       <h1 class="has-text-centered">{% trans "Core Aims" %}</h1>
       <div class="columns">
         <div class="column is-one-thirds">
+          <p class="title has-text-centered">
+            <span class="fa-stack fa-2x">
+                <i class="fas fa-circle fa-stack-2x"style="color:#cceffc;"></i>
+                <i class="fas fa-telescope fa-stack-1x" style="color:#00adef;"></i>
+              </span>
+            </p>
           <p class="title has-text-centered">Robotic Telescopes</p>
           <p class="statement has-text-centered">{% trans "By simplifying the use of robotic telescopes, Serol allows anyone to become an astronomer"%}</p>
         </div>
         <div class="column is-one-thirds">
+          <p class="title has-text-centered">
+            <span class="fa-stack fa-2x">
+                <i class="fas fa-circle fa-stack-2x"style="color:#edf5d7;"></i>
+                <i class="fas fa-child fa-stack-1x" style="color:#a6ee39;"></i>
+              </span>
+            </p>
           <p class="title has-text-centered">Ownership</p>
           <p class="statement  has-text-centered">{% trans "You choose what to observe. We never send you a picture taken by someone else"%}</p>
         </div>
         <div class="column is-one-thirds">
+          <p class="title has-text-centered">
+            <span class="fa-stack fa-2x">
+                <i class="fas fa-circle fa-stack-2x"style="color:#fff3d0;"></i>
+                <i class="far fa-tasks fa-stack-1x" style="color:#ffc312;"></i>
+              </span>
+            </p>
           <p class="title has-text-centered">Science</p>
           <p class="statement  has-text-centered">{% trans "With Serol, you will learn about the different types of objects in space, and analyse your own pictures of them."%}</p>
         </div>

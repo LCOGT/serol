@@ -4,14 +4,13 @@
 {% block title %}{{object.name}}{% endblock %}
 
 {% block main-body %}
-<div class="centre-container">
-<h1>{% if object.is_last%}{% trans "Mission Completed!" %}{% else %}{% trans "Challenge Completed!" %}{%endif%}</h1>
-  <div class="row">
-        <div class="col-lg-4">
+  <h1>{% if object.is_last%}{% trans "Mission Completed!" %}{% else %}{% trans "Challenge Completed!" %}{%endif%}</h1>
+        <div class="columns">
+          <div class="column is-one-quarter">
           {% for sticker in stickers %}
           <p>
             {% with "explorer/"|add:sticker.sticker.filename as icon_url %}
-            <img class="img-fluid rounded" src="{% static icon_url %}"  alt="{{sticker.sticker.desc}}">
+            <img class="rounded-corners" src="{% static icon_url %}"  alt="{{sticker.sticker.desc}}">
             {% endwith %}
           </p>
           {% endfor %}
@@ -26,7 +25,7 @@
             {% endif %}
           </p>
         </div>
-        <div class="col-lg-8">
+        <div class="column">
           <span class="text-right rounded mission-{{object.mission.number}}-colour p-2 oswald black">Your picture of {{progress.target}}</span>
           <img src="{% if progress.image_file %}{{ progress.image_file.url|safe }}{% else %}{% static 'explorer/images/placeholder.jpg' %}{% endif %}" alt="{{object.name}}" class="img-fluid img-thumbnail" id="img-holder">
         </div>
@@ -38,8 +37,6 @@
             <dd class="col-sm-6">{{answer.answer.text}}</dd>
             {% endfor %}
           </dl>
-  </div>
-</div>
 {% endblock %}
 
 {% block script-content %}

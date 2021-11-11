@@ -4,19 +4,29 @@
 {% block wrapper-class%}challenge mission-{{object.mission.number}}-sidebar{%endblock%}
 
 {% block main-body %}
-<div class="centre-container">
-  <h1>{{object.name}}</h1>
-  <div class="container">
-    <div class="row">
-      <div class="col-4">
-      <img src="" class="img-fluid" />
+<nav class="level" >
+  <div class="level-left">
+    <h2>Mission {{object.mission.number}}: {{object.mission.name}}</h2>
+  </div>
+  <div class="level-right">
+    <img src="{% static 'explorer/images/mission1-outlineheader1.svg'%}" style="height: 100px;" />
+  </div>
+</nav>
+
+<div class="blue-bg rounded-corners p-2">
+  <h1>Challenge {{object.number}} : {{object.name}}</h1>
+    <div class="columns">
+      <div class="column is-one-third">
+        <figure class="image">
+          <img src="{{icon}}" />
+        </figure>
+      <p class="has-text-centered"><a href="{% url 'observe' object.pk %}" class="button" id="start-btn">{% trans 'Start the challenge' %}</a></p>
       </div>
-      <div class="col-8">
+      <div class="column">
           <p>{{object.description|safe|markdown}}</p>
-          <p><a href="{% url 'observe' object.pk %}" class="btn btn-lg btn-4 btn-4a animated tada" id="start-btn">{% trans 'Start the challenge' %}</a></p>
       </div>
     </div>
-  </div>
+</div>
 
 {% endblock %}
 

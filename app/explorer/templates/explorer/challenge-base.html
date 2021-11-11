@@ -5,49 +5,17 @@
 
 {% block challengename %}{{object.name}}{% endblock %}
 
-{% block menubar %}
-<div class="container-fluid">
-  <div class="row">
-    <div class="col col-md-2">
-      <div class="dropdown">
-
-        <button class="btn-link dropdown-toggle" type="button" id="dropdownMenuLink" data-toggle="dropdown">
-         <img src="{% static 'explorer/images/serol_logo_sm.png'%}" />
-        </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-          <a class="dropdown-item" href="/">{% trans "Home" %}</a>
-          <a class="dropdown-item" href="/about/">{% trans "About Serol" %}</a>
-          <a class="dropdown-item" href="/videos/">{% trans "Videos" %}</a>
-          <a class="dropdown-item" href="{% url 'missions' %}">{% trans "Missions" %}</a>
-          <a class="dropdown-item" href="{% url 'stickers' %}">{% trans "My Progress" %}</a>
-          <a class="dropdown-item" href="{% url 'auth_logout' %}" id="logout">{% trans "Logout" %}</a>
-        </div>
-      </div>
-    </div>
-</div>
-  <div class="row">
-    <div class="col-12 col-md-2">
-    <div class="mission-label mission-{{object.mission.number}}-colour pl-2">{% trans "Mission" %} {{object.mission.number}}</div>
-    </div>
-    <div class="col">
-    <h2><span class="mission-{{object.mission.number}}-colour-text"><i class="fas fa-play"></i></span> Challenge {{object.number}} : {{object.name}}</h2>
-    </div>
-  </div>
-</div>
-{% endblock %}
-
-
 {% block main-content %}
-<div class="content-wrapper">
-  <div class="content-wrapper-inner">
+<section class="section">
+
     <div class="container">
       <div class="centre-container">
         {% block main-body %}
         {% endblock %}
       </div>
     </div>
-  </div>
-</div>
+
+</section>
 {% endblock %}
 
 

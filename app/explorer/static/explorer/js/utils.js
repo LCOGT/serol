@@ -100,7 +100,7 @@ function status_request(requestid, token) {
   var data;
   $.ajax(
     {
-    url:'https://observe.lco.global/api/requestgroups/'+requestid+'/',
+    url:'https://observe.lco.global/api/requests/'+requestid+'/',
     type: "GET",
     headers: {"Authorization": "Token "+token},
     dataType: 'json',
@@ -108,7 +108,7 @@ function status_request(requestid, token) {
     .done(function(rdata){
       data = rdata
       if (rdata['state'] == 'PENDING' ){
-        status_userrequest(rdata['requests'][0]['id'], token);
+        status_userrequest(requestid, token);
       } else if (rdata['state'] == 'COMPLETED' || rdata['state'] == 'WINDOW_EXPIRED' || rdata['state'] == 'CANCELED'){
         update_status(requestid);
       }
@@ -128,16 +128,16 @@ function status_userrequest(requestid, token) {
     dataType: 'json',
     contentType: 'application/json'})
     .done(function(rdata){
+      console.log(rdata)
       if (rdata.length > 0){
         var d2 = new Date(rdata[0]['start']);
         var d1 = new Date();
         var flextime = update_date(DateDiff.inDays(d1,d2), DateDiff.inHours(d1,d2), DateDiff.inMinutes(d1,d2));
         var site = site_codes[rdata[0]['site']];
         console.log("SCHEDULED"+rdata);
-        $('.calendar-outer .info').html(flextime['units']);
-        $('.calendar-inner .info').html(flextime['number']);
+        $('#calendar-units').html(flextime['units']);
+        $('#calendar-value').html(flextime['number']);
         update_site(rdata[0]['site']);
-        $("."+rdata[0]['site']).addClass('location-highlight');
       } else {
         $('#location-text').html("Hmmm. I'll need to think about this. Check back later!");
         console.log("NOT SCHEDULED YET");

@@ -49,17 +49,18 @@ function add_answers_to_form() {
 {% block challengename %}{{object.challenge.name}}{% endblock %}
 
 {% block main-body %}
-<div class="centre-container">
   <h1>{% trans "Analyse your image!" %}</h1>
-  <div class="row">
-    <div class="col-lg-8">
-      <img src="{% if progress.image_file %}{{ progress.image_file.url|safe }}{% else %}{% static 'explorer/images/placeholder.jpg' %}{% endif %}" alt="{{object.name}}" class="img-fluid rounded" id="img-holder">
+  <div class="columns">
+    <div class="column is-two-thirds">
+      <figure class="image">
+      <img src="{% if progress.image_file %}{{ progress.image_file.url|safe }}{% else %}{% static 'explorer/images/placeholder.jpg' %}{% endif %}" alt="{{object.name}}" class="rounded-corners" id="img-holder">
+      </figure>
     </div>
-    <div class="col-lg-4">
+    <div class="column">
         <div class="arrow bottom right"></div>
       {% for question in questions %}
       <div class="question-wrapper" id="question-{{ forloop.counter0 }}" style="display:none;">
-      <h3>{{question.text}}</strong></h3>
+      <h3><strong>{{question.text}}</strong></h3>
 
         <div class="question-container">
             <ul>
@@ -75,15 +76,15 @@ function add_answers_to_form() {
      </div>
    {% endfor %}
     <div id="submit-answers"  style="display:none;">
+      <p>{% trans "Thanks for those answers" %}</p>
       <form action="" method="post">
         {% csrf_token %}
         <input id="form-answers" name="answers" type="hidden" value="" />
-        <input type="submit" class="btn btn-4 btn-4a animated tada" value='{% trans "Send Serol your answers!" %}' />
+        <input type="submit" class="button " value='{% trans "Send Serol your answers!" %}' />
       </form>
     </div>
     </div>
   </div>
 
-</div>
 
 {% endblock %}
