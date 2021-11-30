@@ -20,9 +20,15 @@
 {% for m in messages %}
 <p class="bg-warning">{{m|safe}}</p>
 {% endfor %}
+
 <div class="card">
   <div class="card-content">
     <div class="content">
+      {% for error in form.non_field_errors%}
+                    <div class="notification is-danger">
+                         {{ error|escape }}
+                    </div>
+      {% endfor %}
       <form action="" method="post" id="loginForm">
         {% csrf_token %}
 

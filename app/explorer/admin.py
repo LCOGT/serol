@@ -42,9 +42,13 @@ class FactAdmin(admin.ModelAdmin):
 class BodyAdmin(admin.ModelAdmin):
     list_display = ('name','icon','active')
 
+class StickerAdmin(admin.ModelAdmin):
+    list_display = ('desc','challenge')
+    ordering = ('challenge',)
+
 admin.site.register(Mission, MissionAdmin)
 admin.site.register(Challenge, ChallengeAdmin)
-admin.site.register(Sticker)
+admin.site.register(Sticker, StickerAdmin)
 admin.site.register(PersonSticker)
 admin.site.register(Body, BodyAdmin)
 admin.site.register(Score)

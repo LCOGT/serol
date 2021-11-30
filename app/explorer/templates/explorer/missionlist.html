@@ -9,16 +9,16 @@
 <div class="content-wrapper-inner">
 <div class="container">
   <h1 class="bg-blur">Missions</h1>
-  <div class="row  info-blue">
+  <div class="columns info-blue">
   {% for mission in object_list %}
-    <div class="col-4">
+    <div class="column is-one-third {% cycle 'green-bg' 'red-bg' 'blue-bg' %} mr-4 rounded-corners">
       {% with "explorer/"|add:mission.patch as icon_url %}
       <img class="img-fluid" src="{% static icon_url %}"  alt="Mission {{mission.number}} patch">
       {% endwith %}
-      <h2>{% trans "Mission" %} {{mission.number}}</h1>
-      <h3 class="mission-name">{{mission.name|safe}}</h1>
+      <h2>{% trans "Mission" %} {{mission.number}}</h2>
+      <h3 class="mission-name">{{mission.name|safe}}</h3>
         {% if request.user|user_mission_state:mission.number %}
-        <p><a class="btn btn-info btn-lg" href="{% url 'mission' mission.pk %}" role="button" id="mission-btn-{{mission.number}}">
+        <p><a class="button is-large " href="{% url 'mission' mission.pk %}" role="button" id="mission-btn-{{mission.number}}">
           {% if mission.pk in active_missions %}
           {% trans "Continue mission" %} &raquo;</a>
           {% else %}

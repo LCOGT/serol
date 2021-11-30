@@ -179,27 +179,20 @@ function arrange_images(url){
     images = shuffle(images);
     for (i=0;i<4;i++){
       $("#img-"+i).attr('src',images[i]['url']);
-      $("#img-"+i).data('mine',images[i]['mine']);
-    }
-    $("img.identify-image").on('click', function(d){
-      if ($(this).data('mine') == true){
-        show_identify_answer('.identify-yes');
+      if (images[i]['mine']){
+         $("#ans-"+i).addClass('identify-yes');
+         $("#ans-"+i).html('<i class="fas fa-smile-beam"></i> Correct!');
       } else {
-        show_identify_answer('.identify-no');
+        $("#ans-"+i).addClass('identify-no');
+        $('#ans-'+i).html('<i class="fas fa-frown"></i> Try Again!');
       }
-    });
-  }
+      $("#img-"+i).on('click',function(){
+        $(this).siblings('.identify-answer').show();
+        if($(this).siblings('.identify-answer').hasClass('identify-yes')){ window.location.replace(redirect_url);}
+      })
 
-function show_identify_answer(class_id){
-  $(class_id).show();
-  $(class_id).addClass('grow');
-  $(".grow").on('transitionend webkitTransitionEnd oTransitionEnd otransitionend MSTransitionEnd',
-    function() {
-         $(class_id).removeClass('grow');
-         $(class_id).hide();
-         if (class_id == ".identify-yes") { window.location.replace(redirect_url);}
-    });
-}
+    }
+  }
 
 function update_date(days, hours, minutes){
   var number;

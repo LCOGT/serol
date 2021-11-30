@@ -33,6 +33,8 @@ var image_file = image_files[category];
 var whatsupurl = "https://whatsup.lco.global/range/?aperture=0m4&format=jsonp";
 var target_type;
 
+var tmp;
+
 function add_targets(i, data){
   var item = "#target-img-"+i;
   $(item+" .target-name").html(data);
@@ -85,12 +87,11 @@ $(document).ready(function(){
   $(".target-holder a").on("click", function(){
     $('#submit_modal').show();
     var tid = $(this).data('tid');
-    console.log(tid, targets[tid])
     if (target_type=='moving'){
       var title = $(this).find(".target-name").html();
-      var desc = $(this).find(".target-desc").html();
+      var desc = $(this).siblings().html();
       $(".modal-card-title").html(title);
-      $(".modal-card-body").html(desc);
+      $("#target_desc_modal").html(desc);
     } else {
       $(".modal-card-title").html(targets[tid].name);
       $("#target_desc_modal").html(targets[tid].desc);
@@ -162,7 +163,7 @@ $(document).ready(function(){
     {% for target in targets %}
     <div class="column is-one-third target-holder">
             <div class="target-name-holder">
-              <a href="#" id="target-img-{{target.id}}" data-toggle="modal" data-target="#targetModal" data-tid="{{target.id}}" data-name="{{target.name}}">
+              <a href="#" id="target-img-{{target.id}}" data-toggle="modal" data-target="#targetModal" data-tid="{{target.id}}" data-name="{{target.name}}" class="button target-name colour-option-{{forloop.counter}} has-text-centered is-fullwidth">
               <div class="target-name">{{target.name}}</div>
               </a>
               <span class="target-desc">{{target.description}}</span>
@@ -179,10 +180,10 @@ $(document).ready(function(){
             </div>
     </div>
     {% endfor %}
-    {% endif %}
     <div class="column is-one-third ">
       <a class="button colour-option-3 is-fullwidth" id="target_refresh"><i class="fas fa-sync"></i>&nbsp;Refresh Targets</a>
     </div>
+    {% endif %}
   </div>
 
   </div>

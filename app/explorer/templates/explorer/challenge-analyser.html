@@ -62,18 +62,21 @@ function add_answers_to_form() {
       <div class="question-wrapper" id="question-{{ forloop.counter0 }}" style="display:none;">
       <h3><strong>{{question.text}}</strong></h3>
 
-        <div class="question-container">
-            <ul>
+        <div class="columns is-multiline question-container">
             {% for answer in question.answer_set.all %}
-            <li>
-               <input type="radio" name='answer' id="answer-{{answer.pk}}">
-               <label for="answer-{{answer.pk}}">{{answer.text}}</label>
-               <div class="check"></div>
-           </li>
+            <div class="column is-half">
+           <label class="box">
+           <input type="radio" name='answer' id="answer-{{answer.pk}}">
+           <div class="question-box">
+             {{answer.text}}
+           </div>
+           <div class="check"></div>
+         </label>
+          </div>
            {% endfor %}
-           </ul>
+           </div>
        </div>
-     </div>
+
    {% endfor %}
     <div id="submit-answers"  style="display:none;">
       <p>{% trans "Thanks for those answers" %}</p>

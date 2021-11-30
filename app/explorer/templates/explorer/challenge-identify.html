@@ -6,6 +6,8 @@
 {% block script-content %}
 <script src="{% static 'explorer/js/utils.js' %}" ></script>
 <script>
+var fail_text = "{% trans "Try Again!" %}";
+var success_text = "{% trans "Correct!" %}";
 var images = Array();
 var current_tag = "{{object.avm_code}}";
 var redirect_url = "{% url 'analyse' object.id %}?frameid="+{{ progress.frameids }};
@@ -58,15 +60,14 @@ $(document).ready(function(){
       </p>
       <div class="columns is-multiline">
         {% for i in "0123" %}
-        <div class="column is-half pb-2">
+        <div class="column is-half pb-2 identify-image">
           <figure class="image">
           <img src="{% static 'explorer/images/placeholder.jpg' %}" alt="" class="identify-image rounded-corners" id="img-{{i}}" data-mine="">
+          <div class="identify-answer" id="ans-{{i}}" style="display:none;"></div>
           </figure>
         </div>
         {% endfor %}
       </div>
-<div class="identify-answer identify-yes" style="display:none;">{% trans "Correct!" %}</div>
-<div class="identify-answer identify-no" style="display:none;">{% trans "Try Again!" %}</div>
 
 
 {% endblock %}

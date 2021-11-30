@@ -8,35 +8,41 @@
         <div class="columns">
           <div class="column is-one-quarter">
           {% for sticker in stickers %}
-          <p>
+          <figure class="image">
+
             {% with "explorer/"|add:sticker.sticker.filename as icon_url %}
             <img class="rounded-corners" src="{% static icon_url %}"  alt="{{sticker.sticker.desc}}">
             {% endwith %}
-          </p>
+          </figure>
           {% endfor %}
           <p class="text-center">
-            <a href="{% url 'stickers' %}"><i class="fas fa-stars"></i> {% trans "Take a look at your stickers" %} <i class="fas fa-stars"></i></a>
+            <a href="{% url 'stickers' %}" class="button"><i class="fas fa-stars"></i> {% trans "Take a look at your stickers" %}</a>
           </p>
           <p class="text-center">
             {% if object.mission.number in completed_missions %}
-            <a href="{% url 'mission-complete' object.mission.number  %}" class="btn btn-4 btn-4a oswald">{% trans "Continue your adventure!" %}</a>
+            <a href="{% url 'mission-complete' object.mission.number  %}" class="button oswald">{% trans "Continue your adventure!" %}</a>
             {% else %}
-            <a href="{% url 'challenge-next' object.mission.number %}" class="btn btn-4 btn-4a oswald">{% trans "start a new challenge?" %}</a>
+            <a href="{% url 'challenge-next' object.mission.number %}" class="button oswald">{% trans "start a new challenge?" %}</a>
             {% endif %}
           </p>
         </div>
         <div class="column">
           <span class="text-right rounded mission-{{object.mission.number}}-colour p-2 oswald black">Your picture of {{progress.target}}</span>
+          <figure class="image">
           <img src="{% if progress.image_file %}{{ progress.image_file.url|safe }}{% else %}{% static 'explorer/images/placeholder.jpg' %}{% endif %}" alt="{{object.name}}" class="img-fluid img-thumbnail" id="img-holder">
+          </figure>
+          <h3>{% trans "From looking at your picture, your analysis was:"%}</h3>
+          <div class="answers">
+            {% for answer in answers %}
+            <div class="questionrow">
+              <span class="question">{{answer.answer.question.text}}</span>
+              <span class="answer">{{answer.answer.text}}</span>
+            </div>
+            {% endfor %}
+          </div>
         </div>
     </div>
-          <h3>{% trans "From looking at your picture, your analysis was:"%}</h3>
-          <dl class="row">
-            {% for answer in answers %}
-            <dt class="col-sm-6">{{answer.answer.question.text}}</dt>
-            <dd class="col-sm-6">{{answer.answer.text}}</dd>
-            {% endfor %}
-          </dl>
+
 {% endblock %}
 
 {% block script-content %}

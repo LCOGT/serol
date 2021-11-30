@@ -1,27 +1,31 @@
 {% extends "explorer/base.html" %}
-{% load i18n explorer_utils %}
+{% load static i18n explorer_utils %}
 
 {% block mission-class %}mission-{{object.number}}{% endblock %}
 
-{% block main-content %}
+{% block main-body %}
+      <div class="columns">
+        <div class="column is-half">
+          <h1>{% trans "Mission" %} {{object.number}}</h1>
+          <h1 class="mission-name">{{object.name|safe}}</h1>
+          <p>
+            <a href="{% url 'challenge-next' object.number %}" class="button">
+            {% if mission.pk in active_missions %}
+            {% trans "Continue mission" %} &raquo;</a>
+            {% else %}
+            {% trans "Start mission" %} &raquo;</a>
+            {% endif %}
+            </a></p>
+        </div>
+        <div class="column is-half">
+          <figure class="image">
+          {% with "explorer/"|add:mission.patch as icon_url %}
+          <img class="img-fluid" src="{% static icon_url %}"  alt="Mission {{object.number}} patch">
+          {% endwith %}
+          </figure>
+        </div>
+      </div>
 
-<div class="container-fluid">
-
-  <div class="row">
-    <div class="col-12  mission-content">
-      <h1>{% trans "Mission" %} {{object.number}}</h1>
-      <h1 class="mission-name">{{object.name|safe}}</h1>
-      <p>
-        <a href="{% url 'challenge-next' object.number %}" class="btn btn-info btn-lg animated tada">
-        {% if mission.pk in active_missions %}
-        {% trans "Continue mission" %} &raquo;</a>
-        {% else %}
-        {% trans "Start mission" %} &raquo;</a>
-        {% endif %}
-        </a></p>
-    </div>
-  </div>
-</div>
 
 {% endblock %}
 

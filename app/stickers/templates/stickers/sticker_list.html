@@ -1,6 +1,6 @@
 {% extends 'explorer/base.html' %}
 
-{% load i18n staticfiles %}
+{% load i18n staticfiles explorer_utils %}
 
 {% block title %}{% trans "Your Stickers" %}{% endblock %}
 {% block ribbon %}{% endblock %}
@@ -17,8 +17,10 @@
           {% with "explorer/"|add:progress.mission.patch as icon_url %}
           <img class="img-fluid rounded" src="{% static icon_url %}"  alt="Mission {{progress.mission.number}} patch">
           <h2>Mission {{progress.mission.number}}: {{progress.mission.name}}</h2>
-          {% if progress.mission.number not in completed_missions %}
+          {% if request.user|user_mission_state:progress.mission.number %}
           <a href="{% url 'challenge-next' progress.mission.number %}" class="button colour-option-{{progress.mission.number}}">{% trans "start a new challenge?" %}</a>
+          {% else %}
+          <p class="p-3 mb-2 bg-grey text-white" id="mission-btn-{{mission.number}}"><i class="far fa-lock-alt"></i> {% trans "Complete Mission 1 to unlock" %}</p>
           {% endif %}
           {% endwith %}
         </div>

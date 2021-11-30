@@ -95,8 +95,8 @@ p {
 
 .sticker-over-image {
   position:absolute;
-  top:0;
-  right:0;
+  top:-20px;
+  right:-20px;
   max-width:30%;
 }
 
@@ -181,4 +181,70 @@ a.register-teacher{
 
 a.button:hover {
     background-color: #edf5d7;
+}
+
+.identify-image {
+  position:relative;
+}
+
+.identify-answer {
+  position:absolute;
+  top: 50%;
+  left: 50%;
+  font-size:2em;
+  margin: -25px 0 0 -50px;
+}
+
+.identify-yes {
+  text-shadow: 0 2px 0 #14bfda, 0 4px 0 #1465da, 0 6px 0  #03be2b , 0 8px 0  #DAF7A6 , 0 10px 0 #FFC300, 0 12px 0 #b92e2e, 0px 12px 10px rgba(0,0,0,0.5);
+  /*text-shadow: 0 2px 0 #22da49, 0 4px 0 #21be42, 0 6px 0 #20cc45, 0 8px 0 #1cb73d, 0 10px 0 #17a034, 0 12px 0 #148e2e, 0px 12px 10px rgba(0,0,0,0.5);*/
+  color:#f00;
+}
+
+.identify-no {
+  text-shadow: 0 2px 0 #d84f4f, 0 4px 0 #d54646, 0 6px 0 #ce3333, 0 8px 0 #b92e2e, 0 10px 0 #912525, 0 12px 0 #721e1e, 0px 12px 10px rgba(0,0,0,0.5);
+  color:#fff;
+}
+
+/* Identify Question buttons */
+
+ .question-container input[type="radio"] {
+	 display: none;
+}
+.question-container .box:hover {
+  background-color:#cceffc;
+  cursor:pointer;
+  color:#555;
+}
+
+.answers {display:table;}
+.questionrow {display:table-row;}
+.answers .question { text-align: right; display:table-cell; font-weight:bold;}
+.answers .answer {padding-left:10px; text-align:left;display:table-cell;}
+
+.mission-1-colour,
+.mission-1-sidebar .page-header {
+   background-color:rgb(29, 220, 93);
+ }
+
+ .mission-1-colour-text {
+   color:rgb(29, 220, 93);
+ }
+
+.mission-2-colour,
+.mission-2-sidebar .page-header {
+    background-color:rgb(237, 80, 48);
+  }
+
+.mission-2-colour-text {
+    color:rgb(237, 80, 48);
+  }
+
+.mission-3-colour,
+.mission-3-sidebar .page-header {
+     background-color:rgb(36, 209, 255);
+   }
+
+.mission-3-colour-text {
+     color:rgb(36, 209, 255);
 }

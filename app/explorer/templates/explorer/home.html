@@ -52,6 +52,9 @@ serolanim = lottie.loadAnimation(serolStatus);
         </figure>
         <h1>{% trans "Serol's Cosmic Explorers" %}</h1>
         <p class="statement">{% trans "Explore the Universe with robotic telescopes, for children and adults from 8 years and up, for free!" %}</p>
+        {% if request.user.is_authenticated %}
+        <a href="{% url 'missions' %}" class="button is-rounded is-large is-fullwidth colour-option-3">Continue your mission</a>
+        {% endif %}
     </div>
     <div class="column">
       <figure class="image">
