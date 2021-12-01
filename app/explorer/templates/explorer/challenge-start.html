@@ -17,10 +17,10 @@
   <h1>Challenge {{object.number}} : {{object.name}}</h1>
     <div class="columns">
       <div class="column is-one-third">
-        <figure class="image">
+        <figure class="image p-6">
           <img src="{{icon}}" />
         </figure>
-      <p class="has-text-centered"><a href="{% url 'observe' object.pk %}" class="button" id="start-btn">{% trans 'Start the challenge' %}</a></p>
+      <p class="has-text-centered"><a href="{% url 'observe' object.pk %}" class="button mission-{{object.mission.number}}-colour" id="start-btn">{% trans 'Start the challenge' %}</a></p>
       </div>
       <div class="column">
           <p>{{object.description|safe|markdown}}</p>

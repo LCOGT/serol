@@ -30,7 +30,7 @@ class StickerView(LoginRequiredMixin, ListView):
                     p = {'image': my_progress.filter(challenge=c)[0].image_file, 'complete':True}
                 else:
                     p = {'image': None, 'complete':False}
-                p['sticker'] = Sticker.objects.get(challenge=c).filename
+                p['sticker'] = Sticker.objects.get(challenge=c).notext
                 p['challenge'] = c
                 progress.append(p)
             missions.append({'mission':m, 'challenges':progress})

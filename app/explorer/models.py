@@ -10,8 +10,8 @@ ICONS = (
         ('1.1.2-neptune.png','Neptune'),
         ('1.1.2-saturn.png','Saturn'),
         ('1.1.2-uranus.png','Uranus'),
-        ('2.2-comet.png','Comet'),
-        ('2.3-asteroid.png','Asteroid')
+        ('2.2-comet-icon.png','Comet'),
+        ('2.3-asteroids-icon.png','Asteroid')
 )
 
 FACT_CATEGORIES = (

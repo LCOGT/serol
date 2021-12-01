@@ -238,17 +238,17 @@ def target_icon(avmcode):
         '5.1.1' : 'explorer/images/5.1.1-spiral_galaxy.png' ,
         '5.1.4' : 'explorer/images/5.1.4-elliptical_galaxy.png' ,
         '5.1.6' : 'explorer/images/5.1.6-interacting_galaxy.png' ,
-        '5' : 'explorer/images/5-galaxy.png' ,
+        '5' : 'explorer/images/5-galaxy-icon.png' ,
         '4.1.4' : 'explorer/images/4.1.4-supernova_remnant.png' ,
         '4.1.3' : 'explorer/images/4.1.3-planetary_nebula.png' ,
-        '4.1.2' : 'explorer/images/4-nebula.png' ,
-        '4' : 'explorer/images/4-nebula.png' ,
-        '3.6.4' : 'explorer/images/3.6.4.1-open_cluster.png' ,
-        '3.6.4.1' : 'explorer/images/3.6.4.1-open_cluster.png' ,
+        '4.1.2' : 'explorer/images/4-nebulae-icon.png' ,
+        '4' : 'explorer/images/4-nebulae-icon.png' ,
+        '3.6.4' : 'explorer/images/3.6.4.1-cluster-icon.png' ,
+        '3.6.4.1' : 'explorer/images/3.6.4.1-cluster-icon.png' ,
         '3.6.4.2' : 'explorer/images/3.6.4.2-globular_cluster.png' ,
-        '2.3' : 'explorer/images/2.3-asteroid.png' ,
-        '2.2' : 'explorer/images/2.2-comet.png' ,
-        '1.1' : 'explorer/images/1.1.2-saturn.png'
+        '2.3' : 'explorer/images/2.3-asteroids-icon.png' ,
+        '2.2' : 'explorer/images/2.2-comet-icon.png' ,
+        '1.1' : 'explorer/images/1.1.2-planet-icon.png'
     }
     avm_file = avm_files.get(avmcode,'')
     if avm_file:

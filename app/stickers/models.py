@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import ugettext as _
 from django.conf import settings
+from django.templatetags.static import static
 
 from status.models import User
 from explorer.models import Challenge
@@ -12,7 +13,9 @@ STICKERS = (
     ('stickers/M2C3SupernovaRemnant.png','M2 Supernova'),
     ('stickers/M2C3SupernovaRemnant2.png','M2 Supernova v2'),
     ('stickers/M3C1Spiral.png', 'M3 Spiral'),
+    ('stickers/M3C1Spiral2.png', 'M3 Spiral v2'),
     ('stickers/M3C4Groups.png','M3 Galaxy Group'),
+    ('stickers/M3C4Groups2.png','M3 Galaxy Group v2'),
     ('stickers/M1C1Planets.png','Planets v2'),
     ('stickers/M1C3Galaxy.png','M1 Galaxy'),
     ('stickers/M1C3Galaxy2.png','M1 Galaxy v2'),
@@ -34,6 +37,15 @@ class Sticker(models.Model):
 
     def __str__(self):
         return "{}".format(self.desc)
+
+    @property
+    def notext(self):
+        elements = self.filename.split('.')
+        filepath = f"explorer/{elements[0]}-notext.{elements[1]}"
+        try:
+            return static(filepath)
+        except:
+            return static(f"explorer/{self.filename}")
 
 class PersonSticker(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

@@ -8,21 +8,21 @@
         <div class="columns">
           <div class="column is-one-quarter">
           {% for sticker in stickers %}
-          <figure class="image">
+          <figure class="image is-1by1">
 
             {% with "explorer/"|add:sticker.sticker.filename as icon_url %}
-            <img class="rounded-corners" src="{% static icon_url %}"  alt="{{sticker.sticker.desc}}">
+            <img src="{% static icon_url %}"  alt="{{sticker.sticker.desc}}">
             {% endwith %}
           </figure>
           {% endfor %}
-          <p class="text-center">
-            <a href="{% url 'stickers' %}" class="button"><i class="fas fa-stars"></i> {% trans "Take a look at your stickers" %}</a>
+          <p class="text-center mt-4">
+            <a href="{% url 'stickers' %}" class="button is-fullwidth mission-{{object.mission.number}}-colour"><i class="fas fa-stars"></i> {% trans "Take a look at your stickers" %}</a>
           </p>
           <p class="text-center">
             {% if object.mission.number in completed_missions %}
-            <a href="{% url 'mission-complete' object.mission.number  %}" class="button oswald">{% trans "Continue your adventure!" %}</a>
+            <a href="{% url 'mission-complete' object.mission.number  %}" class="button is-fullwidth oswald mission-{{object.mission.number}}-colour">{% trans "Continue your adventure!" %}</a>
             {% else %}
-            <a href="{% url 'challenge-next' object.mission.number %}" class="button oswald">{% trans "start a new challenge?" %}</a>
+            <a href="{% url 'challenge-next' object.mission.number %}" class="button is-fullwidth oswald mission-{{object.mission.number}}-colour">{% trans "start a new challenge?" %}</a>
             {% endif %}
           </p>
         </div>

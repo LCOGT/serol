@@ -5,19 +5,14 @@
 
 {% block mission-class %}{%endblock%}
 
-{% block main-content %}
-<div class="container-fluid">
-      <div class="row justify-content-center">
-          <p class="pt-4">
-            <a href="{% url 'missions' %}" class="btn btn-lg btn-4 btn-4a text-center">Start a new mission!</a>
+{% block main-body %}
+
+          <p class="pt-4 has-text-centered">
+            <a href="{% url 'missions' %}" class="button colour-option-2 is-large rounded-corners">Start a new mission!</a>
           </p>
-      </div>
-      <div class="row">
-        <div class="col-12">
+
           <div id="celebration-serol"></div>
-        </div>
-      </div>
-</div>
+
 {% endblock %}
 {% block script-content %}
 <script src="{% static "explorer/js/utils.js" %}"  type="text/javascript" ></script>
