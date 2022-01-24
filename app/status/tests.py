@@ -14,7 +14,7 @@ from serol.basetest import FunctionalTest
 from serol.mocks import *
 from .views import RequestSerializer, ScheduleView, StatusView, save_progress
 from status.models import User, Proposal, Progress
-from status.valhalla import process_observation_request, request_format, format_sidereal_object
+from status.schedule import process_observation_request, request_format, format_sidereal_object
 
 class ScheduleTest(TestCase):
     def setUp(self):

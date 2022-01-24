@@ -13,7 +13,7 @@ from rest_framework import status, serializers
 
 from status.models import Progress, User
 
-from status.valhalla import process_observation_request, get_observation_status, get_observation_frameid
+from status.schedule import process_observation_request, get_observation_status, get_observation_frameid
 
 
 class SerolUserForm(RegistrationForm):

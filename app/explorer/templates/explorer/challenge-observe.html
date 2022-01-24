@@ -1,9 +1,50 @@
 {% extends 'explorer/challenge-base.html' %}
 {% load static i18n %}
 
+{% block extracss %}
+<style>
+#serolthink {
+  bottom: 0 a;
+  position: relative;
+  transform: rotate(20deg);
+  -webkit-animation: ease-in-out infinite;
+  -webkit-animation-name: run;
+  -webkit-animation-duration: 10s;
+}
+@-webkit-keyframes run {
+  0%,20% {
+    left: -1000px;
+    bottom: 0px;
+  }
+  50%,70% {
+    left: -50px;
+    bottom: 200px;
+  }
+  100% {
+    left: -1000px;
+    bottom: 0px;
+  }
+}
+</style>
+{% endblock %}
+
 {% block script-content %}
 <script src="{% static 'explorer/js/utils.js' %}" ></script>
 <script>
+
+var serolStatus = {
+    container: document.getElementById('serolthink'),
+    renderer: 'svg',
+    loop: true,
+    autoplay: true,
+    autoloadSegments: true,
+    rendererSettings: {
+        progressiveLoad:false
+    },
+    path: '{% static "explorer/js/serolthinking.json" %}'
+};
+serolanim = lottie.loadAnimation(serolStatus);
+
 var targets;
 var tmp;
 var category = '{{object.avm_code}}';
@@ -133,7 +174,11 @@ $(document).ready(function(){
 {% endblock%}
 {% block wrapper-class%}challenge mission-{{object.mission.number}}-sidebar{%endblock%}
 
-{% block main-body %}
+{% block main-content %}
+<section class="section">
+
+    <div class="container">
+      <div class="centre-container">
 <nav class="level" >
   <div class="level-left">
     <h2>Mission {{object.mission.number}}: {{object.mission.name}}</h2>
@@ -211,4 +256,11 @@ $(document).ready(function(){
     </footer>
   </div>
 </div>
+
+</div>
+</div>
+
+</section>
+<div id="serolthink" style="max-width:300px;"></div>
+
 {% endblock %}

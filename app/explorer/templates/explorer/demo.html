@@ -1,7 +1,49 @@
 {% extends "explorer/base.html" %}
+
+{% load static %}
+
+
 {% block main-content %}
 <section class="section">
-  Run a manual sweep of anomalous airborne or electromagnetic readings. Radiation levels in our atmosphere have increased by 3,000 percent. Electromagnetic and subspace wave fronts approaching synchronization. What is the strength of the ship's deflector shields at maximum output? The wormhole's size and short period would make this a local phenomenon. Do you have sufficient data to compile a holographic simulation?
+
+    <div class="container">
+      <div class="centre-container">
+        <p>Run a manual sweep of anomalous airborne or electromagnetic readings. Radiation levels in our atmosphere have increased by 3,000 percent. Electromagnetic and subspace wave fronts approaching synchronization. What is the strength of the ship's deflector shields at maximum output? The wormhole's size and short period would make this a local phenomenon. Do you have sufficient data to compile a holographic simulation?
+      </p>
+      </div>
+      <button class="button" id="startserol">Send to serol</button>
+      <div id="seroldemo" style="max-width:300px;"></div>
+      <div id="text">Have we finished?</div>
+    </div>
 
 </section>
+{% endblock %}
+
+{% block extracss %}
+{% endblock %}
+
+{% block script-content %}
+<script>
+var serolStatus = {
+    container: document.getElementById('seroldemo'),
+    renderer: 'svg',
+    loop: false,
+    autoplay: false,
+    autoloadSegments: true,
+    rendererSettings: {
+        progressiveLoad:false
+    },
+    path: '{% static "explorer/js/serolsubmitted.json" %}'
+};
+
+function showText(){
+  $("#text").toggle();
+}
+
+serolanim = lottie.loadAnimation(serolStatus);
+
+$('#startserol').click(function(){serolanim.play();});
+serolanim.addEventListener("complete",showText,false);
+</script>
+
 {% endblock %}
