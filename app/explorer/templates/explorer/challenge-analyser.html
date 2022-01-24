@@ -12,6 +12,23 @@ var frameid = {{ progress.frameids }};
 var current_question=0;
 var question_total={{questions|length}};
 var my_image {% if progress.image_file %} = "{{ progress.image_file.url|safe }}"{% endif %};
+
+var serolStatus = {
+    container: document.getElementById('serolletter'),
+    renderer: 'svg',
+    loop: false,
+    autoplay: false,
+    autoloadSegments: true,
+    rendererSettings: {
+        progressiveLoad:false
+    },
+    path: '{% static "explorer/js/serolsubmitted.json" %}'
+};
+
+serolanim = lottie.loadAnimation(serolStatus);
+
+serolanim.addEventListener("complete",submitForm,false);
+
 $(document).ready(function(){
   $('#question-0').show();
 
@@ -25,7 +42,20 @@ $(document).ready(function(){
     get_colour_image(localStorage.getItem('archive_token'), frameid, mode='analyser')
   }
 
+  $("form").on('submit', function(e) {
+
+      e.preventDefault();
+      e.returnValue = false;
+
+      serolanim.play();
+  });
+
 });
+
+
+function submitForm(){
+  document.theForm.submit();
+}
 
 function show_next_question() {
   $('#question-'+current_question).hide();
@@ -80,14 +110,16 @@ function add_answers_to_form() {
    {% endfor %}
     <div id="submit-answers"  style="display:none;">
       <p>{% trans "Thanks for those answers" %}</p>
-      <form action="" method="post">
+      <form action="" method="post" name="theForm">
         {% csrf_token %}
         <input id="form-answers" name="answers" type="hidden" value="" />
         <input type="submit" class="button " value='{% trans "Send Serol your answers!" %}' />
       </form>
     </div>
+    <div id="serolletter" style="max-width:300px"></div>
     </div>
   </div>
+
 
 
 {% endblock %}
