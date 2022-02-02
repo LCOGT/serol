@@ -46,7 +46,6 @@ var serolStatus = {
 serolanim = lottie.loadAnimation(serolStatus);
 
 var targets;
-var tmp;
 var category = '{{object.avm_code}}';
 var image_files = {
     '5.5' : "{% static 'explorer/images/5.5-groupofgalaxies.png' %}",
@@ -63,6 +62,7 @@ var image_files = {
     '3.6.4.2' : "{% static 'explorer/images/3.6.4.2-globular_cluster.png' %}",
     '2.3' : "{% static 'explorer/images/2.3-asteroid.png' %}",
     '2.2' : "{% static 'explorer/images/2.2-comet.png' %}",
+    '1.4' : "{% static 'explorer/images/1.1.1-mercury.png'  %}",
     '1.1' : "{% static 'explorer/images/1.1.2-saturn.png' %}"
                   };
 var start = new Date();
@@ -74,8 +74,6 @@ var image_file = image_files[category];
 var whatsupurl = "https://whatsup.lco.global/range/?aperture=0m4&format=jsonp";
 var target_type;
 
-var tmp;
-
 function add_targets(i, data){
   var item = "#target-img-"+i;
   $(item+" .target-name").html(data);
@@ -84,6 +82,8 @@ function add_targets(i, data){
 function get_targets(){
   if (category == '2.3' || category == '2.2' || category == '1.1'){
     target_type = 'moving';
+  } else if (category == '1.4'){
+    target_type = 'moon';
   } else {
     target_type = 'sidereal';
     whatsupurl += "&category="+category;
@@ -117,29 +117,41 @@ function trim_text(text) {
   return `${shortenedString}&hellip;`
 }
 
+function show_modal(tid, title, desc, target_type){
+  $('#submit_modal').show();
+  if (target_type=='moving' || target_type == 'moon'){
+    $(".modal-card-title").html(title);
+    $("#target_desc_modal").html(desc);
+  } else {
+    $(".modal-card-title").html(targets[tid].name);
+    $("#target_desc_modal").html(targets[tid].desc);
+  }
+  $("#submit_button").data('tid',tid);
+  $('#submit_button').prop("disabled", false);
+}
+
 $(document).ready(function(){
 
-  get_targets();
+    get_targets();
+
+  {% if moon %}
+  var tid = null;
+  var title = "Moon"
+  var desc = "The Moon moves very fast. Serol is going to try 3 times to catch it for you.";
+    show_modal(tid, title, desc, target_type)
+  {% else %}
 
   $("#target_refresh").on("click", function(){
     get_targets()
     });
 
   $(".target-holder a").on("click", function(){
-    $('#submit_modal').show();
     var tid = $(this).data('tid');
-    if (target_type=='moving'){
-      var title = $(this).find(".target-name").html();
-      var desc = $(this).siblings().html();
-      $(".modal-card-title").html(title);
-      $("#target_desc_modal").html(desc);
-    } else {
-      $(".modal-card-title").html(targets[tid].name);
-      $("#target_desc_modal").html(targets[tid].desc);
-    }
-    $("#submit_button").data('tid',tid);
-    $('#submit_button').prop("disabled", false);
+    var title = $(this).find(".target-name").html();
+    var desc = $(this).siblings().html();
+    show_modal(tid, title, desc, target_type)
   });
+  {% endif %}
 
   $("#cancel_button").on("click", function(){
     $('#submit_modal').hide();
@@ -161,6 +173,8 @@ $(document).ready(function(){
 				};
     if (target_type == 'moving'){
       data['object_name'] = tid;
+    } else if (target_type == 'moon' ) {
+      data['object_name'] = "Moon";
     } else {
       data['object_name'] = targets[tid].name;
       data['object_ra'] = targets[tid].ra;
@@ -179,32 +193,41 @@ $(document).ready(function(){
 
     <div class="container">
       <div class="centre-container">
-<nav class="level" >
-  <div class="level-left">
-    <h2>Mission {{object.mission.number}}: {{object.mission.name}}</h2>
-  </div>
-  <div class="level-right">
-    <img src="{% static 'explorer/images/mission1-outlineheader1.svg'%}" style="height: 100px;" />
-  </div>
-</nav>
+        <nav class="level" >
+          <div class="level-left">
+            <h2>Mission {{object.mission.number}}: {{object.mission.name}}</h2>
+          </div>
+          <div class="level-right">
+            <img src="{% static 'explorer/images/mission1-outlineheader1.svg'%}" style="height: 100px;" />
+          </div>
+        </nav>
 
-  <div class="blue-bg rounded-corners p-2">
+  <div class="blue-bg rounded-corners p-6">
   <article class="media mb-5">
   <figure class="media-left">
     <p class="image is-128x128">
-      <img class="img-fluid" src="{{ icon }}" alt="">
+      <img class="img-fluid" src="{{object.icon_url}}" alt="">
     </p>
   </figure>
   <div class="media-content">
-    <h1>Challenge {{object.number}}: {{object.name}}</h1>
+    <h1>{% trans 'Challenge' %} {{object.number}}: {{object.name}}</h1>
+    <p>{% trans 'Click a target below to find out more' %}
     <p>{% trans 'Serol will take a picture of your choice within 7 days' %}</p>
   </div>
 </article>
 
   <div class="columns is-multiline is-centered">
+    {% if moon %}
+    <div class="column is-half">
+      <figure class="image">
+        <img src="{% static 'explorer/images/rocket-scene-colour.png' %}"
+      </figure>
+    </div>
+    </div>
+    {% else %}
     {% if targets %}
     {% for target in targets %}
-    <div class="column is-one-third target-holder">
+    <div class="column is-one-third target-holder p-5">
             <div class="target-name-holder">
               <a href="#" id="target-img-{{target.id}}" data-toggle="modal" data-target="#targetModal" data-tid="{{target.id}}" data-name="{{target.name}}" class="button target-name colour-option-{{forloop.counter}} has-text-centered is-fullwidth">
               <div class="target-name">{{target.name}}</div>
@@ -215,7 +238,7 @@ $(document).ready(function(){
     {% endfor %}
     {% else %}
     {% for i in "012" %}
-    <div class="column is-one-third target-holder">
+    <div class="column is-one-third target-holder p-5">
             <div class="target-name-holder" id="target-img-{{i}}">
               <a href="#" data-toggle="modal" data-target="#targetModal" data-tid="{{i}}" class="button target-name colour-option-{{i}} has-text-centered is-fullwidth">
               </a>
@@ -227,9 +250,11 @@ $(document).ready(function(){
       <a class="button colour-option-3 is-fullwidth" id="target_refresh"><i class="fas fa-sync"></i>&nbsp;Refresh Targets</a>
     </div>
     {% endif %}
+    {% endif%}
   </div>
 
   </div>
+</div>
 
 <!-- Modal -->
 <div class="modal" style="display:none;" id="submit_modal">
@@ -243,7 +268,7 @@ $(document).ready(function(){
       <article class="media mb-5">
       <figure class="media-left">
         <p class="image is-128x128">
-          <img class="img-fluid" src="{{ icon }}" alt="">
+          <img class="img-fluid" src="{{object.icon_url}}" alt="">
         </p>
       </figure>
       <div class="media-content" id="target_desc_modal">
@@ -257,10 +282,10 @@ $(document).ready(function(){
   </div>
 </div>
 
-</div>
-</div>
 
 </section>
+{% if not moon %}
 <div id="serolthink" style="max-width:300px;"></div>
+{% endif %}
 
 {% endblock %}

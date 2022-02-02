@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.conf.urls import url, include
+from django.conf.urls import url, include, re_path
 from django.contrib import admin
 from django.contrib.auth import urls as django_auth_urls
 from django.contrib.auth.views import LoginView, LogoutView
@@ -71,6 +71,7 @@ urlpatterns = [
     # url(r'^accounts/', include('registration.backends.hmac.urls')),
     url(r'^accounts/', include(django_auth_urls)),
     url(r'^$', home, name='home'),
+    re_path(r'^(?P<url>.*/)$', flatpage),
 ]
 
 if settings.DEBUG:

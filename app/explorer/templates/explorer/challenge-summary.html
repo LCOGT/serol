@@ -4,6 +4,21 @@
 {% block title %}{{object.name}}{% endblock %}
 
 {% block main-body %}
+<div id="serol">
+  <div class="columns is-centered">
+    <div class="column is-half">
+      <figure id="seroldemo" class="image"></figure>
+      {% for sticker in stickers %}
+      <figure id="sticker" class="image">
+        {% with "explorer/"|add:sticker.sticker.filename as icon_url %}
+        <img src="{% static icon_url %}"  alt="{{sticker.sticker.desc}}">
+        {% endwith %}
+      </figure>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+<div id="results">
   <h1>{% if object.is_last%}{% trans "Mission Completed!" %}{% else %}{% trans "Challenge Completed!" %}{%endif%}</h1>
         <div class="columns">
           <div class="column is-one-quarter">
@@ -42,6 +57,7 @@
           </div>
         </div>
     </div>
+</div>
 
 {% endblock %}
 
@@ -51,7 +67,35 @@
 var frameid = {{ progress.frameids}};
 var my_image {% if progress.image_file %} = "{{ progress.image_file.url|safe }}"{% endif %};
 
+var serolStatus = {
+    container: document.getElementById('seroldemo'),
+    renderer: 'svg',
+    loop: false,
+    autoplay: true,
+    autoloadSegments: true,
+    rendererSettings: {
+        progressiveLoad:false
+    },
+    path: '{{animation}}'
+};
+
+function showResults(){
+$("#serol").hide();
+$("#results").show();
+}
+
+function switchSticker(){
+  $("#seroldemo").hide();
+  $("#sticker").show();
+  setTimeout(showResults, 1500)
+}
+
+serolanim = lottie.loadAnimation(serolStatus);
+
 $(document).ready(function(){
+    $("#results").hide();
+    $("#sticker").hide();
+  serolanim.addEventListener("complete",switchSticker,false);
 
   if (typeof(my_image) == 'undefined'){
     get_colour_image(localStorage.getItem('archive_token'), frameid, mode='analyser')

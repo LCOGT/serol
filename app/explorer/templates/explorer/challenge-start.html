@@ -18,7 +18,7 @@
     <div class="columns">
       <div class="column is-one-third">
         <figure class="image p-6">
-          <img src="{{icon}}" />
+          <img src="{{object.icon_url}}" />
         </figure>
       <p class="has-text-centered"><a href="{% url 'observe' object.pk %}" class="button mission-{{object.mission.number}}-colour" id="start-btn">{% trans 'Start the challenge' %}</a></p>
       </div>

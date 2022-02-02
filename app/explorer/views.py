@@ -7,10 +7,12 @@ from django.contrib.staticfiles.templatetags.staticfiles import static
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, Http404
+from django.templatetags.static import static
+from django.urls import reverse, NoReverseMatch
 from django.views import View
 from django.views.generic import DetailView, ListView
 from django.views.generic.base import RedirectView
-from django.urls import reverse, NoReverseMatch
+
 import logging
 import json
 
@@ -96,12 +98,13 @@ class ChallengeView(LoginRequiredMixin, DetailView):
                 obj.save()
             context['progress'] = obj
             if mode == 'observe':
+                if self.object.action == 'moon':
+                    context['moon'] = True
                 targets = Body.objects.filter(avm_code=self.object.avm_code, active=True)
                 context['targets'] = targets
             if mode == 'submitted':
                 token, archive_token = check_token(request.user)
                 request.session['token'] = token
-
         return self.render_to_response(context)
 
 
@@ -163,6 +166,7 @@ class ChallengeSummary(LoginRequiredMixin, DetailView):
         context['stickers'] = stickers
         context['completed_missions'] = completed_missions(self.request.user)
         context['icon'] = target_icon(challenge.avm_code)
+        context['animation'] = static(f"explorer/js/stickerreveal-{challenge.mission.number}.json")
 
         return context
 
@@ -247,8 +251,9 @@ def target_icon(avmcode):
         '3.6.4.1' : 'explorer/images/3.6.4.1-cluster-icon.png' ,
         '3.6.4.2' : 'explorer/images/3.6.4.2-globular_cluster.png' ,
         '2.3' : 'explorer/images/2.3-asteroids-icon.png' ,
-        '2.2' : 'explorer/images/2.2-comet-icon.png' ,
-        '1.1' : 'explorer/images/1.1.2-planet-icon.png'
+        '2.2' : 'explorer/images/M1C2-comet-icon.png' ,
+        '1.4' : "explorer/images/1.1.1-mercury.png",
+        '1.1' : 'explorer/images/M1C1-planet-icon1.png'
     }
     avm_file = avm_files.get(avmcode,'')
     if avm_file:

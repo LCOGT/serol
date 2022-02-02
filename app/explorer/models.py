@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.translation import ugettext as _
+from django.templatetags.static import static
 
 from datetime import datetime
 
@@ -12,6 +13,25 @@ ICONS = (
         ('1.1.2-uranus.png','Uranus'),
         ('2.2-comet-icon.png','Comet'),
         ('2.3-asteroids-icon.png','Asteroid')
+)
+
+CHALLENGE_ICONS = (
+        ('M1C2-comet-icon.png','Comet'),
+        ('M1C1-planet-icon1.png','Planet'),
+        ('M1-moon-icon.png','Moon'),
+        ('M1C3Galaxy-icon-01.png',' Galaxy M1'),
+        ('M1C4-cluster-icon.png','Cluster M1'),
+        ('M1C5-nebulae-icon.png','Nebula M1'),
+        ('M1C7-asteroid-icon.png','Asteroid'),
+        ('M2C1-OpenCluster-icon.png','Open Cluster'),
+        ('M2C2-GlobularCluster-icon.png','Globular Cluster'),
+        ('M2C3-SupernovaRemnant-icon.png','Supernova'),
+        ('M2C4-PlanetaryNebula-icon.png','Planetary Nebula'),
+        ('M2C5-StarFormingNebula-icon1.png','Nebula'),
+        ('M3C1Spiral-icon.png','Spiral Galaxy'),
+        ('M3C2-Elliptical-icon.png','Elliptical Galaxy'),
+        ('M3C3-Irregular-icon.png','Irregular Galaxy'),
+        ('M3C4-Groups-icon1.png','Galaxy Group'),
 )
 
 FACT_CATEGORIES = (
@@ -58,9 +78,14 @@ class Challenge(models.Model):
     active = models.BooleanField(default=True)
     sticker_total = models.IntegerField(default=1, blank=True, null=True)
     is_last = models.BooleanField(default=False)
+    icon = models.CharField(max_length=40, choices=CHALLENGE_ICONS, blank=True, null=True)
 
     def __str__(self):
         return "Challenge {} from Mission {}".format(self.number, self.mission.number)
+
+    @property
+    def icon_url(self):
+        return static(f'explorer/images/{self.icon}')
 
     class Meta:
         unique_together = ['number','mission','active']

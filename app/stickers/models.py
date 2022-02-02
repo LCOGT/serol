@@ -25,7 +25,8 @@ STICKERS = (
     ('stickers/M3C2Elliptical.png','Elliptical Galaxy'),
     ('stickers/M2C2GlobularCluster.png','Globular Cluster'),
     ('stickers/M2C5StarFormingNebula.png', 'Star forming nebula'),
-    ('stickers/M3C3Irregular.png','Irregular Galaxy')
+    ('stickers/M3C3Irregular.png','Irregular Galaxy'),
+    ('stickers/M1Moon.png','Moon')
 )
 
 class Sticker(models.Model):

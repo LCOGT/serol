@@ -14,8 +14,8 @@
     <div class="{% cycle 'green-bg' 'red-bg' 'blue-bg' %} mt-4 mb-4 p-6 rounded-corners">
       <div class="columns">
         <div class="column is-one-third">
-          {% with "explorer/"|add:progress.mission.patch as icon_url %}
-          <img class="img-fluid rounded" src="{% static icon_url %}"  alt="Mission {{progress.mission.number}} patch">
+          {% with "explorer/"|add:progress.mission.patch as patch_url %}
+          <img class="img-fluid rounded" src="{% static patch_url %}"  alt="Mission {{progress.mission.number}} patch">
           <h2>Mission {{progress.mission.number}}: {{progress.mission.name}}</h2>
           {% if request.user|user_mission_state:progress.mission.number %}
           <a href="{% url 'challenge-next' progress.mission.number %}" class="button mission-{{progress.mission.number}}-colour">{% trans "start a new challenge?" %}</a>
