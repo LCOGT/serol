@@ -5,7 +5,7 @@ djangorestframework==3.13.1
 djangorestframework-jsonp==1.0.2
 django-pagedown==2.2.1
 django-markdown-deux
-django-registration==3.0
+django-registration==3.2
 psycopg2==2.8.4
 Pillow==6.2.1
 requests
@@ -13,9 +13,9 @@ gunicorn[gevent]==20.0.4
 gevent==1.4.0
 profanityfilter
 django-cors-headers
-numpy==1.18.2
-astropy==4.3.1
-astroplan==0.7
+numpy==1.21.2
+astropy==5.0
+astroplan==0.8
 astroscrappy==1.0.8
 fits2image>=0.4.0
 fits_align>=0.4.3

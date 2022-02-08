@@ -1,4 +1,4 @@
-FROM python:3.6-alpine
+FROM python:3.9-alpine
 
 WORKDIR /app
 
@@ -10,10 +10,13 @@ RUN apk --no-cache add \
             postgresql-libs \
             openblas \
             zlib \
+            python3-dev \
+            libffi-dev \
         && apk --no-cache add --virtual .build-deps \
             g++ \
             gcc \
             git \
+            make \
             libjpeg-turbo-dev \
             postgresql-dev \
             musl-dev \

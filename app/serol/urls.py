@@ -60,7 +60,7 @@ urlpatterns = [
         TemplateView.as_view(
             template_name='django_registration/activation_complete.html'),
         name='django_registration_activation_complete'),
-    path('accounts/activate/(?P<activation_key>[-:\w]+/',
+    path('accounts/activate/<slug:activation_key>',
         ActivationView.as_view(),
         name='registration_activate'),
     path('accounts/register/complete/',
