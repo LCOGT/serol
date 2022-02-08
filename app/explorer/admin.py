@@ -55,6 +55,7 @@ admin.site.register(Score)
 admin.site.register(LevelScore)
 admin.site.register(Fact, FactAdmin)
 admin.site.register(Season)
+admin.site.register(Activity)
 
 # Re-register FlatPageAdmin
 admin.site.unregister(FlatPage)

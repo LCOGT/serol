@@ -108,7 +108,7 @@ class Body(models.Model):
     exposuretime = models.FloatField()
     avm_code = models.CharField(max_length=10)
     description = models.TextField()
-    icon = models.CharField(max_length=20, choices=ICONS)
+    icon = models.CharField(max_length=25, choices=ICONS)
     active = models.BooleanField(default=True)
     last_update = models.DateTimeField(default=datetime.utcnow)
 
@@ -137,6 +137,18 @@ class Season(models.Model):
     active = models.BooleanField(default=True)
     jsfile = models.CharField(max_length=20, choices=SEASON_FILES)
     message = models.CharField(max_length=100, blank=True, null=True)
+
+    def __str__(self):
+        return self.name
+
+class Activity(models.Model):
+    name = models.CharField(max_length=200)
+    url = models.URLField()
+    desc = models.TextField()
+    active = models.BooleanField()
+
+    class Meta:
+        verbose_name_plural = 'activities'
 
     def __str__(self):
         return self.name

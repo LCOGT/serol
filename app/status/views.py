@@ -28,7 +28,7 @@ class RequestSerializer(serializers.Serializer):
     start = serializers.DateTimeField()
     end = serializers.DateTimeField()
     aperture = serializers.CharField()
-    target_type = serializers.ChoiceField(choices=(('moving', 'moving'),('sidereal', 'sidereal')))
+    target_type = serializers.ChoiceField(choices=(('moving', 'moving'),('sidereal', 'sidereal'),('moon','moon')))
     object_name = serializers.CharField()
     object_ra = serializers.FloatField(required=False)
     object_dec = serializers.FloatField(required=False)
@@ -57,7 +57,7 @@ class ScheduleView(APIView):
             elif not token and not user_logged_in:
 
                 return Response("Not authenticated.", status=status.HTTP_401_UNAUTHORIZED)
-            # Send to Valhalla API
+            # Send to Portal API
             if request.user.default_proposal:
                 params['proposal'] = request.user.default_proposal.code
             else:
@@ -68,7 +68,8 @@ class ScheduleView(APIView):
                 return Response(resp_msg, status=status.HTTP_400_BAD_REQUEST)
 
             # As long as we can a good response from the API, save the progress state
-            resp_prog = save_progress(challenge=params['challenge'], user=request.user, request_id=resp_msg, target=target)
+            reqids = json.dumps(resp_msg)
+            resp_prog = save_progress(challenge=params['challenge'], user=request.user, request_id=reqids, target=target)
             if resp_status and resp_prog:
 
                 return Response("Success", status=status.HTTP_201_CREATED)

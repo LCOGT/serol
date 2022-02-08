@@ -3,7 +3,6 @@ from datetime import datetime
 from django import forms
 from django.conf.urls.static import static
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.staticfiles.templatetags.staticfiles import static
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, Http404
@@ -16,7 +15,7 @@ from django.views.generic.base import RedirectView
 import logging
 import json
 
-from explorer.models import Mission, Challenge, Body, Season
+from explorer.models import Mission, Challenge, Body, Season, Activity
 from status.models import Progress, Answer, Question, UserAnswer
 from stickers.models import PersonSticker
 from status.views import check_token
@@ -104,6 +103,7 @@ class ChallengeView(LoginRequiredMixin, DetailView):
                 context['targets'] = targets
             if mode == 'submitted':
                 token, archive_token = check_token(request.user)
+                context['activities'] = Activity.objects.filter(active=True).order_by('?')[0:2]
                 request.session['token'] = token
         return self.render_to_response(context)
 

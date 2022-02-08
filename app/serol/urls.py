@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.conf.urls import url, include, re_path
+from django.urls import include, re_path, path
 from django.contrib import admin
 from django.contrib.auth import urls as django_auth_urls
 from django.contrib.auth.views import LoginView, LogoutView
@@ -21,62 +21,67 @@ from highscore.views import HighScoreView, AddHighScoreView
 
 
 urlpatterns = [
-    url(r'^demo/$', TemplateView.as_view(template_name='explorer/demo.html')),
-    url(r'^about/$', flatpage, {'url': '/about/'}, name='about'),
-    url(r'^videos/$', flatpage, {'url': '/videos/'}, name='videos'),
-    url(r'^join/$', flatpage, {'url': '/join/'}, name='join'),
-    url(r'^game/$', flatpage, {'url': '/game/'}, name='game'),
-    url('^network/$',TemplateView.as_view(template_name='explorer/network.html'),{'static_url': settings.STATIC_URL}),
-    url(r'^resources/$', flatpage, {'url': '/resources/'}, name='resources'),
-    url(r'^resources/workshops/$', flatpage, {'url': '/resources/workshops/'}, name='workshops'),
-    url(r'^getting-started/$', flatpage, {'url' : '/getting-started/'}, name='getting-started'),
-    url(r'^page/(?P<url>.*/)$', flatpage),
-    url(r'^finish-line/$', TemplateView.as_view(template_name='explorer/project_complete.html'), name="project-complete"),
-    url(r'^mission/(?P<pk>[0-9]+)/$', MissionView.as_view(), name="mission"),
-    url(r'^mission/(?P<mission_num>[0-9]+)/next/$', NextChallengeView.as_view(), name="challenge-next"),
-    url(r'^mission/(?P<pk>[0-9]+)/complete/$', MissionComplete.as_view(), name="mission-complete"),
-    url(r'^missions/$', MissionListView.as_view(), name="missions"),
-    url(r'^challenge/(?P<pk>[0-9]+)/start/$', ChallengeView.as_view(), {'mode':'start'}, name="start"),
-    url(r'^challenge/(?P<pk>[0-9]+)/observe/$', ChallengeView.as_view(), {'mode':'observe'}, name="observe"),
-    url(r'^challenge/(?P<pk>[0-9]+)/identify/$', ChallengeView.as_view(), {'mode':'identify'}, name="identify"),
-    url(r'^challenge/(?P<pk>[0-9]+)/analyse/$', AnalyseView.as_view(), name="analyse"),
-    url(r'^challenge/(?P<pk>[0-9]+)/investigate/$', ChallengeView.as_view(), {'mode':'investigate'}, name="investigate"),
-    url(r'^challenge/(?P<pk>[0-9]+)/submitted/$', ChallengeView.as_view(), {'mode':'submitted'}, name="submitted"),
-    url(r'^challenge/(?P<pk>[0-9]+)/summary/$', ChallengeSummary.as_view(), {'mode':'summary'}, name="summary"),
-    url(r'^challenge/(?P<pk>[0-9]+)/failed/$', ChallengeView.as_view(), {'mode':'failed'}, name="failed"),
-    url(r'^challenge/(?P<pk>[0-9]+)/retry/$', ChallengeRetry.as_view(), name="retry"),
-    url(r'^challenge/(?P<pk>[0-9]+)/$', ChallengeRedirectView.as_view(), name="challenge"),
-    url(r'^stickers/$', StickerView.as_view(), name='stickers'),
-    url(r'^api/status/(?P<requestid>[0-9]+)/$', StatusView.as_view(), name="status"),
-    url(r'^api/facts/$',FactsView.as_view(), name="facts"),
-    url(r'^api/schedule/$', ScheduleView.as_view(), name='schedule'),
-    url(r'^api/highscore/add/$', AddHighScoreView.as_view() , name='highscore-add'),
-    url(r'^api/highscore/leaders/$', HighScoreView.as_view()),
-    url(r'^api-auth-token/$', obtain_auth_token),
-    url(r'^admin/', admin.site.urls),
-    url(r'^accounts/register/$',RegistrationView.as_view(form_class=SerolUserForm), name='registration_register'),
-    url(r'^accounts/login/$', LoginView.as_view(template_name='explorer/login.html'), name='auth_login'),
-    url(r'^accounts/logout/$', LogoutView.as_view(template_name= 'explorer/logout.html'), name='auth_logout'),
-    url(r'^accounts/activate/complete/$',
+    path('demo/', TemplateView.as_view(template_name='explorer/demo.html')),
+    path('about/', flatpage, {'url': '/about/'}, name='about'),
+    path('videos/', flatpage, {'url': '/videos/'}, name='videos'),
+    path('join/', flatpage, {'url': '/join/'}, name='join'),
+    path('game/', flatpage, {'url': '/game/'}, name='game'),
+    path('network/',TemplateView.as_view(template_name='explorer/network.html'),{'static_url': settings.STATIC_URL}),
+    path('resources/', flatpage, {'url': '/resources/'}, name='resources'),
+    path('resources/workshops/', flatpage, {'url': '/resources/workshops/'}, name='workshops'),
+    path('getting-started/', flatpage, {'url' : '/getting-started/'}, name='getting-started'),
+    path('finish-line/', TemplateView.as_view(template_name='explorer/project_complete.html'), name="project-complete"),
+    path('mission/<int:pk>/', MissionView.as_view(), name="mission"),
+    path('mission/<int:mission_num>/next/', NextChallengeView.as_view(), name="challenge-next"),
+    path('mission/<int:pk>/complete/', MissionComplete.as_view(), name="mission-complete"),
+    path('missions/', MissionListView.as_view(), name="missions"),
+    path('challenge/<int:pk>/start/', ChallengeView.as_view(), {'mode':'start'}, name="start"),
+    path('challenge/<int:pk>/observe/', ChallengeView.as_view(), {'mode':'observe'}, name="observe"),
+    path('challenge/<int:pk>/identify/', ChallengeView.as_view(), {'mode':'identify'}, name="identify"),
+    path('challenge/<int:pk>/analyse/', AnalyseView.as_view(), name="analyse"),
+    path('challenge/<int:pk>/investigate/', ChallengeView.as_view(), {'mode':'investigate'}, name="investigate"),
+    path('challenge/<int:pk>/submitted/', ChallengeView.as_view(), {'mode':'submitted'}, name="submitted"),
+    path('challenge/<int:pk>/summary/', ChallengeSummary.as_view(), {'mode':'summary'}, name="summary"),
+    path('challenge/<int:pk>/failed/', ChallengeView.as_view(), {'mode':'failed'}, name="failed"),
+    path('challenge/<int:pk>/retry/', ChallengeRetry.as_view(), name="retry"),
+    path('challenge/<int:pk>/', ChallengeRedirectView.as_view(), name="challenge"),
+    path('stickers/', StickerView.as_view(), name='stickers'),
+    path('api/status/<int:requestid>/', StatusView.as_view(), name="status"),
+    path('api/facts/',FactsView.as_view(), name="facts"),
+    path('api/schedule/', ScheduleView.as_view(), name='schedule'),
+    path('api/highscore/add/', AddHighScoreView.as_view() , name='highscore-add'),
+    path('api/highscore/leaders/', HighScoreView.as_view()),
+    path('api-auth-token/', obtain_auth_token),
+    path('admin/', admin.site.urls),
+    path('accounts/register/',RegistrationView.as_view(form_class=SerolUserForm), name='registration_register'),
+    path('accounts/login/', LoginView.as_view(template_name='explorer/login.html'), name='auth_login'),
+    path('accounts/logout/', LogoutView.as_view(template_name= 'explorer/logout.html'), name='auth_logout'),
+    path('accounts/activate/complete/',
         TemplateView.as_view(
             template_name='django_registration/activation_complete.html'),
         name='django_registration_activation_complete'),
-    url(r'^accounts/activate/(?P<activation_key>[-:\w]+)/$',
+    path('accounts/activate/(?P<activation_key>[-:\w]+/',
         ActivationView.as_view(),
         name='registration_activate'),
-    url(r'^accounts/register/complete/$',
+    path('accounts/register/complete/',
         TemplateView.as_view(
             template_name='django_registration/registration_complete.html'),
         name='django_registration_complete'),
-    # url(r'^accounts/', include('registration.backends.hmac.urls')),
-    url(r'^accounts/', include(django_auth_urls)),
-    url(r'^$', home, name='home'),
+    # path('accounts/', include('registration.backends.hmac.urls')),
+    path('accounts/', include(django_auth_urls)),
+    path('', home, name='home'),
     re_path(r'^(?P<url>.*/)$', flatpage),
 ]
 
 if settings.DEBUG:
-    urlpatterns += [
-        url(r'^static/(?P<path>.*)$', views.serve),
-        url(r'^500/$', TemplateView.as_view(template_name='500.html'), name="error500"),
-        url(r'^404/$', TemplateView.as_view(template_name='404.html'), name="error404"),
-    ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+    from django.conf.urls.static import static
+    from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+
+    # Serve static and media files from development server
+    urlpatterns += (
+            path('500/', TemplateView.as_view(template_name='500.html'), name="error500"),
+            path('404/', TemplateView.as_view(template_name='404.html'), name="error404")
+            )
+    urlpatterns += staticfiles_urlpatterns()
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

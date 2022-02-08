@@ -211,7 +211,8 @@ REST_FRAMEWORK = {
 
 
 PORTAL_API_URL     = 'https://observe.lco.global/api/'
-PORTAL_REQUEST_API = PORTAL_API_URL + 'requestgroups/'
+PORTAL_REQUEST_API = PORTAL_API_URL + 'requests/'
+PORTAL_REQUESTGROUP_API = PORTAL_API_URL + 'requestgroups/'
 PORTAL_TOKEN_URL   = PORTAL_API_URL + 'api-token-auth/'
 PORTAL_PROFILE_URL = PORTAL_API_URL + 'profile/'
 ARCHIVE_URL        = 'https://archive-api.lco.global/'

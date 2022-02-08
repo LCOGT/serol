@@ -45,7 +45,7 @@ class User(AbstractUser):
 class Progress(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     challenge = models.ForeignKey(Challenge, on_delete=models.CASCADE)
-    requestid = models.CharField(max_length=20, null=True, blank=True)
+    requestid = models.CharField(max_length=35, null=True, blank=True)
     frameids = models.CharField(max_length=20, null=True, blank=True)
     status = FSMField(default='New', choices=settings.PROGRESS_OPTIONS)
     last_update = models.DateTimeField(default=datetime.utcnow)

@@ -12,25 +12,17 @@
               <div id="status-serol"></div>
             </div>
             <div class="column">
+              {% for activity in activities %}
               <div class="icon-text">
-                <span class="icon blue is-large">
-                  <i class="fas fa-pencil-ruler fa-2x"></i>
+                <span class="icon {% cycle 'blue' 'yellow' %} is-large">
+                  <i class="fas {% cycle 'fa-pencil-ruler' 'fa-ruler-triangle' %} fa-2x"></i>
                 </span>
-                <span class="is-size-3">Activity 1</span>
+                <span class="is-size-3"><a href="{{activity.url}}" target="_blank">{{activity.name}}</a></span>
               </div>
               <p class="block">
-                This is some placeholder text until we decide on the actual activity we will showcase here.
+                {{activity.desc}}
               </p>
-              <!-- Activity 2 -->
-              <div class="icon-text">
-                <span class="icon yellow is-large">
-                  <i class="fas fa-ruler-triangle fa-2x"></i>
-                </span>
-                <span class="is-size-3">Activity 1</span>
-              </div>
-              <p class="block">
-                This is some placeholder text until we decide on the actual activity we will showcase here.
-              </p>
+              {% endfor %}
               <!-- Activity 3 -->
               <div class="icon-text">
                 <span class="icon green is-large">
