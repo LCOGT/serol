@@ -4,9 +4,10 @@ from rest_framework import status
 from datetime import datetime
 
 import logging
+import json
 
 from status.images import make_request_image
-from status.views import update_status
+from status.schedule import convert_requestid
 from status.models import Progress
 
 logger = logging.getLogger(__name__)
@@ -28,5 +29,9 @@ class Command(BaseCommand):
         for pg in pgs:
             self.stdout.write("Updating {}".format(pg.requestid))
             newid = convert_requestid(pg.requestid, token=settings.PORTAL_TOKEN)
-            pg.requestid = json.dumps(newid)
-            self.stdout.write(self.style.SUCCESS("Update of {} successful".format(newid)))
+            if newid:
+                pg.requestid = json.dumps(newid)
+                pg.save()
+                self.stdout.write(self.style.SUCCESS("Update of {} successful".format(newid)))
+            else:
+                self.stdout.write(self.style.ERROR("Update of {} failed".format(newid)))

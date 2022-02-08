@@ -9,14 +9,14 @@ django-registration==3.2
 psycopg2==2.8.4
 Pillow==6.2.1
 requests
-gunicorn[gevent]==20.0.4
-gevent==1.4.0
+gunicorn[gevent]==20.1.0
+gevent==21.1.2
 profanityfilter
 django-cors-headers
 numpy==1.21.2
 astropy==5.0
 astroplan==0.8
-astroscrappy==1.0.8
+astroscrappy==1.1.0
 fits2image>=0.4.0
 fits_align>=0.4.3
 boto3

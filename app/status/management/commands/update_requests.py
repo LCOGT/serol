@@ -4,6 +4,7 @@ from rest_framework import status
 from datetime import datetime
 
 import logging
+import json
 
 from status.images import make_request_image
 from status.views import update_status
@@ -21,7 +22,7 @@ class Command(BaseCommand):
         self.stdout.write(self.style.WARNING("Running requests update - {}".format(datetime.now().isoformat())))
         if options['request_id']:
             self.stdout.write("Looking for Progress matching ID={}".format(options['request_id']))
-            pgs = Progress.objects.filter(requestid=options['request_id'])
+            pgs = Progress.objects.filter(requestid=json.dumps(int(options['request_id'])))
         else:
             pgs = Progress.objects.filter(status='Submitted')
             self.stdout.write("Found {} Progress entries".format(pgs.count()))

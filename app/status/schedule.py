@@ -24,7 +24,9 @@ def convert_requestid(requestid, token):
         return False, "No request ID provided"
 
     headers = {'Authorization': 'Token {}'.format(token)}
-    url = settings.PORTAL_REQUEST_API + requestid
+    url = settings.PORTAL_REQUESTGROUP_API + requestid
+    logger.critical(url)
+
     try:
         r = requests.get(url, headers=headers, timeout=20.0)
     except requests.exceptions.Timeout:
