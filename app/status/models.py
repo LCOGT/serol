@@ -19,7 +19,8 @@ COLOUR_STATE = {'New': '000',
                 'Analyse':'A569BD',
                 'Investigate':'aaa',
                 'Summary':'2ECC71',
-                'Failed':'E74C3C'
+                'Failed':'E74C3C',
+                'Redo' : 'F98F00'
                 }
 
 class Proposal(models.Model):
@@ -71,6 +72,11 @@ class Progress(models.Model):
         return mark_safe('<img src="{}" width="150" height="150" />'.format(self.image_file.url))
     image_tag.short_description = 'Image'
 
+    @property
+    def target_name(self):
+        print(self.challenge.target)
+        return self.challenge.target
+
     def __str__(self):
         return "{} is {} in {}".format(self.user.username, self.challenge, self.status)
 
@@ -86,7 +92,11 @@ class Progress(models.Model):
     def failed(self):
         pass
 
-    @transition(field=status, source=['Failed'], target='New')
+    @transition(field=status, source=['Analyse','Summary'], target='New')
+    def redo(self):
+        pass
+
+    @transition(field=status, source=['Failed','Redo'], target='New')
     def retry(self):
         self.requestid = ''
         self.frameids = ''

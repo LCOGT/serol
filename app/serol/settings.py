@@ -5,9 +5,11 @@ import os, ast
 from django.utils.crypto import get_random_string
 
 
-VERSION = '0.2'
+VERSION = '1.0'
 
 SITE_ID = 1
+
+DEFAULT_AUTO_FIELD='django.db.models.AutoField'
 
 CURRENT_PATH = os.path.dirname(os.path.realpath(__file__))
 PRODUCTION = True if CURRENT_PATH.startswith('/var/www') else False

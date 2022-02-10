@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 import logging
 import json
+from urllib.parse import urljoin
 
 import requests
 from astropy.time import Time
@@ -20,12 +21,13 @@ def convert_requestid(requestid, token):
     Get status of Requestgroup from the Observing Portal API
     Pass sub-request ID back and replace this on the model if COMPLETED
     '''
+    if '[' in requestid:
+        return False, "Already ported"
     if not requestid:
         return False, "No request ID provided"
 
     headers = {'Authorization': 'Token {}'.format(token)}
-    url = settings.PORTAL_REQUESTGROUP_API + requestid
-    logger.critical(url)
+    url = urljoin(settings.PORTAL_REQUESTGROUP_API, str(requestid))
 
     try:
         r = requests.get(url, headers=headers, timeout=20.0)
@@ -38,10 +40,10 @@ def convert_requestid(requestid, token):
     if r.status_code in [200,201]:
         req = r.json()
         logger.debug('Request {} is {}'.format(req['id'], req['requests'][0]['state']))
-        return [j['id'] for j in req['requests']]
+        return [j['id'] for j in req['requests']], "Success"
     else:
         logger.error("Could not send request: {}".format(r.content))
-        return False
+        return False, "Could not send request"
 
 def get_observation_status(requestid, token):
     '''
@@ -52,7 +54,7 @@ def get_observation_status(requestid, token):
         return False, "No request ID provided"
 
     headers = {'Authorization': 'Token {}'.format(token)}
-    url = settings.PORTAL_REQUEST_API + requestid
+    url = urljoin(settings.PORTAL_REQUEST_API, str(requestid))
     try:
         r = requests.get(url, headers=headers, timeout=20.0)
     except requests.exceptions.Timeout:
@@ -63,21 +65,21 @@ def get_observation_status(requestid, token):
 
     if r.status_code in [200,201]:
         req = r.json()
-        logger.debug('Request {} is {}'.format(req['id'], req['requests'][0]['state']))
-        return req['requests'][0]['id'], req['requests'][0]['state']
+        logger.debug('Request {} is {}'.format(req['id'], req['state']))
+        return req['id'], req['state']
     else:
         logger.error("Could not send request: {}".format(r.content))
         return False, r.content
 
 def get_observation_frameid(requestid, token):
     '''
-    Get status of RequestID from the Valhalla API
+    Get status of RequestID from the Portal API
     '''
     if not requestid:
         return False, "No request ID provided"
 
     headers = {'Authorization': 'Token {}'.format(token)}
-    url = "{}?limit=1&offset=0&ordering=-id&REQNUM={}".format(settings.ARCHIVE_FRAMES_URL, requestid)
+    url = f"{settings.ARCHIVE_FRAMES_URL}?limit=1&offset=0&ordering=-id&REQNUM={requestid}"
     try:
         r = requests.get(url, headers=headers, timeout=20.0)
     except requests.exceptions.Timeout:
@@ -102,7 +104,7 @@ def submit_observation_request(params, token):
     Send the observation parameters and the authentication cookie to the Scheduler API
     '''
     headers = {'Authorization': 'Token {}'.format(token)}
-    url = settings.PORTAL_REQUEST_API
+    url = settings.PORTAL_REQUESTGROUP_API
     logging.debug('Submitting request')
     try:
         r = requests.post(url, json=params, headers=headers, timeout=20.0)
@@ -122,18 +124,18 @@ def submit_observation_request(params, token):
 def process_observation_request(params):
     if params['target_type'] == 'moon':
         obs_params = auto_schedule(proposal=params['proposal'])
-        target['name'] = 'Moon'
+        target_name = 'Moon'
     else:
         if params['target_type'] == 'moving':
             target, filters = format_moving_object(params['object_name'])
             params['filters'] = filters
         else:
             target = format_sidereal_object(params['object_name'], params['object_ra'], params['object_dec'])
-
+        target_name = target['name']
         obs_params = request_format(target, params['start'], params['end'], params['filters'], params['proposal'], params['aperture'])
 
     resp_status, resp_msg = submit_observation_request(params=obs_params, token=params['token'])
-    return resp_status, resp_msg, target['name']
+    return resp_status, resp_msg, target_name
 
 def auto_schedule(proposal):
     siteset = ['ogg','coj','lsc','tfn']
@@ -148,5 +150,5 @@ def auto_schedule(proposal):
         end = time.datetime + timedelta(seconds=180)
         req_params = {'start':start,'end':end,'ra':coords.ra.value, 'dec':coords.dec.value, 'site':site}
         params_list.append(req_params)
-    params = request_format_moon(params_list)
+    params = request_format_moon(params_list, proposal)
     return params

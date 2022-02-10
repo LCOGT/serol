@@ -14,7 +14,7 @@ from django_registration.backends.activation.views import RegistrationView, Acti
 from status.views import ScheduleView, StatusView, SerolUserForm
 from explorer.views import MissionView, MissionListView, ChallengeRedirectView, \
     ChallengeView, AnalyseView, ChallengeSummary, ChallengeRetry, NextChallengeView, \
-    MissionComplete, home
+    MissionComplete, home, ChallengeRedo
 from explorer.serializers import FactsView
 from stickers.views import StickerView
 from highscore.views import HighScoreView, AddHighScoreView
@@ -43,6 +43,8 @@ urlpatterns = [
     path('challenge/<int:pk>/submitted/', ChallengeView.as_view(), {'mode':'submitted'}, name="submitted"),
     path('challenge/<int:pk>/summary/', ChallengeSummary.as_view(), {'mode':'summary'}, name="summary"),
     path('challenge/<int:pk>/failed/', ChallengeView.as_view(), {'mode':'failed'}, name="failed"),
+    path('challenge/<int:pk>/redo/', ChallengeView.as_view(), {'mode':'redo'}, name="redo"),
+    path('challenge/<int:pk>/redo/submit/', ChallengeRedo.as_view(), name="redo-submit"),
     path('challenge/<int:pk>/retry/', ChallengeRetry.as_view(), name="retry"),
     path('challenge/<int:pk>/', ChallengeRedirectView.as_view(), name="challenge"),
     path('stickers/', StickerView.as_view(), name='stickers'),

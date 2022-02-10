@@ -4,6 +4,7 @@ from django import forms
 from django.conf.urls.static import static
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Q
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, Http404
 from django.templatetags.static import static
@@ -104,6 +105,7 @@ class ChallengeView(LoginRequiredMixin, DetailView):
             if mode == 'submitted':
                 token, archive_token = check_token(request.user)
                 context['activities'] = Activity.objects.filter(active=True).order_by('?')[0:2]
+                context['requestids'] = json.loads(obj.requestid)
                 request.session['token'] = token
         return self.render_to_response(context)
 
@@ -133,14 +135,29 @@ class ChallengeRetry(LoginRequiredMixin, DetailView):
     model = Challenge
 
     def get(self, request, *args, **kwargs):
-        # this can only happen if the request has failed
+        # this can only happen if the request has failed or has been explicitly "redone"
         try:
-            obj = Progress.objects.get(challenge=self.get_object(), user=self.request.user, status='Failed')
+            obj = Progress.objects.get(challenge=self.get_object(), user=self.request.user)
             obj.retry()
             obj.save()
         except:
-            logger.debug("Challenge {} for {} has not failed".format(self.get_object(), self.request.user))
+            logger.info("Challenge {} for {} has not failed".format(self.get_object(), self.request.user))
         return HttpResponseRedirect(reverse('challenge', args=args, kwargs=kwargs))
+
+class ChallengeRedo(LoginRequiredMixin, DetailView):
+    model = Challenge
+
+    def get(self, request, *args, **kwargs):
+        logger.info("************")
+        # this can only happen if the request has failed or has been explicitly "redone"
+        try:
+            obj = Progress.objects.get(challenge=self.get_object(), user=self.request.user)
+            obj.redo()
+            obj.save()
+            return HttpResponseRedirect(reverse('retry', args=args, kwargs=kwargs))
+        except:
+            logger.error("Challenge {} for {} is not in the correct state".format(self.get_object(), self.request.user))
+            return HttpResponseRedirect(reverse('challenge', args=args, kwargs=kwargs))
 
 
 

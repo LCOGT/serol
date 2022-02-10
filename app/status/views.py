@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.conf import settings
 import time
+import json
 
 from django_registration.forms import RegistrationForm
 from rest_framework.decorators import api_view
@@ -88,11 +89,11 @@ class StatusView(APIView):
 
 def update_status(requestid, token, archive_token):
     try:
-        progress = Progress.objects.get(requestid=requestid)
+        progress = Progress.objects.get(requestid__contains=requestid)
     except:
         return Response("Progress object not found", status=status.HTTP_404_NOT_FOUND)
     if progress.status != 'Submitted':
-        return Response("Status mismatch", status=status.HTTP_403_FORBIDDEN)
+        return Response("Status retrieved", status=status.HTTP_200_OK)
     requestid, state = get_observation_status(requestid=requestid, token=token)
     if state == 'PENDING':
         return Response("Not observed yet", status=status.HTTP_403_FORBIDDEN)

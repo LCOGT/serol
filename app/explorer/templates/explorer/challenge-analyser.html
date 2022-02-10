@@ -7,7 +7,7 @@
 <script src="{% static 'explorer/js/utils.js' %}" ></script>
 <script>
 var answers = Array();
-var requestid = {{ progress.requestid}};
+var requestid = {{ progress.requestid|safe}};
 var frameid = {{ progress.frameids }};
 var current_question=0;
 var question_total={{questions|length}};
@@ -104,6 +104,10 @@ function add_answers_to_form() {
          </label>
           </div>
            {% endfor %}
+           <div class="notification">
+             Is there something wrong with the picture? Is it not quite as you expected?
+             <a href="{% url 'redo' object.id %}" class="button is-fullwidth oswald gold-bg">{% trans "Let's try again" %}</a>
+           </div>
            </div>
        </div>
 

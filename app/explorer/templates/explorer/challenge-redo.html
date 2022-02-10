@@ -1,0 +1,26 @@
+{% extends 'explorer/challenge-base.html' %}
+{% load static i18n %}
+
+{% block wrapper-class%}challenge mission-{{object.mission.number}}-sidebar{%endblock%}
+
+{% block main-body %}
+<div class="columns">
+  <div class="column is-half">
+    <h1>{% trans "Want to try again?" %}</h1>
+      <p>It looks like your picture of <strong>{{progress.target}}</strong> may have something wrong with it.</p>
+      <p>Let's give "{{progress.challenge.name}}" another try!</p>
+      <div class="buttons">
+        <a href="{% url 'challenge' object.pk %}" class="button">Go back</a>
+        <a href="{% url 'redo-submit' object.pk %}" class="button gold-bg white is-rounded" id="start-btn">{% trans 'Retry the challenge' %}</a>
+      </div>
+  </div>
+  <div class="column">
+    <figure class="image">
+      <img src="{% if progress.image_file %}{{ progress.image_file.url|safe }}{% else %}{% static 'explorer/images/placeholder.jpg' %}{% endif %}" alt="{{object.name}}" class="rounded-corners" id="img-holder">
+    </figure>
+  </div>
+</div>
+{% endblock %}
+
+{% block script-content %}
+{% endblock%}

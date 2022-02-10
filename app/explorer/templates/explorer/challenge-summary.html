@@ -40,6 +40,10 @@
             <a href="{% url 'challenge-next' object.mission.number %}" class="button is-fullwidth oswald mission-{{object.mission.number}}-colour">{% trans "start a new challenge?" %}</a>
             {% endif %}
           </p>
+          <div class="notification">
+            Is there something wrong with the picture? Is it not quite as you expected?
+            <a href="{% url 'redo' object.id %}" class="button is-fullwidth oswald gold-bg">{% trans "Let's try again" %}</a>
+          </div>
         </div>
         <div class="column">
           <span class="text-right rounded mission-{{object.mission.number}}-colour p-2 oswald black">Your picture of {{progress.target}}</span>
