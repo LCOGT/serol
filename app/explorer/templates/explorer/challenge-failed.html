@@ -4,14 +4,36 @@
 {% block wrapper-class%}challenge mission-{{object.mission.number}}-sidebar{%endblock%}
 
 {% block main-body %}
-<div class="centre-container">
-  <h1>{% trans "Bad news! " %}</h1>
-    <p>Serol wasn't able to get you a picture of <strong>{{progress.target}}</strong>.</p>
-    <p>Let's give "{{progress.challenge.name}}" another try!</p>
-    <p><a href="{% url 'retry' object.pk %}" class="button blue-bg white is-rounded" id="start-btn">{% trans 'Retry the challenge' %}</a></p>
+<div class="columns">
+  <div class="column is-half">
+    <h1>{% trans "Bad news! " %}</h1>
+      <p>Serol wasn't able to get you a picture of <strong>{{progress.target}}</strong>.</p>
+      <p>Let's give "{{progress.challenge.name}}" another try!</p>
+      <p><a href="{% url 'retry' object.pk %}" class="button blue-bg white is-rounded" id="start-btn">{% trans 'Retry the challenge' %}</a></p>
   </div>
+  <div class="column">
+    <figure class="image">
+      <div id="serolretry"></div>
+    </figure>
+  </div>
+</div>
 
 {% endblock %}
 
 {% block script-content %}
+<script>
+var serolStatus = {
+    container: document.getElementById('serolretry'),
+    renderer: 'svg',
+    loop: true,
+    autoplay: true,
+    autoloadSegments: true,
+    rendererSettings: {
+        progressiveLoad:false
+    },
+    path: '{% static "explorer/js/serolretry.json" %}'
+};
+
+serolanim = lottie.loadAnimation(serolStatus);
+</script>
 {% endblock%}

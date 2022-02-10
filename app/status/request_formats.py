@@ -1,6 +1,10 @@
+import json
+from django.conf import settings
 from datetime import datetime, timedelta
 from astropy.time import Time
 from astropy.coordinates import EarthLocation, get_moon, AltAz, get_sun
+
+from explorer.models import Body
 
 
 EXPOSURE = '2.0'

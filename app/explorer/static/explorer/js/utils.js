@@ -84,8 +84,8 @@ function get_qs(n) {
     return half !== undefined ? decodeURIComponent(half.split('&')[0]) : null;
 }
 
-function update_status(requestid) {
-  $.getJSON('/api/status/'+requestid+'/')
+function update_status(progressid) {
+  $.getJSON('/api/status/'+progressid+'/')
     .done(function(data){
       window.location.replace(redirect_url);
       console.log("DONE"+data);
@@ -96,11 +96,11 @@ function update_status(requestid) {
     return;
 }
 
-function status_request(requestid, token) {
+function status_request(requestids, rindex, progressid, token, totalstate) {
   var data;
   $.ajax(
     {
-    url:'https://observe.lco.global/api/requests/'+requestid+'/',
+    url:'https://observe.lco.global/api/requests/'+requestids[rindex]+'/',
     type: "GET",
     headers: {"Authorization": "Token "+token},
     dataType: 'json',
@@ -110,7 +110,7 @@ function status_request(requestid, token) {
       if (rdata['state'] == 'PENDING' ){
         status_userrequest(requestid, token);
       } else if (rdata['state'] == 'COMPLETED' || rdata['state'] == 'WINDOW_EXPIRED' || rdata['state'] == 'CANCELED'){
-        update_status(requestid);
+        update_status(progressid);
       }
       console.log("DONE"+data);
     })

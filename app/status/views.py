@@ -82,14 +82,14 @@ class ScheduleView(APIView):
 class StatusView(APIView):
     renderer_classes = (JSONRenderer, BrowsableAPIRenderer)
 
-    def get(self, request, requestid, format=None):
+    def get(self, request, progressid, format=None):
         token, archive_token = check_token(request.user)
-        return update_status(requestid=requestid, token=token, archive_token=archive_token)
+        return update_status(progressid=progressid, token=token, archive_token=archive_token)
 
 
-def update_status(requestid, token, archive_token):
+def update_status(progressid, token, archive_token):
     try:
-        progress = Progress.objects.get(requestid__contains=requestid)
+        progress = Progress.objects.get(id=progressid)
     except:
         return Response("Progress object not found", status=status.HTTP_404_NOT_FOUND)
     if progress.status != 'Submitted':
