@@ -80,13 +80,11 @@
 {% block script-content %}
 <script src="{% static "explorer/js/utils.js" %}?q=0.12"  type="text/javascript" ></script>
 <script>
-var requestids = {{progress.requestid|safe}};
+var requestgroup = {{progress.requestgroup|safe}};
 var resp;
 var redirect_url = "{% url 'challenge' object.id %}";
 $(document).ready(function(){
-  requestids.forEach((req) => {
-    resp = status_request(req, "{{ request.session.token }}");
-  })
+  status_request(requestgroup, {{progress.id}},"{{ request.session.token }}");
   get_facts();
 });
 

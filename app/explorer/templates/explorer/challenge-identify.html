@@ -6,11 +6,18 @@
 {% block script-content %}
 <script src="{% static 'explorer/js/utils.js' %}" ></script>
 <script>
+{% if progress.challenge.action == 'moon' %}
+var color = false;
+{% else %}
+var color = true;
+{% endif %}
 var fail_text = "{% trans "Try Again!" %}";
 var success_text = "{% trans "Correct!" %}";
 var images = Array();
 var current_tag = "{{object.avm_code}}";
+{% if progress.frameids %}
 var redirect_url = "{% url 'analyse' object.id %}?frameid="+{{ progress.frameids }};
+{% endif %}
 var requestid = {{ progress.requestid|safe }};
 var frameid = {{ progress.frameids }};
 var my_image_url {% if progress.image_file %} = "{{ progress.image_file.url|safe }}"{% endif %};
@@ -44,7 +51,7 @@ $(document).ready(function(){
   if (typeof(my_image_url) != 'undefined'){
     arrange_images(my_image_url);
   } else {
-    get_colour_image(localStorage.getItem('archive_token'), frameid, mode='identify')
+    get_colour_image(localStorage.getItem('archive_token'), frameid, mode='identify', color=color)
   }
 });
 </script>

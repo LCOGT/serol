@@ -113,14 +113,14 @@ def submit_observation_request(params, token):
         msg = "Observing portal API timed out"
         logging.error(msg)
         params['error_msg'] = msg
-        return False, msg
+        return False, msg, False
 
     if r.status_code in [200,201]:
         logging.debug('Submitted request')
-        return True, [req['id'] for req in r.json()['requests']]
+        return True, [req['id'] for req in r.json()['requests']], r.json()['id']
     else:
         logging.error("Could not send request: {}".format(r.content))
-        return False, r.content
+        return False, r.content, False
 
 def process_observation_request(params):
     if params['target_type'] == 'moon':
@@ -135,8 +135,8 @@ def process_observation_request(params):
         target_name = target['name']
         obs_params = request_format(target, params['start'], params['end'], params['filters'], params['proposal'], params['aperture'])
 
-    resp_status, resp_msg = submit_observation_request(params=obs_params, token=params['token'])
-    return resp_status, resp_msg, target_name
+    resp_status, resp_msg, resp_group = submit_observation_request(params=obs_params, token=params['token'])
+    return resp_status, resp_msg, target_name, resp_group
 
 def auto_schedule(proposal):
     siteset = ['ogg','coj','lsc','tfn']

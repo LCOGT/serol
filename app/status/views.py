@@ -63,14 +63,14 @@ class ScheduleView(APIView):
                 params['proposal'] = request.user.default_proposal.code
             else:
                 params['proposal'] = settings.DEFAULT_PROPOSAL
-            resp_status, resp_msg, target = process_observation_request(params)
+            resp_status, resp_msg, target, resp_group = process_observation_request(params)
             if not resp_status:
 
                 return Response(resp_msg, status=status.HTTP_400_BAD_REQUEST)
 
             # As long as we can a good response from the API, save the progress state
             reqids = json.dumps(resp_msg)
-            resp_prog = save_progress(challenge=params['challenge'], user=request.user, request_id=reqids, target=target)
+            resp_prog = save_progress(challenge=params['challenge'], user=request.user, request_id=reqids, target=target, request_group=resp_group)
             if resp_status and resp_prog:
 
                 return Response("Success", status=status.HTTP_201_CREATED)
@@ -82,12 +82,12 @@ class ScheduleView(APIView):
 class StatusView(APIView):
     renderer_classes = (JSONRenderer, BrowsableAPIRenderer)
 
-    def get(self, request, progressid, format=None):
+    def get(self, request, progressid, requestid, format=None):
         token, archive_token = check_token(request.user)
-        return update_status(progressid=progressid, token=token, archive_token=archive_token)
+        return update_status(progressid=progressid, requestid=requestid, token=token, archive_token=archive_token)
 
 
-def update_status(progressid, token, archive_token):
+def update_status(progressid, requestid, token, archive_token):
     try:
         progress = Progress.objects.get(id=progressid)
     except:
@@ -103,15 +103,15 @@ def update_status(progressid, token, archive_token):
         if state == 'COMPLETED':
             frameid = get_observation_frameid(requestid=requestid, token=archive_token)
             if frameid:
-                progress.requestid = requestid
                 progress.frameids = frameid
                 progress.observed()
+            progress.requestid = json.dumps([requestid])
         elif state == 'WINDOW_EXPIRED' or state == 'CANCELED':
             progress.failed()
         progress.save()
         return Response("Status updated", status=status.HTTP_200_OK)
 
-def save_progress(challenge, user, request_id, target):
+def save_progress(challenge, user, request_id, target, request_group):
     '''
     Save Progress model
     '''
@@ -119,6 +119,7 @@ def save_progress(challenge, user, request_id, target):
         progress = Progress.objects.get(challenge=challenge, user=user)
     except ObjectNotFound:
         return False
+    progress.requestgroup = request_group
     progress.requestid = request_id
     progress.target = target
     progress.submit()
