@@ -148,7 +148,6 @@ class ChallengeRedo(LoginRequiredMixin, DetailView):
     model = Challenge
 
     def get(self, request, *args, **kwargs):
-        logger.info("************")
         # this can only happen if the request has failed or has been explicitly "redone"
         try:
             obj = Progress.objects.get(challenge=self.get_object(), user=self.request.user)

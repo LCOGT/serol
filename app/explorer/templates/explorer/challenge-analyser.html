@@ -104,11 +104,12 @@ function add_answers_to_form() {
          </label>
           </div>
            {% endfor %}
-           <div class="notification">
-             Is there something wrong with the picture? Is it not quite as you expected?
-             <a href="{% url 'redo' object.id %}" class="button is-fullwidth oswald gold-bg">{% trans "Let's try again" %}</a>
-           </div>
-           </div>
+       </div>
+       <div class="notification mt-6">
+         <span class="icon"> <i class="fal fa-question-circle"></i></span>
+         Is there something wrong with the picture?
+         <a href="{% url 'redo' object.id %}" class="button is-fullwidth oswald has-background-grey-lighter">{% trans "Let's try again" %}</a>
+       </div>
        </div>
 
    {% endfor %}

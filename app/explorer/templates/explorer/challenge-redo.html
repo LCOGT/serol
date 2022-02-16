@@ -8,7 +8,11 @@
   <div class="column is-half">
     <h1>{% trans "Want to try again?" %}</h1>
       <p>It looks like your picture of <strong>{{progress.target}}</strong> may have something wrong with it.</p>
-      <p>Let's give "{{progress.challenge.name}}" another try!</p>
+      <p>If you're interested why your image looks like this, see our <a href="https://lco.global/education/observing/common-image-problems/" target="_blank">Common Image Problems</a> page</p>
+      <div class="notification is-warning">
+        If you redo this challenge your current picture and answers to the question will be deleted
+      </div>
+      <p>Do you want to give "<strong>{{progress.challenge.name}}</strong>" another try?</p>
       <div class="buttons">
         <a href="{% url 'challenge' object.pk %}" class="button">Go back</a>
         <a href="{% url 'redo-submit' object.pk %}" class="button gold-bg white is-rounded" id="start-btn">{% trans 'Retry the challenge' %}</a>

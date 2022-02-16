@@ -30,19 +30,17 @@
             {% endwith %}
           </figure>
           {% endfor %}
-          <p class="text-center mt-4">
-            <a href="{% url 'stickers' %}" class="button is-fullwidth mission-{{object.mission.number}}-colour"><i class="fas fa-stars"></i> {% trans "Take a look at your stickers" %}</a>
-          </p>
-          <p class="text-center">
+          <p class="text-center pt-6">
             {% if object.mission.number in completed_missions %}
             <a href="{% url 'mission-complete' object.mission.number  %}" class="button is-fullwidth oswald mission-{{object.mission.number}}-colour">{% trans "Continue your adventure!" %}</a>
             {% else %}
             <a href="{% url 'challenge-next' object.mission.number %}" class="button is-fullwidth oswald mission-{{object.mission.number}}-colour">{% trans "start a new challenge?" %}</a>
             {% endif %}
           </p>
-          <div class="notification">
-            Is there something wrong with the picture? Is it not quite as you expected?
-            <a href="{% url 'redo' object.id %}" class="button is-fullwidth oswald gold-bg">{% trans "Let's try again" %}</a>
+          <div class="notification mt-6">
+            <span class="icon"> <i class="fal fa-question-square"></i></span>
+            Is there something wrong with the picture?
+            <a href="{% url 'redo' object.id %}" class="button is-fullwidth oswald has-background-grey-lighter">{% trans "Let's try again" %}</a>
           </div>
         </div>
         <div class="column">

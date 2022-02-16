@@ -154,6 +154,13 @@ DATABASES = {
     },
 }
 
+THUMBNAIL_ALIASES = {
+    '': {
+        'medium': {'size': (900, 600), 'crop': False},
+        'sticker' : {'size' : (260,160), 'crop': False}
+    },
+}
+
 ACCOUNT_ACTIVATION_DAYS = 28
 
 #############
