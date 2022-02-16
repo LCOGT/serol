@@ -65,11 +65,13 @@ serolanim = lottie.loadAnimation(serolStatus);
 </div>
 </section>
 
+{% if request.user.is_authenticated and request.user.mission_1 %}
 <section class="section green-bg py-4">
   <div class="container">
     <p class="has-text-centered statement m-0"><span class="tag is-warning">new</span> <a href="{% url 'challenge' 15 %}" class="white">Explore the Moon with our new challenge</a></p>
     </div>
 </section>
+{% endif %}
 
 <section class="section focus-home">
   <div class="container">
@@ -90,7 +92,7 @@ serolanim = lottie.loadAnimation(serolStatus);
       <div class="column is-flex is-align-items-center">
         <div class="buttons">
         <a class="button is-rounded is-large is-fullwidth mb-5 register-ind" href="{% url 'registration_register' %}">Join as an individual</a>
-        <a class="button is-rounded is-large is-fullwidth register-teacher" >Join as a teacher
+        <a class="button is-rounded is-large is-fullwidth register-teacher">Join as a teacher
           <span class="overlay-badge">coming soon</span>
         </a>
           </div>
