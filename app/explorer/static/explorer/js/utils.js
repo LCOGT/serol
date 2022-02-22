@@ -108,8 +108,8 @@ function aggregate_status(rdata, progressid, token){
         }
       });
 
-      if (completed.length > 0){
-        update_status(progressid, completed[0]);
+      if (complete.length > 0){
+        update_status(progressid, complete[0]);
       } else if (pending.length > 0){
         pending.forEach((req) => {
           status_userrequest(req, token);

@@ -12,7 +12,7 @@ from django.contrib.sessions.backends.db import SessionStore
 
 from explorer.models import Body
 from .request_formats import request_format, request_format_moon, format_moving_object, \
-    SITES, best_observing_time, moon_coords
+    SITES, best_observing_time, moon_coords, format_sidereal_object
 
 logger = logging.getLogger(__name__)
 

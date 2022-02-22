@@ -122,7 +122,8 @@ class NextChallengeView(LoginRequiredMixin, View):
                 chal_id = Challenge.objects.get(number=latest.challenge.number + 1, mission=kwargs['mission_num']).id
                 return HttpResponseRedirect(reverse('challenge', kwargs={'pk':chal_id}))
         except ObjectDoesNotExist:
-            if kwargs['mission_num'] in ['1', '2', '3']:
+            print(kwargs['mission_num'])
+            if str(kwargs['mission_num']) in ['1', '2', '3']:
                 logger.debug('User accessing Mission {} for 1st time'.format(kwargs['mission_num']))
                 chal = Challenge.objects.get(number=1,mission__id=kwargs['mission_num'])
                 return HttpResponseRedirect(reverse('challenge', kwargs={'pk':chal.id}))
