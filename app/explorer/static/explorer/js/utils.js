@@ -97,7 +97,7 @@ function update_status(progressid, requestid) {
 }
 
 function aggregate_status(rdata, progressid, token){
-  if (rdata['requests'] == 'COMPLETED' || rdata['state'] == 'PENDING'){
+  if (rdata['state'] == 'COMPLETED' || rdata['state'] == 'PENDING'){
       var complete = Array()
       var pending = Array()
       rdata['requests'].forEach((req) => {
@@ -114,11 +114,10 @@ function aggregate_status(rdata, progressid, token){
         pending.forEach((req) => {
           status_userrequest(req, token);
         })
-      }
-  } else {
-    update_status(progressid, rdata['requests'][0]['id']);
+    } else {
+      update_status(progressid, rdata['requests'][0]['id']);
+    }
   }
-  console.log("DONE");
 }
 
 function status_request(requestgroup, progressid, token) {
