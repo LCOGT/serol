@@ -3,6 +3,7 @@ serol.db
 serol.bk
 fixtures/
 media/
+docker-compose.yml
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
