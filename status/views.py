@@ -96,7 +96,7 @@ def update_status(progressid, requestid, token, archive_token):
         return Response("Status retrieved", status=status.HTTP_200_OK)
     requestid, state = get_observation_status(requestid=requestid, token=token)
     if state == 'PENDING':
-        return Response("Not observed yet", status=status.HTTP_403_FORBIDDEN)
+        return Response("Not observed yet", status=status.HTTP_100_CONTINUE)
     elif not requestid:
         return Response("Problem with the status", status=status.HTTP_403_FORBIDDEN)
     else:

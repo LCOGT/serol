@@ -207,7 +207,7 @@ def best_observing_time(obs):
     now = datetime.utcnow()
     dt = timedelta(seconds=4800)
     day= timedelta(days=1)
-    times = [Time(now) + day*i for i in range(0,10)]
+    times = [Time(now) + day*i for i in range(0,30)]
     for time in times:
         twilight = obs.twilight_evening_astronomical(time=time, which='next')
         if obs.moon_altaz(twilight).alt.value > 30:
@@ -215,7 +215,6 @@ def best_observing_time(obs):
             if obs.moon_altaz(twilight +dt).alt.value > 30:
                 return (twilight +dt).to_value('datetime')
             else:
-                continue
                 return (twilight+dt +timedelta(days=4)).to_value('datetime')
-        else:
-            continue
+
+    return False

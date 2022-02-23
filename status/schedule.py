@@ -146,6 +146,8 @@ def auto_schedule(proposal):
         loc = EarthLocation(lat=SITES[site]['lat'], lon=SITES[site]['lon'], height=SITES[site]['alt'])
         obs = Observer(location=loc)
         date = best_observing_time(obs)
+        if not date:
+            continue
         coords,time, alt = moon_coords(date,site)
         start = time.datetime - timedelta(seconds=60)
         end = time.datetime + timedelta(seconds=180)

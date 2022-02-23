@@ -87,11 +87,11 @@ function get_qs(n) {
 function update_status(progressid, requestid) {
   $.getJSON('/api/status/'+progressid+'/'+requestid+'/')
     .done(function(data){
+      console.log("DONE "+requestid);
       window.location.replace(redirect_url);
-      console.log("DONE"+data);
     })
     .fail(function(data){
-      console.log("FAIL "+data);
+      console.log("FAIL "+requestid);
     });
     return;
 }
@@ -260,8 +260,8 @@ function submit_to_serol(data, redirect_url){
 			success: function(data){
         $('#accept_button').attr('href',redirect_url);
         $('#accept_button').show();
-				$('.modal-title').html("Success!");
-				$('.modal-body').html("<p>Your image will be ready in a few days.</p>");
+				$('.modal-card-title').html("Success!");
+				$('.media-content').html("<p>Your image will be ready in a few days.</p>");
         $('#submit_button').hide();
         $('#submit_button').prop("disabled", true);
         $('#close_button').prop("disabled", true);

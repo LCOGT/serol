@@ -159,6 +159,8 @@ $(document).ready(function(){
 
   $("#submit_button").on("click", function(){
     $(this).prop("disabled", true);
+    $('#target_desc_modal').hide()
+    $('#loading').show();
     console.log('Button pressed')
     var tid = $(this).data('tid');
     var start = new Date();
@@ -272,6 +274,12 @@ $(document).ready(function(){
         </p>
       </figure>
       <div class="media-content" id="target_desc_modal">
+      </div>
+      <div class="media-content" id="loading" style="display:none;">
+        <div class="fa-3x">
+           <i class="fas fa-spinner fa-spin"></i>
+         </div>
+         Sending your request to Serol...
       </div>
       </article>
     </section>
