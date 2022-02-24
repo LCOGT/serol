@@ -97,6 +97,7 @@ function update_status(progressid, requestid) {
 }
 
 function aggregate_status(rdata, progressid, token){
+  console.log("Checking aggregate")
   if (rdata['state'] == 'COMPLETED' || rdata['state'] == 'PENDING'){
       var complete = Array()
       var pending = Array()
@@ -115,7 +116,7 @@ function aggregate_status(rdata, progressid, token){
           status_userrequest(req, token);
         })
     } else {
-      update_status(progressid, rdata['requests'][0]['id']);
+      status_userrequest(rdata['requests'][0]['id'], token)
     }
   }
 }

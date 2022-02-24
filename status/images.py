@@ -27,7 +27,6 @@ def lco_api_call(url, token):
     except requests.exceptions.Timeout:
         msg = "Observing portal API timed out"
         logger.error(msg)
-        params['error_msg'] = msg
         return False, msg
 
     if r.status_code in [200,201]:
