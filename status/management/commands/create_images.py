@@ -17,13 +17,13 @@ class Command(BaseCommand):
     help = 'Update requests and call pipeline'
 
     def add_arguments(self, parser):
-        parser.add_argument('--request_id', '-rid', help="[Optional] Request ID to update")
+        parser.add_argument('--requestgroup', '-rid', help="[Optional] Request group to update")
 
     def handle(self, *args, **options):
         success = []
         self.stdout.write(self.style.WARNING("Running image pipeline - {}".format(datetime.now().isoformat())))
-        if options['request_id']:
-            pgs = Progress.objects.filter(requestid=json.dumps([int(options['request_id'])])
+        if options['requestgroup']:
+            pgs = Progress.objects.filter(requestgroup=options['requestgroup'])
             self.stdout.write("Looking for Progress matching ID={}".format(options['request_id']))
         else:
             # Pick up any successful observation with no image
