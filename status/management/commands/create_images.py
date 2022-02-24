@@ -1,5 +1,6 @@
 from datetime import datetime
 from tempfile import NamedTemporaryFile
+import json
 
 from django.conf import settings
 from django.core.files import File
@@ -24,18 +25,23 @@ class Command(BaseCommand):
         self.stdout.write(self.style.WARNING("Running image pipeline - {}".format(datetime.now().isoformat())))
         if options['requestgroup']:
             pgs = Progress.objects.filter(requestgroup=options['requestgroup'])
-            self.stdout.write("Looking for Progress matching ID={}".format(options['request_id']))
+            self.stdout.write("Looking for Progress matching ID={}".format(options['requestgroup']))
         else:
             # Pick up any successful observation with no image
             pgs = Progress.objects.filter(status__in=('Observed','Identify','Analyse','Investigate','Summary'), image_status=0)
             self.stdout.write("Processing {} observations".format(len(pgs)))
         for pg in pgs:
-            self.stdout.write("Download and make JPEG  - ReqID {}  ProgID {}".format(pg.requestid, pg.id))
+            try:
+                rid = str(json.loads(pg.requestid)[0])
+            except:
+                self.stderr.write(f"Progress id {pg.id} has no requests")
+                continue
+            self.stdout.write("Download and make JPEG  - ReqID {}  ProgID {}".format(rid, pg.id))
             with NamedTemporaryFile() as tmpfile:
-                image_status = make_request_image(filename=tmpfile.name, request_id=pg.requestid, category=pg.challenge.avm_code, targetname=pg.target, frameid=pg.frameids)
-                self.stdout.write("Processed {}: image of {}, status {}".format(pg.requestid, pg.target, image_status))
+                image_status = make_request_image(filename=tmpfile.name, request_id=rid, category=pg.challenge.avm_code, targetname=pg.target, frameid=pg.frameids)
+                self.stdout.write("Processed {}: image of {}, status {}".format(rid, pg.target, image_status))
                 if image_status > 0:
-                    name = "{}-{}.jpg".format(pg.target.replace(" ",""), pg.requestid)
+                    name = "{}-{}.jpg".format(pg.target.replace(" ",""), rid)
                     name = get_valid_filename(name)
                     pg.image_file.save(name, File(tmpfile), save=True)
                     pg.image_status = image_status
