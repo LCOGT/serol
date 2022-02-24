@@ -22,14 +22,14 @@ class Command(BaseCommand):
         self.stdout.write(self.style.WARNING("Running requests update - {}".format(datetime.now().isoformat())))
         if options['request_id']:
             self.stdout.write("Looking for Progress matching ID={}".format(options['request_id']))
-            pgs = Progress.objects.filter(requestid=json.dumps(int(options['request_id'])))
+            pgs = Progress.objects.filter(requestid=json.dumps([int(options['request_id'])]))
         else:
             pgs = Progress.objects.filter(status='Submitted')
             self.stdout.write("Found {} Progress entries".format(pgs.count()))
         for pg in pgs:
             self.stdout.write("Updating {}".format(pg.requestid))
             for rid in json.loads(pg.requestid):
-                resp = update_status(rid, token=settings.PORTAL_TOKEN, archive_token=settings.ARCHIVE_TOKEN)
+                resp = update_status(progressid=pg.id, requestid=rid, token=settings.PORTAL_TOKEN, archive_token=settings.ARCHIVE_TOKEN)
             if status.is_success(resp.status_code):
                 self.stdout.write(self.style.SUCCESS("Update of {} successful".format(pg.requestid)))
             else:

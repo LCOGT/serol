@@ -23,7 +23,7 @@ class Command(BaseCommand):
         success = []
         self.stdout.write(self.style.WARNING("Running image pipeline - {}".format(datetime.now().isoformat())))
         if options['request_id']:
-            pgs = Progress.objects.filter(requestid=options['request_id'])
+            pgs = Progress.objects.filter(requestid=json.dumps([int(options['request_id'])])
             self.stdout.write("Looking for Progress matching ID={}".format(options['request_id']))
         else:
             # Pick up any successful observation with no image
