@@ -101,6 +101,8 @@ class Progress(models.Model):
     def retry(self):
         self.requestid = ''
         self.frameids = ''
+        self.requestgroup = None
+        self.image_file = None
         pass
 
     @transition(field=status, source=['Submitted'], target='Observed')

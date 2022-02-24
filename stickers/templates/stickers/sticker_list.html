@@ -30,7 +30,7 @@
           <div class="column is-one-third">
             <figure class="image image-with-sticker">
               {% if challenge.complete %}
-              <a href="{% url 'summary' challenge.challenge.id %}">
+              <a href="{% url 'challenge' challenge.challenge.id %}">
                 <img src="{% if challenge.image %}{{ challenge.image.url|safe }}{% else %}{% static 'explorer/images/placeholder2.png' %}{% endif %}" />
                 <img src="{{challenge.sticker}}" class="sticker-over-image" />
               </a>
