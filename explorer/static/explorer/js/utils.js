@@ -102,13 +102,12 @@ function aggregate_status(rdata, progressid, token){
       var complete = Array()
       var pending = Array()
       rdata['requests'].forEach((req) => {
-        if (req['state']['COMPLETED']){
+        if (req['state']=='COMPLETED'){
           complete.push(req['id'])
-        } else if (req['state']['PENDING']){
+        } else if (req['state']=='PENDING'){
           pending.push(req['id'])
         }
       });
-
       if (complete.length > 0){
         update_status(progressid, complete[0]);
       } else if (pending.length > 0){
