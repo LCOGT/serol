@@ -124,7 +124,9 @@ class NextChallengeView(LoginRequiredMixin, View):
                 chal_id = check_missing_challenge(user=self.request.user, mission=kwargs['mission_num'])
             if chal_id:
                 return HttpResponseRedirect(reverse('challenge', kwargs={'pk':chal_id}))
-        except ObjectDoesNotExist:
+            else:
+                logger.error("Next challenge returned no challenges")
+        except ObjectDoesNotExist as e:
             if str(kwargs['mission_num']) in ['1', '2', '3']:
                 logger.debug('User accessing Mission {} for 1st time'.format(kwargs['mission_num']))
                 chal = Challenge.objects.get(number=1,mission__id=kwargs['mission_num'])
@@ -282,7 +284,7 @@ def target_icon(avmcode):
 
 def check_missing_challenge(user, mission):
     chals = Challenge.objects.filter(mission__number=mission, active=True).order_by('number').values_list('number', flat=True)
-    pgs = Progress.objects.filter(user=user, challenge__mission__number=mission, challenge__active=True).values_list('challenge__number',flat=True).order_by('challenge__number')
+    pgs = Progress.objects.filter(user=user, challenge__mission__number=mission, challenge__active=True, status="Summary").values_list('challenge__number',flat=True).order_by('challenge__number')
     missing = list(set(chals).difference(set(pgs)))
     if missing:
         return Challenge.objects.get(number=missing[0], mission__number=mission).id
