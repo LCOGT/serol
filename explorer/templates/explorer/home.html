@@ -37,6 +37,20 @@ var serolStatus = {
     {% endif %}
 };
 serolanim = lottie.loadAnimation(serolStatus);
+
+var serolAnim = {
+    container: document.getElementById('serol-space'),
+    renderer: 'svg',
+    loop: true,
+    autoplay: true,
+    autoloadSegments: true,
+    rendererSettings: {
+        progressiveLoad:false
+    },
+    path: '{% static "explorer/js/serolrocket.json" %}'
+};
+serolanim = lottie.loadAnimation(serolAnim);
+
 </script>
 
 {% endblock %}
@@ -57,9 +71,9 @@ serolanim = lottie.loadAnimation(serolStatus);
         {% endif %}
     </div>
     <div class="column">
-      <figure class="image">
-      <img src="{% static 'explorer/images/rocket-scene-colour.png' %}" alt="Serol in a rocket" class="img-fluid" />
-      </figure>
+        <div  style="background-image:url('{% static 'explorer/images/rocket-scene-colour1-background-02.png' %}');height:100%;">
+        <div id="serol-space"></div>
+        </div>
     </div>
   </div>
 </div>
