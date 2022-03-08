@@ -5,7 +5,7 @@ Welcome to Serol's Cosmic Explorers
 
 Please click on the link below to confirm your registration:
 
-https://{{ site }}{% url 'registration_activate' activation_key=activation_key %}
+https://{{ site }}{% url 'django_registration_activate' activation_key=activation_key %}
 
 See you soon,
 
