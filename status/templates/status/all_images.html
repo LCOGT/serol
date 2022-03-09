@@ -1,6 +1,6 @@
 {% extends 'explorer/base.html' %}
 
-{% load static %}
+{% load static thumbnail %}
 
 {% block title %}All Images{% endblock %}
 
@@ -13,7 +13,8 @@
         <div class="column is-one-quarter">
           <figure class="image">
             {% if p.image_file.name %}
-            <img src="{{p.image_file.url}}" />
+            {% thumbnail  p.image_file "sticker" crop as im %}
+                <img src="{{ im.url }}" />
             {% else %}
             <img src="{% static 'explorer/images/placeholder2.png' %}" />
             {% endif %}

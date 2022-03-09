@@ -24,3 +24,4 @@ boto3
 django-storages
 django-user-messages==0.8.0
 django-widget-tweaks==1.4.12
+easy-thumbnails==2.8.1

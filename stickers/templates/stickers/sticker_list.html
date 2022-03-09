@@ -1,6 +1,6 @@
 {% extends 'explorer/base.html' %}
 
-{% load i18n static explorer_utils %}
+{% load i18n static explorer_utils thumbnail %}
 
 {% block title %}{% trans "Your Stickers" %}{% endblock %}
 {% block ribbon %}{% endblock %}
@@ -31,8 +31,13 @@
             <figure class="image image-with-sticker">
               {% if challenge.complete %}
               <a href="{% url 'challenge' challenge.challenge.id %}">
-                <img src="{% if challenge.image %}{{ challenge.image.url|safe }}{% else %}{% static 'explorer/images/placeholder2.png' %}{% endif %}" />
-                <img src="{{challenge.sticker}}" class="sticker-over-image" />
+                {% if challenge.image %}
+                {% thumbnail  challenge.image "sticker" crop as im %}
+                    <img src="{{ im.url }}" />
+                {% else %}
+                  <img src="{% static 'explorer/images/placeholder2.png' %}" />
+                {% endif %}
+                <img src="{{ challenge.sticker }}" class="sticker-over-image" />
               </a>
               {% else %}
               <img src="{% static 'explorer/images/placeholder2.png' %}" />

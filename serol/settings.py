@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'storages',
+    'easy_thumbnails',
 ]
 
 MIDDLEWARE = [
@@ -144,6 +145,7 @@ if ast.literal_eval(os.environ.get('USE_S3', 'False')):
     PUBLIC_MEDIA_LOCATION = 'media'
     MEDIA_URL = f'https://s3-{AWS_S3_REGION_NAME}.amazonaws.com/{AWS_STORAGE_BUCKET_NAME}/{PUBLIC_MEDIA_LOCATION}/'
     DEFAULT_FILE_STORAGE = 'serol.storage_backends.PublicMediaStorage'
+    THUMBNAIL_DEFAULT_STORAGE = DEFAULT_FILE_STORAGE
 
 DATABASES = {
     'default': {
@@ -159,7 +161,7 @@ DATABASES = {
 THUMBNAIL_ALIASES = {
     '': {
         'medium': {'size': (900, 600), 'crop': False},
-        'sticker' : {'size' : (260,160), 'crop': False}
+        'sticker' : {'size' : (500,300), 'crop': False}
     },
 }
 
