@@ -1,0 +1,44 @@
+{% extends 'explorer/base.html' %}
+
+{% load widget_tweaks %}
+
+{% block title %}Send Feedback to Serol{% endblock %}
+
+{% block main-body %}
+
+<h1>Send Feedback to Serol</h1>
+<form method="post">
+    {% csrf_token %}
+<div class="field">
+  <label class="label">Email</label>
+  <div class="control has-icons-left has-icons-right">
+    {{form.from_email|add_class:'input'}}
+    <span class="icon is-small is-left">
+      <i class="fas fa-envelope"></i>
+    </span>
+  </div>
+</div>
+
+<div class="field">
+  <label class="label">Subject</label>
+  <div class="control">
+    {{form.subject|add_class:'input'}}
+  </div>
+</div>
+
+<div class="field">
+  <label class="label">Message</label>
+  <div class="control">
+    {{form.message|add_class:'input textarea'}}
+  </div>
+</div>
+
+
+
+  <div class="control">
+    <button class="button is-link" type="submit">Send</button>
+  </div>
+
+</form>
+
+{% endblock %}

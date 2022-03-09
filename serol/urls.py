@@ -8,6 +8,7 @@ from django.contrib.flatpages.views import flatpage
 from django.contrib.staticfiles import views
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
+
 from rest_framework.authtoken.views import obtain_auth_token
 from django_registration.backends.activation.views import RegistrationView, ActivationView
 
@@ -18,9 +19,11 @@ from explorer.views import MissionView, MissionListView, ChallengeRedirectView, 
 from explorer.serializers import FactsView
 from stickers.views import StickerView
 from highscore.views import HighScoreView, AddHighScoreView
+from notify.views import feedback_send
 
 
 urlpatterns = [
+    path('feedback/', feedback_send, name='feedback'),
     path('demo/', TemplateView.as_view(template_name='explorer/demo.html')),
     path('about/', flatpage, {'url': '/about/'}, name='about'),
     path('videos/', flatpage, {'url': '/videos/'}, name='videos'),
@@ -69,6 +72,10 @@ urlpatterns = [
     #     TemplateView.as_view(
     #         template_name='django_registration/registration_complete.html'),
     #         name='django_registration_complete'),
+
+    path('accounts/password_reset/', auth_views.PasswordResetView.as_view(
+      html_email_template_name='registration/password_reset_email.html'
+    )),
     path('accounts/',
         include('django_registration.backends.activation.urls')
     ),

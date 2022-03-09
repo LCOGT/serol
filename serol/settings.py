@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django.contrib.flatpages',
+    'widget_tweaks',
     'pagedown',
     'markdown_deux',
     'corsheaders',
@@ -173,6 +174,8 @@ EMAIL_PORT          =  587
 EMAIL_FROM  = 'Serol <portal@lco.global>'
 EMAIL_HOST_USER = os.environ.get('EMAIL_USERNAME', '')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD', '')
+
+EMAIL_COMMENTS_TO = 'edu-feedback@lco.global'
 
 MARKDOWN_DEUX_STYLES = {
     "default": {

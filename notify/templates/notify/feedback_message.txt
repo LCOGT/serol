@@ -1,0 +1,5 @@
+{% autoescape off %}
+Feedback from Serol's Cosmic Explorers User - {{email}}
+
+{{message}}
+{% endautoescape %}
