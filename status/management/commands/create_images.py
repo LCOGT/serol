@@ -6,6 +6,7 @@ from django.conf import settings
 from django.core.files import File
 from django.core.management.base import BaseCommand, CommandError
 from django.utils.text import get_valid_filename
+from user_messages import api
 
 from status.images import make_request_image
 from status.views import update_status
@@ -51,5 +52,6 @@ class Command(BaseCommand):
                     pg.save()
                     success.append(pg)
                     self.stdout.write(self.style.SUCCESS("Successfully created image for {}".format(pg.id)))
+                    api.success(pg.user, 'You have an image ready')
             # Email all successfully completed progresses
             send_notifications(success)

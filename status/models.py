@@ -75,7 +75,6 @@ class Progress(models.Model):
 
     @property
     def target_name(self):
-        print(self.challenge.target)
         return self.challenge.target
 
     def __str__(self):

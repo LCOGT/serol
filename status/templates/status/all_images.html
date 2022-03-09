@@ -1,0 +1,46 @@
+{% extends 'explorer/base.html' %}
+
+{% load static %}
+
+{% block title %}All Images{% endblock %}
+
+{% block main-content %}
+<section class="section">
+  <div class="container">
+      <h1>Images by all users</h1>
+      <div class="columns is-multiline">
+        {% for p in object_list %}
+        <div class="column is-one-quarter">
+          <figure class="image">
+            {% if p.image_file.name %}
+            <img src="{{p.image_file.url}}" />
+            {% else %}
+            <img src="{% static 'explorer/images/placeholder2.png' %}" />
+            {% endif %}
+            <figcaption>
+              {{p.target}} from {{p.challenge}} by {{p.user}}
+            </figcaption>
+          </figure>
+        </div>
+        {% endfor %}
+      </div>
+      <div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+    </div>
+</section>
+{% endblock %}

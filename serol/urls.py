@@ -12,7 +12,7 @@ from django.views.generic import TemplateView
 from rest_framework.authtoken.views import obtain_auth_token
 from django_registration.backends.activation.views import RegistrationView, ActivationView
 
-from status.views import ScheduleView, StatusView, SerolUserForm
+from status.views import ScheduleView, StatusView, SerolUserForm, AllImages
 from explorer.views import MissionView, MissionListView, ChallengeRedirectView, \
     ChallengeView, AnalyseView, ChallengeSummary, ChallengeRetry, NextChallengeView, \
     MissionComplete, home, ChallengeRedo
@@ -51,6 +51,7 @@ urlpatterns = [
     path('challenge/<int:pk>/retry/', ChallengeRetry.as_view(), name="retry"),
     path('challenge/<int:pk>/', ChallengeRedirectView.as_view(), name="challenge"),
     path('stickers/', StickerView.as_view(), name='stickers'),
+    path('images/',AllImages.as_view(), name='allimages'),
     path('api/status/<int:progressid>/<int:requestid>/', StatusView.as_view(), name="status"),
     path('api/facts/',FactsView.as_view(), name="facts"),
     path('api/schedule/', ScheduleView.as_view(), name='schedule'),

@@ -8,8 +8,8 @@
 {% block main-content %}
 <section class="section">
 <div class="container">
-    <h1 class="bg-blur">{% trans "Stickers you've unlocked" %}</h1>
-    <p  class="bg-blur">{% trans "Below are the challenge stickers you have unlocked. Click each of them to see your pictures."%}</p>
+    <h1>{% trans "Stickers you've unlocked" %}</h1>
+    <p>{% trans "Below are the challenge stickers you have unlocked. Click each of them to see your pictures."%}</p>
   {% for progress in object_list %}
     <div class="{% cycle 'green-bg' 'red-bg' 'blue-bg' %} mt-4 mb-4 p-6 rounded-corners">
       <div class="columns">

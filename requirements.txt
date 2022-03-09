@@ -22,3 +22,5 @@ fits2image>=0.4.0
 fits_align>=0.4.3
 boto3
 django-storages
+django-user-messages==0.8.0
+django-widget-tweaks==1.4.12

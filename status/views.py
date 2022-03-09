@@ -1,7 +1,8 @@
-from django.shortcuts import render
-from django.conf import settings
 import time
 import json
+from django.shortcuts import render
+from django.conf import settings
+from django.views.generic import ListView
 
 from django_registration.forms import RegistrationForm
 from rest_framework.decorators import api_view
@@ -85,6 +86,14 @@ class StatusView(APIView):
     def get(self, request, progressid, requestid, format=None):
         token, archive_token = check_token(request.user)
         return update_status(progressid=progressid, requestid=requestid, token=token, archive_token=archive_token)
+
+class AllImages(ListView):
+    template_name = "status/all_images.html"
+    model = Progress
+    paginate_by = 12
+
+    def get_queryset(self):
+        return super().get_queryset().filter(image_file__isnull=False).order_by('-last_update')
 
 
 def update_status(progressid, requestid, token, archive_token):

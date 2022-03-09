@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django.contrib.flatpages',
     'widget_tweaks',
+    'user_messages',
     'pagedown',
     'markdown_deux',
     'corsheaders',
@@ -80,7 +81,7 @@ TEMPLATES = [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+                'user_messages.context_processors.messages',
             ],
         },
     },
@@ -220,7 +221,7 @@ REST_FRAMEWORK = {
     )
 }
 
-
+SILENCED_SYSTEM_CHECKS = ["admin.E404",]
 
 PORTAL_API_URL     = 'https://observe.lco.global/api/'
 PORTAL_REQUEST_API = PORTAL_API_URL + 'requests/'
@@ -245,7 +246,7 @@ DEFAULT_PROPOSAL = os.environ.get('DEFAULT_PROPOSAL','LCOEPO2018B-002')
 COLOUR_TEMPLATE = {'rp':'1','V':'2','B':'3'}
 
 
-LOGIN_URL = "/accounts/login/"
+LOGIN_URL = "/login/"
 LOGIN_REDIRECT_URL = "/"
 
 PROGRESS_OPTIONS =  (
