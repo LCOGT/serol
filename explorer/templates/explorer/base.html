@@ -72,7 +72,7 @@
       <div class="navbar-item">
         <a class="navbar-link is-arrowless" id="message-alert">
           {% if messages %}
-          <i class="fad fa-bell-on" style="--fa-primary-color: orange;"></i>
+          <i class="fad fa-bell-on" style="--fa-primary-color: darkorange;--fa-secondary-color: green;"></i>
           {% else %}
           <i class="far fa-bell"></i>
           {% endif %}
@@ -150,12 +150,12 @@
     <script>
     function clear_messages() {
       $('.messages').hide();
-      $.getJSON('/api/messages/remove/')
-        .done(function(data){
+      $.getJSON('/api/messages/remove/?callback=serol', function(data){
           console.log("DONE ");
+          $('#message-alert').html('<i class="far fa-bell"></i>')
         })
         .fail(function(data){
-          console.log("FAIL ");
+          console.log("FAIL ", data);
         });
         return;
     }

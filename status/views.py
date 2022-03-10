@@ -90,11 +90,16 @@ class StatusView(APIView):
         return update_status(progressid=progressid, requestid=requestid, token=token, archive_token=archive_token)
 
 class RemoveMessages(APIView):
+    renderer_classes = (JSONRenderer, BrowsableAPIRenderer)
+
     def get(self, request):
-        msgs = api.get_messages(user=request.user)
-        for m in msgs:
-            m.delete()
-        return Response("Success", status=status.HTTP_200_OK)
+        try:
+            msgs = api.get_messages(user=request.user)
+            for m in msgs:
+                m.delete()
+        except TypeError:
+            return Response('No user supplied', status=status.HTTP_400_BAD_REQUEST)
+        return Response('Success', status=status.HTTP_200_OK)
 
 class AllImages(LoginRequiredMixin, UserPassesTestMixin, ListView):
     template_name = "status/all_images.html"
