@@ -70,6 +70,15 @@
 
     <div class="navbar-end">
       <div class="navbar-item">
+        <a class="navbar-link is-arrowless" id="message-alert">
+          {% if messages %}
+          <i class="fad fa-bell-on" style="--fa-primary-color: orange;"></i>
+          {% else %}
+          <i class="far fa-bell"></i>
+          {% endif %}
+        </a>
+      </div>
+      <div class="navbar-item">
         <div class="buttons">
 
           {% if request.user.is_authenticated %}
@@ -87,12 +96,14 @@
         {% endblock%}
       </header>
 
+      <div class="messages" style="display:none;">
         {% for message in messages %}
-        <div class="notification is-warning is-light">
-         <button class="delete" onclick="this.parentElement.style.display='none';"></button>
-         {{ message }}
+        <div class="notification is-{{ message.tags }} is-light">
+         <button class="delete"></button>
+         {{ message|safe }}
         </div>
         {% endfor %}
+      </div>
 
       {% block main-content %}
       <section class="section">
@@ -136,6 +147,26 @@
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" ></script>
     <script src="{% static "explorer/js/auth.js" %}"  type="text/javascript" ></script>
     <script src="{% static "explorer/js/lottie2.js" %}"  type="text/javascript" ></script>
+    <script>
+    function clear_messages() {
+      $('.messages').hide();
+      $.getJSON('/api/messages/remove/')
+        .done(function(data){
+          console.log("DONE ");
+        })
+        .fail(function(data){
+          console.log("FAIL ");
+        });
+        return;
+    }
+
+    $(document).ready(function(){
+      $('#message-alert').on('click', function(){
+        $('.messages').toggle()
+      })
+      $('.delete').on('click', clear_messages)
+    });
+    </script>
 
     {% block script-content %}
     {% endblock %}

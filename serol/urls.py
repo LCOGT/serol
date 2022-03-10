@@ -12,7 +12,7 @@ from django.views.generic import TemplateView
 from rest_framework.authtoken.views import obtain_auth_token
 from django_registration.backends.activation.views import RegistrationView, ActivationView
 
-from status.views import ScheduleView, StatusView, SerolUserForm, AllImages
+from status.views import ScheduleView, StatusView, SerolUserForm, AllImages, RemoveMessages
 from explorer.views import MissionView, MissionListView, ChallengeRedirectView, \
     ChallengeView, AnalyseView, ChallengeSummary, ChallengeRetry, NextChallengeView, \
     MissionComplete, home, ChallengeRedo
@@ -57,6 +57,7 @@ urlpatterns = [
     path('api/schedule/', ScheduleView.as_view(), name='schedule'),
     path('api/highscore/add/', AddHighScoreView.as_view() , name='highscore-add'),
     path('api/highscore/leaders/', HighScoreView.as_view()),
+    path('api/messages/remove/', RemoveMessages.as_view(), name="remove-messages"),
     path('api-auth-token/', obtain_auth_token),
     path('admin/', admin.site.urls),
     path('login/', LoginView.as_view(template_name='explorer/login.html'), name='auth_login'),

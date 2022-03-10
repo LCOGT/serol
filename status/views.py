@@ -13,6 +13,7 @@ from rest_framework.reverse import reverse
 from rest_framework.views import APIView
 from rest_framework_jsonp.renderers import JSONPRenderer
 from rest_framework import status, serializers
+from user_messages import api
 
 from status.models import Progress, User
 
@@ -87,6 +88,13 @@ class StatusView(APIView):
     def get(self, request, progressid, requestid, format=None):
         token, archive_token = check_token(request.user)
         return update_status(progressid=progressid, requestid=requestid, token=token, archive_token=archive_token)
+
+class RemoveMessages(APIView):
+    def get(self, request):
+        msgs = api.get_messages(user=request.user)
+        for m in msgs:
+            m.delete()
+        return Response("Success", status=status.HTTP_200_OK)
 
 class AllImages(LoginRequiredMixin, UserPassesTestMixin, ListView):
     template_name = "status/all_images.html"
