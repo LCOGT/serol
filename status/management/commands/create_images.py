@@ -55,7 +55,7 @@ class Command(BaseCommand):
                         success.append(pg)
                         self.stdout.write(self.style.SUCCESS("Successfully created image for {}".format(pg.id)))
                         url = reverse('challenge', kwargs={'pk':pg.challenge.id})
-                        api.success(pg.user, f'Your picture of <a href="{url}">{pg.target}</a> is ready')
+                        api.success(pg.user, f'Your picture of <a href="{url}">{pg.target}</a> is ready',deliver_once=False)
                         break
                     else:
                         self.stdout.write(self.style.ERROR("Image processing of {} FAILED".format(pg.id)))

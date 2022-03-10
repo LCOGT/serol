@@ -2,6 +2,8 @@ from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
 from rest_framework import status
 from datetime import datetime
+from django.urls import reverse
+from user_messages import api
 
 import logging
 import json
@@ -35,3 +37,8 @@ class Command(BaseCommand):
                     break
                 else:
                     self.stdout.write(self.style.ERROR("Update of {} failed - {}".format(pg.requestid, resp.data)))
+            # We don't update this object but the db behind the scenes, so refresh here
+            pg.refresh_from_db()
+            if pg.status == 'Failed':
+                url = reverse('challenge', kwargs={'pk':pg.challenge.id})
+                api.warning(pg.user, f'Your picture of <strong>{pg.target}</strong> failed. <a href="{url}">Why not try again</a>?', deliver_once=False)
