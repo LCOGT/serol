@@ -11,6 +11,7 @@ import json
 from status.images import make_request_image
 from status.views import update_status
 from status.models import Progress
+from notify.views import send_notifications
 
 logger = logging.getLogger(__name__)
 
@@ -40,5 +41,6 @@ class Command(BaseCommand):
             # We don't update this object but the db behind the scenes, so refresh here
             pg.refresh_from_db()
             if pg.status == 'Failed':
+                send_notifications([pg])
                 url = reverse('challenge', kwargs={'pk':pg.challenge.id})
                 api.warning(pg.user, f'Your picture of <strong>{pg.target}</strong> failed. <a href="{url}">Why not try again</a>?', deliver_once=False)

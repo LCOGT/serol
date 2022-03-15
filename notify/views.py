@@ -43,6 +43,7 @@ def render_email(progress):
     if progress.status == 'Failed':
         plaintext = get_template('notify/mail_message_failed.txt')
         subject = 'Message from Serol!'
+        htmltext = get_template('notify/mail_message_failed.html')
     else:
         plaintext = get_template('notify/mail_message.txt')
         subject = 'Update from Serol!'
@@ -58,7 +59,6 @@ def render_email(progress):
                 'challenge': progress.challenge.number,
                 'mission_name'  : progress.challenge.mission.name,
                 'url'      : reverse('challenge',kwargs={'pk':progress.challenge.pk}),
-                'image_url': progress.image_file.url,
                 'BASE_URL' : settings.BASE_URL
                  }
     logger.debug("Rendering email to {} for Prog ID {}".format(progress.user.username, progress.pk))

@@ -1,8 +1,8 @@
 Hi {{ username }}!
 
-I have a special message for you about your picture of {{ target }}.
+Oh no! It has not been possible to take your picture of {{ target }}.
 
-Please come to Serol's Cosmic Adventures for more information about Challenge {{ challenge }} from Mission {{ mission }}!
+Please visit to Serol's Cosmic Adventures and we'll get you a new picture for Challenge {{ challenge }} from Mission {{ mission_name }}.
 
 https://serol.lco.global{{ url }}
 

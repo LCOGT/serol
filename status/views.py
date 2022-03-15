@@ -132,7 +132,7 @@ def update_status(progressid, requestid, token, archive_token):
                 progress.frameids = frameid
                 progress.observed()
             progress.requestid = json.dumps([requestid])
-        elif state == 'WINDOW_EXPIRED' or state == 'CANCELED':
+        elif state == 'WINDOW_EXPIRED' or state == 'CANCELED' or state == 'FAILURE_LIMIT_REACHED':
             progress.failed()
         progress.save()
         return Response("Status updated", status=status.HTTP_200_OK)
