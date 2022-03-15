@@ -212,6 +212,9 @@ LOGGING = {
     },
 }
 
+if DEBUG:
+    LOGGING['loggers']['']['level'] = 'DEBUG'
+
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework_jsonp.renderers.JSONPRenderer',
