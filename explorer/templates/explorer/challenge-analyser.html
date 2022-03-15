@@ -6,6 +6,11 @@
 {% block script-content %}
 <script src="{% static 'explorer/js/utils.js' %}" ></script>
 <script>
+  {% if progress.challenge.action == 'moon' %}
+  var color = false;
+  {% else %}
+  var color = true;
+  {% endif %}
 var answers = Array();
 var requestid = {{ progress.requestid|safe}};
 var frameid = {{ progress.frameids }};
@@ -39,7 +44,7 @@ $(document).ready(function(){
   });
 
   if (typeof(my_image) == 'undefined'){
-    get_colour_image(localStorage.getItem('archive_token'), frameid, mode='analyser')
+    get_colour_image(localStorage.getItem('archive_token'), frameid, mode='analyser', color=color)
   }
 
   $("form").on('submit', function(e) {
