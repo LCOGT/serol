@@ -2,7 +2,7 @@ Hi {{ username }}!
 
 Oh no! It has not been possible to take your picture of {{ target }}.
 
-Please visit to Serol's Cosmic Adventures and we'll get you a new picture for Challenge {{ challenge }} from Mission {{ mission_name }}.
+Please visit to Serol's Cosmic Adventures and we'll get you a new picture for Challenge {{ challenge }} from Mission "{{ mission_name }}".
 
 https://serol.lco.global{{ url }}
 
