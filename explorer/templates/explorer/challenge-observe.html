@@ -119,6 +119,7 @@ function trim_text(text) {
 
 function show_modal(tid, title, desc, target_type){
   $('#submit_modal').show();
+  $('#try_again_button').hide()
   if (target_type=='moving' || target_type == 'moon'){
     $(".modal-card-title").html(title);
     $("#target_desc_modal").html(desc);
@@ -153,9 +154,10 @@ $(document).ready(function(){
   });
   {% endif %}
 
-  $("#cancel_button").on("click", function(){
+  $(".cancel_button").on("click", function(){
     $('#submit_modal').hide();
   });
+
 
   $("#submit_button").on("click", function(){
     $(this).prop("disabled", true);
@@ -264,7 +266,7 @@ $(document).ready(function(){
   <div class="modal-card">
     <header class="modal-card-head">
       <p class="modal-card-title"></p>
-      <button class="delete" aria-label="close" id="cancel_button"></button>
+      <button class="delete" aria-label="close" class="cancel_button"></button>
     </header>
     <section class="modal-card-body">
       <article class="media mb-5">
@@ -286,6 +288,7 @@ $(document).ready(function(){
     <footer class="modal-card-foot">
       <button class="button is-success"  id="submit_button">Take Picture!</button>
       <button class="button" id="accept_button" style="display:none;">Next <i class="far fa-chevron-right"></i></button>
+      <button class="button cancel_button" style="display:none;" id="try_again_button">Try another target</button>
     </footer>
   </div>
 </div>

@@ -244,6 +244,20 @@ function startEnd(date) {
   return end.toISOString();
 }
 
+function parseError(msg){
+  var htmltext ='';
+  $.each(msg, function(k, val){
+    $.each(val, function(i, v){
+        htmltext += v
+      })
+  })
+  if (htmltext.search('never visible') > 0){
+    return "Your target in not visible at any of the sites we have currently operational.<br/><br/>Please choose another target."
+  } else {
+    return htmltext
+  }
+}
+
 function submit_to_serol(data, redirect_url){
     var url = '/api/schedule/';
     console.log('In Submit to Serol')
@@ -252,17 +266,24 @@ function submit_to_serol(data, redirect_url){
 			method: 'POST',
 			cache: false,
 			data: data,
-			error: function(e){
-				console.log('Error: '+e[0]);
-				$('.modal-title').html("Error!");
-				$('.modal-body').html("<p>Sorry, there was a problem submitting your request. Please try later.</p>");
+			error: function(xhr, txt, err){
+
+        var tmp;
+        $('.modal-card-title').html("Oops!");
+        var e = JSON.parse(xhr.responseText)
+        tmp = parseError(e)
+        $('#loading').hide();
+        $('#target_desc_modal').show();
+        $('#target_desc_modal').html(tmp);
+        $('#try_again_button').show()
 			},
 			success: function(data){
         $('#accept_button').attr('href',redirect_url);
         $('#accept_button').show();
 				$('.modal-card-title').html("Success!");
-				$('.media-content').html("<p>Your image will be ready in a few days.</p>");
+				$('#target_desc_modal').html("<p>Your image will be ready in a few days.</p>");
         $('#submit_button').hide();
+        $('#try_again_button').hide();
         $('#submit_button').prop("disabled", true);
         $('#close_button').prop("disabled", true);
         window.setTimeout(function(){

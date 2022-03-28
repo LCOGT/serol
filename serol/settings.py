@@ -17,6 +17,8 @@ PRODUCTION = True if CURRENT_PATH.startswith('/var/www') else False
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEBUG= ast.literal_eval(os.environ.get('DEBUG', 'False'))
 
+SCHEDULE_DEBUG = False#True
+
 ALLOWED_HOSTS = ['*']
 
 ADMINS = [('Edward Gomez','egomez@lco.global')]
@@ -231,6 +233,7 @@ SILENCED_SYSTEM_CHECKS = ["admin.E404",]
 PORTAL_API_URL     = 'https://observe.lco.global/api/'
 PORTAL_REQUEST_API = PORTAL_API_URL + 'requests/'
 PORTAL_REQUESTGROUP_API = PORTAL_API_URL + 'requestgroups/'
+PORTAL_VALIDATE_API = PORTAL_REQUESTGROUP_API + 'validate/'
 PORTAL_TOKEN_URL   = PORTAL_API_URL + 'api-token-auth/'
 PORTAL_PROFILE_URL = PORTAL_API_URL + 'profile/'
 ARCHIVE_URL        = 'https://archive-api.lco.global/'

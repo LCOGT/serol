@@ -5,14 +5,13 @@ from urllib.parse import urljoin
 
 import requests
 from astropy.time import Time
-from astropy.coordinates import EarthLocation, get_moon, AltAz, get_sun
-from astroplan import Observer
+from astropy.coordinates import get_moon, AltAz, get_sun
 from django.conf import settings
 from django.contrib.sessions.backends.db import SessionStore
 
 from explorer.models import Body
 from .request_formats import request_format, request_format_moon, format_moving_object, \
-    SITES, best_observing_time, moon_coords, format_sidereal_object
+    best_observing_time, moon_coords, format_sidereal_object
 
 logger = logging.getLogger(__name__)
 
@@ -105,7 +104,11 @@ def submit_observation_request(params, token):
     Send the observation parameters and the authentication cookie to the Scheduler API
     '''
     headers = {'Authorization': 'Token {}'.format(token)}
-    url = settings.PORTAL_REQUESTGROUP_API
+    if settings.SCHEDULE_DEBUG:
+        url = settings.PORTAL_VALIDATE_API
+        logging.debug('Using Validate API')
+    else:
+        url = settings.PORTAL_REQUESTGROUP_API
     logging.debug('Submitting request')
     try:
         r = requests.post(url, json=params, headers=headers, timeout=20.0)
@@ -115,12 +118,12 @@ def submit_observation_request(params, token):
         params['error_msg'] = msg
         return False, msg, False
 
-    if r.status_code in [200,201]:
+    if r.status_code in [200,201] and not settings.SCHEDULE_DEBUG:
         logging.debug('Submitted request')
         return True, [req['id'] for req in r.json()['requests']], r.json()['id']
     else:
         logging.error("Could not send request: {}".format(r.content))
-        return False, r.content, False
+        return False, r.json()['requests'], False
 
 def process_observation_request(params):
     if params['target_type'] == 'moon':
@@ -142,13 +145,15 @@ def auto_schedule(proposal):
     siteset = ['ogg','coj','lsc','tfn']
     now = datetime.utcnow()
     params_list = []
+    dates = []
     for site in siteset:
-        loc = EarthLocation(lat=SITES[site]['lat'], lon=SITES[site]['lon'], height=SITES[site]['alt'])
-        obs = Observer(location=loc)
-        date = best_observing_time(obs)
-        if not date:
-            continue
-        coords,time, alt = moon_coords(date,site)
+        dates.extend(best_observing_time(site))
+    dates = sorted(dates, key=lambda element: (element[0], -element[1]))
+
+    # Choose top 4
+    for date in dates[0:4]:
+        time, alt, loc, site = date
+        coords = get_moon(time, loc)
         start = time.datetime - timedelta(seconds=60)
         end = time.datetime + timedelta(seconds=180)
         req_params = {'start':start,'end':end,'ra':coords.ra.value, 'dec':coords.dec.value, 'site':site}

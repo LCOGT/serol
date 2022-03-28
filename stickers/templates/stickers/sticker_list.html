@@ -35,7 +35,7 @@
                 {% thumbnail  challenge.image "sticker" crop as im %}
                     <img src="{{ im.url }}" />
                 {% else %}
-                  <img src="{% static 'explorer/images/placeholder2.png' %}" />
+                  <img src="{% static 'explorer/images/placeholder2.png' %}" class='tmp'/>
                 {% endif %}
                 <img src="{{ challenge.sticker }}" class="sticker-over-image" />
               </a>

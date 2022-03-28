@@ -27,7 +27,12 @@ class StickerView(LoginRequiredMixin, ListView):
             mission_challenges = challenges.filter(mission=m)
             for c in mission_challenges:
                 if c.count == 1:
-                    p = {'image': my_progress.filter(challenge=c)[0].image_file, 'complete':True}
+                    myp = my_progress.filter(challenge=c)[0]
+                    p = {'image': myp.image_file}
+                    if myp.status == 'Summary':
+                        p['complete'] = True
+                    else:
+                        p['complete'] = False
                 else:
                     p = {'image': None, 'complete':False}
                 p['sticker'] = Sticker.objects.get(challenge=c).notext

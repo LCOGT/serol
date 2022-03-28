@@ -3,6 +3,7 @@ from django.conf import settings
 from datetime import datetime, timedelta
 from astropy.time import Time
 from astropy.coordinates import EarthLocation, get_moon, AltAz, get_sun
+from astroplan import Observer
 
 from explorer.models import Body
 
@@ -195,26 +196,26 @@ def format_moving_object(tid):
 
     return target, filters
 
-def moon_coords(date, site):
+def moon_coords(time, site):
     loc = EarthLocation(lat=SITES[site]['lat'], lon=SITES[site]['lon'], height=SITES[site]['alt'])
-    time = Time(date)
     coords = get_moon(time,loc)
     altazframe = AltAz(obstime=time,location=loc)
     earth_coords = coords.transform_to(altazframe)
     return coords, time, earth_coords.alt.value
 
-def best_observing_time(obs):
+def best_observing_time(site):
+    loc = EarthLocation(lat=SITES[site]['lat'], lon=SITES[site]['lon'], height=SITES[site]['alt'])
+    obs = Observer(location=loc)
     now = datetime.utcnow()
-    dt = timedelta(seconds=4800)
     day= timedelta(days=1)
-    times = [Time(now) + day*i for i in range(0,30)]
+    times = [Time(now) + day*i for i in range(0,14)]
+    best_times = []
     for time in times:
         twilight = obs.twilight_evening_astronomical(time=time, which='next')
-        if obs.moon_altaz(twilight).alt.value > 30:
-            # Set observing time at 2 hours if
-            if obs.moon_altaz(twilight +dt).alt.value > 30:
-                return (twilight +dt).to_value('datetime')
-            else:
-                return (twilight+dt +timedelta(days=4)).to_value('datetime')
+        for dt in range(1,9):
+            t = timedelta(seconds=3600*dt)
+            alt = obs.moon_altaz(twilight +t ).alt.value
+            if alt > 30:
+                best_times.append((twilight + t, alt, obs.location, site))
 
-    return False
+    return best_times
