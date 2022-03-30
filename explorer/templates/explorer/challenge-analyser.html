@@ -84,7 +84,9 @@ function add_answers_to_form() {
 {% block challengename %}{{object.challenge.name}}{% endblock %}
 
 {% block main-body %}
-  <h1>{% trans "Analyse your image!" %}</h1>
+<h1>Mission {{object.mission.number}}: Challenge {{progress.challenge.number}} - {{progress.challenge.name}}</h1>
+
+  <h2>{% trans "Analyse your image of" %} {{progress.target}}</h2>
   <div class="columns">
     <div class="column is-two-thirds">
       <figure class="image">

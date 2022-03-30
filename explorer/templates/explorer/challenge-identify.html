@@ -60,9 +60,10 @@ $(document).ready(function(){
 {% block challengename %}{{object.challenge.name}}{% endblock %}
 
 {% block main-body %}
-    <h1>Identify</h1>
-      <p><i class="fas fa-stars"></i> {% trans "Click on your picture" %} <i class="fas fa-stars"></i> </p>
-    <p>{% trans "You asked for" %} <strong>{{progress.target}}</strong>.
+<h1>Mission {{object.mission.number}}: Challenge {{progress.challenge.number}} - {{progress.challenge.name}}</h1>
+
+    <h2>{% trans "Click on your picture " %}</h2>
+    <p>{% trans "You took a picture of " %} <strong>{{progress.target}}</strong>.
         {% trans "That's a" %} <strong>{{object.category}}</strong>.
       </p>
       <div class="columns is-multiline">

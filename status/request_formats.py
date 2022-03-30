@@ -215,7 +215,7 @@ def best_observing_time(site):
         for dt in range(1,9):
             t = timedelta(seconds=3600*dt)
             alt = obs.moon_altaz(twilight +t ).alt.value
-            if alt > 30:
+            if alt > 31:
                 best_times.append((twilight + t, alt, obs.location, site))
 
     return best_times

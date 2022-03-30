@@ -196,14 +196,17 @@ a.button:hover {
 }
 
 .identify-yes {
-  text-shadow: 0 2px 0 #14bfda, 0 4px 0 #1465da, 0 6px 0  #03be2b , 0 8px 0  #DAF7A6 , 0 10px 0 #FFC300, 0 12px 0 #b92e2e, 0px 12px 10px rgba(0,0,0,0.5);
-  /*text-shadow: 0 2px 0 #22da49, 0 4px 0 #21be42, 0 6px 0 #20cc45, 0 8px 0 #1cb73d, 0 10px 0 #17a034, 0 12px 0 #148e2e, 0px 12px 10px rgba(0,0,0,0.5);*/
-  color:#f00;
+  color:#fff;
+  background-color: #4EC712;
+  padding: 0 5px;
+  border-radius: 10px;
 }
 
 .identify-no {
-  text-shadow: 0 2px 0 #d84f4f, 0 4px 0 #d54646, 0 6px 0 #ce3333, 0 8px 0 #b92e2e, 0 10px 0 #912525, 0 12px 0 #721e1e, 0px 12px 10px rgba(0,0,0,0.5);
   color:#fff;
+  background-color: #b92e2e;
+  padding: 0 5px;
+  border-radius: 10px;
 }
 
 /* Identify Question buttons */

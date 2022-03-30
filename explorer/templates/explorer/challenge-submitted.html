@@ -6,7 +6,9 @@
 {% block mission-class %}{%endblock%}
 
 {% block main-body %}
-          <h2>{% trans "While you wait ...." %}</h2>
+<h1>Mission {{object.mission.number}}: Challenge {{progress.challenge.number}} - {{progress.challenge.name}}</h1>
+
+          <h2>{% trans "While you wait for your picture of" %} {{progress.target}}</h2>
           <div class="columns">
             <div class="column is-half">
               <div id="status-serol"></div>
