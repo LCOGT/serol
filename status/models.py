@@ -54,6 +54,7 @@ class Progress(models.Model):
     target = models.CharField(max_length=100)
     image_file = models.FileField(null=True, blank=True, upload_to='images')
     image_status = models.SmallIntegerField(default=0, choices=IMAGE_STATUS_OPTIONS)
+    badge_shown = models.BooleanField(default=False)
 
     def has_image(self):
         if self.image_file is not None:

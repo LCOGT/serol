@@ -12,7 +12,8 @@ from django.views.generic import TemplateView
 from rest_framework.authtoken.views import obtain_auth_token
 from django_registration.backends.activation.views import RegistrationView, ActivationView
 
-from status.views import ScheduleView, StatusView, SerolUserForm, AllImages, RemoveMessages
+from status.views import ScheduleView, StatusView, SerolUserForm, AllImages, RemoveMessages, \
+    UpdateBadge
 from explorer.views import MissionView, MissionListView, ChallengeRedirectView, \
     ChallengeView, AnalyseView, ChallengeSummary, ChallengeRetry, NextChallengeView, \
     MissionComplete, home, ChallengeRedo
@@ -53,6 +54,7 @@ urlpatterns = [
     path('stickers/', StickerView.as_view(), name='stickers'),
     path('images/',AllImages.as_view(), name='allimages'),
     path('api/status/<int:progressid>/<int:requestid>/', StatusView.as_view(), name="status"),
+    path('api/badge/<int:progressid>/', UpdateBadge.as_view(), name="badge-update"),
     path('api/facts/',FactsView.as_view(), name="facts"),
     path('api/schedule/', ScheduleView.as_view(), name='schedule'),
     path('api/highscore/add/', AddHighScoreView.as_view() , name='highscore-add'),

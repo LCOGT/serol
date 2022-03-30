@@ -4,7 +4,7 @@
 {% block title %}{{object.name}}{% endblock %}
 
 {% block main-body %}
-<div id="serol">
+<div id="serol" style="display:none;">
   <div class="columns is-centered">
     <div class="column is-half">
       <figure id="seroldemo" class="image"></figure>
@@ -82,8 +82,11 @@ var serolStatus = {
 };
 
 function showResults(){
-$("#serol").hide();
-$("#results").show();
+  $("#serol").hide();
+  $("#results").show();
+  $.getJSON( "{% url 'badge-update' progress.id %}", function( data ) {
+    console.log(data)
+  });
 }
 
 function switchSticker(){
@@ -92,11 +95,13 @@ function switchSticker(){
   setTimeout(showResults, 1500)
 }
 
+{% if not progress.badge_shown %}
 serolanim = lottie.loadAnimation(serolStatus);
 
 $(document).ready(function(){
     $("#results").hide();
     $("#sticker").hide();
+    $("#serol").show();
   serolanim.addEventListener("complete",switchSticker,false);
 
   if (typeof(my_image) == 'undefined'){
@@ -104,5 +109,6 @@ $(document).ready(function(){
   }
 
 });
+{% endif %}
 </script>
 {% endblock %}

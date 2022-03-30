@@ -101,6 +101,13 @@ class RemoveMessages(APIView):
             return Response('No user supplied', status=status.HTTP_400_BAD_REQUEST)
         return Response('Success', status=status.HTTP_200_OK)
 
+class UpdateBadge(APIView):
+    renderer_classes = (JSONRenderer, BrowsableAPIRenderer)
+
+    def get(self, request, progressid):
+        Progress.objects.filter(user=request.user, id=progressid).update(badge_shown=True)
+        return Response(f'Progress {progressid} badge status updated', status=status.HTTP_200_OK)
+
 class AllImages(LoginRequiredMixin, UserPassesTestMixin, ListView):
     template_name = "status/all_images.html"
     model = Progress

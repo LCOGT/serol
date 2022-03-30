@@ -172,8 +172,11 @@ class ChallengeSummary(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(ChallengeSummary, self).get_context_data(**kwargs)
 
+        user = self.request.user
+
         challenge = self.get_object()
-        progress = Progress.objects.get(challenge=challenge, user=self.request.user)
+        progress = Progress.objects.get(challenge=challenge, user=user)
+        
         stickers = PersonSticker.objects.filter(user=self.request.user, sticker__challenge=challenge)
         answers = UserAnswer.objects.filter(answer__question__challenge=self.get_object(), user=self.request.user)
         # if we are at the end of the mission make sure we mark it on the user profile
