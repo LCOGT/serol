@@ -13,7 +13,7 @@ from rest_framework.authtoken.views import obtain_auth_token
 from django_registration.backends.activation.views import RegistrationView, ActivationView
 
 from status.views import ScheduleView, StatusView, SerolUserForm, AllImages, RemoveMessages, \
-    UpdateBadge
+    UpdateBadge, ScheduleMoon
 from explorer.views import MissionView, MissionListView, ChallengeRedirectView, \
     ChallengeView, AnalyseView, ChallengeSummary, ChallengeRetry, NextChallengeView, \
     MissionComplete, home, ChallengeRedo
@@ -56,6 +56,7 @@ urlpatterns = [
     path('api/status/<int:progressid>/<int:requestid>/', StatusView.as_view(), name="status"),
     path('api/badge/<int:progressid>/', UpdateBadge.as_view(), name="badge-update"),
     path('api/facts/',FactsView.as_view(), name="facts"),
+    path('api/schedule/moon/', ScheduleMoon.as_view()),
     path('api/schedule/', ScheduleView.as_view(), name='schedule'),
     path('api/highscore/add/', AddHighScoreView.as_view() , name='highscore-add'),
     path('api/highscore/leaders/', HighScoreView.as_view()),

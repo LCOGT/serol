@@ -17,7 +17,8 @@ from user_messages import api
 
 from status.models import Progress, User
 
-from status.schedule import process_observation_request, get_observation_status, get_observation_frameid
+from status.schedule import process_observation_request, get_observation_status, \
+    get_observation_frameid, auto_schedule, submit_observation_request
 
 
 class SerolUserForm(RegistrationForm):
@@ -27,7 +28,7 @@ class SerolUserForm(RegistrationForm):
 
 class RequestSerializer(serializers.Serializer):
     """
-    POSTing parameters to the Valhalla api.
+    POSTing parameters to the Observing Portal api.
     """
     start = serializers.DateTimeField()
     end = serializers.DateTimeField()
@@ -40,6 +41,10 @@ class RequestSerializer(serializers.Serializer):
     token = serializers.CharField()
     challenge = serializers.IntegerField()
 
+class MoonSerializer(serializers.Serializer):
+    proposal = serializers.CharField(max_length=100)
+    token = serializers.CharField(max_length=100)
+    target_type = serializers.CharField(max_length=100)
 
 class ScheduleView(APIView):
     """
@@ -119,6 +124,15 @@ class AllImages(LoginRequiredMixin, UserPassesTestMixin, ListView):
     def get_queryset(self):
         return super().get_queryset().filter(image_file__isnull=False).order_by('-last_update')
 
+class ScheduleMoon(APIView):
+    renderer_classes = (JSONRenderer, BrowsableAPIRenderer)
+
+    def post(self, request):
+        serializer = MoonSerializer(data=request.data)
+        if serializer.is_valid():
+            resp_status, resp_msg, target, resp_group = process_observation_request(serializer.data)
+            return Response(resp_msg, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 def update_status(progressid, requestid, token, archive_token):
     try:
