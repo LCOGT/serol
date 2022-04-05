@@ -123,7 +123,7 @@ def submit_observation_request(params, token):
         return True, [req['id'] for req in r.json()['requests']], r.json()['id']
     else:
         logging.error("Could not send request: {}".format(r.content))
-        return False, r.json()['requests'], False
+        return False, r.json(), False
 
 def process_observation_request(params):
     if params['target_type'] == 'moon':

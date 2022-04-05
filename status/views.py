@@ -4,6 +4,8 @@ from django.shortcuts import render
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 
 from django_registration.forms import RegistrationForm
 from rest_framework.decorators import api_view
@@ -43,7 +45,6 @@ class RequestSerializer(serializers.Serializer):
 
 class MoonSerializer(serializers.Serializer):
     proposal = serializers.CharField(max_length=100)
-    token = serializers.CharField(max_length=100)
     target_type = serializers.CharField(max_length=100)
 
 class ScheduleView(APIView):
@@ -124,13 +125,21 @@ class AllImages(LoginRequiredMixin, UserPassesTestMixin, ListView):
     def get_queryset(self):
         return super().get_queryset().filter(image_file__isnull=False).order_by('-last_update')
 
+@method_decorator(csrf_exempt, name='dispatch')
 class ScheduleMoon(APIView):
     renderer_classes = (JSONRenderer, BrowsableAPIRenderer)
 
     def post(self, request):
         serializer = MoonSerializer(data=request.data)
         if serializer.is_valid():
-            resp_status, resp_msg, target, resp_group = process_observation_request(serializer.data)
+            if not request.META.get('HTTP_AUTHORIZATION',None):
+                return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
+            data = {
+            'target_type'   : serializer.data['target_type'],
+            'proposal'      : serializer.data['proposal'],
+            'token'         : request.META['HTTP_AUTHORIZATION'].split(' ')[1]
+            }
+            resp_status, resp_msg, target, resp_group = process_observation_request(data)
             return Response(resp_msg, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
