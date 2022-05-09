@@ -193,6 +193,7 @@ def make_request_image(filename, request_id, targetname, category=None, name=Non
         return image_status
 
     logger.debug("{} files downloaded".format(num_files))
+    image_status = 1
     if category == '1.1':
         logger.debug("Processing planet")
         r = planet_process(infile=img_list[0], outfile=filename, planet=targetname)
@@ -200,7 +201,11 @@ def make_request_image(filename, request_id, targetname, category=None, name=Non
     else:
         if len(img_list) == 3:
             logger.debug('Reprojecting {} files'.format(len(img_list)))
-            img_list = reproject_files(img_list[0], img_list, tmp_dir)
+            try:
+                img_list = reproject_files(img_list[0], img_list, tmp_dir)
+            except AttributeError:
+                logger.error('Bad catalogue!')
+                image_status = 3
         img_list = write_clean_data(img_list)
         logger.debug('Sorting for colour')
         if len(img_list) != 3:
@@ -212,7 +217,6 @@ def make_request_image(filename, request_id, targetname, category=None, name=Non
         else:
             img_list = sort_files_for_colour(img_list, colour_template=settings.COLOUR_TEMPLATE)
             r = fits_to_jpg(img_list, filename, width=1000, height=1000, color=True)
-            image_status = 1
     if r:
         shutil.rmtree(tmp_dir)
         return image_status

@@ -15,7 +15,7 @@ jinja2==3.0.3
 markupsafe==2.0.1
 django-cors-headers
 numpy==1.21.2
-git+https://github.com/astropy/astropy
+astropy==4.0
 astroplan==0.8
 astroscrappy==1.1.0
 fits2image>=0.4.0
