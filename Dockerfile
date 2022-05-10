@@ -4,7 +4,7 @@ WORKDIR /app
 COPY . /app
 
 # install depedencies
-COPY requirements.txt /app/requirements.txt
+COPY requirements.pip /app/requirements.pip
 RUN apk --no-cache add \
             libgomp \
             libjpeg-turbo \
@@ -25,7 +25,7 @@ RUN apk --no-cache add \
             libffi-dev \
             file \
             make \
-        && pip --no-cache-dir --trusted-host=buildsba.lco.gtn install -r requirements.txt \
+        && pip --no-cache-dir --trusted-host=buildsba.lco.gtn install -r requirements.pip \
         && apk --no-cache del .build-deps
 
 # install web application
