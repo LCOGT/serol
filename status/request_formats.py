@@ -208,14 +208,18 @@ def best_observing_time(site):
     obs = Observer(location=loc)
     now = datetime.utcnow()
     day= timedelta(days=1)
-    times = [Time(now) + day*i for i in range(0,14)]
+    times = [Time(now) + day*i for i in range(0,7)]
     best_times = []
+
     for time in times:
         twilight = obs.twilight_evening_astronomical(time=time, which='next')
-        for dt in range(1,9):
+        moonset = obs.moon_set_time(time=time, which='next')
+        for dt in range(1,4):
             t = timedelta(seconds=3600*dt)
+            if twilight +t > moonset:
+                # exit loop if moon has set
+                continue
             alt = obs.moon_altaz(twilight +t ).alt.value
             if alt > 31:
                 best_times.append((twilight + t, alt, obs.location, site))
-
     return best_times
