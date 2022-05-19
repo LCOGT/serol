@@ -204,22 +204,27 @@ def moon_coords(time, site):
     return coords, time, earth_coords.alt.value
 
 def best_observing_time(site):
+    """
+    Calculate moon alt every other day over the next 7 days
+    Once we have 4 dates return dates
+    """
     loc = EarthLocation(lat=SITES[site]['lat'], lon=SITES[site]['lon'], height=SITES[site]['alt'])
     obs = Observer(location=loc)
     now = datetime.utcnow()
     day= timedelta(days=1)
-    times = [Time(now) + day*i for i in range(0,7)]
+    times = [Time(now) + day*i for i in range(0,7,2)]
     best_times = []
 
     for time in times:
         twilight = obs.twilight_evening_astronomical(time=time, which='next')
         moonset = obs.moon_set_time(time=time, which='next')
-        for dt in range(1,4):
+        for dt in range(1,10):
             t = timedelta(seconds=3600*dt)
             if twilight +t > moonset:
-                # exit loop if moon has set
                 continue
             alt = obs.moon_altaz(twilight +t ).alt.value
             if alt > 31:
                 best_times.append((twilight + t, alt, obs.location, site))
+            if len(best_times) >= 4:
+                break
     return best_times
