@@ -149,7 +149,7 @@ def auto_schedule(proposal):
     for site in siteset:
         dates.extend(best_observing_time(site))
     dates = sorted(dates, key=lambda element: (element[0], -element[1]))
-
+    print(len(dates))
     # Choose top 4
     for date in dates[0:4]:
         time, alt, loc, site = date

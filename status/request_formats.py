@@ -212,19 +212,29 @@ def best_observing_time(site):
     obs = Observer(location=loc)
     now = datetime.utcnow()
     day= timedelta(days=1)
-    times = [Time(now) + day*i for i in range(0,7,2)]
+    times = [Time(now) + day*i for i in range(0,4)]
     best_times = []
 
     for time in times:
-        twilight = obs.twilight_evening_astronomical(time=time, which='next')
-        moonset = obs.moon_set_time(time=time, which='next')
+        twilight = obs.twilight_evening_astronomical(time=time, which='nearest')
+        dawn = obs.twilight_morning_astronomical(time=time, which='next')
+        moonset = obs.moon_set_time(time=twilight, which='nearest')
+        moonrise = obs.moon_rise_time(time=twilight, which='next')
+        # print(f"{twilight.iso} : {moonset.iso} -> {moonrise.iso}")
+        if twilight < moonset and twilight > moonrise:
+            begin = twilight
+        else:
+            begin = moonrise
         for dt in range(1,10):
-            t = timedelta(seconds=3600*dt)
-            if twilight +t > moonset:
+            t = timedelta(seconds=1800*dt)
+            if begin + t > dawn:
                 continue
-            alt = obs.moon_altaz(twilight +t ).alt.value
+            if begin + t > moonset and begin + t < moonrise:
+                continue
+            alt = obs.moon_altaz(begin +t ).alt.value
+
             if alt > 31:
-                best_times.append((twilight + t, alt, obs.location, site))
+                best_times.append((begin + t, alt, obs.location, site))
             if len(best_times) >= 4:
                 break
     return best_times
