@@ -139,17 +139,32 @@ def process_observation_request(params):
         obs_params = request_format(target, params['start'], params['end'], params['filters'], params['proposal'], params['aperture'])
 
     resp_status, resp_msg, resp_group = submit_observation_request(params=obs_params, token=params['token'])
+    if not resp_status:
+        resp_msg = parse_error(resp_msg)
     return resp_status, resp_msg, target_name, resp_group
 
+def parse_error(msg):
+    htmltext = ''
+    if msg.get('requests', None):
+        for val in msg['requests']:
+            for k,v in val.items():
+                htmltext += ", ".join(v)
+
+    if ('never visible' in htmltext):
+        return "Your target in not visible at any of the sites we have currently operational.<br/><br/>Please choose another target."
+    if not htmltext:
+        logger.error(msg)
+        htmltext = "An error occured.<br/><br/>Please contact <a href='/feedback/'>Serol's support team</a>."
+    return htmltext
+
 def auto_schedule(proposal):
-    siteset = ['ogg','coj','lsc','tfn']
+    siteset = ['ogg','lsc','tfn']
     now = datetime.utcnow()
     params_list = []
     dates = []
     for site in siteset:
         dates.extend(best_observing_time(site))
     dates = sorted(dates, key=lambda element: (element[0], -element[1]))
-    print(len(dates))
     # Choose top 4
     for date in dates[0:4]:
         time, alt, loc, site = date

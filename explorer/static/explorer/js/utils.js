@@ -246,6 +246,7 @@ function startEnd(date) {
 
 function parseError(msg){
   var htmltext ='';
+  console.log(Array.isArray(msg));
   $.each(msg, function(k, val){
     $.each(val, function(i, v){
         htmltext += v
@@ -271,10 +272,10 @@ function submit_to_serol(data, redirect_url){
         var tmp;
         $('.modal-card-title').html("Oops!");
         var e = JSON.parse(xhr.responseText)
-        tmp = parseError(e)
+        // tmp = parseError(e)
         $('#loading').hide();
         $('#target_desc_modal').show();
-        $('#target_desc_modal').html(tmp);
+        $('#target_desc_modal').html(e);
         $('#try_again_button').show()
 			},
 			success: function(data){

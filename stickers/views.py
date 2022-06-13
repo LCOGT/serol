@@ -1,6 +1,9 @@
+import json
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from django.views.generic.list import ListView
+from django.views.generic.detail import DetailView
 from django.db.models import Count, Q
 
 from stickers.models import PersonSticker, Sticker
@@ -40,6 +43,31 @@ class StickerView(LoginRequiredMixin, ListView):
                 progress.append(p)
             missions.append({'mission':m, 'challenges':progress})
         return missions
+
+class MissionPrintView(LoginRequiredMixin, DetailView):
+
+    model = Mission
+    template_name = 'stickers/print.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(MissionPrintView, self).get_context_data(**kwargs)
+        my_progress = Progress.objects.filter(user=self.request.user, challenge__mission=self.get_object())
+        progress = []
+        mission_challenges = Challenge.objects.filter(active=True, mission=self.get_object()).annotate(count=Count("progress", filter=Q(progress__user__username=self.request.user))).order_by('number')
+        for c in mission_challenges:
+            if c.count == 1:
+                myp = my_progress.filter(challenge=c)[0]
+                p = {'image': myp.image_file,'target':myp.target, 'frameid':myp.frameids}
+                if myp.status == 'Summary':
+                    p['complete'] = True
+                else:
+                    p['complete'] = False
+            else:
+                p = {'image': None, 'complete':False}
+            p['sticker'] = Sticker.objects.get(challenge=c).notext
+            progress.append(p)
+        context['challenges'] = progress
+        return context
 
 def add_sticker(challenge, user, progress):
     sticker = Sticker.objects.get(challenge=challenge, progress=progress, active=True)

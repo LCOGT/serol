@@ -25,9 +25,9 @@ def feedback_send(request):
             from_email = form.cleaned_data['from_email']
             message = form.cleaned_data['message']
             plaintext = get_template('notify/feedback_message.txt')
-            text_content = plaintext.render({'message': plaintext, 'email': from_email})
+            text_content = plaintext.render({'message': message, 'email': from_email})
             try:
-                send_mail(subject, message, from_email, [settings.EMAIL_COMMENTS_TO])
+                send_mail(subject, text_content, from_email, [settings.EMAIL_COMMENTS_TO])
             except BadHeaderError:
                 return HttpResponse('Invalid header found.')
                 messages.success(request, 'Feedback sent')
