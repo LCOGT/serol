@@ -1,8 +1,6 @@
 FROM python:3.8-alpine
 WORKDIR /app
 
-COPY . /app
-
 # install depedencies
 COPY requirements.pip /app/requirements.pip
 RUN apk --no-cache add \

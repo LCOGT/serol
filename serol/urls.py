@@ -36,7 +36,7 @@ urlpatterns = [
     path('getting-started/', flatpage, {'url' : '/getting-started/'}, name='getting-started'),
     path('finish-line/', TemplateView.as_view(template_name='explorer/project_complete.html'), name="project-complete"),
     path('mission/<int:pk>/', MissionView.as_view(), name="mission"),
-    path('mission/<int:pk>/print/', MissionPrintView.as_view(), name="mission"),
+    path('mission/<int:pk>/print/', MissionPrintView.as_view(), name="mission-print"),
     path('mission/<int:mission_num>/next/', NextChallengeView.as_view(), name="challenge-next"),
     path('mission/<int:pk>/complete/', MissionComplete.as_view(), name="mission-complete"),
     path('missions/', MissionListView.as_view(), name="missions"),
