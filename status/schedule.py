@@ -158,7 +158,7 @@ def parse_error(msg):
     return htmltext
 
 def auto_schedule(proposal):
-    siteset = ['ogg','lsc','tfn']
+    siteset = ['coj','tfn']
     now = datetime.utcnow()
     params_list = []
     dates = []

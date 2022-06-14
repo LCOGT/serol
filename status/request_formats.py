@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from astropy.time import Time
 from astropy.coordinates import EarthLocation, get_moon, AltAz, get_sun
 from astroplan import Observer
+from numpy import float64
 
 from explorer.models import Body
 
@@ -221,8 +222,9 @@ def best_observing_time(site):
         dawn = obs.twilight_morning_astronomical(time=time, which='next')
         moonset = obs.moon_set_time(time=twilight, which='nearest')
         moonrise = obs.moon_rise_time(time=twilight, which='next')
-        logging.debug(f"{twilight.iso} : {moonset.iso} -> {moonrise.iso}")
-        if moonrise > twilight and moonset < dawn:
+        logging.debug(f"{twilight.iso} : {moonset.iso} -> {moonrise.jd}")
+        # If the moon never rises at night, check the time isn't a weird masked array
+        if type(moonrise.jd) != float64 or (moonrise > twilight and moonset < dawn):
             begin = twilight
         else:
             begin = moonrise
