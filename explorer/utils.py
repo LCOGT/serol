@@ -15,3 +15,7 @@ def completed_missions(user):
         if getattr(user, 'mission_'+str(mid)):
             completed_missions.append(mid)
     return completed_missions
+
+class SerolException(Exception):
+    def __init__(self, msg='Something went wrong', *args, **kwargs):
+        super().__init__(msg, *args, **kwargs)

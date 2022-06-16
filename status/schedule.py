@@ -12,6 +12,7 @@ from django.contrib.sessions.backends.db import SessionStore
 from explorer.models import Body
 from .request_formats import request_format, request_format_moon, format_moving_object, \
     best_observing_time, moon_coords, format_sidereal_object
+from explorer.utils import SerolException
 
 logger = logging.getLogger(__name__)
 
@@ -127,8 +128,12 @@ def submit_observation_request(params, token):
 
 def process_observation_request(params):
     if params['target_type'] == 'moon':
-        obs_params = auto_schedule(proposal=params['proposal'])
         target_name = 'Moon'
+        try:
+            obs_params = auto_schedule(proposal=params['proposal'])
+        except SerolException as e:
+            logger.error(e)
+            return False, str(e), target_name, ''
     else:
         if params['target_type'] == 'moving':
             target, filters = format_moving_object(params['object_name'])
@@ -164,6 +169,8 @@ def auto_schedule(proposal):
     dates = []
     for site in siteset:
         dates.extend(best_observing_time(site))
+    if len(dates) == 0:
+        raise SerolException('No dates found')
     dates = sorted(dates, key=lambda element: (element[0], -element[1]))
     # Choose top 4
     for date in dates[0:4]:

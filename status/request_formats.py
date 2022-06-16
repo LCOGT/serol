@@ -214,32 +214,35 @@ def best_observing_time(site):
     obs = Observer(location=loc)
     now = datetime.utcnow()
     day= timedelta(days=1)
-    times = [Time(now) + day*i for i in range(1,5)]
+    times = [Time(now) + day*i for i in range(1,7)]
     best_times = []
 
     for time in times:
         twilight = obs.twilight_evening_astronomical(time=time, which='nearest')
         dawn = obs.twilight_morning_astronomical(time=time, which='next')
-        moonset = obs.moon_set_time(time=twilight, which='nearest')
+        moonset = obs.moon_set_time(time=twilight, which='next')
         moonrise = obs.moon_rise_time(time=twilight, which='next')
-        logging.debug(f"{twilight.iso} : {moonset.iso} -> {moonrise.jd}")
+        logging.debug(f"{site} - {twilight.iso} : {moonrise.iso} -> {moonset.iso}")
+        if moonset > dawn and moonrise > dawn:
+            logging.debug(f'New moon {twilight.iso}')
+            continue
         # If the moon never rises at night, check the time isn't a weird masked array
-        if type(moonrise.jd) != float64 or (moonrise > twilight and moonset < dawn):
+        if type(moonrise.jd) != float64 or moonset < dawn:
+            logging.debug('Using twilight')
             begin = twilight
         else:
             begin = moonrise
+            logging.debug('Using moonrise')
         for dt in range(1,10):
             t = timedelta(seconds=1800*dt)
             if begin + t > dawn:
                 logging.debug(f'{(begin+t).iso} is day time')
                 continue
-            if begin + t > moonset and begin + t < moonrise:
-                logging.debug(f'Moon not up at {begin+t}')
-                continue
-            alt = obs.moon_altaz(begin +t ).alt.value
 
+            alt = obs.moon_altaz(begin +t ).alt.value
+            logging.debug(f'Alt: {alt} {(begin +t).iso}')
             if alt > 31:
                 best_times.append((begin + t, alt, obs.location, site))
             if len(best_times) >= 3:
-                break
+                return best_times
     return best_times
