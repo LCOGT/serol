@@ -67,17 +67,6 @@ urlpatterns = [
     path('login/', LoginView.as_view(template_name='explorer/login.html'), name='auth_login'),
     path('logout/', LogoutView.as_view(template_name= 'explorer/logout.html'), name='auth_logout'),
     path('accounts/register/',RegistrationView.as_view(form_class=SerolUserForm), name='registration_register'),
-    # path('accounts/activate/complete/',
-    #     TemplateView.as_view(
-    #         template_name='django_registration/activation_complete.html'),
-    #         name='django_registration_activation_complete'),
-    # path('accounts/activate/<slug:activation_key>',
-    #     ActivationView.as_view(),
-    #     name='registration_activate'),
-    # path('accounts/register/complete/',
-    #     TemplateView.as_view(
-    #         template_name='django_registration/registration_complete.html'),
-    #         name='django_registration_complete'),
 
     path('accounts/password_reset/', auth_views.PasswordResetView.as_view(
       html_email_template_name='registration/password_reset_email.html'

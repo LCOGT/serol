@@ -6,9 +6,11 @@ from astropy.time import Time
 from astropy.coordinates import EarthLocation, get_moon, AltAz, get_sun
 from astroplan import Observer
 from numpy import float64
+from astropy.utils import iers
 
 from explorer.models import Body
 
+iers.conf.auto_download = False 
 
 EXPOSURE = '2.0'
 DEFAULT_CAMERAS = { '1m0' : '1M0-SCICAM-SBIG',
@@ -240,7 +242,7 @@ def best_observing_time(site):
                 continue
 
             alt = obs.moon_altaz(begin +t ).alt.value
-            # logging.debug(f'Alt: {alt} {(begin +t).iso}')
+            #  logging.debug(f'Alt: {alt} {(begin +t).iso}')
             if alt > 31:
                 best_times.append((begin + t, alt, obs.location, site))
             if len(best_times) >= 3:
