@@ -214,7 +214,7 @@ def best_observing_time(site):
     obs = Observer(location=loc)
     now = datetime.utcnow()
     day= timedelta(days=1)
-    times = [Time(now) + day*i for i in range(1,7)]
+    times = [Time(now) + day*i for i in range(1,14,2)]
     best_times = []
 
     for time in times:
@@ -228,7 +228,7 @@ def best_observing_time(site):
             continue
         # If the moon never rises at night, check the time isn't a weird masked array
         if type(moonrise.jd) != float64 or moonset < dawn:
-            logging.debug('Using twilight')
+            logging.debug(f'Using twilight {twilight.iso}')
             begin = twilight
         else:
             begin = moonrise
@@ -240,7 +240,7 @@ def best_observing_time(site):
                 continue
 
             alt = obs.moon_altaz(begin +t ).alt.value
-            logging.debug(f'Alt: {alt} {(begin +t).iso}')
+            # logging.debug(f'Alt: {alt} {(begin +t).iso}')
             if alt > 31:
                 best_times.append((begin + t, alt, obs.location, site))
             if len(best_times) >= 3:
