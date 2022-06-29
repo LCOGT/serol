@@ -95,14 +95,17 @@ class Progress(models.Model):
 
     @transition(field=status, source=['Analyse','Summary'], target='New')
     def redo(self):
+        self.requestid = ''
+        self.frameids = ''
+        self.requestgroup = None
+        self.image_file.storage.delete(self.image_file.name)
+        self.image_file.delete()
+        self.image_status = 0
+        self.save()
         pass
 
     @transition(field=status, source=['Failed','Redo'], target='New')
     def retry(self):
-        self.requestid = ''
-        self.frameids = ''
-        self.requestgroup = None
-        self.image_file = None
         pass
 
     @transition(field=status, source=['Submitted'], target='Observed')
@@ -132,10 +135,19 @@ class Question(models.Model):
     class Meta:
         verbose_name_plural = 'questions'
 
+    def __str__(self):
+        return f"{self.text}"
+
 class Answer(models.Model):
     text = models.TextField()
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f"{self.text}"
+
 class UserAnswer(models.Model):
     answer = models.ForeignKey(Answer, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.answer.question.challenge}: {self.answer.question} {self.answer}"

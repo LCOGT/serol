@@ -3,8 +3,15 @@ from django.utils.translation import ugettext as _
 from django.contrib.auth.admin import UserAdmin
 from django.contrib import messages
 
-from status.models import User, Progress, Answer, Question, UserAnswer, Proposal
+from status.models import User, Progress, Answer, Question, UserAnswer, Proposal, Progress
 from notify.views import send_notifications
+
+
+class UserAnswerInline(admin.TabularInline):
+    model = UserAnswer
+
+class UserChallenges(admin.TabularInline):
+    model = Progress
 
 class CustomUserAdmin(UserAdmin):
     fieldsets = (
@@ -15,7 +22,7 @@ class CustomUserAdmin(UserAdmin):
                                        'groups', 'user_permissions')}),
         (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
     )
-
+    inlines = [UserChallenges, UserAnswerInline,]
 
 class AnswerInline(admin.TabularInline):
     model = Answer

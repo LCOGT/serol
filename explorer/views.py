@@ -158,6 +158,8 @@ class ChallengeRedo(LoginRequiredMixin, DetailView):
             obj = Progress.objects.get(challenge=self.get_object(), user=self.request.user)
             obj.redo()
             obj.save()
+            answers = UserAnswer.objects.filter(user=self.request.user, answer__question__challenge=self.get_object())
+            answers.delete()
             return HttpResponseRedirect(reverse('retry', args=args, kwargs=kwargs))
         except:
             logger.error("Challenge {} for {} is not in the correct state".format(self.get_object(), self.request.user))
@@ -176,7 +178,7 @@ class ChallengeSummary(LoginRequiredMixin, DetailView):
 
         challenge = self.get_object()
         progress = Progress.objects.get(challenge=challenge, user=user)
-        
+
         stickers = PersonSticker.objects.filter(user=self.request.user, sticker__challenge=challenge)
         answers = UserAnswer.objects.filter(answer__question__challenge=self.get_object(), user=self.request.user)
         # if we are at the end of the mission make sure we mark it on the user profile
