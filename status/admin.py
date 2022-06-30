@@ -46,7 +46,7 @@ resend_email.short_description = 'Resend email'
 
 class ProgressAdmin(admin.ModelAdmin):
     list_filter = ( 'status', 'challenge__number','challenge__mission__number')
-    list_display = ('user','target','challenge','coloured_state','last_update', 'has_image')
+    list_display = ('user','target','challenge','coloured_state','last_update', 'ra','dec','has_image')
     fields = ['user','challenge', 'target', 'requestgroup', 'requestid', 'frameids', 'status', 'last_update', 'image_file', 'image_tag', 'image_status']
     readonly_fields = ['image_tag']
     actions = [remove_images, resend_email]

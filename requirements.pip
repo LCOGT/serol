@@ -8,6 +8,7 @@ django-registration==3.2
 django-storages==1.12.3
 django-user-messages==0.8.0
 django-widget-tweaks==1.4.12
+django-weasyprint==2.1.0
 easy-thumbnails==2.8.1
 psycopg2==2.8.4
 Pillow==6.2.1

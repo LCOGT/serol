@@ -49,6 +49,12 @@
           <p>No stickers defined?</p>
           {% endfor %}
           </div>
+          <span class="icon-text">
+            <span class="icon">
+              <i class="fas fa-download"></i>
+            </span>
+            <span><a href="{% url 'mission-pdf' progress.mission.number %}">Download your picture sheet</a></span>
+          </span>
         </div>
       </div>
     </div>

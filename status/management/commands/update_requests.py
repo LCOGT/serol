@@ -19,7 +19,7 @@ class Command(BaseCommand):
     help = 'Update requests and call pipeline'
 
     def add_arguments(self, parser):
-        parser.add_argument('--requestgroup', '-rid', help="[Optional] Request Group to update")
+        parser.add_argument('--requestgroup', '-r', help="[Optional] Request Group to update")
 
     def handle(self, *args, **options):
         self.stdout.write(self.style.WARNING("Running requests update - {}".format(datetime.now().isoformat())))
@@ -32,7 +32,7 @@ class Command(BaseCommand):
         for pg in pgs:
             self.stdout.write("Updating {}".format(pg.requestid))
             for rid in json.loads(pg.requestid):
-                resp = update_status(progressid=pg.id, requestid=rid, token=settings.PORTAL_TOKEN, archive_token=settings.ARCHIVE_TOKEN)
+                resp = update_status(progressid=pg.id, requestid=rid, token=settings.PORTAL_TOKEN)
                 if status.is_success(resp.status_code):
                     self.stdout.write(self.style.SUCCESS("Update of {} successful".format(pg.requestid)))
                     break

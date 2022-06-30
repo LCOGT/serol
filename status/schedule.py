@@ -91,8 +91,13 @@ def get_observation_frameid(requestid, token):
     if r.status_code in [200,201]:
         resp = r.json()
         if len(resp['results']) > 0:
-            frameid = resp['results'][0]['id'];
-            return frameid
+            data = {
+                'frameid' :resp['results'][0]['id'],
+                'date' : resp['results'][0]['observation_date'],
+                'ra' : resp['results'][0]['area']['coordinates'][0][0][0],
+                'dec' : resp['results'][0]['area']['coordinates'][0][0][1]
+            }
+            return data
         else:
             logger.error("No frames found for {}".format(requestid))
             return False

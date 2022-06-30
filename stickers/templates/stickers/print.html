@@ -20,46 +20,80 @@
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="theme-color" content=“#ffffff”>
 
-    <title>Serol's Cosmic Adventures | {% block title %}powered by Las Cumbres Observatory{% endblock %}</title>
+    <title>Serol's Cosmic Adventures | Printable Images for Mission {{object.number}}</title>
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
     <link href="https://fonts.googleapis.com/css?family=Oswald|Aldrich" rel="stylesheet">
 
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js" ></script>
-    <script>
-      $(document).ready(function(){
-        $('.targets').each( function(index){
-          var div = $(this);
-          var frame = $(this).data('frameid');
-          var target_name = $(this).data('target')
-          // var url = `https://simbad2k.lco.global/${target}?target_type=sidereal`
-          var url = `https://archive-api.lco.global/frames/${frame}/headers/`
-          $.getJSON(url, function(data){
-            var content = `RA: ${data.CRVAL1} Declination: ${data.crval2} <br/>`
-                          + `Name: ${target_name}`;
-            $('.targets')[index].html = content;
-            console.log(content)
-          })
-        })
-      })
-      </script>
+    <style>
+    @media all {
+      body{
+        font-family: 'Aldrich', Arial, sans-serif;
+      }
+    @page {
+
+      size: letter landscape;
+
+    }
+    .title {
+      font-family: 'Oswald', sans-serif;
+    }
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+
+    .item {
+      width: 32%;
+      /* padding-bottom: 32%; /* Same as width, sets height */ */
+      margin-bottom: 2%; /* (100-32*3)/2 */
+      position: relative;
+      border:dashed;
+    }
+    .image {
+      margin:auto;
+    }
+    img {
+      max-width: 100%;
+    }
+    .red {
+     color: hsl(348, 86%, 43%);
+    }
+    .blue {
+      color: hsl(217, 71%, 45%);
+    }
+}
+    </style>
+
   </head>
 
   <body>
-    <div class="container">
-      <div class="columns is-multiline">
+    <div>
+      <h1 class="title"><img src="{% static 'explorer/images/serol-logo-blue.png' %}" alt="serol logo" style="width:2cm"> Serol's Cosmic Explorers</h1>
+      <h3 class="title">Mission {{object.number}}: {{object.name}}</h3>
+      <div class="container">
         {% for challenge in challenges %}
-        <div class="column is-half">
-          <figure class="image">
-            {% if challenge.image %}
-            {% thumbnail  challenge.image "sticker" crop as im %}
+        <div class="item">
+            <figure class="image">
+            {% if challenge.progress.image_file %}
+            {% thumbnail  challenge.progress.image_file "sticker" crop as im %}
               <img src="{{ im.url }}" />
             {% else %}
               <img src="{% static 'explorer/images/placeholder2.png' %}" class='tmp'/>
             {% endif %}
+            <figcaption>
+              {% if challenge.progress %}
+                {% if challenge.progress.status in 'NewSubmittedFailed' %}
+                <div class="red">Not observed yet</div>
+                {% else %}
+                Name: {{challenge.progress.target}}
+                Approximate RA: <strong>{{challenge.progress.ra|floatformat:0}}</strong>,  Dec: <strong>{{challenge.progress.dec|floatformat:0}}</strong> <br/>
+                {% endif %}
+              {% else %}
+              <div class="blue">Challenge not started</div>
+              {% endif %}
+            </figcaption>
           </figure>
-          <p data-target="{{challenge.target}}" data-frameid="{{challenge.frameid}}" class="targets">
-          </p>
         </div>
         {% endfor %}
       </div>

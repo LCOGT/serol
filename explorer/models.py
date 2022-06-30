@@ -63,7 +63,7 @@ class Mission(models.Model):
     name = models.CharField(max_length=200)
     patch = models.CharField(max_length=40, choices=PATCHES)
     sticker_total = models.IntegerField(default=0)
-
+    
     def __str__(self):
         return "{}".format(self.name)
 

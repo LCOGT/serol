@@ -5,6 +5,7 @@ from django.shortcuts import render
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.db.models import Count, Q
+from django_weasyprint import WeasyTemplateResponseMixin
 
 from stickers.models import PersonSticker, Sticker
 from explorer.models import Mission, Challenge
@@ -56,8 +57,9 @@ class MissionPrintView(LoginRequiredMixin, DetailView):
         mission_challenges = Challenge.objects.filter(active=True, mission=self.get_object()).annotate(count=Count("progress", filter=Q(progress__user__username=self.request.user))).order_by('number')
         for c in mission_challenges:
             if c.count == 1:
+                p = {}
                 myp = my_progress.filter(challenge=c)[0]
-                p = {'image': myp.image_file,'target':myp.target, 'frameid':myp.frameids}
+                p['progress'] = myp
                 if myp.status == 'Summary':
                     p['complete'] = True
                 else:
@@ -68,6 +70,11 @@ class MissionPrintView(LoginRequiredMixin, DetailView):
             progress.append(p)
         context['challenges'] = progress
         return context
+
+class DownloadStickersView(WeasyTemplateResponseMixin, MissionPrintView):
+    def get_pdf_filename(self):
+        return f'serol-mission-{self.get_object().number}.pdf'
+
 
 def add_sticker(challenge, user, progress):
     sticker = Sticker.objects.get(challenge=challenge, progress=progress, active=True)

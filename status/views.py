@@ -92,8 +92,8 @@ class StatusView(APIView):
     renderer_classes = (JSONRenderer, BrowsableAPIRenderer)
 
     def get(self, request, progressid, requestid, format=None):
-        token, archive_token = check_token(request.user)
-        return update_status(progressid=progressid, requestid=requestid, token=token, archive_token=archive_token)
+        token = check_token(request.user)
+        return update_status(progressid=progressid, requestid=requestid, token=token)
 
 class RemoveMessages(APIView):
     renderer_classes = (JSONRenderer, BrowsableAPIRenderer)
@@ -143,7 +143,7 @@ class ScheduleMoon(APIView):
             return Response(resp_msg, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-def update_status(progressid, requestid, token, archive_token):
+def update_status(progressid, requestid, token):
     try:
         progress = Progress.objects.get(id=progressid)
     except:
@@ -157,9 +157,12 @@ def update_status(progressid, requestid, token, archive_token):
         return Response("Problem with the status", status=status.HTTP_403_FORBIDDEN)
     else:
         if state == 'COMPLETED':
-            frameid = get_observation_frameid(requestid=requestid, token=archive_token)
-            if frameid:
-                progress.frameids = frameid
+            data = get_observation_frameid(requestid=requestid, token=token)
+            if data:
+                progress.frameids = data['frameid']
+                progress.ra = data['ra']
+                progress.dec = data['dec']
+                progress.obsdate = data['date'][0:19]
                 progress.observed()
             progress.requestid = json.dumps([requestid])
         elif state == 'WINDOW_EXPIRED' or state == 'CANCELED' or state == 'FAILURE_LIMIT_REACHED':
@@ -187,8 +190,4 @@ def check_token(user):
         token = settings.PORTAL_TOKEN
     else:
         token = user.token
-    if not user.archive_token:
-        archive_token = settings.ARCHIVE_TOKEN
-    else:
-        archive_token = user.archive_token
-    return token, archive_token
+    return token
