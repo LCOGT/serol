@@ -1,4 +1,4 @@
-{% load static i18n thumbnail %}
+{% load static thumbnail %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -86,7 +86,7 @@
                 {% if challenge.progress.status in 'NewSubmittedFailed' %}
                 <div class="red">Not observed yet</div>
                 {% else %}
-                Name: {{challenge.progress.target}}
+                Name: {{challenge.progress.target}}<br/>
                 Approximate RA: <strong>{{challenge.progress.ra|floatformat:0}}</strong>,  Dec: <strong>{{challenge.progress.dec|floatformat:0}}</strong> <br/>
                 {% endif %}
               {% else %}
