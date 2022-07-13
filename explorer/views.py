@@ -103,7 +103,7 @@ class ChallengeView(LoginRequiredMixin, DetailView):
                 targets = Body.objects.filter(avm_code=self.object.avm_code, active=True)
                 context['targets'] = targets
             if mode == 'submitted':
-                token, archive_token = check_token(request.user)
+                token = check_token(request.user)
                 context['activities'] = Activity.objects.filter(active=True).order_by('?')[0:2]
                 context['requestids'] = json.loads(obj.requestid)
                 request.session['token'] = token
