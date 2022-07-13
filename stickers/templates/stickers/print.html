@@ -1,4 +1,4 @@
-{% load static thumbnail %}
+{% load static thumbnail explorer_utils %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -87,7 +87,7 @@
                 <div class="red">Not observed yet</div>
                 {% else %}
                 Name: {{challenge.progress.target}}<br/>
-                Approximate RA: <strong>{{challenge.progress.ra|floatformat:0}}</strong>,  Dec: <strong>{{challenge.progress.dec|floatformat:0}}</strong> <br/>
+                Approximate RA: <strong>{% ra_deg_to_hms challenge.progress.ra challenge.progress.dec %}</strong>,  Dec: <strong>{{challenge.progress.dec|floatformat:0}}</strong> <br/>
                 {% endif %}
               {% else %}
               <div class="blue">Challenge not started</div>

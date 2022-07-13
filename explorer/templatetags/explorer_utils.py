@@ -1,3 +1,4 @@
+from astropy.coordinates import SkyCoord
 from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 from django import template
@@ -69,3 +70,13 @@ def user_mission_state(user, missionid):
         return True
     else:
         return False
+
+@register.simple_tag
+def ra_deg_to_hms(ra,dec):
+    if not ra or not dec:
+        return "0"
+    try:
+        coords = SkyCoord(ra, dec, unit='deg')
+        return "{:.0f}".format(coords.ra.value)
+    except ValueError:
+        return "0"
