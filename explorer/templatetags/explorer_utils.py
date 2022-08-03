@@ -80,3 +80,18 @@ def ra_deg_to_hms(ra,dec):
         return "{:.0f}".format(coords.ra.value)
     except ValueError:
         return "0"
+
+@register.simple_tag
+def lco_site(code):
+    sites = {
+            'ogg' : 'Halakealā, Hawaii',
+            'cpt' : 'Sutherland, South Africa',
+            'lsc' : 'Cerro Tololo, Chile',
+            'elp' : 'McDonald Observatory, Texas',
+            'tfn' : 'Tenerife, Canary Islands, Spain',
+            'coj' : 'Siding Spring Observatory, Australia'
+            }
+    try:
+        return sites[code]
+    except:
+        return 'Unknown'

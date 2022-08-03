@@ -251,3 +251,9 @@ a.button:hover {
 .mission-3-colour-text {
      color:rgb(36, 209, 255);
 }
+
+abbr[title], acronym[title] {
+    text-decoration: none;
+    border-bottom: dashed #aaa;
+    border-width: thin;
+}

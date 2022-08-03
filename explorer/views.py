@@ -1,4 +1,5 @@
 from datetime import datetime
+from astropy.coordinates import SkyCoord
 
 from django import forms
 from django.conf.urls.static import static
@@ -9,6 +10,7 @@ from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, Http404
 from django.templatetags.static import static
 from django.urls import reverse, NoReverseMatch
+from django.utils.html import mark_safe
 from django.views import View
 from django.views.generic import DetailView, ListView
 from django.views.generic.base import RedirectView
@@ -178,6 +180,7 @@ class ChallengeSummary(LoginRequiredMixin, DetailView):
 
         challenge = self.get_object()
         progress = Progress.objects.get(challenge=challenge, user=user)
+        print(progress.ra, progress.dec)
 
         stickers = PersonSticker.objects.filter(user=self.request.user, sticker__challenge=challenge)
         answers = UserAnswer.objects.filter(answer__question__challenge=self.get_object(), user=self.request.user)
@@ -193,6 +196,7 @@ class ChallengeSummary(LoginRequiredMixin, DetailView):
         context['completed_missions'] = completed_missions(self.request.user)
         context['icon'] = target_icon(challenge.avm_code)
         context['animation'] = static(f"explorer/js/stickerreveal-{challenge.mission.number}.json")
+        context['coords'] = deg_to_hms(progress.ra, progress.dec)
 
         return context
 
@@ -295,3 +299,14 @@ def check_missing_challenge(user, mission):
         return Challenge.objects.get(number=missing[0], mission__number=mission).id
     else:
         return 0
+
+def deg_to_hms(ra,dec):
+    try:
+        coords = SkyCoord(ra, dec, unit='deg')
+        ra = coords.ra.hms
+        dec = coords.dec.dms
+        ra_html = f'<abbr title="{ra[0]:.0f} hours {ra[1]:.0f} minutes {ra[2]:.0f} seconds">{ra[0]:.0f} : {ra[1]:.0f} : {ra[2]:.0f}</abbr>'
+        dec_html = f'<abbr title="{dec[0]:.0f} degrees {dec[1]:.0f} minutes {dec[2]:.0f} seconds">{dec[0]:.0f} : {dec[1]:.0f} : {dec[2]:.0f}</abbr>'
+        return mark_safe(ra_html), mark_safe(dec_html)
+    except ValueError:
+        return "0", "0"

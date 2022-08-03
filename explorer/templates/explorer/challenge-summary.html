@@ -37,6 +37,37 @@
             <a href="{% url 'challenge-next' object.mission.number %}" class="button is-fullwidth oswald mission-{{object.mission.number}}-colour">{% trans "start a new challenge?" %}</a>
             {% endif %}
           </p>
+          <table class="table is-fullwidth">
+            <th>
+              <td colspan=2>Observation Information</td>
+            </th>
+            <tr>
+              <td>RA:</td><td>{{coords.0}}</td>
+            </tr>
+            <tr>
+              <td>Dec:</td><td>{{coords.1}}</td>
+            <tr>
+            <tr>
+              <td><i class="fas fa-clock" aria-hidden="true"></i></td><td>{{progress.obsdate|date:"j F Y"}}</td>
+            </tr>
+            <tr>
+              <td><i class="fas fa-map-marker-alt" aria-hidden="true"></i></td><td>{% lco_site progress.siteid %}</td>
+            </tr>
+            {% if progress.image_file %}
+            <tr>
+              <td colspan=2">
+                <a href="{{ progress.image_file.url|safe }}" download>
+                <span class="icon-text">
+                  <span class="icon">
+                    <i class="fas fa-download" aria-hidden="true"></i>
+                  </span>
+                <span>download image</span>
+                </span>
+                </a>
+                </td>
+              </tr>
+            {% endif %}
+          </table>
           <div class="notification mt-6">
             <span class="icon"> <i class="fal fa-question-square"></i></span>
             Is there something wrong with the picture?

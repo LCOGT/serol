@@ -58,6 +58,7 @@ class Progress(models.Model):
     obsdate = models.DateTimeField(blank=True, null=True)
     ra = models.FloatField(blank=True, null=True)
     dec = models.FloatField(blank=True, null=True)
+    siteid = models.CharField(max_length=3, blank=True, null=True)
 
     def has_image(self):
         if self.image_file is not None:

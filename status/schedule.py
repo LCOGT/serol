@@ -95,12 +95,39 @@ def get_observation_frameid(requestid, token):
                 'frameid' :resp['results'][0]['id'],
                 'date' : resp['results'][0]['observation_date'],
                 'ra' : resp['results'][0]['area']['coordinates'][0][0][0],
-                'dec' : resp['results'][0]['area']['coordinates'][0][0][1]
+                'dec' : resp['results'][0]['area']['coordinates'][0][0][1],
+                'siteid' : resp['results'][0]['siteid']
             }
             return data
         else:
             logger.error("No frames found for {}".format(requestid))
             return False
+    else:
+        logger.error("Could not send request: {}".format(r.content))
+        return False
+
+def get_headers_frameid(frameid, token):
+    '''
+    Get status of FrameID from the Portal API
+    '''
+    if not frameid:
+        return False, "No frame ID provided"
+
+    headers = {'Authorization': 'Token {}'.format(token)}
+    url = f"https://archive-api.lco.global/frames/{frameid}/headers/"
+    try:
+        r = requests.get(url, headers=headers, timeout=20.0)
+    except requests.exceptions.Timeout:
+        msg = "Archive API timed out"
+        logger.error(msg)
+        return False
+
+    if r.status_code in [200,201]:
+        resp = r.json()
+        data = {
+            'siteid' :resp['data']['SITEID'],
+        }
+        return data
     else:
         logger.error("Could not send request: {}".format(r.content))
         return False
