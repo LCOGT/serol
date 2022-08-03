@@ -11,6 +11,7 @@ from stickers.models import PersonSticker, Sticker
 from explorer.models import Mission, Challenge
 from explorer.utils import completed_missions
 from status.models import Progress
+from explorer.utils import deg_to_hms_plain
 
 class StickerView(LoginRequiredMixin, ListView):
 
@@ -61,6 +62,7 @@ class MissionPrintView(LoginRequiredMixin, DetailView):
                 myp = my_progress.filter(challenge=c)[0]
                 p['progress'] = myp
                 if myp.status == 'Summary':
+                    p['coords'] = deg_to_hms_plain(myp.ra, myp.dec)
                     p['complete'] = True
                 else:
                     p['complete'] = False

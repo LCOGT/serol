@@ -48,7 +48,7 @@
       /* padding-bottom: 32%; /* Same as width, sets height */ */
       margin-bottom: 2%; /* (100-32*3)/2 */
       position: relative;
-      border:dashed;
+      border:#aaa thin dashed;
     }
     .image {
       margin:auto;
@@ -75,7 +75,7 @@
         {% for challenge in challenges %}
         <div class="item">
             <figure class="image">
-            {% if challenge.progress.image_file %}
+            {% if challenge.progress.image_file and challenge.progress.status in 'AnalyseIdentifySummary' %}
             {% thumbnail  challenge.progress.image_file "sticker" crop as im %}
               <img src="{{ im.url }}" />
             {% else %}
@@ -87,7 +87,7 @@
                 <div class="red">Not observed yet</div>
                 {% else %}
                 Name: {{challenge.progress.target}}<br/>
-                Approximate RA: <strong>{% ra_deg_to_hms challenge.progress.ra challenge.progress.dec %}</strong>,  Dec: <strong>{{challenge.progress.dec|floatformat:0}}</strong> <br/>
+                RA: <strong>{{challenge.coords.0}}</strong>,  Dec: <strong>{{challenge.coords.1}}</strong> <br/>
                 {% endif %}
               {% else %}
               <div class="blue">Challenge not started</div>

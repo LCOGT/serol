@@ -1,5 +1,4 @@
 from datetime import datetime
-from astropy.coordinates import SkyCoord
 
 from django import forms
 from django.conf.urls.static import static
@@ -23,7 +22,7 @@ from status.models import Progress, Answer, Question, UserAnswer
 from stickers.models import PersonSticker
 from status.views import check_token
 from stickers.views import add_sticker
-from explorer.utils import add_answers, completed_missions
+from explorer.utils import add_answers, completed_missions, deg_to_hms
 
 logger = logging.getLogger(__name__)
 
@@ -299,14 +298,3 @@ def check_missing_challenge(user, mission):
         return Challenge.objects.get(number=missing[0], mission__number=mission).id
     else:
         return 0
-
-def deg_to_hms(ra,dec):
-    try:
-        coords = SkyCoord(ra, dec, unit='deg')
-        ra = coords.ra.hms
-        dec = coords.dec.dms
-        ra_html = f'<abbr title="{ra[0]:.0f} hours {ra[1]:.0f} minutes {ra[2]:.0f} seconds">{ra[0]:.0f} : {ra[1]:.0f} : {ra[2]:.0f}</abbr>'
-        dec_html = f'<abbr title="{dec[0]:.0f} degrees {dec[1]:.0f} minutes {dec[2]:.0f} seconds">{dec[0]:.0f} : {dec[1]:.0f} : {dec[2]:.0f}</abbr>'
-        return mark_safe(ra_html), mark_safe(dec_html)
-    except ValueError:
-        return "0", "0"
