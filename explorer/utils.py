@@ -1,5 +1,6 @@
 from astropy.coordinates import SkyCoord
 from django.shortcuts import get_object_or_404
+from django.utils.html import mark_safe
 
 from status.models import UserAnswer, Answer
 
