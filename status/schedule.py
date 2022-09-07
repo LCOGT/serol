@@ -96,7 +96,7 @@ def get_observation_frameid(requestid, token):
                 'date' : resp['results'][0]['observation_date'],
                 'ra' : resp['results'][0]['area']['coordinates'][0][0][0],
                 'dec' : resp['results'][0]['area']['coordinates'][0][0][1],
-                'siteid' : resp['results'][0]['siteid']
+                'siteid' : resp['results'][0]['SITEID']
             }
             return data
         else:
