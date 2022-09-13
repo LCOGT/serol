@@ -3,6 +3,7 @@ from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.conf import settings
 from django.test import TestCase
 from mock import patch
+from model_bakery import baker
 from selenium import webdriver
 from selenium.webdriver.support.expected_conditions import staleness_of, visibility_of_element_located
 from selenium.webdriver.common.by import By
@@ -13,6 +14,23 @@ import time
 from serol.basetest import FunctionalTest
 from status.tests import mock_lco_authenticate
 from serol.mocks import *
+from .utils import *
+
+from .models import *
+
+import factory
+
+class MissionFactory(factory.Factory):
+    class Meta:
+        model = Mission
+
+class ChallengeFactory(factory.Factory):
+    class Meta:
+        model = Challenge
+
+class AnswerFactory(factory.Factory):
+    class Meta:
+        model = Answer
 
 class BrowseSiteTest(FunctionalTest):
 
@@ -70,3 +88,31 @@ class BrowseSiteTest(FunctionalTest):
             self.assertIn('Film', self.browser.title)
 
             self.tearDown()
+
+class UtilsTest(TestCase):
+
+    def setUp(self):
+        self.user = baker.make('status.User', mission_1=True)
+        # self.make_basic_site()
+
+    def test_deg_to_hms_plain_fail(self):
+        ra, dec = deg_to_hms_plain("x","x")
+        self.assertEqual(ra, "0")
+        self.assertEqual(dec, "0")
+
+    def test_deg_to_hms_plain_success(self):
+        ra, dec = deg_to_hms_plain(12.2, 20.2)
+        self.assertEqual(ra, "0 : 48 : 48")
+        self.assertEqual(dec, "20 : 11 : 60")
+
+    def test_completed_missions(self):
+        missions = completed_missions(self.user)
+        self.assertEqual(missions, [1])
+
+    def test_target_icon_fail(self):
+
+class ViewsTest(TestCase):
+
+
+    def test_add_answers(self):
+        resp = add_answers(answers, self.user)

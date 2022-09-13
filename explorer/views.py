@@ -22,7 +22,7 @@ from status.models import Progress, Answer, Question, UserAnswer
 from stickers.models import PersonSticker
 from status.views import check_token
 from stickers.views import add_sticker
-from explorer.utils import add_answers, completed_missions, deg_to_hms
+from explorer.utils import add_answers, completed_missions, deg_to_hms, target_icon
 
 logger = logging.getLogger(__name__)
 
@@ -264,31 +264,6 @@ class ChallengeRedirectView(LoginRequiredMixin, RedirectView):
         except NoReverseMatch:
             return None
         return super(ChallengeRedirectView, self).get_redirect_url(*args, **kwargs)
-
-def target_icon(avmcode):
-    avm_files = {
-        '5.5' : 'explorer/images/5.5-groupofgalaxies.png' ,
-        '5.1.1' : 'explorer/images/5.1.1-spiral_galaxy.png' ,
-        '5.1.4' : 'explorer/images/5.1.4-elliptical_galaxy.png' ,
-        '5.1.6' : 'explorer/images/5.1.6-interacting_galaxy.png' ,
-        '5' : 'explorer/images/5-galaxy-icon.png' ,
-        '4.1.4' : 'explorer/images/4.1.4-supernova_remnant.png' ,
-        '4.1.3' : 'explorer/images/4.1.3-planetary_nebula.png' ,
-        '4.1.2' : 'explorer/images/4-nebulae-icon.png' ,
-        '4' : 'explorer/images/4-nebulae-icon.png' ,
-        '3.6.4' : 'explorer/images/3.6.4.1-cluster-icon.png' ,
-        '3.6.4.1' : 'explorer/images/3.6.4.1-cluster-icon.png' ,
-        '3.6.4.2' : 'explorer/images/3.6.4.2-globular_cluster.png' ,
-        '2.3' : 'explorer/images/2.3-asteroids-icon.png' ,
-        '2.2' : 'explorer/images/M1C2-comet-icon.png' ,
-        '1.4' : "explorer/images/1.1.1-mercury.png",
-        '1.1' : 'explorer/images/M1C1-planet-icon1.png'
-    }
-    avm_file = avm_files.get(avmcode,'')
-    if avm_file:
-        return static(avm_file)
-    else:
-        return static('explorer/images/serol_logo_sm.png')
 
 def check_missing_challenge(user, mission):
     chals = Challenge.objects.filter(mission__number=mission, active=True).order_by('number').values_list('number', flat=True)

@@ -163,6 +163,7 @@ def update_status(progressid, requestid, token):
                 progress.ra = data['ra']
                 progress.dec = data['dec']
                 progress.obsdate = data['date'][0:19]
+                progress.siteid = data['siteid']
                 progress.observed()
             progress.requestid = json.dumps([requestid])
         elif state == 'WINDOW_EXPIRED' or state == 'CANCELED' or state == 'FAILURE_LIMIT_REACHED':

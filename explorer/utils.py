@@ -1,6 +1,7 @@
 from astropy.coordinates import SkyCoord
 from django.shortcuts import get_object_or_404
 from django.utils.html import mark_safe
+from django.templatetags.static import static
 
 from status.models import UserAnswer, Answer
 
@@ -40,6 +41,32 @@ def deg_to_hms(ra,dec):
         return mark_safe(ra_html), mark_safe(dec_html)
     except ValueError:
         return "0", "0"
+
+def target_icon(avmcode):
+    avm_files = {
+        '5.5' : 'explorer/images/5.5-groupofgalaxies.png' ,
+        '5.1.1' : 'explorer/images/5.1.1-spiral_galaxy.png' ,
+        '5.1.4' : 'explorer/images/5.1.4-elliptical_galaxy.png' ,
+        '5.1.6' : 'explorer/images/5.1.6-interacting_galaxy.png' ,
+        '5' : 'explorer/images/5-galaxy-icon.png' ,
+        '4.1.4' : 'explorer/images/4.1.4-supernova_remnant.png' ,
+        '4.1.3' : 'explorer/images/4.1.3-planetary_nebula.png' ,
+        '4.1.2' : 'explorer/images/4-nebulae-icon.png' ,
+        '4' : 'explorer/images/4-nebulae-icon.png' ,
+        '3.6.4' : 'explorer/images/3.6.4.1-cluster-icon.png' ,
+        '3.6.4.1' : 'explorer/images/3.6.4.1-cluster-icon.png' ,
+        '3.6.4.2' : 'explorer/images/3.6.4.2-globular_cluster.png' ,
+        '2.3' : 'explorer/images/2.3-asteroids-icon.png' ,
+        '2.2' : 'explorer/images/M1C2-comet-icon.png' ,
+        '1.4' : "explorer/images/1.1.1-mercury.png",
+        '1.1' : 'explorer/images/M1C1-planet-icon1.png'
+    }
+    avm_file = avm_files.get(avmcode,'')
+    if avm_file:
+        return static(avm_file)
+    else:
+        return static('explorer/images/serol_logo_sm.png')
+
 
 class SerolException(Exception):
     def __init__(self, msg='Something went wrong', *args, **kwargs):
