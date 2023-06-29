@@ -49,12 +49,14 @@
           <p>No stickers defined?</p>
           {% endfor %}
           </div>
+          {% if request.user|user_mission_state:progress.mission.number %}
           <span class="icon-text">
             <span class="icon">
               <i class="fas fa-download"></i>
             </span>
             <span><a href="{% url 'mission-pdf' progress.mission.number %}">Download your picture sheet</a></span>
           </span>
+          {% endif %}
         </div>
       </div>
     </div>

@@ -9,10 +9,10 @@ from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, Http404
 from django.templatetags.static import static
 from django.urls import reverse, NoReverseMatch
-from django.utils.html import mark_safe
 from django.views import View
 from django.views.generic import DetailView, ListView
 from django.views.generic.base import RedirectView
+from django.contrib import messages
 
 import logging
 import json
@@ -179,7 +179,6 @@ class ChallengeSummary(LoginRequiredMixin, DetailView):
 
         challenge = self.get_object()
         progress = Progress.objects.get(challenge=challenge, user=user)
-        print(progress.ra, progress.dec)
 
         stickers = PersonSticker.objects.filter(user=self.request.user, sticker__challenge=challenge)
         answers = UserAnswer.objects.filter(answer__question__challenge=self.get_object(), user=self.request.user)

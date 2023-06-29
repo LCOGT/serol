@@ -3,6 +3,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Sum
 from profanityfilter import ProfanityFilter
 from rest_framework import serializers, generics, viewsets, status
+from rest_framework.authentication import TokenAuthentication
 from rest_framework_jsonp.renderers import JSONPRenderer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.renderers import JSONRenderer, BrowsableAPIRenderer
@@ -60,6 +61,7 @@ class AddHighScoreView(APIView):
     Schedule observations given a full set of observing parameters
     """
     renderer_classes = (JSONRenderer, BrowsableAPIRenderer, JSONPRenderer)
+    authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
     def post(self, request, format=None):
         data = request.data

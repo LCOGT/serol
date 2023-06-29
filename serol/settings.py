@@ -7,7 +7,7 @@ from django.utils.crypto import get_random_string
 
 VERSION = '1.0'
 
-SITE_ID = 1
+SITE_ID = 2
 
 DEFAULT_AUTO_FIELD='django.db.models.AutoField'
 

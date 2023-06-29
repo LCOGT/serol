@@ -154,6 +154,11 @@ def submit_observation_request(params, token):
     if r.status_code in [200,201] and not settings.SCHEDULE_DEBUG:
         logging.debug('Submitted request')
         return True, [req['id'] for req in r.json()['requests']], r.json()['id']
+    elif r.status_code in [200,201] and settings.SCHEDULE_DEBUG:
+        if not r.json()['errors']:
+            return True, [999], 999
+        else:
+            return False, r.json(), False
     else:
         logging.error("Could not send request: {}".format(r.content))
         return False, r.json(), False
