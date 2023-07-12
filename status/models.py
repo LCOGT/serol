@@ -1,4 +1,5 @@
 from datetime import datetime
+import uuid
 
 from django.db import models
 from django.contrib import admin
@@ -36,6 +37,7 @@ class Proposal(models.Model):
 
 
 class User(AbstractUser):
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
     token = models.CharField(help_text=_('Authentication for Valhalla'), max_length=50, blank=True, null=True)
     archive_token = models.CharField(help_text=_('Authentication for LCO archive'), max_length=50, blank=True, null=True)
     default_proposal = models.ForeignKey(Proposal, null=True, blank=True, on_delete=models.CASCADE)

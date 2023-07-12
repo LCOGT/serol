@@ -23,6 +23,7 @@ from stickers.models import PersonSticker
 from status.views import check_token
 from stickers.views import add_sticker
 from explorer.utils import add_answers, completed_missions, deg_to_hms, target_icon
+from status.models import User
 
 logger = logging.getLogger(__name__)
 
@@ -189,20 +190,22 @@ class ChallengeRedo(LoginRequiredMixin, DetailView):
 
 
 
-class ChallengeSummary(LoginRequiredMixin, DetailView):
+class ChallengeSummary(DetailView):
     model = Challenge
     template_name = "explorer/challenge-summary.html"
 
-    def get_context_data(self, **kwargs):
+    def get_context_data(self, *args, **kwargs):
         context = super(ChallengeSummary, self).get_context_data(**kwargs)
-
-        user = self.request.user
+        user, readonly = get_current_user(self.request)
+        if not user:
+            context['loggedin'] = False
+            return context
 
         challenge = self.get_object()
         progress = Progress.objects.get(challenge=challenge, user=user)
 
-        stickers = PersonSticker.objects.filter(user=self.request.user, sticker__challenge=challenge)
-        answers = UserAnswer.objects.filter(answer__question__challenge=self.get_object(), user=self.request.user)
+        stickers = PersonSticker.objects.filter(user=user, sticker__challenge=challenge)
+        answers = UserAnswer.objects.filter(answer__question__challenge=self.get_object(), user=user)
         # if we are at the end of the mission make sure we mark it on the user profile
         if challenge.is_last:
             missionid = "mission_{}".format(challenge.mission.number)
@@ -212,12 +215,20 @@ class ChallengeSummary(LoginRequiredMixin, DetailView):
         context['progress'] = progress
         context['answers'] = answers
         context['stickers'] = stickers
-        context['completed_missions'] = completed_missions(self.request.user)
+        context['completed_missions'] = completed_missions(user)
         context['icon'] = target_icon(challenge.avm_code)
         context['animation'] = static(f"explorer/js/stickerreveal-{challenge.mission.number}.json")
         context['coords'] = deg_to_hms(progress.ra, progress.dec)
+        context['readonly'] = readonly
 
         return context
+    
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        context = self.get_context_data(object=self.object)
+        if not context.get('loggedin', False):
+            return HttpResponseRedirect(reverse('auth_login'))
+        return self.render_to_response(context)
 
 class AnalyseView(LoginRequiredMixin, DetailView):
     model = Challenge
@@ -293,3 +304,18 @@ def check_missing_challenge(user, mission):
         return Challenge.objects.get(number=missing[0], mission__number=mission).id
     else:
         return 0
+    
+def get_current_user(request):
+    readonly = False
+    uid = request.GET.get('uid','')
+    print(uid)
+    user = None
+    if uid:
+        try:
+            user = User.objects.get(uuid=uid)
+            readonly = True
+        except:
+            pass
+    if request.user.is_authenticated and not user:
+        user = request.user
+    return user, readonly

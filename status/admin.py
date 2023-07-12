@@ -14,8 +14,9 @@ class UserChallenges(admin.TabularInline):
     model = Progress
 
 class CustomUserAdmin(UserAdmin):
+    readonly_fields = ('uuid',)
     fieldsets = (
-        (None, {'fields': ('username', 'password', 'email', 'default_proposal', 'mission_1', 'mission_2', 'mission_3' )}),
+        (None, {'fields': ('username', 'password', 'email', 'uuid', 'default_proposal', 'mission_1', 'mission_2', 'mission_3' )}),
         (_('Tokens'), {'fields' :('token', 'archive_token')}),
         (_('Personal info'), {'fields': ('first_name', 'last_name')}),
         (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser',
