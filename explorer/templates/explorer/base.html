@@ -95,7 +95,17 @@
 </nav>
         {% endblock%}
       </header>
+      {% if readonly %}
+      <div class="notification is-warning">
+        <span class="icon-text is-align-items-center is-flex">
+          <span class="icon is-large">
+            <i class="fad fa-exclamation-triangle fa-2x"></i>
+          </span>
+          <span> Viewing <strong>{{user.first_name}} {{user.last_name}}</strong>in case-study mode.</span>
+        </span>
 
+      </div>
+      {% endif%}
       <div class="messages" style="{% if not messages %}display:none;{% endif %}">
         {% for message in messages %}
         <div class="notification {% if message.tags  == 'error' %}is-danger{% else %}is-{{ message.tags }}{% endif %} is-light">
@@ -177,7 +187,22 @@
       })
       $('.delete').on('click', clear_messages)
     });
+
+
+  {% if readonly %}
+
+  document.body.addEventListener('click',function (e) {
+    console.log(e.target.classList);
+  if ( e.target.classList.contains('button') ) {
+    alert('Not available in case-study mode.')
+    e.preventDefault();
+  }
+});
+  {% endif %}
+
+
     </script>
+
 
     {% block script-content %}
     {% endblock %}

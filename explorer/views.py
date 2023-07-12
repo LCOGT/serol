@@ -83,6 +83,15 @@ class MissionListView(LoginRequiredMixin, ListView):
         else:
             return super(MissionListView, self).get(request)
 
+class ChallengeBaseView(DetailView):
+    model = Challenge
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        context = self.get_context_data(object=self.object)
+        if context.get('nouser', False):
+            return HttpResponseRedirect(reverse('auth_login'))
+        return self.render_to_response(context)
 
 class ChallengeView(LoginRequiredMixin, DetailView):
     model = Challenge
@@ -188,17 +197,15 @@ class ChallengeRedo(LoginRequiredMixin, DetailView):
             logger.error("Challenge {} for {} is not in the correct state".format(self.get_object(), self.request.user))
             return HttpResponseRedirect(reverse('challenge', args=args, kwargs=kwargs))
 
-
-
-class ChallengeSummary(DetailView):
-    model = Challenge
+class ChallengeSummary(ChallengeBaseView):
     template_name = "explorer/challenge-summary.html"
 
     def get_context_data(self, *args, **kwargs):
         context = super(ChallengeSummary, self).get_context_data(**kwargs)
         user, readonly = get_current_user(self.request)
+        print(user, readonly)
         if not user:
-            context['loggedin'] = False
+            context['nouser'] = True
             return context
 
         challenge = self.get_object()
@@ -207,7 +214,7 @@ class ChallengeSummary(DetailView):
         stickers = PersonSticker.objects.filter(user=user, sticker__challenge=challenge)
         answers = UserAnswer.objects.filter(answer__question__challenge=self.get_object(), user=user)
         # if we are at the end of the mission make sure we mark it on the user profile
-        if challenge.is_last:
+        if challenge.is_last and not readonly:
             missionid = "mission_{}".format(challenge.mission.number)
             self.request.user.__setattr__(missionid, True)
             self.request.user.save()
@@ -220,27 +227,27 @@ class ChallengeSummary(DetailView):
         context['animation'] = static(f"explorer/js/stickerreveal-{challenge.mission.number}.json")
         context['coords'] = deg_to_hms(progress.ra, progress.dec)
         context['readonly'] = readonly
+        context['user'] = user
 
         return context
     
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        context = self.get_context_data(object=self.object)
-        if not context.get('loggedin', False):
-            return HttpResponseRedirect(reverse('auth_login'))
-        return self.render_to_response(context)
 
-class AnalyseView(LoginRequiredMixin, DetailView):
-    model = Challenge
+class AnalyseView(ChallengeBaseView):
     template_name = "explorer/challenge-analyser.html"
     form_class = AnalyseForm
 
     def get_context_data(self, **kwargs):
         frameid = self.request.GET.get('frameid', None)
         context = super(AnalyseView, self).get_context_data(**kwargs)
+        user, readonly = get_current_user(self.request)
+        context['user'] = user
+        context['readonly'] = readonly
+        if not user:
+            context['nouser'] = True
+            return context
         try:
             context['questions'] = Question.objects.filter(challenge=self.get_object())
-            progress = Progress.objects.get(challenge=self.get_object(), user=self.request.user)
+            progress = Progress.objects.get(challenge=self.get_object(), user=user)
             if frameid and progress.status != 'Analyse':
                 progress.analyse()
                 progress.frameids = frameid
