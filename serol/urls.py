@@ -16,7 +16,7 @@ from status.views import ScheduleView, StatusView, SerolUserForm, AllImages, Rem
     UpdateBadge, ScheduleMoon
 from explorer.views import MissionView, MissionListView, ChallengeRedirectView, \
     ChallengeView, AnalyseView, ChallengeSummary, ChallengeRetry, NextChallengeView, \
-    MissionComplete, home, ChallengeRedo
+    MissionComplete, home, ChallengeRedo, NextMissionChallengeView
 from explorer.serializers import FactsView
 from stickers.views import StickerView, MissionPrintView, DownloadStickersView
 from highscore.views import HighScoreView, AddHighScoreView
@@ -38,6 +38,7 @@ urlpatterns = [
     path('mission/<int:pk>/', MissionView.as_view(), name="mission"),
     path('mission/<int:pk>/print/', MissionPrintView.as_view(), name="mission-print"),
     path('mission/<int:pk>/pdf/',DownloadStickersView.as_view(), name="mission-pdf"),
+    path('mission/<int:mission_num>/challenge/<int:chall_num>/next/', NextMissionChallengeView.as_view(), name="mission-challenge-next"),
     path('mission/<int:mission_num>/next/', NextChallengeView.as_view(), name="challenge-next"),
     path('mission/<int:pk>/complete/', MissionComplete.as_view(), name="mission-complete"),
     path('missions/', MissionListView.as_view(), name="missions"),

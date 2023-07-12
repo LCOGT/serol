@@ -119,6 +119,28 @@ class NextChallengeView(LoginRequiredMixin, View):
                                             status='Summary',
                                             challenge__mission__number=kwargs['mission_num']
                                             ).latest('last_update')
+
+            chal_id = check_missing_challenge(user=self.request.user, mission=kwargs['mission_num'])
+            if chal_id:
+                return HttpResponseRedirect(reverse('challenge', kwargs={'pk':chal_id}))
+            else:
+                logger.error("Next challenge returned no challenges")
+        except ObjectDoesNotExist as e:
+            if str(kwargs['mission_num']) in ['1', '2', '3']:
+                logger.debug('User accessing Mission {} for 1st time'.format(kwargs['mission_num']))
+                chal = Challenge.objects.get(number=1,mission__id=kwargs['mission_num'])
+                return HttpResponseRedirect(reverse('challenge', kwargs={'pk':chal.id}))
+            else:
+                logger.error("User tried to access mission {} which doesn't exist".format(kwargs['mission_num']))
+        return HttpResponseRedirect(reverse('missions'))
+
+class NextMissionChallengeView(LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        try:
+            latest = Progress.objects.filter(user=self.request.user,
+                                            status='Summary',
+                                            challenge__mission__number=kwargs['mission_num']
+                                            ).latest('last_update')
             if not latest.challenge.is_last:
                 chal_id = Challenge.objects.get(number=latest.challenge.number + 1, mission=kwargs['mission_num']).id
             else:
@@ -135,7 +157,6 @@ class NextChallengeView(LoginRequiredMixin, View):
             else:
                 logger.error("User tried to access mission {} which doesn't exist".format(kwargs['mission_num']))
         return HttpResponseRedirect(reverse('missions'))
-
 
 class ChallengeRetry(LoginRequiredMixin, DetailView):
     model = Challenge
