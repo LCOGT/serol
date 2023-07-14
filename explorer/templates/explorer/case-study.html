@@ -1,0 +1,325 @@
+{% extends 'explorer/home.html' %}
+{% load static %}
+
+{% block title %}{{ flatpage.title }}{% endblock %}
+
+{% block main-content %}
+<style>
+    * {
+  box-sizing: border-box;
+}
+
+
+/* The actual timeline (the vertical ruler) */
+.timeline {
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* The actual timeline (the vertical ruler) */
+.timeline::after {
+  content: '';
+  position: absolute;
+  width: 6px;
+  background-color: #00ADEF;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  margin-left: -3px;
+}
+
+/* timewrapper around content */
+.timewrapper {
+  padding: 10px 40px;
+  position: relative;
+  background-color: inherit;
+  width: 50%;
+}
+
+/* The circles on the timeline */
+.first.timewrapper::after {
+  content: '';
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  right: -17px;
+  background-color: white;
+  border: 4px solid #FF9F55;
+  top: 15px;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+/* The circles on the timeline */
+.timewrapper::after {
+  content: '';
+  position: absolute;
+  width: 25px;
+  height: 10px;
+  right: 0px;
+  background-color: #00ADEF;
+  top: 15px;
+  z-index: 1;
+}
+
+/* Place the timewrapper to the left */
+.left {
+  left: 0;
+}
+
+/* Place the timewrapper to the right */
+.right {
+  left: 50%;
+}
+
+
+
+/* Add arrows to the left timewrapper (pointing right) */
+.left::before {
+  content: " ";
+  height: 0;
+  position: absolute;
+  top: 22px;
+  width: 0;
+  z-index: 1;
+  right: 30px;
+  border: medium solid white;
+  border-width: 10px 0 10px 10px;
+  border-color: transparent transparent transparent white;
+}
+
+/* Add arrows to the right timewrapper (pointing left) */
+.right::before {
+  content: " ";
+  height: 0;
+  position: absolute;
+  top: 22px;
+  width: 0;
+  z-index: 1;
+  left: 30px;
+  border: medium solid white;
+  border-width: 10px 10px 10px 0;
+  border-color: transparent white transparent transparent;
+}
+
+/* Fix the circle for timewrappers on the right side */
+.right::after {
+  left: 0;
+}
+
+/* The actual content */
+.timecontent {
+  padding: 0px 30px;
+  position: relative;
+}
+.left .timecontent,
+.left .timecontent h2 {
+    text-align: right;
+}
+
+/* Media queries - Responsive timeline on screens less than 600px wide */
+@media screen and (max-width: 600px) {
+/* Place the timelime to the left */
+  .timeline::after {
+    left: 31px;
+  }
+
+/* Full-width timewrappers */
+  .timewrapper {
+    width: 100%;
+    padding-left: 70px;
+    padding-right: 25px;
+  }
+
+/* Make sure that all arrows are pointing leftwards */
+  .timewrapper::before {
+    left: 60px;
+    border: medium solid white;
+    border-width: 10px 10px 10px 0;
+    border-color: transparent white transparent transparent;
+  }
+
+/* Make sure all circles are at the same spot */
+  .left::after, .right::after {
+    left: 15px;
+  }
+
+/* Make all right timewrappers behave like the left ones */
+  .right {
+    left: 0%;
+  }
+}
+</style>
+
+<section class="section">
+    <div class="container">
+    <div class="columns">
+        <div class="column is-one-third">
+            <figure class="image">
+                <img src="{% static 'explorer/images/serol-logo-blue.png' %}" alt="serol logo">
+            </figure>
+            <h1>Serol's Cosmic Explorers</h1>
+        </div>
+        <div class="column">
+            <h2>Case Study</h2>
+            <p>This page outlines the main observing missions of the Serol's Cosmic Explorers website.</p>
+        </div>
+    </div>
+    </div>
+</section>
+
+<section class="section focus-home">
+    <div class="container">
+        <h2>Exploring space with Serol</h2>
+        <p>With a Serol's Cosmic Explorers account you can use Las Cumbres Observatory's robotic telescopes to take your own pictures of space and learn about a variety of different objects in the Universe. Below is a walk through of each stage of the observing and learning process of our space missions.</p>
+    </div>
+</section>
+
+<div class="timeline">
+    <div class="timewrapper left">
+      <div class="timecontent">
+        <h2>
+            <span class="icon-text">
+                <span>Choose a Mission</span>
+                <span class="icon pl-2">
+                    <i class="fas fa-sitemap"></i>
+                </span>
+            </span>
+        </h2>
+        <p>There are 3 missions to explore. Missions 2 and 3 are unlocked once you have completed Mission 1. 
+            <br/>
+            <a href="{% url 'missions' %}?uid=9607e8b1-5841-4ec5-9767-e1281bcf6032" target="_blank">Preview this step</a>
+        </p>
+      </div>
+    </div>
+    <div class="timewrapper right">
+      <div class="timecontent">
+        <h2>
+            <span class="icon-text">
+                <span class="icon pr-2">
+                    <i class="fas fa-telescope"></i>
+                </span>
+                <span>Start the challenge</span>
+            </span>
+        </h2>
+        <p>Challenges focus on one type of astronomical object. Learn about the astronomical object and get ready to take your own picture.
+            <br/>
+            <a href="{% url 'start' 5 %}?uid=bf85b967-4160-4230-b750-dce22016aa0c" target="_blank">Preview this step</a>
+        </p>
+     </div>
+    </div>
+    <div class="timewrapper left">
+      <div class="timecontent">
+        <h2>
+        <span class="icon-text">
+            <span>Select a target</span>
+            <span class="icon">
+                <i class="fas fa-bullseye-arrow"></i>
+            </span>
+        </span>
+        </h2>
+        <p>Select a target to observe from multiple options.
+            <br/>
+            <a href="{% url 'observe' 5 %}?uid=bf85b967-4160-4230-b750-dce22016aa0c" target="_blank">Preview this step</a>
+        </p>
+      </div>
+    </div>
+    <div class="timewrapper right">
+      <div class="timecontent">
+        <h2>
+            <span class="icon-text">
+                <span class="icon pr-2">
+                    <i class="fas fa-clock"></i>
+                </span>
+                <span>While you wait...</span>
+            </span>
+        </h2>
+        <p>See when and where your image will be taken. Read our fun facts or try an activity while you wait for your picture to be taken.
+            <br/>
+            <a href="{% url 'submitted' 5 %}?uid=bf85b967-4160-4230-b750-dce22016aa0c" target="_blank">Preview this step</a>
+        </p>  
+    </div>
+    </div>
+    <div class="timewrapper left">
+      <div class="timecontent">
+        <h2>
+        <span class="icon-text">
+            <span>Identify your image</span>
+            <span class="icon">
+                <i class="fas fa-search"></i>
+            </span>
+        </span>
+        </h2>
+        <p>Identify your image from a selection of astronomical images.
+            <br/>
+            <a href="{% url 'identify' 5 %}?uid=bf85b967-4160-4230-b750-dce22016aa0c" target="_blank">Preview this step</a>
+        </p>
+     </div>
+    </div>
+    <div class="timewrapper right">
+      <div class="timecontent">
+        <h2>
+            <span class="icon-text">
+                <span class="icon pr-2">
+                    <i class="fas fa-question-circle"></i>
+                </span>
+                <span>Guided analysis</span>
+            </span>
+        </h2>
+        <p>Analyse your image through a series of multiple choice questions.
+            <br/>
+            <a href="{% url 'analyse' 5 %}?uid=bf85b967-4160-4230-b750-dce22016aa0c" target="_blank">Preview this step</a>
+        </p>
+     </div>
+    </div>
+    <div class="timewrapper left">
+        <div class="timecontent">
+            <h2>
+          <span class="icon-text">
+            <span>Challenge complete</span>
+            <span class="icon">
+                <i class="fas fa-medal"></i>
+            </span>
+        </span>
+        </h2>
+          <p>After you have analysed your picture, you'll unlock a brand new sticker, to show you have successfully completed the challenge.
+            <br/>
+            <a href="{% url 'summary' 5 %}?uid=bf85b967-4160-4230-b750-dce22016aa0c" target="_blank">Preview this step</a>
+          </p>
+       </div>
+      </div>
+      <div class="timewrapper right">
+        <div class="timecontent">
+          <h2>
+            <span class="icon-text">
+                <span class="icon pr-2">
+                    <i class="fas fa-tasks"></i>
+                </span>
+                <span>Mission progress</span>
+            </span>
+        </h2>
+          <p>View your mission progress on the stickers page.
+            <br/>
+            <a href="{% url 'stickers' %}?uid=bf85b967-4160-4230-b750-dce22016aa0c" target="_blank">Preview this step</a>
+          </p>
+       </div>
+      </div>
+      <div class="timewrapper left">
+        <div class="timecontent">
+          <h2>
+          <span class="icon-text">
+            <span>Mission Complete</span>
+            <span class="icon">
+                <i class="fas fa-trophy-alt"></i>
+            </span>
+        </span>
+        </h2>
+          <p>When you have collected all three mission patches, you can finally declare yourself a real Cosmic Explorer!
+            <br/>
+            <a href="{% url 'project-complete' %}?uid=bf85b967-4160-4230-b750-dce22016aa0c" target="_blank">Preview this step</a>
+          </p>
+       </div>
+      </div>
+    </div>
+{% endblock %}

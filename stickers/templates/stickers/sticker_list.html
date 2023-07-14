@@ -17,7 +17,7 @@
           {% with "explorer/"|add:progress.mission.patch as patch_url %}
           <img class="img-fluid rounded" src="{% static patch_url %}"  alt="Mission {{progress.mission.number}} patch">
           <h2>Mission {{progress.mission.number}}: {{progress.mission.name}}</h2>
-          {% if request.user|user_mission_state:progress.mission.number %}
+          {% if user|user_mission_state:progress.mission.number %}
           <a href="{% url 'challenge-next' progress.mission.number %}" class="button mission-{{progress.mission.number}}-colour">{% trans "start a new challenge?" %}</a>
           {% else %}
           <p class="p-3 mb-2 bg-grey text-white" id="mission-btn-{{mission.number}}"><i class="far fa-lock-alt"></i> {% trans "Complete Mission 1 to unlock" %}</p>
@@ -49,7 +49,7 @@
           <p>No stickers defined?</p>
           {% endfor %}
           </div>
-          {% if request.user|user_mission_state:progress.mission.number %}
+          {% if user|user_mission_state:progress.mission.number %}
           <span class="icon-text">
             <span class="icon">
               <i class="fas fa-download"></i>

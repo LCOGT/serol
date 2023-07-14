@@ -22,8 +22,7 @@ from status.models import Progress, Answer, Question, UserAnswer
 from stickers.models import PersonSticker
 from status.views import check_token
 from stickers.views import add_sticker
-from explorer.utils import add_answers, completed_missions, deg_to_hms, target_icon
-from status.models import User
+from explorer.utils import add_answers, completed_missions, deg_to_hms, target_icon, get_current_user
 
 logger = logging.getLogger(__name__)
 
@@ -93,17 +92,19 @@ class ChallengeBaseView(DetailView):
             return HttpResponseRedirect(reverse('auth_login'))
         return self.render_to_response(context)
 
-class ChallengeView(LoginRequiredMixin, DetailView):
-    model = Challenge
+class ChallengeView(ChallengeBaseView):
 
     def get(self, request, *args, **kwargs):
         self.template_name = "explorer/challenge-{}.html".format(kwargs['mode'])
         self.object = self.get_object()
         context = self.get_context_data(object=self.object)
+        user, readonly = get_current_user(self.request)
+        context['user'] = user
+        context['readonly'] = readonly
         context['icon'] = target_icon(self.object.avm_code)
         mode = kwargs.get('mode',None)
         if mode != 'start':
-            obj,created = Progress.objects.get_or_create(challenge=self.object, user=self.request.user)
+            obj,created = Progress.objects.get_or_create(challenge=self.object, user=user)
             if created:
                 obj.last_update = datetime.utcnow()
                 obj.save()
@@ -114,7 +115,7 @@ class ChallengeView(LoginRequiredMixin, DetailView):
                 targets = Body.objects.filter(avm_code=self.object.avm_code, active=True)
                 context['targets'] = targets
             if mode == 'submitted':
-                token = check_token(request.user)
+                token = check_token(user)
                 context['activities'] = Activity.objects.filter(active=True).order_by('?')[0:2]
                 context['requestids'] = json.loads(obj.requestid)
                 request.session['token'] = token
@@ -312,17 +313,3 @@ def check_missing_challenge(user, mission):
     else:
         return 0
     
-def get_current_user(request):
-    readonly = False
-    uid = request.GET.get('uid','')
-    print(uid)
-    user = None
-    if uid:
-        try:
-            user = User.objects.get(uuid=uid)
-            readonly = True
-        except:
-            pass
-    if request.user.is_authenticated and not user:
-        user = request.user
-    return user, readonly

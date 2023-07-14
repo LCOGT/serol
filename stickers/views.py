@@ -12,20 +12,33 @@ from explorer.models import Mission, Challenge
 from explorer.utils import completed_missions
 from status.models import Progress
 from explorer.utils import deg_to_hms_plain
+from explorer.utils import get_current_user
 
-class StickerView(LoginRequiredMixin, ListView):
+class StickerView(ListView):
 
     model = Sticker
     template_name = 'stickers/sticker_list.html'
 
+    # def get(self, request, *args, **kwargs):
+    #     context = self.get_context_data()
+    #     if context.get('nouser', False):
+    #         return HttpResponseRedirect(reverse('auth_login'))
+    #     return self.render_to_response(context)
+
     def get_context_data(self):
         context = super(StickerView, self).get_context_data()
-        context['completed_missions'] = completed_missions(self.request.user)
+        user, readonly = get_current_user(self.request)
+        context['user'] = user
+        context['readonly'] = readonly
+        context['completed_missions'] = completed_missions(user)
+        if context.get('nouser', False):
+            return HttpResponseRedirect(reverse('auth_login'))
         return context
 
     def get_queryset(self):
-        challenges = Challenge.objects.filter(active=True).annotate(count=Count("progress", filter=Q(progress__user__username=self.request.user))).order_by('number')
-        my_progress = Progress.objects.filter(user=self.request.user)
+        user, readonly = get_current_user(self.request)
+        challenges = Challenge.objects.filter(active=True).annotate(count=Count("progress", filter=Q(progress__user__username=user))).order_by('number')
+        my_progress = Progress.objects.filter(user=user)
         missions = []
         for m in Mission.objects.all():
             progress = []

@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404
 from django.utils.html import mark_safe
 from django.templatetags.static import static
 
-from status.models import UserAnswer, Answer
+from status.models import UserAnswer, Answer, User
 
 
 def add_answers(answers, user):
@@ -71,3 +71,18 @@ def target_icon(avmcode):
 class SerolException(Exception):
     def __init__(self, msg='Something went wrong', *args, **kwargs):
         super().__init__(msg, *args, **kwargs)
+
+def get_current_user(request):
+    readonly = False
+    uid = request.GET.get('uid','')
+    user = None
+    if uid:
+        try:
+            user = User.objects.get(uuid=uid)
+            readonly = True
+        except Exception as e:
+            print(e)
+            pass
+    if request.user.is_authenticated and not user:
+        user = request.user
+    return user, readonly
