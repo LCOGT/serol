@@ -187,10 +187,11 @@ def process_observation_request(params):
 
 def parse_error(msg):
     htmltext = ''
-    if msg.get('requests', None):
-        for val in msg['requests']:
-            for k,v in val.items():
-                htmltext += ", ".join(v)
+    if msg.get('errors', None):
+        if msg.get('requests', None):
+            for val in msg['requests']:
+                for k,v in val.items():
+                    htmltext += ", ".join(v)
 
     if ('never visible' in htmltext):
         return "Your target in not visible at any of the sites we have currently operational.<br/><br/>Please choose another target."

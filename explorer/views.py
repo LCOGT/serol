@@ -60,23 +60,37 @@ class MissionView(LoginRequiredMixin, DetailView):
         return context
 
 
-class MissionComplete(LoginRequiredMixin, DetailView):
+class MissionComplete(DetailView):
     model = Mission
     template_name = "explorer/mission_complete.html"
 
-class MissionListView(LoginRequiredMixin, ListView):
+    def get_context_data(self, **kwargs):
+        context = super(MissionComplete, self).get_context_data(**kwargs)
+        user, readonly = get_current_user(self.request)
+        context['user'] = user
+        context['readonly'] = readonly
+
+        return context
+
+class MissionListView(ListView):
     model = Mission
     template_name = "explorer/missionlist.html"
 
     def get_context_data(self, **kwargs):
         context = super(MissionListView, self).get_context_data(**kwargs)
-        active_missions = set(Progress.objects.filter(user=self.request.user).values_list('challenge__mission', flat=True))
-        context['active_missions'] = active_missions
+        user, readonly = get_current_user(self.request)
+        context['user'] = user
+        context['readonly'] = readonly
+        context['active_missions'] = set(Progress.objects.filter(user=user).values_list('challenge__mission', flat=True))
 
         return context
 
     def get(self, request):
-        if request.user.mission_1 and request.user.mission_2 and request.user.mission_3:
+        req = super(MissionListView, self).get(request)
+        context = self.get_context_data()
+        if not context['user']:
+            return HttpResponseRedirect(reverse('auth_login'))
+        if context['user'].mission_1 and context['user'].mission_2 and context['user'].mission_3:
             url = reverse('project-complete')
             return HttpResponseRedirect(url)
         else:

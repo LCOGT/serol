@@ -12,7 +12,7 @@
     </div>
     <div class="container has-text-centered">
           <p class="statement">{% trans "You have reached the end of Serol's Cosmic Explorer missions!" %}</p>
-          <p class="statement">{% trans "Have a look back at all of your" %} <a href="{% url 'stickers' %}">{% trans "challenges and cosmic pictures!" %}</a> </p>
+          <p class="statement">{% trans "Have a look back at all of your" %} <a href="{% url 'stickers' %}?uid={{user.uuid}}">{% trans "challenges and cosmic pictures!" %}</a> </p>
       </div>
     </div>
 </div>

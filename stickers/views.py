@@ -6,6 +6,8 @@ from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.db.models import Count, Q
 from django_weasyprint import WeasyTemplateResponseMixin
+from django.http import Http404, HttpResponseRedirect
+from django.urls import reverse
 
 from stickers.models import PersonSticker, Sticker
 from explorer.models import Mission, Challenge
@@ -30,9 +32,10 @@ class StickerView(ListView):
         user, readonly = get_current_user(self.request)
         context['user'] = user
         context['readonly'] = readonly
-        context['completed_missions'] = completed_missions(user)
-        if context.get('nouser', False):
-            return HttpResponseRedirect(reverse('auth_login'))
+        if not user:
+            context['completed_missions'] = []
+        else:
+            context['completed_missions'] = completed_missions(user)
         return context
 
     def get_queryset(self):
