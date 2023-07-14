@@ -4,6 +4,7 @@ serol.bk
 fixtures/
 media/
 docker-compose.yml
+*.json.gz
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -18,10 +18,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='user',
-            name='id',
-        ),
         migrations.AddField(
             model_name='user',
             name='uuid',
