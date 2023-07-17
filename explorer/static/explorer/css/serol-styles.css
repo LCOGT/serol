@@ -34,14 +34,19 @@ h3 {
   font-size: 1.3rem;
 }
 
-a,
-a:focus,{
+.section a,
+.section a:focus{
   color: #ff5233;
+  border-bottom: dotted thin #065c99;
+  text-decoration: none;
+  padding-bottom: 3px;
 }
 
-a:hover {
-  background-color: #cceffc;
-  color: #fff;
+.footer a:hover,
+.section a:hover {
+    background-color: #ffcd05;
+    color: #000;
+    line-height: 20px;
 }
 
 p {

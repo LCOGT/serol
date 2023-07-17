@@ -30,7 +30,7 @@ urlpatterns = [
     path('videos/', flatpage, {'url': '/videos/'}, name='videos'),
     path('join/', flatpage, {'url': '/join/'}, name='join'),
     path('game/', flatpage, {'url': '/game/'}, name='game'),
-    path('network/',TemplateView.as_view(template_name='explorer/network.html'),{'static_url': settings.STATIC_URL}),
+    path('network/',TemplateView.as_view(template_name='explorer/network.html'),{'static_url': settings.STATIC_URL}, name='network'),
     path('case-study/',TemplateView.as_view(template_name='explorer/case-study.html')),
     path('resources/', flatpage, {'url': '/resources/'}, name='resources'),
     path('resources/workshops/', flatpage, {'url': '/resources/workshops/'}, name='workshops'),

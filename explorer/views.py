@@ -113,6 +113,7 @@ class ChallengeView(ChallengeBaseView):
         self.object = self.get_object()
         context = self.get_context_data(object=self.object)
         user, readonly = get_current_user(self.request)
+        print(user, readonly)
         context['user'] = user
         context['readonly'] = readonly
         context['icon'] = target_icon(self.object.avm_code)

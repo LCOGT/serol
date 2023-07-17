@@ -37,18 +37,13 @@
   width: 50%;
 }
 
+.first.timewrapper{
+    padding-top:80px;
+}
+
 /* The circles on the timeline */
 .first.timewrapper::after {
-  content: '';
-  position: absolute;
-  width: 25px;
-  height: 25px;
-  right: -17px;
-  background-color: white;
-  border: 4px solid #FF9F55;
-  top: 15px;
-  border-radius: 50%;
-  z-index: 1;
+  top: 80px;
 }
 
 /* The circles on the timeline */
@@ -157,13 +152,22 @@
     <div class="columns">
         <div class="column is-one-third">
             <figure class="image">
-                <img src="{% static 'explorer/images/serol-logo-blue.png' %}" alt="serol logo">
+                <img src="{% static 'explorer/images/serol-logo-rainbow-white-blue.png' %}" alt="serol logo">
             </figure>
-            <h1>Serol's Cosmic Explorers</h1>
         </div>
         <div class="column">
-            <h2>Case Study</h2>
+            <h1>Serol's Cosmic Explorers - Case  Study</h1>
+            <div class="content">
             <p>This page outlines the main observing missions of the Serol's Cosmic Explorers website.</p>
+            <p>As well as the challenges and missions, make sure you check out:
+                <ul class="list">
+                    <li><a href="{% url 'videos' %}">Serol's animated adventures</a>,</li>
+                    <li>our retro <a href="{% url 'game' %}">video game</a>,</li>
+                    <li>our <a href="{% url 'resources' %}">educational resources</a>,</li>
+                    <li>as well as an animated overview of all <a href="{% url 'network' %}">25 telescopes in Las Cumbres Observatory</a>.</li>
+                </ul>    
+                </p>
+                </div>
         </div>
     </div>
     </div>
@@ -177,7 +181,7 @@
 </section>
 
 <div class="timeline">
-    <div class="timewrapper left">
+    <div class="first timewrapper left">
       <div class="timecontent">
         <h2>
             <span class="icon-text">
@@ -189,7 +193,7 @@
         </h2>
         <p>There are 3 missions to explore. Missions 2 and 3 are unlocked once you have completed Mission 1. 
             <br/>
-            <a href="{% url 'missions' %}?uid=aa2cb135-8fb0-4422-92f3-3c59ef54e639" target="_blank">Preview this step</a>
+            <a href="{% url 'missions' %}?uid=1a074dca-937c-498d-8d9e-956970ed17cf" target="_blank">Preview this step</a>
         </p>
       </div>
     </div>
@@ -205,7 +209,7 @@
         </h2>
         <p>Challenges focus on one type of astronomical object. Learn about the astronomical object and get ready to take your own picture.
             <br/>
-            <a href="{% url 'start' 3 %}?uid=bf85b967-4160-4230-b750-dce22016aa0c" target="_blank">Preview this step</a>
+            <a href="{% url 'start' 3 %}?uid=1a074dca-937c-498d-8d9e-956970ed17cf" target="_blank">Preview this step</a>
         </p>
      </div>
     </div>
@@ -221,7 +225,7 @@
         </h2>
         <p>Select a target to observe from multiple options.
             <br/>
-            <a href="{% url 'observe' 8 %}?uid=bf85b967-4160-4230-b750-dce22016aa0c" target="_blank">Preview this step</a>
+            <a href="{% url 'observe' 8 %}?uid=7712cafa-06f6-43ed-9f42-634a231f3290" target="_blank">Preview this step</a>
         </p>
       </div>
     </div>
@@ -237,7 +241,7 @@
         </h2>
         <p>See when and where your image will be taken. Read our fun facts or try an activity while you wait for your picture to be taken.
             <br/>
-            <a href="{% url 'submitted' 8 %}?uid=bf85b967-4160-4230-b750-dce22016aa0c" target="_blank">Preview this step</a>
+            <a href="{% url 'submitted' 8 %}?uid=7712cafa-06f6-43ed-9f42-634a231f3290" target="_blank">Preview this step</a>
         </p>  
     </div>
     </div>
@@ -253,7 +257,7 @@
         </h2>
         <p>Identify your image from a selection of astronomical images.
             <br/>
-            <a href="{% url 'identify' 8 %}?uid=bf85b967-4160-4230-b750-dce22016aa0c" target="_blank">Preview this step</a>
+            <a href="{% url 'identify' 8 %}?uid=7712cafa-06f6-43ed-9f42-634a231f3290" target="_blank">Preview this step</a>
         </p>
      </div>
     </div>
@@ -269,7 +273,7 @@
         </h2>
         <p>Analyse your image through a series of multiple choice questions.
             <br/>
-            <a href="{% url 'analyse' 8 %}?uid=bf85b967-4160-4230-b750-dce22016aa0c" target="_blank">Preview this step</a>
+            <a href="{% url 'analyse' 8 %}?uid=7712cafa-06f6-43ed-9f42-634a231f3290" target="_blank">Preview this step</a>
         </p>
      </div>
     </div>
@@ -285,7 +289,7 @@
         </h2>
           <p>After you have analysed your picture, you'll unlock a brand new sticker, to show you have successfully completed the challenge.
             <br/>
-            <a href="{% url 'summary' 8 %}?uid=bf85b967-4160-4230-b750-dce22016aa0c" target="_blank">Preview this step</a>
+            <a href="{% url 'summary' 8 %}?uid=7712cafa-06f6-43ed-9f42-634a231f3290" target="_blank">Preview this step</a>
           </p>
        </div>
       </div>
@@ -301,7 +305,7 @@
         </h2>
           <p>View your mission progress on the stickers page.
             <br/>
-            <a href="{% url 'stickers' %}?uid=bf85b967-4160-4230-b750-dce22016aa0c" target="_blank">Preview this step</a>
+            <a href="{% url 'stickers' %}?uid=7712cafa-06f6-43ed-9f42-634a231f3290" target="_blank">Preview this step</a>
           </p>
        </div>
       </div>
@@ -317,7 +321,7 @@
         </h2>
           <p>When you have collected all three mission patches, you can finally declare yourself a real Cosmic Explorer!
             <br/>
-            <a href="{% url 'project-complete' %}?uid=bf85b967-4160-4230-b750-dce22016aa0c" target="_blank">Preview this step</a>
+            <a href="{% url 'project-complete' %}?uid=7712cafa-06f6-43ed-9f42-634a231f3290" target="_blank">Preview this step</a>
           </p>
        </div>
       </div>

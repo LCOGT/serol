@@ -1,3 +1,5 @@
+import logging
+
 from astropy.coordinates import SkyCoord
 from django.shortcuts import get_object_or_404
 from django.utils.html import mark_safe
@@ -5,6 +7,7 @@ from django.templatetags.static import static
 
 from status.models import UserAnswer, Answer, User
 
+logger = logging.getLogger(__name__)
 
 def add_answers(answers, user):
     for answer_id in answers:
@@ -80,8 +83,8 @@ def get_current_user(request):
         try:
             user = User.objects.get(uuid=uid)
             readonly = True
-        except Exception as e:
-            print(e)
+        except User.DoesNotExist:
+            logger.error(f'User does not exist {uid}')
             pass
     if request.user.is_authenticated and not user:
         user = request.user
