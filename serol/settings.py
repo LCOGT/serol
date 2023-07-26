@@ -17,7 +17,7 @@ PRODUCTION = True if CURRENT_PATH.startswith('/var/www') else False
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEBUG= ast.literal_eval(os.environ.get('DEBUG', 'False'))
 
-SCHEDULE_DEBUG = False#True
+SCHEDULE_DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -63,6 +63,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'rollbar.contrib.django.middleware.RollbarNotifierMiddleware',
+
 ]
 
 AUTHENTICATION_BACKENDS = (
@@ -273,6 +275,13 @@ FILTER_ORDER = {
             'mars'      : {},
             'saturn'    : {'zs':1}
                 }
+
+ROLLBAR = {
+    'access_token': '52aa7c41683f469cb6411033394220e4',
+    'environment': 'development' if DEBUG else 'production',
+    'code_version': '1.0',
+    'root': BASE_DIR,
+}
 
 ##################
 # LOCAL SETTINGS #
