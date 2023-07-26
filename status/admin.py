@@ -14,6 +14,7 @@ class UserChallenges(admin.TabularInline):
     model = Progress
 
 class CustomUserAdmin(UserAdmin):
+    ordering = ('-date_joined', )
     readonly_fields = ('uuid',)
     fieldsets = (
         (None, {'fields': ('username', 'password', 'email', 'uuid', 'default_proposal', 'mission_1', 'mission_2', 'mission_3' )}),
@@ -24,6 +25,8 @@ class CustomUserAdmin(UserAdmin):
         (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
     )
     inlines = [UserChallenges, UserAnswerInline,]
+    list_display = ('username', 'email', 'date_joined', 'first_name', 'last_name', 'is_active')
+
 
 class AnswerInline(admin.TabularInline):
     model = Answer
