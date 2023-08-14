@@ -17,7 +17,7 @@ PRODUCTION = True if CURRENT_PATH.startswith('/var/www') else False
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEBUG= ast.literal_eval(os.environ.get('DEBUG', 'False'))
 
-SCHEDULE_DEBUG = True
+SCHEDULE_DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
