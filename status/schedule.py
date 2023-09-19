@@ -187,12 +187,17 @@ def process_observation_request(params):
 
 def parse_error(msg):
     htmltext = ''
-    if msg.get('errors', None):
+    if not settings.SCHEDULE_DEBUG:
         if msg.get('requests', None):
             for val in msg['requests']:
                 for k,v in val.items():
                     htmltext += ", ".join(v)
-
+    else:
+        if msg.get('errors', None):
+            if msg['errors'].get('requests', None):
+                for val in msg['errors']['requests']:
+                    for k,v in val.items():
+                        htmltext += ", ".join(v)
     if ('never visible' in htmltext):
         return "Your target in not visible at any of the sites we have currently operational.<br/><br/>Please choose another target."
     if not htmltext:
@@ -201,7 +206,7 @@ def parse_error(msg):
     return htmltext
 
 def auto_schedule(proposal):
-    siteset = ['coj','tfn']
+    siteset = ['coj','elp']
     now = datetime.utcnow()
     params_list = []
     dates = []

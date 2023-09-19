@@ -13,10 +13,7 @@ from explorer.models import Body
 iers.conf.auto_download = False 
 
 EXPOSURE = '2.0'
-DEFAULT_CAMERAS = { '1m0' : '1M0-SCICAM-SBIG',
-                    '2m0' : '2M0-SCICAM-SPECTRAL',
-                    '0m4' : '0M4-SCICAM-SBIG'
-                    }
+
 SITES = {
     'ogg': {'lat': 20.7075, 'lon': -156.256111,'alt':3055},
     'coj': {'lat': -31.273333, 'lon': 149.071111,'alt':1116},
@@ -54,13 +51,14 @@ def request_format_moon(params, proposal, aperture='0m4'):
         configurations = [
             {
                 'type': 'EXPOSE',
-                'instrument_type': DEFAULT_CAMERAS[aperture],
+                'instrument_type': settings.DEFAULT_CAMERAS[aperture],
                 'target': target,
                 'constraints': constraints,
                 'acquisition_config': {},
                 'guiding_config': {},
                 'instrument_configs': [
                     {
+                        "mode": "central30x30",
                         'exposure_time': EXPOSURE,
                         'exposure_count': 1,
                         'optical_elements': {
@@ -114,6 +112,7 @@ def request_format(target, start, end, obs_filter, proposal, aperture='0m4'):
 
     for f in obs_filter:
         config = {
+                "mode": "central30x30",
                 'exposure_time': f['exposure'],
                 'exposure_count': 1,
                 'optical_elements': {
