@@ -71,7 +71,7 @@ var csrftoken = '{{ csrf_token }}';
 var challenge_id = '{{object.id}}'
 var redirect_url = "{% url 'challenge' object.id %}";
 var image_file = image_files[category];
-var whatsupurl = "https://whatsup.lco.global/range/?aperture=0m4&format=jsonp&full=best";
+var whatsupurl = "https://whatsup.lco.global/range/?aperture=0m4&mode=best";
 var target_type;
 
 function add_targets(i, data){
@@ -91,8 +91,7 @@ function get_targets(){
     whatsupurl += "&start="+start.toISOString().substr(0,19);
 
     $.ajax( {url : whatsupurl,
-      jsonp: "callback",
-      dataType: "jsonp",
+      dataType: "json",
       success: function( data ) {
         targets = data.targets;
         var target;
@@ -138,7 +137,7 @@ $(document).ready(function(){
   {% if moon %}
   var tid = null;
   var title = "Moon"
-  var desc = "The Moon moves very fast. Serol is going to try 3 times to catch it for you.";
+  var desc = "The Moon moves very fast. Serol is going to try 4 times to catch it for you.";
     show_modal(tid, title, desc, target_type)
   {% else %}
 
