@@ -12,7 +12,7 @@ from explorer.models import Body
 
 iers.conf.auto_download = False 
 
-EXPOSURE = '2.0'
+EXPOSURE = '0.5'
 
 SITES = {
     'ogg': {'lat': 20.7075, 'lon': -156.256111,'alt':3055},
@@ -215,7 +215,7 @@ def best_observing_time(site):
     obs = Observer(location=loc)
     now = datetime.utcnow()
     day= timedelta(days=1)
-    times = [Time(now) + day*i for i in range(1,14,2)]
+    times = [Time(now) + day*i for i in range(1,16,2)]
     best_times = []
 
     for time in times:
