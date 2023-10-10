@@ -104,7 +104,7 @@ class Body(models.Model):
     meandist = models.FloatField(help_text='A',blank=True, null=True)
     perihdist = models.FloatField(help_text='Used for comets',blank=True, null=True)
     epochofperih = models.FloatField(help_text='Used for comets',blank=True, null=True)
-    filter_list = models.CharField(max_length=20, help_text=_('JSON blob of filters'))
+    filter_list = models.CharField(max_length=100, help_text=_('JSON blob of filters'))
     exposuretime = models.FloatField()
     avm_code = models.CharField(max_length=10)
     description = models.TextField()

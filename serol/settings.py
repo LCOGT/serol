@@ -278,7 +278,7 @@ FILTER_ORDER = {
                 }
 
 ROLLBAR = {
-    'access_token': '52aa7c41683f469cb6411033394220e4',
+    'access_token': os.environ.get('ROLLBAR_TOKEN',''),
     'environment': 'development' if DEBUG else 'production',
     'code_version': '1.0',
     'root': BASE_DIR,
