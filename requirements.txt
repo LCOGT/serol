@@ -13,7 +13,7 @@ django-weasyprint==1.1.0
 easy-thumbnails==2.8.1
 psycopg2==2.8.4
 Pillow==6.2.1
-requests==2.27.1
+requests==2.31.0
 gunicorn[gevent]==20.1.0
 gevent==21.12.0
 profanityfilter==2.0.6
