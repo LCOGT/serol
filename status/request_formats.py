@@ -104,7 +104,7 @@ def request_format(target, start, end, obs_filter, proposal, aperture='0m4'):
         }
 
     constraints = {
-            'max_airmass': 1.6,
+            'max_airmass': 2.0,
             'min_lunar_distance': 30.0
         }
 
