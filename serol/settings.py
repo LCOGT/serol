@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django.contrib.flatpages',
+    'django_recaptcha',
     'widget_tweaks',
     'user_messages',
     'pagedown',
@@ -274,6 +275,10 @@ FILTER_ORDER = {
             'mars'      : {},
             'saturn'    : {'zs':1}
                 }
+
+RECAPTCHA_PUBLIC_KEY = os.environ.get('RECAPTCHA_PUBLIC_KEY', '')
+RECAPTCHA_PRIVATE_KEY = os.environ.get('RECAPTCHA_PRIVATE_KEY', '')
+RECAPTCHA_REQUIRED_SCORE = 0.85
 
 ##################
 # LOCAL SETTINGS #
