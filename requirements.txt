@@ -20,7 +20,7 @@ profanityfilter==2.0.6
 django-cors-headers==3.11.0
 numpy==1.21.6
 astropy==5.1
-astroplan==0.8
+astroplan==0.10.1
 astroscrappy==1.1.0
 fits2image>=0.4.0
 fits_align>=0.4.3

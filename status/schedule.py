@@ -1,17 +1,13 @@
-from datetime import datetime, timedelta
+from datetime import timedelta
 import logging
-import json
 from urllib.parse import urljoin
 
 import requests
-from astropy.time import Time
-from astropy.coordinates import get_moon, AltAz, get_sun
+from astropy.coordinates import get_body
 from django.conf import settings
-from django.contrib.sessions.backends.db import SessionStore
 
-from explorer.models import Body
 from .request_formats import request_format, request_format_moon, format_moving_object, \
-    best_observing_time, moon_coords, format_sidereal_object
+    best_observing_time, format_sidereal_object
 from explorer.utils import SerolException
 
 logger = logging.getLogger(__name__)
@@ -206,8 +202,7 @@ def parse_error(msg):
     return htmltext
 
 def auto_schedule(proposal):
-    siteset = ['coj','elp']
-    now = datetime.utcnow()
+    siteset = ['lsc','elp','tfn']
     params_list = []
     dates = []
     for site in siteset:
@@ -218,7 +213,7 @@ def auto_schedule(proposal):
     # Choose top 4
     for date in dates[0:4]:
         time, alt, loc, site = date
-        coords = get_moon(time, loc)
+        coords = get_body(time=time, body='moon', location=loc)
         start = time.datetime - timedelta(seconds=60)
         end = time.datetime + timedelta(seconds=180)
         req_params = {'start':start,'end':end,'ra':coords.ra.value, 'dec':coords.dec.value, 'site':site}

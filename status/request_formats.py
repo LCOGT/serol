@@ -1,9 +1,9 @@
 import json
 import logging
 from django.conf import settings
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from astropy.time import Time
-from astropy.coordinates import EarthLocation, get_moon, AltAz, get_sun
+from astropy.coordinates import EarthLocation, AltAz, get_body
 from astroplan import Observer
 from numpy import float64
 from astropy.utils import iers
@@ -201,19 +201,19 @@ def format_moving_object(tid):
 
 def moon_coords(time, site):
     loc = EarthLocation(lat=SITES[site]['lat'], lon=SITES[site]['lon'], height=SITES[site]['alt'])
-    coords = get_moon(time,loc)
+    coords = get_body(time=time,body='moon',location=loc)
     altazframe = AltAz(obstime=time,location=loc)
     earth_coords = coords.transform_to(altazframe)
     return coords, time, earth_coords.alt.value
 
 def best_observing_time(site):
     """
-    Calculate moon alt every other day over the next 7 days
+    Calculate moon alt every other day over the next 14 days
     Once we have 4 dates return dates
     """
     loc = EarthLocation(lat=SITES[site]['lat'], lon=SITES[site]['lon'], height=SITES[site]['alt'])
     obs = Observer(location=loc)
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc)
     day= timedelta(days=1)
     times = [Time(now) + day*i for i in range(1,16,2)]
     best_times = []

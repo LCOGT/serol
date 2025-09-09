@@ -8,19 +8,16 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 
 from django_registration.forms import RegistrationForm
-from rest_framework.decorators import api_view
 from rest_framework.renderers import JSONRenderer, BrowsableAPIRenderer
 from rest_framework.response import Response
-from rest_framework.reverse import reverse
 from rest_framework.views import APIView
-from rest_framework_jsonp.renderers import JSONPRenderer
 from rest_framework import status, serializers
 from user_messages import api
 
 from status.models import Progress, User
 
 from status.schedule import process_observation_request, get_observation_status, \
-    get_observation_frameid, auto_schedule, submit_observation_request
+    get_observation_frameid
 
 
 class SerolUserForm(RegistrationForm):
