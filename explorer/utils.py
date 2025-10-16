@@ -1,10 +1,14 @@
 import logging
 
+import requests
+from datetime import date, timezone, datetime, timedelta
+
 from astropy.coordinates import SkyCoord
 from django.shortcuts import get_object_or_404
 from django.utils.html import mark_safe
 from django.templatetags.static import static
 
+from explorer.models import Body
 from status.models import UserAnswer, Answer, User
 
 logger = logging.getLogger(__name__)
@@ -89,3 +93,19 @@ def get_current_user(request):
     if request.user.is_authenticated and not user:
         user = request.user
     return user, readonly
+
+def visible_planets():
+    start = datetime.now(timezone.utc)
+    end = start + timedelta(days=10)
+    start_str = start.strftime('%Y-%m-%d')
+    end_str = end.strftime('%Y-%m-%d')
+    resp = requests.get(f"https://lco-edu-rti-bridge.lco.global/get_ephemeris/?start_date={start_str}&end_date={end_str}")
+    planet_ephem = resp.json()
+    visible = []
+    for planet, ephems in planet_ephem.items():
+        for ephem in ephems:
+            if float(ephem['elong']) > 60:
+                visible.append(planet)
+                continue
+    visible_planets = Body.objects.filter(name__in=visible)
+    return visible_planets

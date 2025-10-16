@@ -39,7 +39,7 @@ def lco_api_call(url, token):
 def get_archive_data(out_dir, request_id):
     # Only look for data which has completed
     url = "{}?REQNUM={}&ordering=-id".format(settings.ARCHIVE_FRAMES_URL, request_id)
-    success, r = lco_api_call(url, settings.ARCHIVE_TOKEN)
+    success, r = lco_api_call(url, settings.PORTAL_TOKEN)
     if success:
         logger.debug('Downloading {}'.format(request_id))
         dl_status = dl_sort_data_files(r, out_dir)
@@ -54,9 +54,9 @@ def get_archive_data(out_dir, request_id):
 def get_thumbnail(out_file, frameid):
     # Only look for data which has completed
     url = settings.THUMB_SERVICE.format(frameid)
-    success, r = lco_api_call(url, settings.ARCHIVE_TOKEN)
+    success, r = lco_api_call(url, settings.PORTAL_TOKEN)
     if success:
-        logger.debug('Downloading {}'.format(request_id))
+        logger.debug('Downloading {}'.format(frameid))
         dl_status = download_file(out_file, r['url'])
         if not dl_status:
             logger.debug('No colour image available')

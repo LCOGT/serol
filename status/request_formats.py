@@ -2,6 +2,8 @@ import json
 import logging
 from django.conf import settings
 from datetime import datetime, timedelta, timezone
+import requests
+
 from astropy.time import Time
 from astropy.coordinates import EarthLocation, AltAz, get_body
 from astroplan import Observer
@@ -9,6 +11,7 @@ from numpy import float64
 from astropy.utils import iers
 
 from explorer.models import Body
+from explorer.utils import SerolException
 
 iers.conf.auto_download = False 
 
@@ -172,24 +175,25 @@ def format_moving_object(tid):
     Format target for non-sidereal objects
     '''
     body = Body.objects.get(id=tid)
+    elements = fetch_orbital_elements(body.name, body.get_schema_display())
     target = {
         "name": body.name,
         "type": "ORBITAL_ELEMENTS",
-        "epochofel": body.epochofel,
+        "epochofel": elements['epoch_jd'] - 2400000.5,
         "scheme": body.get_schema_display(),
-        "orbinc": body.orbinc,
-        "longascnode": body.longascnode,
-        "argofperih": body.argofperih,
-        "eccentricity": body.eccentricity
+        "orbinc": elements['inclination'],
+        "longascnode": elements['ascending_node'],
+        "argofperih": elements['argument_of_perihelion'],
+        "eccentricity": elements['eccentricity']
     }
     if body.schema in [0,2]:
-        target["meandist"] = body.meandist
-        target["meananom"] = body.meananom
+        target["meandist"] = elements['semimajor_axis']
+        target["meananom"] = elements['mean_anomaly']
         if body.schema == 2:
-            target["dailymot"] = body.dailymotion
+            target["dailymot"] = elements['mean_daily_motion']
     elif body.schema == 1:
-        target["perihdist"] = body.perihdist
-        target["epochofperih"] = body.epochofperih
+        target["perihdist"] = elements['perihelion_distance']
+        target["epochofperih"] = elements['perihelion_date_jd'] - 2400000.5
 
     # Add filters to inputs
     filters = []
@@ -198,6 +202,16 @@ def format_moving_object(tid):
         filters.append(filter_item)
 
     return target, filters
+
+def fetch_orbital_elements(name, schema):
+    '''
+    Fetch orbital elements from Simbad2K small body database
+    '''
+    url = f"https://simbad2k.lco.global/{name}?target_type=non_sidereal&scheme={schema}"
+    resp = requests.get(url)
+    if resp.status_code != 200:
+        raise SerolException('Could not fetch orbital elements')
+    return resp.json()
 
 def moon_coords(time, site):
     loc = EarthLocation(lat=SITES[site]['lat'], lon=SITES[site]['lon'], height=SITES[site]['alt'])

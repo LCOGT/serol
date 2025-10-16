@@ -22,7 +22,7 @@ from status.models import Progress, Answer, Question, UserAnswer
 from stickers.models import PersonSticker
 from status.views import check_token
 from stickers.views import add_sticker
-from explorer.utils import add_answers, completed_missions, deg_to_hms, target_icon, get_current_user
+from explorer.utils import add_answers, completed_missions, deg_to_hms, target_icon, get_current_user, visible_planets
 
 logger = logging.getLogger(__name__)
 
@@ -128,8 +128,7 @@ class ChallengeView(ChallengeBaseView):
             if mode == 'observe':
                 if self.object.action == 'moon':
                     context['moon'] = True
-                targets = Body.objects.filter(avm_code=self.object.avm_code, active=True)
-                context['targets'] = targets
+                context['targets'] = visible_planets()
             if mode == 'submitted':
                 token = check_token(user)
                 context['activities'] = Activity.objects.filter(active=True).order_by('?')[0:2]
