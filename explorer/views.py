@@ -128,7 +128,11 @@ class ChallengeView(ChallengeBaseView):
             if mode == 'observe':
                 if self.object.action == 'moon':
                     context['moon'] = True
-                context['targets'] = visible_planets()
+                if self.object.avm_code in ['2.2','1.1']:
+                    context['planets'] = True
+                    context['targets'] = visible_planets()
+                else:
+                    context['targets'] = []
             if mode == 'submitted':
                 token = check_token(user)
                 context['activities'] = Activity.objects.filter(active=True).order_by('?')[0:2]
