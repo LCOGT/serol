@@ -1,7 +1,5 @@
-from PIL import Image, ImageChops
+from PIL import Image
 from astropy.io import fits
-import glob
-import logging
 import numpy as np
 from pathlib import Path
 
@@ -45,21 +43,33 @@ def create_jupiter_image(infile, outfile):
     return
 
 def create_saturn_image(infile, outfile):
-    '''
-    Makes a single colour Saturn image, rotating and cropping appropriately
-    '''
-    data = fits.getdata(infile)
-    data = data.astype(np.float32)
-    min_val = np.percentile(data,99.9)
-    data -= min_val
-    scaled_planet = data*256./(data.max())
-    tmp_im = Image.fromarray(scaled_planet)
-    tmp_im.crop((w/2-dp, h/2-dp, w/2+200, h/2+200))
-    tmp_im.transpose(method=Image.ROTATE_90)
-    tmp_im.convert('RGB')
-    tmp_im.save(outfile, format='JPEG')
-    return
+    data = fits.getdata(infile).astype(np.float32)
 
+    min_val = np.percentile(data, 99.9)
+    data -= min_val
+    data[data < 0] = 0
+
+    max_val = data.max()
+    if max_val > 0:
+        data = data * 255.0 / max_val
+
+    data = np.clip(data, 0, 255).astype(np.uint8)
+
+    im = Image.fromarray(data)
+
+    w, h = im.size
+    half_size = 200
+
+    im = im.crop((
+        w // 2 - half_size,
+        h // 2 - half_size,
+        w // 2 + half_size,
+        h // 2 + half_size,
+    ))
+
+    im = im.transpose(Image.ROTATE_90)
+    im = im.convert("L")
+    im.save(outfile, format="JPEG")
 
 def planet_centre_coord(filename):
     # Extract photometry info for brightest object i.e. the planet
