@@ -67,7 +67,7 @@ def create_saturn_image(infile, outfile):
         h // 2 + half_size,
     ))
 
-    im = im.transpose(Image.Transpose.ROTATE_90)
+    im = im.transpose(Image.ROTATE_90)
     im = im.convert("L")
     im.save(outfile, format="JPEG")
 
